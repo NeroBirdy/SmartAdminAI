@@ -94,14 +94,6 @@ body {
   flex-direction: row;
 }
 
-.side-bar {
-  display: flex;
-  flex-direction: column;
-  width: 264px;
-  margin-right: 16px;
-  margin-left: 5px;
-}
-
 .btn-submit {
   color: white;
   background-color: #2C71E4;
@@ -110,35 +102,6 @@ body {
   border-radius: 20px;
   border: none;
   margin-right: 15px;
-}
-
-
-.category {
-  display: flex;
-  flex-direction: row;
-  border-radius: 10px;
-  height: 44px;
-  z-index: 1;
-  width: 264px;
-}
-
-.selected-category {
-  background-color: white;
-}
-
-.category img {
-  margin: auto;
-  margin-left: 5px;
-  margin-right: 10px;
-  height: 24px;
-  width: 24px;
-  z-index: 2;
-}
-
-.category p {
-  margin: auto;
-  margin-right: 0;
-  margin-left: 0;
 }
 
 .title {

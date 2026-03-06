@@ -5,6 +5,7 @@
             </button>
             <h1 class="header-xl header-text">ИИ Администратор</h1>
         </div>
+        
         <div class="rightSide">
             <img class="icon" src="../assets/icons/headset.png" alt="">
             <img class="icon icon-bell" src="../assets/icons/bell.png" alt="">
