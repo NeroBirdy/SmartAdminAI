@@ -4,7 +4,7 @@
             Рекомендации (Growth opportunities)
         </h1>
         <div class="inside-frame">
-            <div class="frame second-frame" v-for="(item, index) in recomendations" :key="index">
+            <div class="frame second-frame" v-for="(item, index) in recommendations" :key="index">
                 <div class="blue-dot"></div>
                 <div class="texts">
                     <div class="second-frame-title header-sm">{{ index }}</div>
@@ -18,7 +18,7 @@
             Риски (Risks)
         </h1>
         <div class="inside-frame">
-            <div class="frame second-frame" v-for="(item, index) in recomendations" :key="index">
+            <div class="frame second-frame" v-for="(item, index) in risks" :key="index">
                 <div class="red-dot"></div>
                 <div class="texts">
                     <div class="second-frame-title header-sm">{{ index }}</div>
@@ -29,13 +29,10 @@
     </div>
 </template>
 <script setup>
-const recomendations = ref({
-    'Проводите больше занятий': 'В мае занятий −2,1% при загрузке 87,5%. Добавьте 4–6 слотов/неделю и мини-группы, целевая загрузка 80–85%.',
-    'Внедрите летние форматы': 'Запустите интенсивы 2–4 недели, разовые визиты и «заморозку» абонемента, чтобы не терять клиентов в отпуска.',
-    'Увеличьте средний чек': 'Пакеты «семейный», индивидуальные тренировки и мерч. ',
-    'Сделайте рассылку по неактивным пользователям': 'Прогрейте базу: звонок + сообщение, акция на возвращение. ',
-    'Рефералы и отзывы': 'Прогрейте базу: звонок + сообщение, акция на возвращение. '
-})
+const { data, pending, error } = await useFetch('/api/risks');
+
+const recommendations = computed(() => data.value?.recommendations || [])
+const risks = computed(() => data.value?.risks || [])
 </script>
 <style scoped>
 .frame {

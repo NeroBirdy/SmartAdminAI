@@ -13,17 +13,35 @@ datasource db {
   provider = "mysql"
 }
 
-model User { 
-  id    Int     @id @default(autoincrement()) 
-  email String  @unique
-  name  String?
-  posts Post[]
-} 
-model Post { 
-  id        Int     @id @default(autoincrement()) 
-  title     String
-  content   String? @db.Text
-  published Boolean @default(false) 
-  author    User    @relation(fields: [authorId], references: [id]) 
-  authorId  Int
-} 
+model Section {
+  id             Int              @id @default(autoincrement())
+  name           String
+  createdAt      DateTime         @default(now())
+  recommendations Recommendation[]
+  risks          Risk[]
+
+  @@map("sections")
+}
+
+model Recommendation {
+  id         Int      @id @default(autoincrement())
+  title      String
+  text       String
+  complete   Boolean  @default(false)
+  sectionId  Int
+  section    Section  @relation(fields: [sectionId], references: [id])
+  createdAt  DateTime @default(now())
+
+  @@map("recommendations")
+}
+
+model Risk {
+  id         Int      @id @default(autoincrement())
+  title      String
+  text       String
+  sectionId  Int
+  section    Section  @relation(fields: [sectionId], references: [id])
+  createdAt  DateTime @default(now())
+
+  @@map("risks")
+}
