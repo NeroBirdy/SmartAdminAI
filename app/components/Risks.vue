@@ -4,11 +4,11 @@
             Рекомендации (Growth opportunities)
         </h1>
         <div class="inside-frame">
-            <div class="frame second-frame" v-for="(item, index) in recommendations" :key="index">
+            <div class="frame second-frame" v-for="(item) in recommendations" :key="index">
                 <div class="blue-dot"></div>
                 <div class="texts">
-                    <div class="second-frame-title header-sm">{{ index }}</div>
-                    <div class="second-frame-text main-text-sm"> {{ item }}</div>
+                    <div class="second-frame-title header-sm">{{ item.title }}</div>
+                    <div class="second-frame-text main-text-sm"> {{ item.text }}</div>
                 </div>
             </div>
         </div>
@@ -21,8 +21,8 @@
             <div class="frame second-frame" v-for="(item, index) in risks" :key="index">
                 <div class="red-dot"></div>
                 <div class="texts">
-                    <div class="second-frame-title header-sm">{{ index }}</div>
-                    <div class="second-frame-text main-text-sm"> {{ item }}</div>
+                    <div class="second-frame-title header-sm">{{ item.title }}</div>
+                    <div class="second-frame-text main-text-sm"> {{ item.text }}</div>
                 </div>
             </div>
         </div>
@@ -30,6 +30,7 @@
 </template>
 <script setup>
 const { data, pending, error } = await useFetch('/api/risks');
+console.log(data.value.test);
 
 const recommendations = computed(() => data.value?.recommendations || [])
 const risks = computed(() => data.value?.risks || [])

@@ -11,9 +11,10 @@ CREATE TABLE `sections` (
 CREATE TABLE `recommendations` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `title` VARCHAR(191) NOT NULL,
-    `text` VARCHAR(191) NOT NULL,
+    `text` TEXT NOT NULL,
     `complete` BOOLEAN NOT NULL DEFAULT false,
     `sectionId` INTEGER NOT NULL,
+    `done` BOOLEAN NOT NULL DEFAULT false,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     PRIMARY KEY (`id`)
@@ -23,8 +24,9 @@ CREATE TABLE `recommendations` (
 CREATE TABLE `risks` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `title` VARCHAR(191) NOT NULL,
-    `text` VARCHAR(191) NOT NULL,
+    `text` TEXT NOT NULL,
     `sectionId` INTEGER NOT NULL,
+    `done` BOOLEAN NOT NULL DEFAULT false,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     PRIMARY KEY (`id`)

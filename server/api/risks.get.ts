@@ -1,29 +1,192 @@
 import { gigachat } from "../utils/gigaChat";
 import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
+import { subMonths, isBefore, startOfDay, endOfDay } from 'date-fns'
+
+const sectionId = 1;
+let risks = {};
+let recommendations = {};
 
 export default defineEventHandler(async (event) => {
-  const filePathRisk = join(process.cwd(), 'app', 'assets', 'prompts', 'promptRisk.txt');
-  const filePathRec = join(process.cwd(), 'app', 'assets', 'prompts', 'promptRec.txt');
-  const promptRisk = await readFile(filePathRisk, 'utf-8');
-  const prompRec = await readFile(filePathRec, 'utf-8');
-  const response = await gigachat.chat({ messages: [{ role: 'user', content: promptRisk }] },).then((resp) => {
-    console.log(resp.choices[0]?.message.content);  
-  });
+
+  const lastRecordRisk = await prisma.risk.findFirst({ where: { sectionId: sectionId }, orderBy: { createdAt: 'desc' } });
+  const lastRecordRec = await prisma.recommendation.findFirst({ where: { sectionId: sectionId }, orderBy: { createdAt: 'desc' } });
+
+  if (!lastRecordRisk) {
+    const parsed = await requestGigaChat('risk', null);
+
+    const data = parsed.map((item) => ({
+      title: item.title,
+      text: item.text,
+      sectionId: sectionId
+    }));
+
+    await prisma.risk.createMany({ data });
+    risks = parsed;
+  } else {
+    const oneMonthAgo = subMonths(new Date(), 1);
+    const isOlder = isBefore(lastRecordRisk.createdAt, oneMonthAgo);
+
+    const targetDate = lastRecordRisk.createdAt;
+    const temp = await getData('risk', targetDate);
+    let textForPrompt = 'При проведение анализа учти данные ниже это твои рекомендации с прошлого месяца и были ли они выполнены \n';
+    if (isOlder) {
+      for (const item of temp) {
+        textForPrompt += `**${item.title}**\n -${item.text}\n Выполнено:${item.done ? 'да' : 'нет'}\n`;
+      }
+      const parsed = await requestGigaChat('risk', textForPrompt);
+
+      const data = parsed.map((item) => ({
+        title: item.title,
+        text: item.text,
+        sectionId: sectionId
+      }));
+
+      await prisma.risk.createMany({ data });
+      risks = parsed;
+    } else {
+      risks = temp;
+    }
+  }
+
+  if (!lastRecordRec) {
+    const parsed = await requestGigaChat('rec', null);
+
+    const data = parsed.map((item) => ({
+      title: item.title,
+      text: item.text,
+      sectionId: sectionId
+    }));
+
+    await prisma.recommendation.createMany({ data });
+    recommendations = parsed;
+  } else {
+    const oneMonthAgo = subMonths(new Date(), 1);
+    const isOlder = isBefore(lastRecordRec.createdAt, oneMonthAgo);
+
+    const targetDate = lastRecordRec.createdAt;
+    const temp = await getData('rec', targetDate);
+    let textForPrompt = 'При проведение анализа учти данные ниже это твои рекомендации с прошлого месяца и были ли они выполнены \n';
+    if (isOlder) {
+
+      for (const item of temp) {
+        textForPrompt += `**${item.title}**\n -${item.text}\n Выполнено:${item.done ? 'да' : 'нет'}\n`;
+      }
+      const parsed = await requestGigaChat('rec', textForPrompt);
+
+      const data = parsed.map((item) => ({
+        title: item.title,
+        text: item.text,
+        sectionId: sectionId
+      }));
+
+      await prisma.recommendation.createMany({ data });
+      recommendations = parsed;
+    } else {
+      recommendations = temp;
+    }
+  }
+
+
   return {
-    risks: {
-      'Проводите больше занятий': 'В мае занятий −2,1% при загрузке 87,5%. Добавьте 4–6 слотов/неделю и мини-группы, целевая загрузка 80–85%.',
-      'Внедрите летние форматы': 'Запустите интенсивы 2–4 недели, разовые визиты и «заморозку» абонемента, чтобы не терять клиентов в отпуска.',
-      'Увеличьте средний чек': 'Пакеты «семейный», индивидуальные тренировки и мерч. ',
-      'Сделайте рассылку по неактивным пользователям': 'Прогрейте базу: звонок + сообщение, акция на возвращение. ',
-      'Рефералы и отзывы': 'Прогрейте базу: звонок + сообщение, акция на возвращение. '
-    },
-    recommendations: {
-      'Проводите больше занятий': 'В мае занятий −2,1% при загрузке 87,5%. Добавьте 4–6 слотов/неделю и мини-группы, целевая загрузка 80–85%.',
-      'Внедрите летние форматы': 'Запустите интенсивы 2–4 недели, разовые визиты и «заморозку» абонемента, чтобы не терять клиентов в отпуска.',
-      'Увеличьте средний чек': 'Пакеты «семейный», индивидуальные тренировки и мерч. ',
-      'Сделайте рассылку по неактивным пользователям': 'Прогрейте базу: звонок + сообщение, акция на возвращение. ',
-      'Рефералы и отзывы': 'Прогрейте базу: звонок + сообщение, акция на возвращение. '
-    },
+    risks: risks, recommendations: recommendations
   };
 });
+
+async function getData(type: string, targetDate: Date) {
+  let list = {};
+  const dateStart = startOfDay(targetDate);
+  const dateEnd = endOfDay(targetDate);
+  if (type == 'risk') {
+    const records = await prisma.risk.findMany({
+      where: {
+        sectionId: sectionId,
+        createdAt: {
+          gte: dateStart,
+          lte: dateEnd,
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+    list = records.map(record => ({
+      title: record.title,
+      text: record.text,
+      done: record.done
+    }))
+  } else {
+    const records = await prisma.recommendation.findMany({
+      where: {
+        sectionId: sectionId,
+        createdAt: {
+          gte: dateStart,
+          lte: dateEnd,
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+    console.log(dateStart);
+    list = records.map(record => ({
+      title: record.title,
+      text: record.text,
+      done: record.done
+    }))
+  }
+  return list;
+};
+
+async function requestGigaChat(type: string, promptUpgrade: string | null) {
+  const filePathIns = join(process.cwd(), 'app', 'assets', 'prompts', 'instruction.txt');
+  const instruction = await readFile(filePathIns, 'utf-8');
+  let response;
+  if (type == 'risk') {
+    const filePathRisk = join(process.cwd(), 'app', 'assets', 'prompts', 'promptRisk.txt');
+    let promptRisk = await readFile(filePathRisk, 'utf-8');
+    if (promptUpgrade != null) {
+      promptRisk += promptUpgrade;
+    }
+    response = await gigachat.chat({ messages: [{ role: 'system', content: instruction }, { role: 'user', content: promptRisk }] },);
+  } else {
+    const filePathRec = join(process.cwd(), 'app', 'assets', 'prompts', 'promptRec.txt');
+    let promptRec = await readFile(filePathRec, 'utf-8');
+    if (promptUpgrade != null) {
+      promptRec += promptUpgrade;
+    }
+    response = await gigachat.chat({ messages: [{ role: 'system', content: instruction }, { role: 'user', content: promptRec }] },);
+  }
+
+  const ans = response.choices[0]?.message.content;
+  return parseFormattedText(ans!);
+};
+
+interface ParsedItem {
+  title: string;
+  text: string;
+}
+
+function parseFormattedText(text: string): ParsedItem[] {
+  const result: ParsedItem[] = [];
+  const lines = text.split('\n');
+  let currentKey: string | null = null;
+
+  for (const line of lines) {
+    const keyMatch = line.match(/\*\*(.+?)\*\*/);
+    if (keyMatch) {
+      currentKey = keyMatch[1]!.trim();
+      continue;
+    }
+
+    if (currentKey && line.trim().startsWith('-')) {
+      const value = line.trim().substring(1).trim();
+      result.push({
+        title: currentKey,
+        text: value
+      });
+    }
+  }
+
+  return result;
+}
