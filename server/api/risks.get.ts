@@ -23,6 +23,7 @@ export default defineEventHandler(async (event) => {
 
     await prisma.risk.createMany({ data });
     risks = await getData('risk', new Date());
+    risks = await getData('risk', new Date());
   } else {
     const oneMonthAgo = subMonths(new Date(), 1);
     const isOlder = isBefore(lastRecordRisk.createdAt, oneMonthAgo);
@@ -30,7 +31,9 @@ export default defineEventHandler(async (event) => {
     const targetDate = lastRecordRisk.createdAt;
     const temp = await getData('risk', targetDate);
 
+
     if (isOlder) {
+      const parsed = await requestGigaChat('risk', null);
       const parsed = await requestGigaChat('risk', null);
 
       const data = parsed.map((item) => ({
@@ -40,6 +43,7 @@ export default defineEventHandler(async (event) => {
       }));
 
       await prisma.risk.createMany({ data });
+      risks = await getData('risk', new Date());;
       risks = await getData('risk', new Date());;
     } else {
       risks = temp;
@@ -56,6 +60,7 @@ export default defineEventHandler(async (event) => {
     }));
 
     await prisma.recommendation.createMany({ data });
+    recommendations = await getData('rec', new Date());
     recommendations = await getData('rec', new Date());
   } else {
     const oneMonthAgo = subMonths(new Date(), 1);
@@ -78,6 +83,7 @@ export default defineEventHandler(async (event) => {
       }));
 
       await prisma.recommendation.createMany({ data });
+      recommendations = await getData('rec', new Date());
       recommendations = await getData('rec', new Date());
     } else {
       recommendations = temp;
@@ -107,6 +113,7 @@ async function getData(type: string, targetDate: Date) {
       },
     });
     list = records.map(record => ({
+      id: record.id,
       id: record.id,
       title: record.title,
       text: record.text,
