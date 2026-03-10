@@ -3,7 +3,7 @@
     <div class="category" :class="{ 'selected-category': selectedCategory == 'risks' }"
       @click="selectCategory('risks')">
       <img src="../assets/icons/chart.png" alt="">
-      <NuxtLink class="header-sm">Рекомендации и риски</NuxtLink>
+      <p class="header-sm">Рекомендации и риски</p>
     </div>
     <div class="category" :class="{ 'selected-category': selectedCategory == 'shredule' }"
       @click="selectCategory('shredule')">

@@ -42,7 +42,6 @@ model Risk {
   text      String   @db.Text
   sectionId Int
   section   Section  @relation(fields: [sectionId], references: [id])
-  done Boolean @default(false)
   createdAt DateTime @default(now())
 
   @@map("risks")
