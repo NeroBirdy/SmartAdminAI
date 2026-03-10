@@ -22,19 +22,16 @@ export default defineEventHandler(async (event) => {
     }));
 
     await prisma.risk.createMany({ data });
-    risks = parsed;
+    risks = await getData('risk', new Date());
   } else {
     const oneMonthAgo = subMonths(new Date(), 1);
     const isOlder = isBefore(lastRecordRisk.createdAt, oneMonthAgo);
 
     const targetDate = lastRecordRisk.createdAt;
     const temp = await getData('risk', targetDate);
-    let textForPrompt = 'При проведение анализа учти данные ниже это твои рекомендации с прошлого месяца и были ли они выполнены \n';
+
     if (isOlder) {
-      for (const item of temp) {
-        textForPrompt += `**${item.title}**\n -${item.text}\n Выполнено:${item.done ? 'да' : 'нет'}\n`;
-      }
-      const parsed = await requestGigaChat('risk', textForPrompt);
+      const parsed = await requestGigaChat('risk', null);
 
       const data = parsed.map((item) => ({
         title: item.title,
@@ -43,7 +40,7 @@ export default defineEventHandler(async (event) => {
       }));
 
       await prisma.risk.createMany({ data });
-      risks = parsed;
+      risks = await getData('risk', new Date());;
     } else {
       risks = temp;
     }
@@ -59,7 +56,7 @@ export default defineEventHandler(async (event) => {
     }));
 
     await prisma.recommendation.createMany({ data });
-    recommendations = parsed;
+    recommendations = await getData('rec', new Date());
   } else {
     const oneMonthAgo = subMonths(new Date(), 1);
     const isOlder = isBefore(lastRecordRec.createdAt, oneMonthAgo);
@@ -81,12 +78,11 @@ export default defineEventHandler(async (event) => {
       }));
 
       await prisma.recommendation.createMany({ data });
-      recommendations = parsed;
+      recommendations = await getData('rec', new Date());
     } else {
       recommendations = temp;
     }
   }
-
 
   return {
     risks: risks, recommendations: recommendations
@@ -111,9 +107,9 @@ async function getData(type: string, targetDate: Date) {
       },
     });
     list = records.map(record => ({
+      id: record.id,
       title: record.title,
       text: record.text,
-      done: record.done
     }))
   } else {
     const records = await prisma.recommendation.findMany({
@@ -128,8 +124,8 @@ async function getData(type: string, targetDate: Date) {
         createdAt: 'desc',
       },
     });
-    console.log(dateStart);
     list = records.map(record => ({
+      id: record.title,
       title: record.title,
       text: record.text,
       done: record.done
@@ -145,9 +141,6 @@ async function requestGigaChat(type: string, promptUpgrade: string | null) {
   if (type == 'risk') {
     const filePathRisk = join(process.cwd(), 'app', 'assets', 'prompts', 'promptRisk.txt');
     let promptRisk = await readFile(filePathRisk, 'utf-8');
-    if (promptUpgrade != null) {
-      promptRisk += promptUpgrade;
-    }
     response = await gigachat.chat({ messages: [{ role: 'system', content: instruction }, { role: 'user', content: promptRisk }] },);
   } else {
     const filePathRec = join(process.cwd(), 'app', 'assets', 'prompts', 'promptRec.txt');

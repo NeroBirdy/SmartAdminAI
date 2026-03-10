@@ -26,7 +26,6 @@ CREATE TABLE `risks` (
     `title` VARCHAR(191) NOT NULL,
     `text` TEXT NOT NULL,
     `sectionId` INTEGER NOT NULL,
-    `done` BOOLEAN NOT NULL DEFAULT false,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     PRIMARY KEY (`id`)
