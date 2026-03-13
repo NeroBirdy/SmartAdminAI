@@ -1,10 +1,6 @@
-# Nuxt Minimal Starter
+# Установка
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
-
-## Setup
-
-Make sure to install dependencies:
+Установка зависмостей:
 
 ```bash
 # npm
@@ -20,7 +16,22 @@ yarn install
 bun install
 ```
 
-## Development Server
+Инициалиация Prisma ORM
+
+```bash
+npx prisma init
+```
+
+```bash
+npx prisma generate
+```
+
+Создаем файл и заполняем .env на основе .env.example
+
+- DB Models -> prisma/schema.prisma
+- Prisma Confog -> prisma.config.ts
+
+# Development Server
 
 Start the development server on `http://localhost:3000`:
 
@@ -38,38 +49,39 @@ yarn dev
 bun run dev
 ```
 
-## Production
+# Работа с Prettier
 
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
+Форматировать все файлы
 
 ```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
+npx prettier . --write
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+Проверить форматирование всех файлов
+
+```bash
+npx prettier . --check
+```
+
+Установить расширение в VS Code
+- Prettier - Code formatter
+
+Заходим в настройки
+- Ctrl+,
+- Ищем "editor"
+- Находим Default formatter 
+- Выбираем Prettier - Code formatter
+
+# Работа с Prisma
+
+| Команда | Описание |
+| :--- | :--- |
+| `npx prisma generate` | Генерация Prisma Client |
+| `npx prisma db pull` | Импорт схемы из существующей БД |
+| `npx prisma db push` | Синхронизация схемы с БД (без миграций) |
+| `npx prisma migrate dev` | Создание и применение миграции (dev) |
+| `npx prisma migrate deploy` | Применение миграций (prod) |
+| `npx prisma studio` | Запуск GUI для работы с БД |
+| `npx prisma format` | Форматирование schema.prisma |
+| `npx prisma validate` | Проверка валидности схемы |
+
