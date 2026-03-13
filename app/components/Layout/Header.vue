@@ -6,10 +6,10 @@
     </div>
 
     <div class="rightSide">
-      <img class="icon" src="../assets/icons/headset.png" alt="" />
-      <img class="icon icon-bell" src="../assets/icons/bell.png" alt="" />
+      <img class="icon" src="../../assets/icons/headset.png" alt="" />
+      <img class="icon icon-bell" src="../../assets/icons/bell.png" alt="" />
       <p class="header-sm user-name">Евгений П.</p>
-      <img class="user-img" src="../assets/icons/user_pic.png" alt="" />
+      <img class="user-img" src="../../assets/icons/user_pic.png" alt="" />
     </div>
   </div>
 </template>
@@ -33,7 +33,7 @@
 }
 
 .back-btn {
-  background-image: url(../assets/icons/arrow_left.png);
+  background-image: url(../../assets/icons/arrow_left.png);
   background-position: center;
   background-repeat: no-repeat;
   width: 40px;

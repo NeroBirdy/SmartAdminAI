@@ -31,7 +31,7 @@
               @click="changeDoneState(item)"
             >
               <img
-                src="../assets/icons/check.svg"
+                src="../../assets/icons/check.svg"
                 alt="Check image"
                 class="check-img"
               />

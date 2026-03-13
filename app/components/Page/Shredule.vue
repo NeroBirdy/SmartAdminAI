@@ -8,7 +8,7 @@
             <p class="second-frame-text main-text-md">Создано занятий</p>
             <img
               class="second-frame-img"
-              src="../assets/icons/ellipsis.svg"
+              src="../../assets/icons/ellipsis.svg"
               alt=""
             />
           </div>
@@ -21,7 +21,7 @@
             <p class="second-frame-text main-text-md">Перенесено занятий</p>
             <img
               class="second-frame-img"
-              src="../assets/icons/ellipsis.svg"
+              src="../../assets/icons/ellipsis.svg"
               alt=""
             />
           </div>
@@ -35,7 +35,7 @@
     <div class="inside-frame">
       <div class="frame second-frame-skills">
         <div class="second-frame-title">
-          <img src="../assets/icons/sparkles.svg" alt="" />
+          <img src="../../assets/icons/sparkles.svg" alt="" />
           <div class="right">
             <div class="title-texts">
               <h1 class="header-sm">Генерация расписания</h1>
@@ -56,7 +56,7 @@
               <h1 class="second-text">Горизонт планирования</h1>
               <div class="setting-description">
                 <p class="header-sm">2 недели</p>
-                <img src="../assets/icons/remove.svg" alt="" />
+                <img src="../../assets/icons/remove.svg" alt="" />
               </div>
             </div>
           </div>
@@ -65,7 +65,7 @@
               <h1 class="second-text">При планировании учитывать</h1>
               <div class="setting-description">
                 <p class="header-sm">Только занятость инструкторов</p>
-                <img src="../assets/icons/remove.svg" alt="" />
+                <img src="../../assets/icons/remove.svg" alt="" />
               </div>
             </div>
           </div>
@@ -74,7 +74,7 @@
               <h1 class="second-text">Учитывать</h1>
               <div class="setting-description">
                 <p class="header-sm">Занятость инструкторов</p>
-                <img src="../assets/icons/remove.svg" alt="" />
+                <img src="../../assets/icons/remove.svg" alt="" />
               </div>
             </div>
           </div>
@@ -95,8 +95,8 @@
   </div>
 </template>
 <script setup>
-import down from "./assets/icons/chevron_down.svg";
-import up from "./assets/icons/chevron_up.svg";
+import down from "../../assets/icons/chevron_down.svg";
+import up from "../../assets/icons/chevron_up.svg";
 
 const openManagement = ref(false);
 const openGenerate = ref(false);

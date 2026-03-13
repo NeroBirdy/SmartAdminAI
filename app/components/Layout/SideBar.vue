@@ -5,7 +5,7 @@
       :class="{ 'selected-category': selectedCategory == 'risks' }"
       @click="selectCategory('risks')"
     >
-      <img src="../assets/icons/chart.png" alt="" />
+      <img src="../../assets/icons/chart.png" alt="" />
       <p class="header-sm">Рекомендации и риски</p>
     </div>
     <div
@@ -55,17 +55,17 @@
       :class="{ 'selected-category': selectedCategory == 'settings' }"
       @click="selectCategory('settings')"
     >
-      <img src="../assets/icons/bolt.png" alt="" />
+      <img src="../../assets/icons/bolt.png" alt="" />
       <p class="header-sm">Настройки</p>
     </div>
   </div>
 </template>
 
 <script setup>
-import toggleLeft from "../assets/icons/toggle_left.svg";
-import toggleRight from "../assets/icons/toggle_right.svg";
-import toggleOff from "../assets/icons/toggle_off.svg";
-import toggleOn from "../assets/icons/toggle_on.svg";
+import toggleLeft from "../../assets/icons/toggle_left.svg";
+import toggleRight from "../../assets/icons/toggle_right.svg";
+import toggleOff from "../../assets/icons/toggle_off.svg";
+import toggleOn from "../../assets/icons/toggle_on.svg";
 
 const route = useRoute();
 

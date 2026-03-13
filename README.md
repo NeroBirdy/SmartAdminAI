@@ -64,24 +64,25 @@ npx prettier . --check
 ```
 
 Установить расширение в VS Code
+
 - Prettier - Code formatter
 
 Заходим в настройки
+
 - Ctrl+,
 - Ищем "editor"
-- Находим Default formatter 
+- Находим Default formatter
 - Выбираем Prettier - Code formatter
 
 # Работа с Prisma
 
-| Команда | Описание |
-| :--- | :--- |
-| `npx prisma generate` | Генерация Prisma Client |
-| `npx prisma db pull` | Импорт схемы из существующей БД |
-| `npx prisma db push` | Синхронизация схемы с БД (без миграций) |
-| `npx prisma migrate dev` | Создание и применение миграции (dev) |
-| `npx prisma migrate deploy` | Применение миграций (prod) |
-| `npx prisma studio` | Запуск GUI для работы с БД |
-| `npx prisma format` | Форматирование schema.prisma |
-| `npx prisma validate` | Проверка валидности схемы |
-
+| Команда                     | Описание                                |
+| :-------------------------- | :-------------------------------------- |
+| `npx prisma generate`       | Генерация Prisma Client                 |
+| `npx prisma db pull`        | Импорт схемы из существующей БД         |
+| `npx prisma db push`        | Синхронизация схемы с БД (без миграций) |
+| `npx prisma migrate dev`    | Создание и применение миграции (dev)    |
+| `npx prisma migrate deploy` | Применение миграций (prod)              |
+| `npx prisma studio`         | Запуск GUI для работы с БД              |
+| `npx prisma format`         | Форматирование schema.prisma            |
+| `npx prisma validate`       | Проверка валидности схемы               |
