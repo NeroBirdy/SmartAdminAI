@@ -34,7 +34,6 @@ export default defineEventHandler(async (event) => {
 
     if (isOlder) {
       const parsed = await requestGigaChat('risk', null);
-      const parsed = await requestGigaChat('risk', null);
 
       const data = parsed.map((item) => ({
         title: item.title,
@@ -113,7 +112,6 @@ async function getData(type: string, targetDate: Date) {
       },
     });
     list = records.map(record => ({
-      id: record.id,
       id: record.id,
       title: record.title,
       text: record.text,
