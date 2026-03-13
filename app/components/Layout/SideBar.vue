@@ -115,6 +115,10 @@ const getIcon = (number, block) => {
   width: 264px;
   margin-right: 16px;
   margin-left: 5px;
+  top: 10px;
+  z-index: 1;
+  position: sticky;
+  height: 100%;
 }
 
 .category {
@@ -143,5 +147,6 @@ const getIcon = (number, block) => {
   margin: auto;
   margin-right: 0;
   margin-left: 0;
+  pointer-events: none;  
 }
 </style>
