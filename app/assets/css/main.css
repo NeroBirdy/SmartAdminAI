@@ -86,7 +86,7 @@ body {
 .settings-text {
   font-family: "Nunito-SemiBold";
   font-size: 16px;
-  color: #9DA4B1;
+  color: #9da4b1;
 }
 
 .content {
@@ -96,7 +96,7 @@ body {
 
 .btn-submit {
   color: white;
-  background-color: #2C71E4;
+  background-color: #2c71e4;
   height: 48px;
   width: 142px;
   border-radius: 20px;
@@ -107,7 +107,7 @@ body {
 .title {
   border-radius: 15px;
   height: 72px;
-  background-color: #E9F3FF;
+  background-color: #e9f3ff;
   display: flex;
   flex-direction: row;
   align-items: center;
