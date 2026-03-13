@@ -1,0 +1,10 @@
+model Risk {
+  id        Int      @id @default(autoincrement())
+  title     String
+  text      String   @db.Text
+  sectionId Int
+  section   Section  @relation(fields: [sectionId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@map("risks")
+}
