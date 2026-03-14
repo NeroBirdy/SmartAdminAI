@@ -1,5 +1,5 @@
 <template>
-  <Loading v-if="loading" />
+  <Loader v-if="loading" />
   <div v-else>
     <div class="frame">
       <h1 class="frame-header header-md">
