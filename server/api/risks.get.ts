@@ -1,95 +1,54 @@
-import { gigachat } from "../utils/gigaChat";
-import { readFile } from "node:fs/promises";
-import { join } from "node:path";
-import { subMonths, isBefore, startOfDay, endOfDay } from "date-fns";
+import { GigaChatAnalitics } from "../utils/gigaChat";
+import { prompts } from "../utils/prompts";
+import { subMonths, isBefore } from "date-fns";
+import { Risk, Recommendation } from "../../generated/prisma/client";
 
 const sectionId = 1;
 let risks = {};
 let recommendations = {};
 
+const prisma = usePrisma();
+
+type RiskOutput = { id: number; title: string; text: string };
+type RecommendationOutput = {
+  id: number;
+  title: string;
+  text: string;
+  done: boolean;
+};
+
+type ParsedItem = {
+  title: string;
+  text: string;
+};
+
 export default defineEventHandler(async (event) => {
-  const lastRecordRisk = await prisma.risk.findFirst({
-    where: { sectionId: sectionId },
-    orderBy: { createdAt: "desc" },
-  });
-  const lastRecordRec = await prisma.recommendation.findFirst({
-    where: { sectionId: sectionId },
-    orderBy: { createdAt: "desc" },
-  });
+  const lastRecordRisk = await getLastRecord("risk");
+  const lastRecordRec = await getLastRecord("recommendation");
+
+  const today = new Date();
+  const oneMonthAgo = subMonths(today, 1);
+  const gigaChat = new GigaChatAnalitics();
 
   if (!lastRecordRisk) {
-    const parsed = await requestGigaChat("risk", null);
-
-    const data = parsed.map((item) => ({
-      title: item.title,
-      text: item.text,
-      sectionId: sectionId,
-    }));
-
-    await prisma.risk.createMany({ data });
-    risks = await getData("risk", new Date());
-    risks = await getData("risk", new Date());
+    risks = await getRiskOrRec(gigaChat, "risk");
   } else {
-    const oneMonthAgo = subMonths(new Date(), 1);
     const isOlder = isBefore(lastRecordRisk.createdAt, oneMonthAgo);
-
-    const targetDate = lastRecordRisk.createdAt;
-    const temp = await getData("risk", targetDate);
-
     if (isOlder) {
-      const parsed = await requestGigaChat("risk", null);
-
-      const data = parsed.map((item) => ({
-        title: item.title,
-        text: item.text,
-        sectionId: sectionId,
-      }));
-
-      await prisma.risk.createMany({ data });
-      risks = await getData("risk", new Date());
-      risks = await getData("risk", new Date());
+      risks = await getRiskOrRec(gigaChat, "risk");
     } else {
-      risks = temp;
+      risks = await getRecords("risk");
     }
   }
 
   if (!lastRecordRec) {
-    const parsed = await requestGigaChat("rec", null);
-
-    const data = parsed.map((item) => ({
-      title: item.title,
-      text: item.text,
-      sectionId: sectionId,
-    }));
-
-    await prisma.recommendation.createMany({ data });
-    recommendations = await getData("rec", new Date());
-    recommendations = await getData("rec", new Date());
+    recommendations = await getRiskOrRec(gigaChat, "recommendation");
   } else {
-    const oneMonthAgo = subMonths(new Date(), 1);
     const isOlder = isBefore(lastRecordRec.createdAt, oneMonthAgo);
-
-    const targetDate = lastRecordRec.createdAt;
-    const temp = await getData("rec", targetDate);
-    let textForPrompt =
-      "При проведение анализа учти данные ниже это твои рекомендации с прошлого месяца и были ли они выполнены \n";
     if (isOlder) {
-      for (const item of temp) {
-        textForPrompt += `**${item.title}**\n -${item.text}\n Выполнено:${item.done ? "да" : "нет"}\n`;
-      }
-      const parsed = await requestGigaChat("rec", textForPrompt);
-
-      const data = parsed.map((item) => ({
-        title: item.title,
-        text: item.text,
-        sectionId: sectionId,
-      }));
-
-      await prisma.recommendation.createMany({ data });
-      recommendations = await getData("rec", new Date());
-      recommendations = await getData("rec", new Date());
+      recommendations = await getUpdatedRec(gigaChat);
     } else {
-      recommendations = temp;
+      recommendations = await getRecords("recommendation");
     }
   }
 
@@ -99,125 +58,126 @@ export default defineEventHandler(async (event) => {
   };
 });
 
-async function getData(type: string, targetDate: Date) {
-  let list = {};
-  const dateStart = startOfDay(targetDate);
-  const dateEnd = endOfDay(targetDate);
+const getRiskOrRec = async (
+  gigaChat: GigaChatAnalitics,
+  type: "risk" | "recommendation",
+) => {
+  let prompt: string = "";
+  let instruction: string = "";
   if (type == "risk") {
-    const records = await prisma.risk.findMany({
-      where: {
-        sectionId: sectionId,
-        createdAt: {
-          gte: dateStart,
-          lte: dateEnd,
-        },
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-    list = records.map((record) => ({
-      id: record.id,
-      title: record.title,
-      text: record.text,
-    }));
+    prompt = prompts.risk;
+    instruction = prompts.instructionRisk;
   } else {
-    const records = await prisma.recommendation.findMany({
-      where: {
-        sectionId: sectionId,
-        createdAt: {
-          gte: dateStart,
-          lte: dateEnd,
-        },
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-    list = records.map((record) => ({
-      id: record.id,
-      title: record.title,
-      text: record.text,
-      done: record.done,
-    }));
+    prompt = prompts.recommendation;
+    instruction = prompts.instructionRec;
   }
-  return list;
-}
+  const parsedResponse = await gigaChat.sendMessage(instruction, prompt);
 
-async function requestGigaChat(type: string, promptUpgrade: string | null) {
-  const filePathIns = join(
-    process.cwd(),
-    "app",
-    "assets",
-    "prompts",
-    "instruction.txt",
+  return await createAndReturn(parsedResponse, type);
+};
+
+const getUpdatedRec = async (gigaChat: GigaChatAnalitics) => {
+  let promptAppend: string = "";
+  const records = (await getRecords(
+    "recommendation",
+  )) as RecommendationOutput[];
+  for (const item of records) {
+    promptAppend += `**${item.title}**\n`;
+    promptAppend += `-${item.text}\n`;
+    promptAppend += `Выполнено:${item.done ? "да" : "нет"}\n`;
+  }
+
+  const prompt = prompts.recommendation + promptAppend;
+
+  const parsedResponse = await gigaChat.sendMessage(
+    prompts.instructionRec,
+    prompt,
   );
-  const instruction = await readFile(filePathIns, "utf-8");
-  let response;
-  if (type == "risk") {
-    const filePathRisk = join(
-      process.cwd(),
-      "app",
-      "assets",
-      "prompts",
-      "promptRisk.txt",
-    );
-    let promptRisk = await readFile(filePathRisk, "utf-8");
-    response = await gigachat.chat({
-      messages: [
-        { role: "system", content: instruction },
-        { role: "user", content: promptRisk },
-      ],
-    });
+
+  return await createAndReturn(parsedResponse, "recommendation");
+};
+
+const getRecords = async (
+  type: "risk" | "recommendation",
+): Promise<RiskOutput[] | RecommendationOutput[]> => {
+  const records = await fetchRecords(type);
+
+  return mapRecords(records, type);
+};
+
+const fetchRecords = async (
+  type: "risk" | "recommendation",
+): Promise<Risk[] | Recommendation[]> => {
+  const lastRecord = await getLastRecord(type);
+
+  if (type === "risk") {
+    return (await prisma.risk.findMany({
+      where: {
+        sectionId: sectionId,
+        createdAt: lastRecord!.createdAt,
+      },
+      orderBy: { createdAt: "desc" },
+    })) as Risk[];
+  }
+  return (await prisma.recommendation.findMany({
+    where: {
+      sectionId: sectionId,
+      createdAt: lastRecord!.createdAt,
+    },
+    orderBy: { createdAt: "desc" },
+  })) as Recommendation[];
+};
+
+const mapRecords = (
+  records: (Risk | Recommendation)[],
+  type: "risk" | "recommendation",
+): (RiskOutput | RecommendationOutput)[] => {
+  if (type === "risk") {
+    return (records as Risk[]).map((r) => ({
+      id: r.id,
+      title: r.title,
+      text: r.text,
+    })) as RiskOutput[];
   } else {
-    const filePathRec = join(
-      process.cwd(),
-      "app",
-      "assets",
-      "prompts",
-      "promptRec.txt",
-    );
-    let promptRec = await readFile(filePathRec, "utf-8");
-    if (promptUpgrade != null) {
-      promptRec += promptUpgrade;
-    }
-    response = await gigachat.chat({
-      messages: [
-        { role: "system", content: instruction },
-        { role: "user", content: promptRec },
-      ],
-    });
+    return (records as Recommendation[]).map((r) => ({
+      id: r.id,
+      title: r.title,
+      text: r.text,
+      done: r.done,
+    })) as RecommendationOutput[];
+  }
+};
+
+const getLastRecord = async (
+  type: "risk" | "recommendation",
+): Promise<Risk | Recommendation> => {
+  if (type == "risk") {
+    return (await prisma.risk.findFirst({
+      where: { sectionId: sectionId },
+      orderBy: { createdAt: "desc" },
+    })) as Risk;
+  }
+  return (await prisma.recommendation.findFirst({
+    where: { sectionId: sectionId },
+    orderBy: { createdAt: "desc" },
+  })) as Recommendation;
+};
+
+const createAndReturn = async (
+  parsedResponse: ParsedItem[],
+  type: "risk" | "recommendation",
+): Promise<RiskOutput[] | RecommendationOutput[]> => {
+  const data = parsedResponse.map((item) => ({
+    title: item.title,
+    text: item.text,
+    sectionId: sectionId,
+  }));
+
+  if (type == "risk") {
+    await prisma.risk.createMany({ data });
+  } else {
+    await prisma.recommendation.createMany({ data });
   }
 
-  const ans = response.choices[0]?.message.content;
-  return parseFormattedText(ans!);
-}
-
-interface ParsedItem {
-  title: string;
-  text: string;
-}
-
-function parseFormattedText(text: string): ParsedItem[] {
-  const result: ParsedItem[] = [];
-  const lines = text.split("\n");
-  let currentKey: string | null = null;
-
-  for (const line of lines) {
-    const keyMatch = line.match(/\*\*(.+?)\*\*/);
-    if (keyMatch) {
-      currentKey = keyMatch[1]!.trim();
-      continue;
-    }
-
-    if (currentKey && line.trim().startsWith("-")) {
-      const value = line.trim().substring(1).trim();
-      result.push({
-        title: currentKey,
-        text: value,
-      });
-    }
-  }
-
-  return result;
-}
+  return await getRecords(type);
+};

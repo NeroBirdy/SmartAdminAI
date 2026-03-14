@@ -147,6 +147,6 @@ const getIcon = (number, block) => {
   margin: auto;
   margin-right: 0;
   margin-left: 0;
-  pointer-events: none;  
+  pointer-events: none;
 }
 </style>
