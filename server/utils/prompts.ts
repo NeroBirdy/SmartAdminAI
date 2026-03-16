@@ -1,6 +1,8 @@
+export { prompts, initPrompts };
+
 const prisma = usePrisma();
 
-export const prompts = {
+const prompts = {
   instructionRisk: "",
   instructionRec: "",
   recommendation: "",
@@ -9,7 +11,7 @@ export const prompts = {
 
 let isInitialized = false;
 
-export async function initPrompts(): Promise<void> {
+async function initPrompts(): Promise<void> {
   if (isInitialized) return;
 
   const getPrompt = async (id: number): Promise<string> => {
@@ -25,12 +27,8 @@ export async function initPrompts(): Promise<void> {
     return prompt.text;
   };
 
-  const [instructionRisk, instructionRec, recommendation, risk] = await Promise.all([
-    getPrompt(5),
-    getPrompt(6),
-    getPrompt(7),
-    getPrompt(8),
-  ]);
+  const [instructionRisk, instructionRec, recommendation, risk] =
+    await Promise.all([getPrompt(5), getPrompt(6), getPrompt(7), getPrompt(8)]);
 
   prompts.instructionRisk = instructionRisk;
   prompts.instructionRec = instructionRec;

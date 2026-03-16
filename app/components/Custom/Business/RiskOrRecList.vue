@@ -4,16 +4,9 @@
       {{ title }}
     </h1>
     <div class="inside-frame">
-      <div
-        class="frame second-frame"
-        v-for="item in items"
-        :key="item.id"
-      >
-    <CustomBusinessRiskOrRecRow 
-    :item="item"
-    :type="type"
-    />
-    </div>
+      <div class="frame second-frame" v-for="item in items" :key="item.id">
+        <CustomBusinessRiskOrRecRow :item="item" :type="type" />
+      </div>
     </div>
   </div>
 </template>

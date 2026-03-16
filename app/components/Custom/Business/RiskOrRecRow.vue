@@ -4,7 +4,10 @@
     <div class="second-frame-title header-sm">{{ item.title }}</div>
     <div class="second-frame-text main-text-sm">{{ item.text }}</div>
   </div>
-  <UIRecommendationButton v-if="type == 'recommendation'" :item="(item as Recommendation)" />
+  <UIRecommendationButton
+    v-if="type == 'recommendation'"
+    :item="item as Recommendation"
+  />
 </template>
 
 <script lang="ts" setup>

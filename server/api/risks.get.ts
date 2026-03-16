@@ -3,10 +3,6 @@ import { prompts } from "../utils/prompts";
 import { subMonths, isBefore } from "date-fns";
 import { Risk, Recommendation } from "../../generated/prisma/client";
 
-const sectionId = 1;
-let risks = {};
-let recommendations = {};
-
 const prisma = usePrisma();
 
 type RiskOutput = { id: number; title: string; text: string };
@@ -23,32 +19,36 @@ type ParsedItem = {
 };
 
 export default defineEventHandler(async (event) => {
-  const lastRecordRisk = await getLastRecord("risk");
-  const lastRecordRec = await getLastRecord("recommendation");
+  const sectionId = 1;
+  let risks = {};
+  let recommendations = {};
+
+  const lastRecordRisk = await getLastRecord("risk", sectionId);
+  const lastRecordRec = await getLastRecord("recommendation", sectionId);
 
   const today = new Date();
   const oneMonthAgo = subMonths(today, 1);
   const gigaChat = new GigaChatAnalitics();
 
   if (!lastRecordRisk) {
-    risks = await getRiskOrRec(gigaChat, "risk");
+    risks = await getRiskOrRec(gigaChat, "risk", sectionId);
   } else {
     const isOlder = isBefore(lastRecordRisk.createdAt, oneMonthAgo);
     if (isOlder) {
-      risks = await getRiskOrRec(gigaChat, "risk");
+      risks = await getRiskOrRec(gigaChat, "risk", sectionId);
     } else {
-      risks = await getRecords("risk");
+      risks = await getRecords("risk", sectionId);
     }
   }
 
   if (!lastRecordRec) {
-    recommendations = await getRiskOrRec(gigaChat, "recommendation");
+    recommendations = await getRiskOrRec(gigaChat, "recommendation", sectionId);
   } else {
     const isOlder = isBefore(lastRecordRec.createdAt, oneMonthAgo);
     if (isOlder) {
-      recommendations = await getUpdatedRec(gigaChat);
+      recommendations = await getUpdatedRec(gigaChat, sectionId);
     } else {
-      recommendations = await getRecords("recommendation");
+      recommendations = await getRecords("recommendation", sectionId);
     }
   }
 
@@ -61,6 +61,7 @@ export default defineEventHandler(async (event) => {
 const getRiskOrRec = async (
   gigaChat: GigaChatAnalitics,
   type: "risk" | "recommendation",
+  sectionId: number,
 ) => {
   let prompt: string = "";
   let instruction: string = "";
@@ -73,13 +74,17 @@ const getRiskOrRec = async (
   }
   const parsedResponse = await gigaChat.sendMessage(instruction, prompt);
 
-  return await createAndReturn(parsedResponse, type);
+  return await createAndReturn(parsedResponse, type, sectionId);
 };
 
-const getUpdatedRec = async (gigaChat: GigaChatAnalitics) => {
+const getUpdatedRec = async (
+  gigaChat: GigaChatAnalitics,
+  sectionId: number,
+) => {
   let promptAppend: string = "";
   const records = (await getRecords(
     "recommendation",
+    sectionId,
   )) as RecommendationOutput[];
   for (const item of records) {
     promptAppend += `**${item.title}**\n`;
@@ -94,21 +99,23 @@ const getUpdatedRec = async (gigaChat: GigaChatAnalitics) => {
     prompt,
   );
 
-  return await createAndReturn(parsedResponse, "recommendation");
+  return await createAndReturn(parsedResponse, "recommendation", sectionId);
 };
 
 const getRecords = async (
   type: "risk" | "recommendation",
+  sectionId: number,
 ): Promise<RiskOutput[] | RecommendationOutput[]> => {
-  const records = await fetchRecords(type);
+  const records = await fetchRecords(type, sectionId);
 
   return mapRecords(records, type);
 };
 
 const fetchRecords = async (
   type: "risk" | "recommendation",
+  sectionId: number,
 ): Promise<Risk[] | Recommendation[]> => {
-  const lastRecord = await getLastRecord(type);
+  const lastRecord = await getLastRecord(type, sectionId);
 
   if (type === "risk") {
     return (await prisma.risk.findMany({
@@ -150,6 +157,7 @@ const mapRecords = (
 
 const getLastRecord = async (
   type: "risk" | "recommendation",
+  sectionId: number,
 ): Promise<Risk | Recommendation> => {
   if (type == "risk") {
     return (await prisma.risk.findFirst({
@@ -166,6 +174,7 @@ const getLastRecord = async (
 const createAndReturn = async (
   parsedResponse: ParsedItem[],
   type: "risk" | "recommendation",
+  sectionId: number,
 ): Promise<RiskOutput[] | RecommendationOutput[]> => {
   const data = parsedResponse.map((item) => ({
     title: item.title,
@@ -179,5 +188,5 @@ const createAndReturn = async (
     await prisma.recommendation.createMany({ data });
   }
 
-  return await getRecords(type);
+  return await getRecords(type, sectionId);
 };
