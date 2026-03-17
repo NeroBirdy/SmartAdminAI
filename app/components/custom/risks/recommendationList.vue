@@ -5,23 +5,22 @@
     </h1>
     <div class="inside-frame">
       <div class="frame second-frame" v-for="item in items" :key="item.id">
-        <CustomBusinessRiskOrRecRow :item="item" :type="type" />
+        <custom-risks-recommendation-row :item="item"/>
       </div>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-type RisksOrRec = {
+type Recommendation = {
   id: number;
   title: string;
   text: string;
-  done?: boolean;
+  done: boolean;
 };
 
 defineProps<{
-  type: string;
   title: string;
-  items: RisksOrRec[];
+  items: Recommendation[];
 }>();
 </script>
 

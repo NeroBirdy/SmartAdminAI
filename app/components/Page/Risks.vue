@@ -1,12 +1,12 @@
 <template>
-  <UILoader v-if="loading" />
+  <ui-loader v-if="loading" />
+
   <div v-else>
-    <CustomBusinessRiskOrRecList
-      type="recommendation"
+    <custom-risks-recommendation-list
       title="Рекомендации (Growth opportunities)"
       :items="recommendations"
     />
-    <CustomBusinessRiskOrRecList
+    <custom-risks-risk-list
       type="risk"
       title="Риски (Risks)"
       :items="risks"
@@ -37,6 +37,10 @@ const risks = ref<Risk[]>([]);
 const loading = ref(true);
 
 onMounted(async () => {
+  await getData();
+});
+
+const getData = async () => {
   try {
     const response = await $fetch<ApiResponse>("/api/risks");
 
@@ -47,6 +51,6 @@ onMounted(async () => {
   } finally {
     loading.value = false;
   }
-});
+};
 </script>
 <style scoped></style>

@@ -10,14 +10,14 @@
     </div>
     <div
       class="category"
-      :class="{ 'selected-category': selectedCategory == 'shredule' }"
-      @click="selectCategory('shredule')"
+      :class="{ 'selected-category': selectedCategory == 'schedule' }"
+      @click="selectCategory('schedule')"
     >
       <img
         class="toggle"
-        :class="toggles['shredule'] ? 'on' : 'off'"
-        :src="getIcon('shredule', 0)"
-        @click.stop="toggleIcon('shredule')"
+        :class="toggles['schedule'] ? 'on' : 'off'"
+        :src="getIcon('schedule', 0)"
+        @click.stop="toggleIcon('schedule')"
         alt=""
       />
       <p class="header-sm">Управление расписанием</p>
@@ -74,11 +74,11 @@ const selectedCategory = computed(() => {
   return path;
 });
 
-const toggles = ref({ shredule: 1, clients: 0, staff: 0 });
+const toggles = ref({ schedule: 1, clients: 0, staff: 0 });
 
 const categories = {
   risks: "Рекомендации и риски",
-  shredule: "Управление расписанием",
+  schedule: "Управление расписанием",
   clients: "Сопровождение клиентов",
   staff: "Координация персонала",
   settings: "Настройки",

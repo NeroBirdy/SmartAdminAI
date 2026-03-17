@@ -1,46 +1,24 @@
 <template>
-  <div :class="type == 'recommendation' ? 'blue-dot' : 'red-dot'"></div>
+  <div class="red-dot"></div>
   <div class="texts">
     <div class="second-frame-title header-sm">{{ item.title }}</div>
     <div class="second-frame-text main-text-sm">{{ item.text }}</div>
   </div>
-  <UIRecommendationButton
-    v-if="type == 'recommendation'"
-    :item="item as Recommendation"
-  />
 </template>
 
 <script lang="ts" setup>
-type RiskOrRec = {
+type Risk = {
   id: number;
   title: string;
   text: string;
-  done?: boolean;
 };
 
-type Recommendation = {
-  id: number;
-  title: string;
-  text: string;
-  done: boolean;
-};
-
-defineProps<{
-  type: string;
-  item: RiskOrRec;
+const props = defineProps<{
+  item: Risk;
 }>();
 </script>
 
 <style scoped>
-.blue-dot {
-  min-width: 8px;
-  height: 8px;
-  background-color: #2c71e4;
-  border-radius: 50%;
-  margin-left: 16px;
-  margin-right: 16px;
-}
-
 .red-dot {
   min-width: 8px;
   height: 8px;
@@ -60,7 +38,7 @@ defineProps<{
 }
 
 .second-frame .texts {
-  margin: auto;
+  margin-right: 40px;
   margin-left: 0;
 }
 </style>
