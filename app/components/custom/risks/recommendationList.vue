@@ -4,8 +4,18 @@
       {{ title }}
     </h1>
     <div class="inside-frame">
-      <div class="frame second-frame" v-for="item in items" :key="item.id">
-        <custom-risks-recommendation-row :item="item"/>
+      <div
+        class="frame second-frame"
+        v-if="items.length"
+        v-for="item in items"
+        :key="item.id"
+      >
+        <custom-risks-recommendation-row :item="item" />
+      </div>
+      <div v-else class="error">
+        <h1 class="header-sm">
+          Упс! Кажется произошла ошибка. Попробуйте еще раз позже.
+        </h1>
       </div>
     </div>
   </div>
@@ -48,5 +58,17 @@ defineProps<{
   flex-direction: row;
   align-items: center;
   margin-bottom: 10px;
+}
+
+.header-sm {
+  color: #717e97;
+  margin: 0;
+}
+
+.error {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+  margin-bottom: 56px;
 }
 </style>
