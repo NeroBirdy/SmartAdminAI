@@ -1,0 +1,95 @@
+{
+  "response": [
+    {
+      "name": "Краски и мелки",
+      "type": "творческие секции",
+      "city": "Екатеринбург",
+      "performanceIndicators": [
+        {
+          "period": "01.04.2026-01.05.2026",
+          "activeClients": 150,
+          "newClients": 20,
+          "returnClients": 8,
+          "totalVisits": 90,
+          "occupancyRate": 78.0,
+          "profit": 180000,
+          "averageProfitFromClient": 1200,
+          "lessonsConducted": 80,
+          "averageScore": 8.8,
+          "paymentType": ["помесячно"],
+          "groupCount": 10,
+          "coachCount": 7,
+          "lessonsType": ["лепка", "рисование", "живопись"],
+          "sexRatio": {
+            "men": 20,
+            "female": 80
+          },
+          "ageGroup": ["6-9", "10-14", "15-17"]
+        },
+        {
+          "period": "01.03.2026-01.04.2026",
+          "activeClients": 154,
+          "newClients": 22,
+          "returnClients": 9,
+          "totalVisits": 95,
+          "occupancyRate": 78.9,
+          "profit": 190145,
+          "averageProfitFromClient": 1255,
+          "lessonsConducted": 75,
+          "averageScore": 8.9,
+          "paymentType": ["помесячно"],
+          "groupCount": 10,
+          "coachCount": 7,
+          "lessonsType": ["лепка", "рисование", "живопись"],
+          "sexRatio": {
+            "men": 20,
+            "female": 80
+          },
+          "ageGroup": ["6-9", "10-14", "15-17"]
+        },
+        {
+          "period": "01.02.2026-01.03.2026",
+          "activeClients": 157,
+          "newClients": 25,
+          "returnClients": 10,
+          "totalVisits": 101,
+          "occupancyRate": 79.8,
+          "profit": 203009,
+          "averageProfitFromClient": 1315,
+          "lessonsConducted": 71,
+          "averageScore": 8.9,
+          "paymentType": ["помесячно"],
+          "groupCount": 10,
+          "coachCount": 7,
+          "lessonsType": ["лепка", "рисование", "живопись"],
+          "sexRatio": {
+            "male": 20,
+            "female": 80
+          },
+          "ageGroup": ["6-9", "10-14", "15-17"]
+        },
+        {
+          "period": "01.01.2026-01.02.2026",
+          "activeClients": 159,
+          "newClients": 28,
+          "returnClients": 11,
+          "totalVisits": 106,
+          "occupancyRate": 78.0,
+          "profit": 214567,
+          "averageProfitFromClient": 1366,
+          "lessonsConducted": 68,
+          "averageScore": 9.0,
+          "paymentType": ["помесячно"],
+          "groupCount": 10,
+          "coachCount": 7,
+          "lessonsType": ["лепка", "рисование", "живопись"],
+          "sexRatio": {
+            "men": 20,
+            "female": 80
+          },
+          "ageGroup": ["6-9", "10-14", "15-17"]
+        }
+      ]
+    }
+  ]
+}

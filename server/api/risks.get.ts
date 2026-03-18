@@ -59,21 +59,21 @@ export default defineEventHandler(async (event) => {
 });
 
 const getRiskOrRec = async (
+  //Нужно поменять
   gigaChat: GigaChatAnalitics,
   type: "risk" | "recommendation",
   sectionId: number,
 ) => {
-  let prompt: string = "";
   let instruction: string = "";
   if (type == "risk") {
-    prompt = prompts.risk;
     instruction = prompts.instructionRisk;
   } else {
-    prompt = prompts.recommendation;
     instruction = prompts.instructionRec;
   }
-  const parsedResponse = await gigaChat.sendMessage(instruction, prompt);
 
+  const prompt = await $fetch<string>("/api/getDataForPrompt");
+
+  const parsedResponse = await gigaChat.sendMessage(instruction, prompt);
   return await createAndReturn(parsedResponse, type, sectionId);
 };
 
@@ -81,18 +81,19 @@ const getUpdatedRec = async (
   gigaChat: GigaChatAnalitics,
   sectionId: number,
 ) => {
-  let promptAppend: string = "";
+  let prompt =
+    "При проведение анализа учти данные ниже это твоих рекомендации с прошлого месяца и были ли они выполнины\n";
   const records = (await getRecords(
     "recommendation",
     sectionId,
   )) as RecommendationOutput[];
   for (const item of records) {
-    promptAppend += `**${item.title}**\n`;
-    promptAppend += `-${item.text}\n`;
-    promptAppend += `Выполнено:${item.done ? "да" : "нет"}\n`;
+    prompt += `**${item.title}**\n`;
+    prompt += `-${item.text}\n`;
+    prompt += `Выполнено:${item.done ? "да" : "нет"}\n`;
   }
 
-  const prompt = prompts.recommendation + promptAppend;
+  prompt += await $fetch<string>("/api/getDataForPrompt");
 
   const parsedResponse = await gigaChat.sendMessage(
     prompts.instructionRec,
