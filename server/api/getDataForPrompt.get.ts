@@ -12,6 +12,18 @@ export default defineEventHandler(async (event) => {
 
     const performanceIndicators = response.performanceIndicators;
 
+    const formatArray = (arr: string[] | undefined): string =>
+      Array.isArray(arr) ? arr.join(", ") : "—";
+
+    const formatSexRatio = (
+      ratio: { male?: number; female?: number; men?: number } | undefined,
+    ): string => {
+      if (!ratio) return "—";
+      const male = ratio.male ?? ratio.men ?? 0;
+      const female = ratio.female ?? 0;
+      return `М: ${male}%, Ж: ${female}%`;
+    };
+
     const tableData = [
       // Заголовки
       [
@@ -25,6 +37,12 @@ export default defineEventHandler(async (event) => {
         "Средний доход на клиента, ₽",
         "Проведено занятий",
         "Средняя оценка занятий",
+        "Количество групп",
+        "Количество инструкторов",
+        "Виды занятий",
+        "Соотношение полов клинентов",
+        "Вид оплаты",
+        "Возростные группы клиентов",
       ],
       // Строки данных
       ...performanceIndicators.map((item: any) => [
@@ -38,6 +56,12 @@ export default defineEventHandler(async (event) => {
         item.averageProfitFromClient.toLocaleString("ru-RU"),
         item.lessonsConducted,
         item.averageScore,
+        item.groupCount,
+        item.coachCount,
+        formatArray(item.lessonsType),
+        formatSexRatio(item.sexRatio),
+        formatArray(item.paymentType),
+        formatArray(item.ageGroup),
       ]),
     ];
 
