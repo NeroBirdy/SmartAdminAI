@@ -16,6 +16,7 @@
     "dotenv": "^17.3.1",
     "gigachat": "^0.0.18",
     "markdown-table": "^3.0.4",
+    "node-vk-bot-api": "^3.5.0",
     "nuxt": "^4.3.0",
     "tablemark": "^4.1.0",
     "vue": "^3.5.27",

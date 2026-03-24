@@ -1,6 +1,8 @@
 import { GigaChat } from "gigachat";
 import { Agent } from "node:https";
 import { usePrisma } from "./prisma";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 
 const httpsAgent = new Agent({
   rejectUnauthorized: false,
@@ -30,20 +32,48 @@ export class GigaChatAnalitics {
     instruction: string,
     message: string,
   ): Promise<ParsedItem[]> {
-    const response = await gigachat.chat({
+    const filePath = join(
+      process.cwd(),
+      "app",
+      "assets",
+      "prompts",
+      "knowledge.md",
+    );
+    const file = await readFile(filePath, "utf-8");
+    instruction = file + instruction;
+    let response = await gigachat.chat({
       messages: [
         { role: "system", content: instruction },
         { role: "user", content: message },
       ],
     });
 
-    const choice = response.choices[0];
+    let choice = response.choices[0];
 
     if (!choice?.message?.content) {
       throw new Error("Пустой ответ от Gigachat");
     }
 
-    const textResponse = choice.message.content;
+    let textResponse = choice.message.content;
+
+    response = await gigachat.chat({
+      messages: [
+        {
+          role: "system",
+          content: `В ответе не нужно нумеровать и не нужно ставить двоеточие в заголовоках. Формат ответа: Твой формат ответа : "** Заголовок" "-Описание рекомендации". 
+          Не добавляй ничего нового в текст, только исправь, если нужно этот текст.`,
+        },
+        { role: "user", content: textResponse },
+      ],
+    });
+
+    choice = response.choices[0];
+
+    if (!choice?.message?.content) {
+      throw new Error("Пустой ответ от Gigachat");
+    }
+
+    textResponse = choice.message.content;
     const parsedResponse = this.parseResponse(textResponse);
 
     return parsedResponse;
