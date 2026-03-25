@@ -1,63 +1,66 @@
 <template>
   <div class="side-bar">
-    <div
-      class="category"
-      :class="{ 'selected-category': selectedCategory == 'risks' }"
-      @click="selectCategory('risks')"
-    >
-      <img src="../../assets/icons/chart.png" alt="" />
-      <p class="header-sm">Рекомендации и риски</p>
+    <div class="side-bar-categories">
+      <div
+        class="category"
+        :class="{ 'selected-category': selectedCategory == 'risks' }"
+        @click="selectCategory('risks')"
+      >
+        <img src="../../assets/icons/chart.png" alt="" />
+        <p class="header-sm">Рекомендации и риски</p>
+      </div>
+      <div
+        class="category"
+        :class="{ 'selected-category': selectedCategory == 'schedule' }"
+        @click="selectCategory('schedule')"
+      >
+        <img
+          class="toggle"
+          :class="toggles['schedule'] ? 'on' : 'off'"
+          :src="getIcon('schedule', 0)"
+          @click.stop="toggleIcon('schedule')"
+          alt=""
+        />
+        <p class="header-sm">Управление расписанием</p>
+      </div>
+      <div
+        class="category"
+        :class="{ 'selected-category': selectedCategory == 'clients' }"
+        @click="selectCategory('clients')"
+      >
+        <img
+          class="toggle"
+          :class="toggles['clients'] ? 'on' : 'off'"
+          :src="getIcon('clients', 0)"
+          @click.stop="toggleIcon('clients')"
+          alt=""
+        />
+        <p class="header-sm">Сопровождение клиентов</p>
+      </div>
+      <div
+        class="category"
+        :class="{ 'selected-category': selectedCategory == 'staff' }"
+        @click="selectCategory('staff')"
+      >
+        <img
+          class="toggle"
+          :class="toggles['staff'] ? 'on' : 'off'"
+          :src="getIcon('staff', 0)"
+          @click.stop="toggleIcon('staff')"
+          alt=""
+        />
+        <p class="header-sm">Координация персонала</p>
+      </div>
+      <div
+        class="category"
+        :class="{ 'selected-category': selectedCategory == 'settings' }"
+        @click="selectCategory('settings')"
+      >
+        <img src="../../assets/icons/bolt.png" alt="" />
+        <p class="header-sm">Настройки</p>
+      </div>
     </div>
-    <div
-      class="category"
-      :class="{ 'selected-category': selectedCategory == 'schedule' }"
-      @click="selectCategory('schedule')"
-    >
-      <img
-        class="toggle"
-        :class="toggles['schedule'] ? 'on' : 'off'"
-        :src="getIcon('schedule', 0)"
-        @click.stop="toggleIcon('schedule')"
-        alt=""
-      />
-      <p class="header-sm">Управление расписанием</p>
-    </div>
-    <div
-      class="category"
-      :class="{ 'selected-category': selectedCategory == 'clients' }"
-      @click="selectCategory('clients')"
-    >
-      <img
-        class="toggle"
-        :class="toggles['clients'] ? 'on' : 'off'"
-        :src="getIcon('clients', 0)"
-        @click.stop="toggleIcon('clients')"
-        alt=""
-      />
-      <p class="header-sm">Сопровождение клиентов</p>
-    </div>
-    <div
-      class="category"
-      :class="{ 'selected-category': selectedCategory == 'staff' }"
-      @click="selectCategory('staff')"
-    >
-      <img
-        class="toggle"
-        :class="toggles['staff'] ? 'on' : 'off'"
-        :src="getIcon('staff', 0)"
-        @click.stop="toggleIcon('staff')"
-        alt=""
-      />
-      <p class="header-sm">Координация персонала</p>
-    </div>
-    <div
-      class="category"
-      :class="{ 'selected-category': selectedCategory == 'settings' }"
-      @click="selectCategory('settings')"
-    >
-      <img src="../../assets/icons/bolt.png" alt="" />
-      <p class="header-sm">Настройки</p>
-    </div>
+    <layout-dev-menu />
   </div>
 </template>
 
@@ -119,6 +122,10 @@ const getIcon = (number, block) => {
   z-index: 1;
   position: sticky;
   height: 100%;
+}
+
+.side-bar-categories {
+  margin-bottom: 95px;
 }
 
 .category {

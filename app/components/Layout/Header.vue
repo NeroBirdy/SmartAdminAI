@@ -6,13 +6,28 @@
     </div>
 
     <div class="rightSide">
-      <img class="icon" src="../../assets/icons/headset.png" alt="" />
+      <img
+        class="icon"
+        :class="{active: isDevMenuOpen}"
+        src="../../assets/icons/wrench.svg"
+        alt=""
+        @click="toggleDevMenu()"
+      />
+      <img
+        class="icon icon-headset"
+        src="../../assets/icons/headset.png"
+        alt=""
+      />
       <img class="icon icon-bell" src="../../assets/icons/bell.png" alt="" />
       <p class="header-sm user-name">Евгений П.</p>
       <img class="user-img" src="../../assets/icons/user_pic.png" alt="" />
     </div>
   </div>
 </template>
+
+<script lang="ts" setup>
+const { isDevMenuOpen, toggleDevMenu } = useDevMenu();
+</script>
 
 <style scoped>
 .header {
@@ -60,6 +75,15 @@
   height: 24px;
   margin-left: 0;
   margin-right: 0;
+  transition: 0.2s;
+}
+
+.icon.active {
+  filter: saturate(5);
+}
+
+.icon-headset {
+  margin-left: 20px;
 }
 
 .icon-bell {
