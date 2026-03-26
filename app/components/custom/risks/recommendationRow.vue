@@ -36,7 +36,7 @@ const props = defineProps<{
 
 const handleRecommendationButtonClick = async () => {
   try {
-    await $fetch("/api/changeDoneState", {
+    await $fetch("/api/risks/changeDoneState", {
       method: "POST",
       body: { id: props.item.id, done: !props.item.done },
     });

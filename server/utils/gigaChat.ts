@@ -28,10 +28,7 @@ type ParsedItem = {
 };
 
 export class GigaChatAnalitics {
-  async sendMessage(
-    instruction: string,
-    message: string,
-  ): Promise<ParsedItem[]> {
+  async sendMessage(message: string): Promise<ParsedItem[]> {
     const filePath = join(
       process.cwd(),
       "app",
@@ -40,10 +37,10 @@ export class GigaChatAnalitics {
       "knowledge.md",
     );
     const file = await readFile(filePath, "utf-8");
-    instruction = file + instruction;
+
     let response = await gigachat.chat({
       messages: [
-        { role: "system", content: instruction },
+        { role: "system", content: file },
         { role: "user", content: message },
       ],
     });
@@ -58,12 +55,16 @@ export class GigaChatAnalitics {
 
     response = await gigachat.chat({
       messages: [
+        // {
+        //   role: "system",
+        //   content: `В ответе не нужно нумеровать и не нужно ставить двоеточие в заголовоках. Формат ответа: Твой формат ответа : "** Заголовок" "- Описание рекомендации".
+        //   Не добавляй ничего нового в текст, только исправь, если нужно этот текст.`,
+        // },
         {
-          role: "system",
-          content: `В ответе не нужно нумеровать и не нужно ставить двоеточие в заголовоках. Формат ответа: Твой формат ответа : "** Заголовок" "-Описание рекомендации". 
-          Не добавляй ничего нового в текст, только исправь, если нужно этот текст.`,
+          role: "user",
+          content: `В ответе не нужно нумеровать и не нужно ставить двоеточие в заголовоках. Формат ответа: Твой формат ответа : "** Заголовок" "- Описание рекомендации". 
+          Не добавляй ничего нового в текст, только исправь, если нужно этот текст. \n ${textResponse}`,
         },
-        { role: "user", content: textResponse },
       ],
     });
 
@@ -74,6 +75,7 @@ export class GigaChatAnalitics {
     }
 
     textResponse = choice.message.content;
+
     const parsedResponse = this.parseResponse(textResponse);
 
     return parsedResponse;

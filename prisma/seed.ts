@@ -1,4 +1,6 @@
 import { usePrisma } from "../server/utils/prisma";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 
 const prisma = usePrisma();
 
@@ -97,15 +99,45 @@ async function main() {
 
   console.log("✅ Created schedule_consider_resources setting");
 
-  // ========== Итоговая статистика ==========
-  const typesCount = await prisma.settingType.count();
-  const definitionsCount = await prisma.settingDefinition.count();
-  const optionsCount = await prisma.settingOption.count();
+  const promptsToLoad = [
+    {
+      title: "Промпт к Рекомендациям",
+      filePath: join(
+        process.cwd(),
+        "app",
+        "assets",
+        "prompts",
+        "instructionRec.txt",
+      ),
+    },
+    {
+      title: "Промпт к Рискам",
+      filePath: join(
+        process.cwd(),
+        "app",
+        "assets",
+        "prompts",
+        "instructionRisk.txt",
+      ),
+    },
+  ];
 
-  console.log("\n📊 Seeding completed:");
-  console.log(`   - Setting Types: ${typesCount}`);
-  console.log(`   - Setting Definitions: ${definitionsCount}`);
-  console.log(`   - Setting Options: ${optionsCount}`);
+  for (const promptConfig of promptsToLoad) {
+    try {
+      const text = await readFile(promptConfig.filePath, "utf-8");
+
+      await prisma.prompt.create({
+        data: {
+          title: promptConfig.title,
+          text,
+        },
+      });
+
+      console.log(`✅ Loaded: ${promptConfig.title}`);
+    } catch (error) {
+      console.error(`❌ Failed to load ${promptConfig.filePath}:`, error);
+    }
+  }
 }
 
 main()

@@ -1,7 +1,7 @@
-import { GigaChatAnalitics } from "../utils/gigaChat";
-import { prompts } from "../utils/prompts";
+import { GigaChatAnalitics } from "../../utils/gigaChat";
+import { prompts } from "../../utils/prompts";
 import { subMonths, isBefore } from "date-fns";
-import { Risk, Recommendation } from "../../generated/prisma/client";
+import { Risk, Recommendation } from "../../../generated/prisma/client";
 
 const prisma = usePrisma();
 
@@ -64,16 +64,18 @@ const getRiskOrRec = async (
   type: "risk" | "recommendation",
   sectionId: number,
 ) => {
-  let instruction: string = "";
+  let prompt = "";
   if (type == "risk") {
-    instruction = prompts.instructionRisk;
+    prompt = prompts.promptRisk;
   } else {
-    instruction = prompts.instructionRec;
+    prompt = prompts.promptRec;
   }
 
-  const prompt = await $fetch<string>("/api/getDataForPrompt");
+  const dataForPrompt = await $fetch<string>("/api/risks/getDataForPrompt");
 
-  const parsedResponse = await gigaChat.sendMessage(instruction, prompt);
+  prompt += "\n" + dataForPrompt;
+
+  const parsedResponse = await gigaChat.sendMessage(prompt);
   return await createAndReturn(parsedResponse, type, sectionId);
 };
 
@@ -81,8 +83,11 @@ const getUpdatedRec = async (
   gigaChat: GigaChatAnalitics,
   sectionId: number,
 ) => {
-  let prompt =
-    "При проведение анализа учти данные ниже это твоих рекомендации с прошлого месяца и были ли они выполнины\n";
+  let prompt = prompts.promptRec;
+  prompt += await $fetch<string>("/api/risks/getDataForPrompt");
+
+  prompt +=
+    "\n При проведение анализа учти данные ниже это твоих рекомендации с прошлого месяца и были ли они выполнины\n";
   const records = (await getRecords(
     "recommendation",
     sectionId,
@@ -93,12 +98,7 @@ const getUpdatedRec = async (
     prompt += `Выполнено:${item.done ? "да" : "нет"}\n`;
   }
 
-  prompt += await $fetch<string>("/api/getDataForPrompt");
-
-  const parsedResponse = await gigaChat.sendMessage(
-    prompts.instructionRec,
-    prompt,
-  );
+  const parsedResponse = await gigaChat.sendMessage(prompt);
 
   return await createAndReturn(parsedResponse, "recommendation", sectionId);
 };

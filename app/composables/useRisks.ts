@@ -24,7 +24,7 @@ export const useRisks = () => {
   const getData = async () => {
     loading.value = true;
     try {
-      const response = await $fetch<ApiResponse>("/api/risks");
+      const response = await $fetch<ApiResponse>("/api/risks/getData");
       recommendations.value = response.recommendations;
       risks.value = response.risks;
     } catch (err) {
