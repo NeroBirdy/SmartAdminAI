@@ -24,6 +24,7 @@ const props = defineProps<{
 .help {
   background-color: #e9f3ff;
   border-radius: 25px;
+  margin-top: 20px;
   margin-left: 16px;
   margin-right: 24px;
 }
