@@ -4,10 +4,9 @@ model Recommendation {
   text      String   @db.Text
   complete  Boolean  @default(false)
   sectionId Int
-  done Boolean @default(false)
+  done      Boolean  @default(false)
   section   Section  @relation(fields: [sectionId], references: [id])
   createdAt DateTime @default(now())
 
   @@map("recommendations")
 }
-

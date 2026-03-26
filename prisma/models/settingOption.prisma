@@ -1,0 +1,13 @@
+// Доступные опции для каждой настройки (статичный список значений)
+model SettingOption {
+  id                  Int    @id @default(autoincrement())
+  settingDefinitionId Int
+  key                 String // '2_weeks', 'instructors'
+  name                String // '2 недели', 'Занятость инструкторов'
+
+  settingDefinition SettingDefinition @relation(fields: [settingDefinitionId], references: [id], onDelete: Cascade)
+  sectionSettings   SectionSetting[]
+
+  @@unique([settingDefinitionId, key])
+  @@index([settingDefinitionId])
+}

@@ -78,17 +78,10 @@
               </div>
             </div>
           </div>
-          <div class="help">
-            <div class="inside-help">
-              <h1 class="help-header main-text-sm">Как это работает?</h1>
-              <p class="help-p main-text-sm">
-                Перед тем как назначить пробное занятие, агент свяжется с
+          <ui-help title="Как это работает?" text=" Перед тем как назначить пробное занятие, агент свяжется с
                 Клиентом и подберет для него подходящее дату и время. Клиент
                 может написать о том, что пробное занятие нужно перенести. После
-                занятия агент соберет обратную связь и предложит выбрать группу.
-              </p>
-            </div>
-          </div>
+                занятия агент соберет обратную связь и предложит выбрать группу."/>
         </div>
       </div>
     </div>
@@ -195,32 +188,6 @@ const getIcon = (bool) => {
 
 .second-frame-header-text {
   margin: 0;
-}
-
-.help {
-  background-color: #e9f3ff;
-  border-radius: 25px;
-  margin-left: 16px;
-  margin-right: 24px;
-}
-
-.help-header {
-  margin: 0;
-  padding-top: 16px;
-  color: #2067df;
-}
-
-.help-p {
-  padding-top: 3px;
-  margin: 0;
-}
-
-.inside-help {
-  display: flex;
-  flex-direction: column;
-  padding-bottom: 15px;
-  padding-left: 20px;
-  margin-bottom: 10px;
 }
 
 .second-text {

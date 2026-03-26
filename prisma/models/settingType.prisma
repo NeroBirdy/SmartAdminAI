@@ -1,0 +1,10 @@
+// Справочник типов настроек (нормализация)
+model SettingType {
+  id   Int    @id @default(autoincrement())
+  key  String @unique // 'single_select', 'multi_select', 'boolean'
+  name String // 'Одиночный выбор', 'Множественный выбор', 'Да/Нет'
+
+  definitions SettingDefinition[]
+
+  @@index([key])
+}
