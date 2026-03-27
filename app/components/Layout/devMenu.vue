@@ -65,11 +65,23 @@ const activeSection = computed(() => {
   display: flex;
   flex-direction: column;
   text-align: center;
+  animation: menuAppear 0.3s ease;
 }
 .header-dev-menu {
   align-self: self-start;
   color: #2c71e4;
   margin-left: 20px;
   margin-bottom: 12px;
+}
+
+@keyframes menuAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 </style>

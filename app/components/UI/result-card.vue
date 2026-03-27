@@ -3,11 +3,7 @@
     <div class="inside-frame">
       <div class="second-frame-up">
         <p class="second-frame-text main-text-md">{{ title }}</p>
-        <img
-          class="second-frame-img"
-          src="../../assets/icons/ellipsis.svg"
-          alt=""
-        />
+        <component class="second-frame-img" :is="ellipsisImg" />
       </div>
       <h1 class="second-frame-header-text header-2xl">{{ text }}</h1>
     </div>
@@ -15,6 +11,7 @@
 </template>
 
 <script lang="ts" setup>
+import ellipsisImg from "~/assets/icons/ellipsis.svg";
 
 defineProps<{
 title: string,
@@ -49,6 +46,8 @@ text: string
 
 .second-frame-img {
   margin-right: 20px;
+  overflow: visible;
+  align-self: center;
 }
 
 .second-frame-header-text {

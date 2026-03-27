@@ -4,6 +4,7 @@ model SettingOption {
   settingDefinitionId Int
   key                 String // '2_weeks', 'instructors'
   name                String // '2 недели', 'Занятость инструкторов'
+  sortOrder           Int
 
   settingDefinition SettingDefinition @relation(fields: [settingDefinitionId], references: [id], onDelete: Cascade)
   sectionSettings   SectionSetting[]

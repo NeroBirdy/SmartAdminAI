@@ -19,6 +19,7 @@
     "node-vk-bot-api": "^3.5.0",
     "nuxt": "^4.3.0",
     "tablemark": "^4.1.0",
+    "vite-svg-loader": "^5.1.1",
     "vue": "^3.5.27",
     "vue-router": "^4.6.4",
     "vue-sonner": "^2.0.9"

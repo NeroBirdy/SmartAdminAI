@@ -10,7 +10,7 @@
       @click="handleRecommendationButtonClick()"
       class="header-sm done-btn-pushed"
     >
-      <img src="../../../assets/icons/check.svg" />
+      <component :is="checkImg" />
     </ui-button>
     <ui-button
       v-else
@@ -23,6 +23,8 @@
 </template>
 
 <script lang="ts" setup>
+import checkImg from "~/assets/icons/check.svg";
+
 type Recommendation = {
   id: number;
   title: string;

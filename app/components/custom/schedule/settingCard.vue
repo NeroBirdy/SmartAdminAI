@@ -3,22 +3,24 @@
     <div class="inside-setting-card">
       <h1 class="second-text">{{ setting.name }}</h1>
       <div class="btn-and-options">
-        <button
-          class="add-button"
-          @click="showOptionList = !showOptionList"
+        <div
+          class="add-button-wrapper"
           v-if="availableToAddMore"
         >
-          <img src="../../../assets/icons/plus.svg" alt="" />
-          <div class="option-list" v-if="showOptionList">
+          <button class="add-button" @click.stop="toggleList(listId)">
+            <component class="add-button-img" :is="plusImg" />
+          </button>
+          <div class="option-list" v-if="isOpen(listId)">
             <div
               class="option"
               v-for="option in availableOptions"
-              @click="addHandler(1, setting.id, option.id)"
+              :key="option.id"
+              @click.stop="addHandler(1, setting.id, option.id)"
             >
-              <p>{{ option.name }}</p>
+              <p class="header-sm">{{ option.name }}</p>
             </div>
           </div>
-        </button>
+        </div>
         <div
           class="setting-description"
           :class="{
@@ -27,23 +29,23 @@
           v-for="option in sectionSettings"
         >
           <p class="header-sm">{{ option.option_name }}</p>
-          <img
-            src="../../../assets/icons/remove.svg"
-            alt=""
-            @click="deleteHandler(option.id)"
-          />
+          <component class="remove-img" :is="removeImg" @click.stop="deleteHandler(option.id)"/>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
+import plusImg from "~/assets/icons/plus.svg";
+import removeImg from "~/assets/icons/remove.svg";
+
 type Option = {
   id: number;
   key: string;
   name: string;
   settingDefinitionId: number;
 };
+
 type SectionSetting = { id: number; option_name: string; option_key: string };
 
 const props = defineProps<{
@@ -92,7 +94,11 @@ const addHandler = async (
     });
     sectionSettings.value.push(newsectionSetting);
 
+    showOptionList.value = false;
+
     updateAvailableOption();
+
+    closeList();
   } catch (err) {
     console.error("Failed to add setting option:", err);
   }
@@ -144,8 +150,17 @@ const getData = async () => {
   }
 };
 
+const { toggleList, isOpen, closeList } = useOptionList();
+
+const listId = `setting-${props.queryKey}`;
+
 onMounted(() => {
   getData();
+  document.addEventListener("click", closeList);
+});
+
+onUnmounted(() => {
+  document.removeEventListener("click", closeList);
 });
 </script>
 <style scoped>
@@ -181,6 +196,10 @@ onMounted(() => {
   padding-bottom: 3px;
 }
 
+.add-button-wrapper {
+  position: relative;
+}
+
 .add-button {
   width: 34px;
   height: 34px;
@@ -190,7 +209,17 @@ onMounted(() => {
   border-radius: 50px;
   display: flex;
   justify-content: center;
+  align-items: center;
   margin-right: 15px;
+  cursor: pointer;
+  transition:
+    transform 0.1s ease,
+    box-shadow 0.1s ease;
+}
+
+.add-button:active {
+  transform: scale(0.85);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .add-button img {
@@ -212,26 +241,35 @@ onMounted(() => {
 
 .option-list {
   position: absolute;
-  margin-left: 175px;
-  min-width: 110px;
+  top: calc(100% + 6px);
+  white-space: nowrap;
   background-color: white;
-
-  border-radius: 16px;
+  border-radius: 10px;
   box-shadow: 0 12px 40px 4px rgba(0, 0, 0, 0.12);
   border: 1px solid rgba(133, 144, 165, 0.2);
-
-  overflow-y: auto;
-  z-index: 1;
-
-  /* animation: 0.2s ease-out; */
+  z-index: 1000;
+  animation: optionListAppear 0.3s ease;
 }
 
 .option {
-  width: 100%;
   height: 34px;
   align-items: center;
   display: flex;
+  cursor: pointer;
+  padding: 0 15px;
+  border-radius: 8px;
   justify-content: center;
+}
+
+@keyframes optionListAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 .option p {
@@ -240,5 +278,13 @@ onMounted(() => {
 
 .option:hover {
   background-color: #e9f3ff;
+}
+
+.remove-img {
+  overflow: visible;
+}
+
+.add-button-img {
+  overflow: visible;
 }
 </style>

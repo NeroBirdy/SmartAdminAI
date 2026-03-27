@@ -73,6 +73,7 @@ CREATE TABLE `SettingOption` (
     `settingDefinitionId` INTEGER NOT NULL,
     `key` VARCHAR(191) NOT NULL,
     `name` VARCHAR(191) NOT NULL,
+    `sortOrder` INTEGER NOT NULL,
 
     INDEX `SettingOption_settingDefinitionId_idx`(`settingDefinitionId`),
     UNIQUE INDEX `SettingOption_settingDefinitionId_key_key`(`settingDefinitionId`, `key`),

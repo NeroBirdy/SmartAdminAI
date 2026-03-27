@@ -1,68 +1,47 @@
 <template>
-  <div class="frame">
-    <h1 class="frame-header header-md">Выполняемые задачи (Skills)</h1>
-    <div class="inside-frame">
-      <div class="frame second-frame-skills">
-        <div class="second-frame-title">
-          <img src="../../../assets/icons/sparkles.svg" alt="" />
-          <div class="right">
-            <div class="title-texts">
-              <h1 class="header-sm">Генерация расписания</h1>
-              <p class="description main-text-sm">
-                Отслеживать сообщения требующие внимания
-              </p>
-            </div>
-            <img
-              :src="getIcon(openGenerate)"
-              alt=""
-              @click.stop="openGenerate = !openGenerate"
-            />
-          </div>
+  <div class="frame second-frame-skills">
+    <div class="second-frame-title">
+      <component class="sparkle" :is="sparklesImg" />
+      <div class="right">
+        <div class="title-texts">
+          <h1 class="header-sm">Генерация расписания</h1>
+          <p class="description main-text-sm">
+            Отслеживать сообщения требующие внимания
+          </p>
         </div>
-        <div class="second-frame-content">
-          <custom-schedule-horizon-planning
-            queryKey="schedule_planning_horizon"
-          />
+        <component
+          class="card-arrow"
+          :is="cardArrowImg"
+          @click.stop="openCard = !openCard"
+        />
+      </div>
+    </div>
+    <div class="second-frame-content" :class="{ hidden: !openCard }">
+      <custom-schedule-setting-card queryKey="schedule_planning_horizon" />
 
-          <custom-schedule-horizon-planning
-            queryKey="schedule_consider_resources"
-          />
+      <custom-schedule-setting-card queryKey="schedule_consider_resources" />
 
-          <ui-help
-            title="Как это работает?"
-            text=" Перед тем как назначить пробное занятие, агент свяжется с
+      <ui-help
+        title="Как это работает?"
+        text=" Перед тем как назначить пробное занятие, агент свяжется с
                 Клиентом и подберет для него подходящее дату и время. Клиент
                 может написать о том, что пробное занятие нужно перенести. После
                 занятия агент соберет обратную связь и предложит выбрать группу."
-          />
-        </div>
-      </div>
+      />
     </div>
   </div>
 </template>
 
 <script setup>
-import down from "../../../assets/icons/chevron_down.svg";
-import up from "../../../assets/icons/chevron_up.svg";
+import cardArrowImg from "~/assets/icons/chevron_down.svg";
+import sparklesImg from "~/assets/icons/sparkles.svg";
 
-const openManagement = ref(false);
-const openGenerate = ref(false);
-
-const getIcon = (bool) => {
-  if (bool) {
-    return up;
-  }
-  return down;
-};
+const openCard = ref(false);
 </script>
 
 <style scoped>
 .frame {
   margin-top: 10px;
-}
-
-.row {
-  flex-direction: row !important;
 }
 
 .inside-frame {
@@ -105,11 +84,12 @@ const getIcon = (bool) => {
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding-left: 16px;
 }
 
-.second-frame-title img {
-  padding-right: 10px;
+.sparkle {
+  overflow: visible;
+  align-self: center;
+  padding: 0 16px;
 }
 
 .title-texts {
@@ -145,7 +125,27 @@ const getIcon = (bool) => {
   margin: 0;
 }
 
-.setting-description img {
-  padding-left: 5px;
+.card-arrow {
+  align-self: center;
+  padding: 0 24px;
+  transition: transform 0.3s ease;
+}
+
+.card-arrow.mirrored {
+  transform: rotate(180deg);
+}
+
+.second-frame-content {
+  transition:
+    max-height 0.6s ease,
+    opacity 0.6s ease;
+  overflow: hidden;
+  max-height: 500px;
+  opacity: 1;
+}
+
+.second-frame-content.hidden {
+  max-height: 0;
+  opacity: 0;
 }
 </style>

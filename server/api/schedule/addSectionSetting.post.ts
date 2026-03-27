@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
       data: {
         sectionId: sectionId,
         settingDefinitionId: settingDefinitionId,
-        settingOptionId: settingDefinitionId,
+        settingOptionId: settingOptionId,
       },
     });
 

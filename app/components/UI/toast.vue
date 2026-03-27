@@ -2,12 +2,8 @@
   <div class="toast">
     <div class="inside-toast">
       <div class="icons">
-        <img :src="getIcon()" alt="Иконка" />
-        <img
-          src="../../assets/icons/remove.svg"
-          alt="Закрыть"
-          @click="handleClose"
-        />
+        <component :is="getIcon()" alt="Иконка уведомеления"/>
+        <component :is="removeIcon" @click.stop="handleClose" alt="Иконка закрытия"/>
       </div>
       <h1 class="header-md">{{ title }}</h1>
       <p class="main-text-sm">{{ description }}</p>
@@ -16,9 +12,10 @@
 </template>
 
 <script lang="ts" setup>
-import sucessIcon from "../../assets/icons/sucess_toast.svg";
-import warningIcon from "../../assets/icons/warning_toast.svg";
-import dangerIcon from "../../assets/icons/danger_toast.svg";
+import sucessIcon from "~/assets/icons/sucess_toast.svg";
+import removeIcon from "~/assets/icons/remove.svg";
+import warningIcon from "~/assets/icons/warning_toast.svg";
+import dangerIcon from "~/assets/icons/danger_toast.svg";
 
 const props = defineProps<{
   toast: any;

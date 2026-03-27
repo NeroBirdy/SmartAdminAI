@@ -1,6 +1,6 @@
 <template>
   <div class="dev-menu-row" :class="{ active: isActive }" @click="handleClick">
-    <img class="icon" :src="props.icon" />
+    <component :is="props.icon" class="icon" />
     <p class="header-sm">{{ text }}</p>
   </div>
 </template>
@@ -42,8 +42,8 @@ const handleClick = () => {
   transition: background-color 0.2s;
 }
 
-.dev-menu-row.active .icon {
-  filter: saturate(4);
+.dev-menu-row.active .icon :deep(path){
+  stroke: #6897fd
 }
 
 .dev-menu-row.active .header-sm {
@@ -57,6 +57,10 @@ const handleClick = () => {
 }
 
 .icon {
+  align-self: center;
+  overflow: visible;
+  margin: 0;
+  padding: 0;
   margin-right: 12px;
 }
 </style>

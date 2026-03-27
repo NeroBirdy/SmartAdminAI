@@ -6,26 +6,26 @@
     </div>
 
     <div class="rightSide">
-      <img
-        class="icon"
+      <component :is="WrechIcon" class="icon"
         :class="{active: isDevMenuOpen}"
-        src="../../assets/icons/wrench.svg"
-        alt=""
+        alt="Иконка режима разработчика"
         @click="toggleDevMenu()"
       />
       <img
         class="icon icon-headset"
-        src="../../assets/icons/headset.png"
+        src="~/assets/icons/headset.png"
         alt=""
       />
-      <img class="icon icon-bell" src="../../assets/icons/bell.png" alt="" />
+      <img class="icon icon-bell" src="~/assets/icons/bell.png" alt="" />
       <p class="header-sm user-name">Евгений П.</p>
-      <img class="user-img" src="../../assets/icons/user_pic.png" alt="" />
+      <img class="user-img" src="~/assets/icons/user_pic.png" alt="" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import WrechIcon from "~/assets/icons/wrench.svg";
+
 const { isDevMenuOpen, toggleDevMenu } = useDevMenu();
 </script>
 
@@ -48,7 +48,7 @@ const { isDevMenuOpen, toggleDevMenu } = useDevMenu();
 }
 
 .back-btn {
-  background-image: url(../../assets/icons/arrow_left.png);
+  background-image: url(~/assets/icons/arrow_left.png);
   background-position: center;
   background-repeat: no-repeat;
   width: 40px;
@@ -70,6 +70,7 @@ const { isDevMenuOpen, toggleDevMenu } = useDevMenu();
 }
 
 .icon {
+  overflow: visible;
   margin: auto;
   width: 24px;
   height: 24px;

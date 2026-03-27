@@ -27,7 +27,7 @@ export default defineEventHandler(async (event) => {
   const settingOptions = await prisma.settingOption.findMany({
     where: { settingDefinitionId: settingDefinition.id },
     orderBy: {
-      name: "asc",
+      sortOrder: "asc",
     },
   });
 

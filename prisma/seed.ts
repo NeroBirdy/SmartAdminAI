@@ -51,18 +51,22 @@ async function main() {
           {
             key: "1_week",
             name: "1 неделя",
+            sortOrder: 1,
           },
           {
             key: "2_weeks",
             name: "2 недели",
+            sortOrder: 2,
           },
           {
             key: "1_month",
             name: "1 месяц",
+            sortOrder: 3,
           },
           {
             key: "3_months",
             name: "3 месяца",
+            sortOrder: 4,
           },
         ],
       },
@@ -83,14 +87,17 @@ async function main() {
           {
             key: "instructors",
             name: "Занятость инструкторов",
+            sortOrder: 1,
           },
           {
             key: "areas",
             name: "Занятость площадок",
+            sortOrder: 2,
           },
           {
             key: "org_schedule",
             name: "График организации",
+            sortOrder: 3,
           },
         ],
       },
@@ -138,6 +145,16 @@ async function main() {
       console.error(`❌ Failed to load ${promptConfig.filePath}:`, error);
     }
   }
+}
+
+try {
+  await prisma.section.create({
+    data: {
+      name: "Конфетка",
+    },
+  });
+} catch (error) {
+  console.error(`❌ Failed to load section:`, error);
 }
 
 main()

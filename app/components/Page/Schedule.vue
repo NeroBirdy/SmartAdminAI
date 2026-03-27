@@ -5,8 +5,12 @@
       <ui-result-card title="Создано занятий" text="24" />
       <ui-result-card title="Перенесено занятий" text="24" />
     </div>
-    <custom-schedule-generate-schedule-card />
-
+  </div>
+  <div class="frame">
+    <h1 class="frame-header header-md">Выполняемые задачи (Skills)</h1>
+    <div class="inside-frame">
+      <custom-schedule-generate-schedule-card />
+    </div>
   </div>
 </template>
 <style scoped>
