@@ -7,13 +7,17 @@
     }"
     @click="selectCategory(category)"
   >
+    <ui-side-bar-toggle
+      v-if="['schedule', 'clients', 'staff'].includes(category)"
+      :enabled="pictures[category] === toggleRight"
+      class="icon"
+    />
     <component
+      v-else
       :is="pictures[category]"
       class="icon"
       :class="{
-        active:
-          isSelected(category) &&
-          (category == 'risks' || category == 'settings'),
+        active: isSelected(category),
       }"
     />
     <p
@@ -93,7 +97,6 @@ const pictures = computed<Record<string, string>>(() => ({
 
 .icon {
   position: relative;
-  z-index: 1;
   margin: auto;
   margin-left: 5px;
   margin-right: 10px;
