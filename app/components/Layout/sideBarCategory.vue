@@ -20,7 +20,7 @@
       class="category-text header-sm"
       :class="{ active: isSelected(category) }"
     >
-      {{ categories[category] }}
+      {{ categoriesText[category] }}
     </p>
   </div>
 </template>
@@ -32,8 +32,13 @@ import toggleLeft from "~/assets/icons/toggle_left.svg";
 import toggleRight from "~/assets/icons/toggle_right.svg";
 
 const { selectCategory, isSelected, isPressed } = useCategoryNavigation();
+const { categories } = useSideBarCategories();
 
-const categories: Record<string, string> = {
+const props = defineProps<{
+  category: string;
+}>();
+
+const categoriesText: Record<string, string> = {
   risks: "Рекомендации и риски",
   schedule: "Управление расписанием",
   clients: "Сопровождение клиентов",
@@ -41,17 +46,13 @@ const categories: Record<string, string> = {
   settings: "Настройки",
 };
 
-const pictures: Record<string, string> = {
+const pictures = computed<Record<string, string>>(() => ({
   risks: riskImg,
-  schedule: toggleRight,
-  clients: toggleLeft,
-  staff: toggleLeft,
+  schedule: categories.value?.[0]?.enable ? toggleRight : toggleLeft,
+  clients: categories.value?.[1]?.enable ? toggleRight : toggleLeft,
+  staff: categories.value?.[2]?.enable ? toggleRight : toggleLeft,
   settings: settingImg,
-};
-
-const props = defineProps<{
-  category: string;
-}>();
+}));
 </script>
 
 <style scoped>

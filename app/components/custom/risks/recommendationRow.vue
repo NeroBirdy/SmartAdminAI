@@ -5,20 +5,22 @@
     <div class="second-frame-text main-text-sm">{{ item.text }}</div>
   </div>
   <div class="btn-block">
-    <ui-button
-      v-if="item.done"
-      @click="handleRecommendationButtonClick()"
-      class="header-sm done-btn-pushed"
-    >
-      <component :is="checkImg" />
-    </ui-button>
-    <ui-button
-      v-else
-      @click="handleRecommendationButtonClick()"
-      class="header-sm done-btn"
-    >
-      Выполнено
-    </ui-button>
+    <Transition name="btn" mode="out-in">
+      <ui-button
+        v-if="item.done"
+        @click="handleRecommendationButtonClick()"
+        class="header-sm done-btn-pushed"
+      >
+        <component :is="checkImg" />
+      </ui-button>
+      <ui-button
+        v-else
+        @click="handleRecommendationButtonClick()"
+        class="header-sm done-btn"
+      >
+        Выполнено
+      </ui-button>
+    </Transition>
   </div>
 </template>
 
@@ -91,5 +93,20 @@ const handleRecommendationButtonClick = async () => {
   background-color: #e9f3ff;
   padding: 8px;
   margin-right: 20px;
+}
+
+.btn-enter-active,
+.btn-leave-active {
+  transition: all 0.2s ease;
+}
+
+.btn-enter-from {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.btn-leave-to {
+  opacity: 0;
+  transform: scale(0.8);
 }
 </style>

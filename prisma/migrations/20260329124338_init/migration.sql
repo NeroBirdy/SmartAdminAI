@@ -41,6 +41,18 @@ CREATE TABLE `sections` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `SectionAISetting` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `sectionId` INTEGER NOT NULL,
+    `settingAIId` INTEGER NOT NULL,
+    `enable` BOOLEAN NOT NULL DEFAULT false,
+
+    INDEX `SectionAISetting_sectionId_idx`(`sectionId`),
+    INDEX `SectionAISetting_settingAIId_idx`(`settingAIId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `SectionSetting` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `sectionId` INTEGER NOT NULL,
@@ -50,6 +62,14 @@ CREATE TABLE `SectionSetting` (
     INDEX `SectionSetting_sectionId_idx`(`sectionId`),
     INDEX `SectionSetting_settingOptionId_idx`(`settingOptionId`),
     INDEX `SectionSetting_settingDefinitionId_idx`(`settingDefinitionId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `SettingAI` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(191) NOT NULL,
+
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -96,6 +116,12 @@ ALTER TABLE `recommendations` ADD CONSTRAINT `recommendations_sectionId_fkey` FO
 
 -- AddForeignKey
 ALTER TABLE `risks` ADD CONSTRAINT `risks_sectionId_fkey` FOREIGN KEY (`sectionId`) REFERENCES `sections`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `SectionAISetting` ADD CONSTRAINT `SectionAISetting_sectionId_fkey` FOREIGN KEY (`sectionId`) REFERENCES `sections`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `SectionAISetting` ADD CONSTRAINT `SectionAISetting_settingAIId_fkey` FOREIGN KEY (`settingAIId`) REFERENCES `SettingAI`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `SectionSetting` ADD CONSTRAINT `SectionSetting_sectionId_fkey` FOREIGN KEY (`sectionId`) REFERENCES `sections`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

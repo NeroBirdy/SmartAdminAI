@@ -10,7 +10,9 @@
     <layout-dev-menu />
   </div>
 </template>
-
+<script lang="ts" setup>
+const { categories } = useSideBarCategories();
+</script>
 <style scoped>
 .side-bar {
   display: flex;

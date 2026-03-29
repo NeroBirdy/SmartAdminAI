@@ -157,6 +157,31 @@ try {
   console.error(`❌ Failed to load section:`, error);
 }
 
+try {
+  await prisma.settingAI.createMany({
+    data: [
+      { name: "Управление расписанием" },
+      { name: "Сопровождение клиентов" },
+      { name: "Координация персонала" },
+    ],
+  });
+} catch (error) {
+  console.error(`❌ Failed to create settingAI:`, error);
+}
+
+try {
+  const settingAIs = await prisma.settingAI.findMany();
+
+  await prisma.sectionAISetting.createMany({
+    data: settingAIs.map((setting) => ({
+      sectionId: 1,
+      settingAIId: setting.id,
+    })),
+  });
+} catch (error) {
+  console.error(`❌ Failed to create sectionAISettings:`, error);
+}
+
 main()
   .catch((e) => {
     console.error("❌ Seeding failed:", e);

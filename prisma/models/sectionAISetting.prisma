@@ -1,0 +1,12 @@
+model SectionAISetting {
+  id          Int     @id @default(autoincrement())
+  sectionId   Int
+  settingAIId Int
+  enable      Boolean @default(false)
+
+  section   Section   @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  settingAI SettingAI @relation(fields: [settingAIId], references: [id], onDelete: Cascade)
+
+  @@index([sectionId])
+  @@index([settingAIId])
+}
