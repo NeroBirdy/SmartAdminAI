@@ -42,8 +42,8 @@ const handleClick = () => {
   transition: background-color 0.2s;
 }
 
-.dev-menu-row.active .icon :deep(path){
-  stroke: #6897fd
+.dev-menu-row.active .icon :deep(path) {
+  stroke: #6897fd;
 }
 
 .dev-menu-row.active .header-sm {

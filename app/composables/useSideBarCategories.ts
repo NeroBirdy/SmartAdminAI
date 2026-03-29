@@ -6,7 +6,10 @@ type SideBarCategory = {
 };
 
 export const useSideBarCategories = () => {
-  const categories = useState<SideBarCategory[] | null>("sideBarCategories", () => null);
+  const categories = useState<SideBarCategory[] | null>(
+    "sideBarCategories",
+    () => null,
+  );
 
   const getCategories = async () => {
     const data = await $fetch("/api/sideBar/getCategories", {

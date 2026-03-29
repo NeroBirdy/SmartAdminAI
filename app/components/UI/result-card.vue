@@ -14,8 +14,8 @@
 import ellipsisImg from "~/assets/icons/ellipsis.svg";
 
 defineProps<{
-title: string,
-text: string
+  title: string;
+  text: string;
 }>();
 </script>
 

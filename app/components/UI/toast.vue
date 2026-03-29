@@ -2,8 +2,12 @@
   <div class="toast">
     <div class="inside-toast">
       <div class="icons">
-        <component :is="getIcon()" alt="Иконка уведомеления"/>
-        <component :is="removeIcon" @click.stop="handleClose" alt="Иконка закрытия"/>
+        <component :is="getIcon()" alt="Иконка уведомеления" />
+        <component
+          :is="removeIcon"
+          @click.stop="handleClose"
+          alt="Иконка закрытия"
+        />
       </div>
       <h1 class="header-md">{{ title }}</h1>
       <p class="main-text-sm">{{ description }}</p>

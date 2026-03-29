@@ -6,16 +6,14 @@
     </div>
 
     <div class="rightSide">
-      <component :is="WrechIcon" class="icon"
-        :class="{active: isDevMenuOpen}"
+      <component
+        :is="WrechIcon"
+        class="icon"
+        :class="{ active: isDevMenuOpen }"
         alt="Иконка режима разработчика"
         @click="toggleDevMenu()"
       />
-      <img
-        class="icon icon-headset"
-        src="~/assets/icons/headset.png"
-        alt=""
-      />
+      <img class="icon icon-headset" src="~/assets/icons/headset.png" alt="" />
       <img class="icon icon-bell" src="~/assets/icons/bell.png" alt="" />
       <p class="header-sm user-name">Евгений П.</p>
       <img class="user-img" src="~/assets/icons/user_pic.png" alt="" />

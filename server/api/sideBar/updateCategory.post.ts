@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
       data: { enable },
     });
 
-    console.log(response)
+    console.log(response);
 
     return { success: true };
   } catch (error) {
