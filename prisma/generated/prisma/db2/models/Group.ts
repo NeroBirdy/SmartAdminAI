@@ -611,10 +611,6 @@ export type GroupUncheckedUpdateManyWithoutInstructorNestedInput = {
   deleteMany?: Prisma.GroupScalarWhereInput | Prisma.GroupScalarWhereInput[]
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
 export type GroupCreateNestedOneWithoutLessonsInput = {
   create?: Prisma.XOR<Prisma.GroupCreateWithoutLessonsInput, Prisma.GroupUncheckedCreateWithoutLessonsInput>
   connectOrCreate?: Prisma.GroupCreateOrConnectWithoutLessonsInput

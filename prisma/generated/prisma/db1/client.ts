@@ -91,3 +91,8 @@ export type SettingOption = Prisma.SettingOptionModel
  * 
  */
 export type SettingType = Prisma.SettingTypeModel
+/**
+ * Model Users
+ * 
+ */
+export type Users = Prisma.UsersModel

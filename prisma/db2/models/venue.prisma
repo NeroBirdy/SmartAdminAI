@@ -3,6 +3,7 @@ model Venue {
   name             String
   cityId           Int
   address          String
+  organizationId   Int
   city             City           @relation(fields: [cityId], references: [id], onDelete: Cascade)
   groupsDefault    Group[]        @relation("DefaultVenue")
   groupsAdditional Group[]        @relation("AdditionalVenues")

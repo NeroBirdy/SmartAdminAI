@@ -15,15 +15,19 @@ enum ClientStatus {
 }
 
 model Client {
-  id          Int          @id @default(autoincrement())
-  firstName   String
-  lastName    String
-  gender      Gender
-  birthDate   DateTime
-  accountType ClientType
-  groupId     Int?
-  status      ClientStatus @default(WAITING)
-  accessCode  Int          @unique
+  id              Int          @id @default(autoincrement())
+  firstName       String
+  lastName        String
+  gender          Gender
+  birthDate       DateTime
+  phone           String
+  email           String
+  firstNameParent String?
+  lastNameParent  String?
+  accountType     ClientType
+  groupId         Int?
+  status          ClientStatus @default(WAITING)
+  accessCode      Int          @unique
 
   group         Group?               @relation(fields: [groupId], references: [id])
   subscriptions ClientSubscription[]

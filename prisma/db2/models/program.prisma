@@ -4,9 +4,7 @@ model Program {
   description    String
   organizationId Int
 
-  organization      Organization     @relation(fields: [organizationId], references: [id])
-  employeeProgram   EmployeeProgram? @relation(fields: [employeeProgramId], references: [id])
-  employeeProgramId Int?
-  lessons           Lesson[]
-  modules           Module[]
+  organization Organization @relation(fields: [organizationId], references: [id])
+  lessons      Lesson[]
+  modules      Module[]
 }

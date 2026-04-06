@@ -62,6 +62,7 @@ export const ModelName = {
   Module: 'Module',
   Organization: 'Organization',
   Program: 'Program',
+  ProgramVenue: 'ProgramVenue',
   Schedule: 'Schedule',
   SubscriptionType: 'SubscriptionType',
   Topic: 'Topic',
@@ -109,6 +110,10 @@ export const ClientScalarFieldEnum = {
   lastName: 'lastName',
   gender: 'gender',
   birthDate: 'birthDate',
+  phone: 'phone',
+  email: 'email',
+  firstNameParent: 'firstNameParent',
+  lastNameParent: 'lastNameParent',
   accountType: 'accountType',
   groupId: 'groupId',
   status: 'status',
@@ -143,7 +148,8 @@ export type EmployeeScalarFieldEnum = (typeof EmployeeScalarFieldEnum)[keyof typ
 
 export const EmployeeProgramScalarFieldEnum = {
   id: 'id',
-  employeeId: 'employeeId'
+  employeeId: 'employeeId',
+  programId: 'programId'
 } as const
 
 export type EmployeeProgramScalarFieldEnum = (typeof EmployeeProgramScalarFieldEnum)[keyof typeof EmployeeProgramScalarFieldEnum]
@@ -204,11 +210,19 @@ export const ProgramScalarFieldEnum = {
   id: 'id',
   name: 'name',
   description: 'description',
-  organizationId: 'organizationId',
-  employeeProgramId: 'employeeProgramId'
+  organizationId: 'organizationId'
 } as const
 
 export type ProgramScalarFieldEnum = (typeof ProgramScalarFieldEnum)[keyof typeof ProgramScalarFieldEnum]
+
+
+export const ProgramVenueScalarFieldEnum = {
+  id: 'id',
+  programId: 'programId',
+  venueId: 'venueId'
+} as const
+
+export type ProgramVenueScalarFieldEnum = (typeof ProgramVenueScalarFieldEnum)[keyof typeof ProgramVenueScalarFieldEnum]
 
 
 export const ScheduleScalarFieldEnum = {
@@ -246,7 +260,8 @@ export const VenueScalarFieldEnum = {
   id: 'id',
   name: 'name',
   cityId: 'cityId',
-  address: 'address'
+  address: 'address',
+  organizationId: 'organizationId'
 } as const
 
 export type VenueScalarFieldEnum = (typeof VenueScalarFieldEnum)[keyof typeof VenueScalarFieldEnum]
@@ -300,7 +315,11 @@ export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 export const ClientOrderByRelevanceFieldEnum = {
   firstName: 'firstName',
-  lastName: 'lastName'
+  lastName: 'lastName',
+  phone: 'phone',
+  email: 'email',
+  firstNameParent: 'firstNameParent',
+  lastNameParent: 'lastNameParent'
 } as const
 
 export type ClientOrderByRelevanceFieldEnum = (typeof ClientOrderByRelevanceFieldEnum)[keyof typeof ClientOrderByRelevanceFieldEnum]

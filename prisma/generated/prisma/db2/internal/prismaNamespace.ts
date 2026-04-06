@@ -395,6 +395,7 @@ export const ModelName = {
   Module: 'Module',
   Organization: 'Organization',
   Program: 'Program',
+  ProgramVenue: 'ProgramVenue',
   Schedule: 'Schedule',
   SubscriptionType: 'SubscriptionType',
   Topic: 'Topic',
@@ -416,7 +417,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "breaks" | "city" | "client" | "clientSubscription" | "employee" | "employeeProgram" | "group" | "lesson" | "module" | "organization" | "program" | "schedule" | "subscriptionType" | "topic" | "venue" | "workSchedule" | "workScheduleBreaks"
+    modelProps: "breaks" | "city" | "client" | "clientSubscription" | "employee" | "employeeProgram" | "group" | "lesson" | "module" | "organization" | "program" | "programVenue" | "schedule" | "subscriptionType" | "topic" | "venue" | "workSchedule" | "workScheduleBreaks"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1146,6 +1147,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ProgramVenue: {
+      payload: Prisma.$ProgramVenuePayload<ExtArgs>
+      fields: Prisma.ProgramVenueFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ProgramVenueFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramVenuePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ProgramVenueFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramVenuePayload>
+        }
+        findFirst: {
+          args: Prisma.ProgramVenueFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramVenuePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ProgramVenueFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramVenuePayload>
+        }
+        findMany: {
+          args: Prisma.ProgramVenueFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramVenuePayload>[]
+        }
+        create: {
+          args: Prisma.ProgramVenueCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramVenuePayload>
+        }
+        createMany: {
+          args: Prisma.ProgramVenueCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.ProgramVenueDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramVenuePayload>
+        }
+        update: {
+          args: Prisma.ProgramVenueUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramVenuePayload>
+        }
+        deleteMany: {
+          args: Prisma.ProgramVenueDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ProgramVenueUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.ProgramVenueUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramVenuePayload>
+        }
+        aggregate: {
+          args: Prisma.ProgramVenueAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProgramVenue>
+        }
+        groupBy: {
+          args: Prisma.ProgramVenueGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProgramVenueGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ProgramVenueCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProgramVenueCountAggregateOutputType> | number
+        }
+      }
+    }
     Schedule: {
       payload: Prisma.$SchedulePayload<ExtArgs>
       fields: Prisma.ScheduleFieldRefs
@@ -1604,6 +1671,10 @@ export const ClientScalarFieldEnum = {
   lastName: 'lastName',
   gender: 'gender',
   birthDate: 'birthDate',
+  phone: 'phone',
+  email: 'email',
+  firstNameParent: 'firstNameParent',
+  lastNameParent: 'lastNameParent',
   accountType: 'accountType',
   groupId: 'groupId',
   status: 'status',
@@ -1638,7 +1709,8 @@ export type EmployeeScalarFieldEnum = (typeof EmployeeScalarFieldEnum)[keyof typ
 
 export const EmployeeProgramScalarFieldEnum = {
   id: 'id',
-  employeeId: 'employeeId'
+  employeeId: 'employeeId',
+  programId: 'programId'
 } as const
 
 export type EmployeeProgramScalarFieldEnum = (typeof EmployeeProgramScalarFieldEnum)[keyof typeof EmployeeProgramScalarFieldEnum]
@@ -1699,11 +1771,19 @@ export const ProgramScalarFieldEnum = {
   id: 'id',
   name: 'name',
   description: 'description',
-  organizationId: 'organizationId',
-  employeeProgramId: 'employeeProgramId'
+  organizationId: 'organizationId'
 } as const
 
 export type ProgramScalarFieldEnum = (typeof ProgramScalarFieldEnum)[keyof typeof ProgramScalarFieldEnum]
+
+
+export const ProgramVenueScalarFieldEnum = {
+  id: 'id',
+  programId: 'programId',
+  venueId: 'venueId'
+} as const
+
+export type ProgramVenueScalarFieldEnum = (typeof ProgramVenueScalarFieldEnum)[keyof typeof ProgramVenueScalarFieldEnum]
 
 
 export const ScheduleScalarFieldEnum = {
@@ -1741,7 +1821,8 @@ export const VenueScalarFieldEnum = {
   id: 'id',
   name: 'name',
   cityId: 'cityId',
-  address: 'address'
+  address: 'address',
+  organizationId: 'organizationId'
 } as const
 
 export type VenueScalarFieldEnum = (typeof VenueScalarFieldEnum)[keyof typeof VenueScalarFieldEnum]
@@ -1795,7 +1876,11 @@ export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 export const ClientOrderByRelevanceFieldEnum = {
   firstName: 'firstName',
-  lastName: 'lastName'
+  lastName: 'lastName',
+  phone: 'phone',
+  email: 'email',
+  firstNameParent: 'firstNameParent',
+  lastNameParent: 'lastNameParent'
 } as const
 
 export type ClientOrderByRelevanceFieldEnum = (typeof ClientOrderByRelevanceFieldEnum)[keyof typeof ClientOrderByRelevanceFieldEnum]
@@ -2064,6 +2149,7 @@ export type GlobalOmitConfig = {
   module?: Prisma.ModuleOmit
   organization?: Prisma.OrganizationOmit
   program?: Prisma.ProgramOmit
+  programVenue?: Prisma.ProgramVenueOmit
   schedule?: Prisma.ScheduleOmit
   subscriptionType?: Prisma.SubscriptionTypeOmit
   topic?: Prisma.TopicOmit

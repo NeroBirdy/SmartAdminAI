@@ -12,8 +12,8 @@ model WorkSchedule {
   id           Int       @id @default(autoincrement())
   dayOfWeek    DayOfWeek
   isWorkingDay Boolean   @default(true)
-  startWork    DateTime @db2.Time(0)
-  endWork      DateTime @db2.Time(0)
+  startWork    DateTime  @db2.Time(0)
+  endWork      DateTime  @db2.Time(0)
 
   // Полиморфная связь — заполняется только одно из трёх полей
   organizationId Int?

@@ -97,6 +97,11 @@ export type Organization = Prisma.OrganizationModel
  */
 export type Program = Prisma.ProgramModel
 /**
+ * Model ProgramVenue
+ * 
+ */
+export type ProgramVenue = Prisma.ProgramVenueModel
+/**
  * Model Schedule
  * 
  */

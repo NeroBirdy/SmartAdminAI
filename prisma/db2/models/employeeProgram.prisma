@@ -1,9 +1,9 @@
 model EmployeeProgram {
   id         Int @id @default(autoincrement())
   employeeId Int @unique
+  programId  Int
 
-  employee Employee  @relation(fields: [employeeId], references: [id])
-  programs Program[]
+  employee Employee @relation(fields: [employeeId], references: [id])
   groups   Group[]
   lessons  Lesson[]
 }

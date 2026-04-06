@@ -44,6 +44,10 @@ export type ClientMinAggregateOutputType = {
   lastName: string | null
   gender: $Enums.Gender | null
   birthDate: Date | null
+  phone: string | null
+  email: string | null
+  firstNameParent: string | null
+  lastNameParent: string | null
   accountType: $Enums.ClientType | null
   groupId: number | null
   status: $Enums.ClientStatus | null
@@ -56,6 +60,10 @@ export type ClientMaxAggregateOutputType = {
   lastName: string | null
   gender: $Enums.Gender | null
   birthDate: Date | null
+  phone: string | null
+  email: string | null
+  firstNameParent: string | null
+  lastNameParent: string | null
   accountType: $Enums.ClientType | null
   groupId: number | null
   status: $Enums.ClientStatus | null
@@ -68,6 +76,10 @@ export type ClientCountAggregateOutputType = {
   lastName: number
   gender: number
   birthDate: number
+  phone: number
+  email: number
+  firstNameParent: number
+  lastNameParent: number
   accountType: number
   groupId: number
   status: number
@@ -94,6 +106,10 @@ export type ClientMinAggregateInputType = {
   lastName?: true
   gender?: true
   birthDate?: true
+  phone?: true
+  email?: true
+  firstNameParent?: true
+  lastNameParent?: true
   accountType?: true
   groupId?: true
   status?: true
@@ -106,6 +122,10 @@ export type ClientMaxAggregateInputType = {
   lastName?: true
   gender?: true
   birthDate?: true
+  phone?: true
+  email?: true
+  firstNameParent?: true
+  lastNameParent?: true
   accountType?: true
   groupId?: true
   status?: true
@@ -118,6 +138,10 @@ export type ClientCountAggregateInputType = {
   lastName?: true
   gender?: true
   birthDate?: true
+  phone?: true
+  email?: true
+  firstNameParent?: true
+  lastNameParent?: true
   accountType?: true
   groupId?: true
   status?: true
@@ -217,6 +241,10 @@ export type ClientGroupByOutputType = {
   lastName: string
   gender: $Enums.Gender
   birthDate: Date
+  phone: string
+  email: string
+  firstNameParent: string | null
+  lastNameParent: string | null
   accountType: $Enums.ClientType
   groupId: number | null
   status: $Enums.ClientStatus
@@ -252,6 +280,10 @@ export type ClientWhereInput = {
   lastName?: Prisma.StringFilter<"Client"> | string
   gender?: Prisma.EnumGenderFilter<"Client"> | $Enums.Gender
   birthDate?: Prisma.DateTimeFilter<"Client"> | Date | string
+  phone?: Prisma.StringFilter<"Client"> | string
+  email?: Prisma.StringFilter<"Client"> | string
+  firstNameParent?: Prisma.StringNullableFilter<"Client"> | string | null
+  lastNameParent?: Prisma.StringNullableFilter<"Client"> | string | null
   accountType?: Prisma.EnumClientTypeFilter<"Client"> | $Enums.ClientType
   groupId?: Prisma.IntNullableFilter<"Client"> | number | null
   status?: Prisma.EnumClientStatusFilter<"Client"> | $Enums.ClientStatus
@@ -266,6 +298,10 @@ export type ClientOrderByWithRelationInput = {
   lastName?: Prisma.SortOrder
   gender?: Prisma.SortOrder
   birthDate?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
+  email?: Prisma.SortOrder
+  firstNameParent?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastNameParent?: Prisma.SortOrderInput | Prisma.SortOrder
   accountType?: Prisma.SortOrder
   groupId?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -285,6 +321,10 @@ export type ClientWhereUniqueInput = Prisma.AtLeast<{
   lastName?: Prisma.StringFilter<"Client"> | string
   gender?: Prisma.EnumGenderFilter<"Client"> | $Enums.Gender
   birthDate?: Prisma.DateTimeFilter<"Client"> | Date | string
+  phone?: Prisma.StringFilter<"Client"> | string
+  email?: Prisma.StringFilter<"Client"> | string
+  firstNameParent?: Prisma.StringNullableFilter<"Client"> | string | null
+  lastNameParent?: Prisma.StringNullableFilter<"Client"> | string | null
   accountType?: Prisma.EnumClientTypeFilter<"Client"> | $Enums.ClientType
   groupId?: Prisma.IntNullableFilter<"Client"> | number | null
   status?: Prisma.EnumClientStatusFilter<"Client"> | $Enums.ClientStatus
@@ -298,6 +338,10 @@ export type ClientOrderByWithAggregationInput = {
   lastName?: Prisma.SortOrder
   gender?: Prisma.SortOrder
   birthDate?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
+  email?: Prisma.SortOrder
+  firstNameParent?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastNameParent?: Prisma.SortOrderInput | Prisma.SortOrder
   accountType?: Prisma.SortOrder
   groupId?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -318,6 +362,10 @@ export type ClientScalarWhereWithAggregatesInput = {
   lastName?: Prisma.StringWithAggregatesFilter<"Client"> | string
   gender?: Prisma.EnumGenderWithAggregatesFilter<"Client"> | $Enums.Gender
   birthDate?: Prisma.DateTimeWithAggregatesFilter<"Client"> | Date | string
+  phone?: Prisma.StringWithAggregatesFilter<"Client"> | string
+  email?: Prisma.StringWithAggregatesFilter<"Client"> | string
+  firstNameParent?: Prisma.StringNullableWithAggregatesFilter<"Client"> | string | null
+  lastNameParent?: Prisma.StringNullableWithAggregatesFilter<"Client"> | string | null
   accountType?: Prisma.EnumClientTypeWithAggregatesFilter<"Client"> | $Enums.ClientType
   groupId?: Prisma.IntNullableWithAggregatesFilter<"Client"> | number | null
   status?: Prisma.EnumClientStatusWithAggregatesFilter<"Client"> | $Enums.ClientStatus
@@ -329,6 +377,10 @@ export type ClientCreateInput = {
   lastName: string
   gender: $Enums.Gender
   birthDate: Date | string
+  phone: string
+  email: string
+  firstNameParent?: string | null
+  lastNameParent?: string | null
   accountType: $Enums.ClientType
   status?: $Enums.ClientStatus
   accessCode: number
@@ -342,6 +394,10 @@ export type ClientUncheckedCreateInput = {
   lastName: string
   gender: $Enums.Gender
   birthDate: Date | string
+  phone: string
+  email: string
+  firstNameParent?: string | null
+  lastNameParent?: string | null
   accountType: $Enums.ClientType
   groupId?: number | null
   status?: $Enums.ClientStatus
@@ -354,6 +410,10 @@ export type ClientUpdateInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   birthDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  firstNameParent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastNameParent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountType?: Prisma.EnumClientTypeFieldUpdateOperationsInput | $Enums.ClientType
   status?: Prisma.EnumClientStatusFieldUpdateOperationsInput | $Enums.ClientStatus
   accessCode?: Prisma.IntFieldUpdateOperationsInput | number
@@ -367,6 +427,10 @@ export type ClientUncheckedUpdateInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   birthDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  firstNameParent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastNameParent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountType?: Prisma.EnumClientTypeFieldUpdateOperationsInput | $Enums.ClientType
   groupId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumClientStatusFieldUpdateOperationsInput | $Enums.ClientStatus
@@ -380,6 +444,10 @@ export type ClientCreateManyInput = {
   lastName: string
   gender: $Enums.Gender
   birthDate: Date | string
+  phone: string
+  email: string
+  firstNameParent?: string | null
+  lastNameParent?: string | null
   accountType: $Enums.ClientType
   groupId?: number | null
   status?: $Enums.ClientStatus
@@ -391,6 +459,10 @@ export type ClientUpdateManyMutationInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   birthDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  firstNameParent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastNameParent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountType?: Prisma.EnumClientTypeFieldUpdateOperationsInput | $Enums.ClientType
   status?: Prisma.EnumClientStatusFieldUpdateOperationsInput | $Enums.ClientStatus
   accessCode?: Prisma.IntFieldUpdateOperationsInput | number
@@ -402,6 +474,10 @@ export type ClientUncheckedUpdateManyInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   birthDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  firstNameParent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastNameParent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountType?: Prisma.EnumClientTypeFieldUpdateOperationsInput | $Enums.ClientType
   groupId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumClientStatusFieldUpdateOperationsInput | $Enums.ClientStatus
@@ -420,6 +496,10 @@ export type ClientCountOrderByAggregateInput = {
   lastName?: Prisma.SortOrder
   gender?: Prisma.SortOrder
   birthDate?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
+  email?: Prisma.SortOrder
+  firstNameParent?: Prisma.SortOrder
+  lastNameParent?: Prisma.SortOrder
   accountType?: Prisma.SortOrder
   groupId?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -438,6 +518,10 @@ export type ClientMaxOrderByAggregateInput = {
   lastName?: Prisma.SortOrder
   gender?: Prisma.SortOrder
   birthDate?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
+  email?: Prisma.SortOrder
+  firstNameParent?: Prisma.SortOrder
+  lastNameParent?: Prisma.SortOrder
   accountType?: Prisma.SortOrder
   groupId?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -450,6 +534,10 @@ export type ClientMinOrderByAggregateInput = {
   lastName?: Prisma.SortOrder
   gender?: Prisma.SortOrder
   birthDate?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
+  email?: Prisma.SortOrder
+  firstNameParent?: Prisma.SortOrder
+  lastNameParent?: Prisma.SortOrder
   accountType?: Prisma.SortOrder
   groupId?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -479,6 +567,10 @@ export type ClientOrderByRelationAggregateInput = {
 
 export type EnumGenderFieldUpdateOperationsInput = {
   set?: $Enums.Gender
+}
+
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
 }
 
 export type EnumClientTypeFieldUpdateOperationsInput = {
@@ -558,6 +650,10 @@ export type ClientCreateWithoutSubscriptionsInput = {
   lastName: string
   gender: $Enums.Gender
   birthDate: Date | string
+  phone: string
+  email: string
+  firstNameParent?: string | null
+  lastNameParent?: string | null
   accountType: $Enums.ClientType
   status?: $Enums.ClientStatus
   accessCode: number
@@ -570,6 +666,10 @@ export type ClientUncheckedCreateWithoutSubscriptionsInput = {
   lastName: string
   gender: $Enums.Gender
   birthDate: Date | string
+  phone: string
+  email: string
+  firstNameParent?: string | null
+  lastNameParent?: string | null
   accountType: $Enums.ClientType
   groupId?: number | null
   status?: $Enums.ClientStatus
@@ -597,6 +697,10 @@ export type ClientUpdateWithoutSubscriptionsInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   birthDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  firstNameParent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastNameParent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountType?: Prisma.EnumClientTypeFieldUpdateOperationsInput | $Enums.ClientType
   status?: Prisma.EnumClientStatusFieldUpdateOperationsInput | $Enums.ClientStatus
   accessCode?: Prisma.IntFieldUpdateOperationsInput | number
@@ -609,6 +713,10 @@ export type ClientUncheckedUpdateWithoutSubscriptionsInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   birthDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  firstNameParent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastNameParent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountType?: Prisma.EnumClientTypeFieldUpdateOperationsInput | $Enums.ClientType
   groupId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumClientStatusFieldUpdateOperationsInput | $Enums.ClientStatus
@@ -620,6 +728,10 @@ export type ClientCreateWithoutGroupInput = {
   lastName: string
   gender: $Enums.Gender
   birthDate: Date | string
+  phone: string
+  email: string
+  firstNameParent?: string | null
+  lastNameParent?: string | null
   accountType: $Enums.ClientType
   status?: $Enums.ClientStatus
   accessCode: number
@@ -632,6 +744,10 @@ export type ClientUncheckedCreateWithoutGroupInput = {
   lastName: string
   gender: $Enums.Gender
   birthDate: Date | string
+  phone: string
+  email: string
+  firstNameParent?: string | null
+  lastNameParent?: string | null
   accountType: $Enums.ClientType
   status?: $Enums.ClientStatus
   accessCode: number
@@ -673,6 +789,10 @@ export type ClientScalarWhereInput = {
   lastName?: Prisma.StringFilter<"Client"> | string
   gender?: Prisma.EnumGenderFilter<"Client"> | $Enums.Gender
   birthDate?: Prisma.DateTimeFilter<"Client"> | Date | string
+  phone?: Prisma.StringFilter<"Client"> | string
+  email?: Prisma.StringFilter<"Client"> | string
+  firstNameParent?: Prisma.StringNullableFilter<"Client"> | string | null
+  lastNameParent?: Prisma.StringNullableFilter<"Client"> | string | null
   accountType?: Prisma.EnumClientTypeFilter<"Client"> | $Enums.ClientType
   groupId?: Prisma.IntNullableFilter<"Client"> | number | null
   status?: Prisma.EnumClientStatusFilter<"Client"> | $Enums.ClientStatus
@@ -685,6 +805,10 @@ export type ClientCreateManyGroupInput = {
   lastName: string
   gender: $Enums.Gender
   birthDate: Date | string
+  phone: string
+  email: string
+  firstNameParent?: string | null
+  lastNameParent?: string | null
   accountType: $Enums.ClientType
   status?: $Enums.ClientStatus
   accessCode: number
@@ -695,6 +819,10 @@ export type ClientUpdateWithoutGroupInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   birthDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  firstNameParent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastNameParent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountType?: Prisma.EnumClientTypeFieldUpdateOperationsInput | $Enums.ClientType
   status?: Prisma.EnumClientStatusFieldUpdateOperationsInput | $Enums.ClientStatus
   accessCode?: Prisma.IntFieldUpdateOperationsInput | number
@@ -707,6 +835,10 @@ export type ClientUncheckedUpdateWithoutGroupInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   birthDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  firstNameParent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastNameParent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountType?: Prisma.EnumClientTypeFieldUpdateOperationsInput | $Enums.ClientType
   status?: Prisma.EnumClientStatusFieldUpdateOperationsInput | $Enums.ClientStatus
   accessCode?: Prisma.IntFieldUpdateOperationsInput | number
@@ -719,6 +851,10 @@ export type ClientUncheckedUpdateManyWithoutGroupInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   birthDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  firstNameParent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastNameParent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountType?: Prisma.EnumClientTypeFieldUpdateOperationsInput | $Enums.ClientType
   status?: Prisma.EnumClientStatusFieldUpdateOperationsInput | $Enums.ClientStatus
   accessCode?: Prisma.IntFieldUpdateOperationsInput | number
@@ -761,6 +897,10 @@ export type ClientSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   lastName?: boolean
   gender?: boolean
   birthDate?: boolean
+  phone?: boolean
+  email?: boolean
+  firstNameParent?: boolean
+  lastNameParent?: boolean
   accountType?: boolean
   groupId?: boolean
   status?: boolean
@@ -778,13 +918,17 @@ export type ClientSelectScalar = {
   lastName?: boolean
   gender?: boolean
   birthDate?: boolean
+  phone?: boolean
+  email?: boolean
+  firstNameParent?: boolean
+  lastNameParent?: boolean
   accountType?: boolean
   groupId?: boolean
   status?: boolean
   accessCode?: boolean
 }
 
-export type ClientOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "lastName" | "gender" | "birthDate" | "accountType" | "groupId" | "status" | "accessCode", ExtArgs["result"]["client"]>
+export type ClientOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "lastName" | "gender" | "birthDate" | "phone" | "email" | "firstNameParent" | "lastNameParent" | "accountType" | "groupId" | "status" | "accessCode", ExtArgs["result"]["client"]>
 export type ClientInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   group?: boolean | Prisma.Client$groupArgs<ExtArgs>
   subscriptions?: boolean | Prisma.Client$subscriptionsArgs<ExtArgs>
@@ -803,6 +947,10 @@ export type $ClientPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     lastName: string
     gender: $Enums.Gender
     birthDate: Date
+    phone: string
+    email: string
+    firstNameParent: string | null
+    lastNameParent: string | null
     accountType: $Enums.ClientType
     groupId: number | null
     status: $Enums.ClientStatus
@@ -1183,6 +1331,10 @@ export interface ClientFieldRefs {
   readonly lastName: Prisma.FieldRef<"Client", 'String'>
   readonly gender: Prisma.FieldRef<"Client", 'Gender'>
   readonly birthDate: Prisma.FieldRef<"Client", 'DateTime'>
+  readonly phone: Prisma.FieldRef<"Client", 'String'>
+  readonly email: Prisma.FieldRef<"Client", 'String'>
+  readonly firstNameParent: Prisma.FieldRef<"Client", 'String'>
+  readonly lastNameParent: Prisma.FieldRef<"Client", 'String'>
   readonly accountType: Prisma.FieldRef<"Client", 'ClientType'>
   readonly groupId: Prisma.FieldRef<"Client", 'Int'>
   readonly status: Prisma.FieldRef<"Client", 'ClientStatus'>

@@ -60,7 +60,8 @@ export const ModelName = {
   SettingAI: 'SettingAI',
   SettingDefinition: 'SettingDefinition',
   SettingOption: 'SettingOption',
-  SettingType: 'SettingType'
+  SettingType: 'SettingType',
+  Users: 'Users'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -180,12 +181,32 @@ export const SettingTypeScalarFieldEnum = {
 export type SettingTypeScalarFieldEnum = (typeof SettingTypeScalarFieldEnum)[keyof typeof SettingTypeScalarFieldEnum]
 
 
+export const UsersScalarFieldEnum = {
+  id: 'id',
+  peerId: 'peerId',
+  state: 'state',
+  city: 'city',
+  citiesList: 'citiesList',
+  citiesPage: 'citiesPage',
+  createdAt: 'createdAt'
+} as const
+
+export type UsersScalarFieldEnum = (typeof UsersScalarFieldEnum)[keyof typeof UsersScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const PromptOrderByRelevanceFieldEnum = {
@@ -248,4 +269,37 @@ export const SettingTypeOrderByRelevanceFieldEnum = {
 } as const
 
 export type SettingTypeOrderByRelevanceFieldEnum = (typeof SettingTypeOrderByRelevanceFieldEnum)[keyof typeof SettingTypeOrderByRelevanceFieldEnum]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
+
+
+export const QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+} as const
+
+export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const UsersOrderByRelevanceFieldEnum = {
+  state: 'state',
+  city: 'city'
+} as const
+
+export type UsersOrderByRelevanceFieldEnum = (typeof UsersOrderByRelevanceFieldEnum)[keyof typeof UsersOrderByRelevanceFieldEnum]
 

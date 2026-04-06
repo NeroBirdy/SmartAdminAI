@@ -3,7 +3,7 @@ import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 import { PrismaClient } from "../../prisma/generated/prisma/db1/client";
 import { PrismaClient as FakeAPIClient } from "../../prisma/generated/prisma/db2/client";
 
-export { usePrisma };
+export { usePrisma, useFakeAPI };
 
 const adapter = new PrismaMariaDb({
   host: process.env.DATABASE_HOST,
