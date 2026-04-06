@@ -1,0 +1,8 @@
+model Topic {
+  id           Int    @id @default(autoincrement())
+  moduleId     Int
+  name         String
+  lessonsCount Int
+
+  module Module @relation(fields: [moduleId], references: [id])
+}

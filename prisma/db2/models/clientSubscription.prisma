@@ -1,0 +1,10 @@
+model ClientSubscription {
+  id                 Int      @id @default(autoincrement())
+  clientId           Int
+  subscriptionTypeId Int
+  purchaseDate       DateTime @default(now())
+  remainingVisits    Int
+
+  client           Client           @relation(fields: [clientId], references: [id])
+  subscriptionType SubscriptionType @relation(fields: [subscriptionTypeId], references: [id])
+}

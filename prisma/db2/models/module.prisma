@@ -1,0 +1,8 @@
+model Module {
+  id        Int    @id @default(autoincrement())
+  programId Int
+  name      String
+
+  program Program @relation(fields: [programId], references: [id])
+  topics  Topic[]
+}

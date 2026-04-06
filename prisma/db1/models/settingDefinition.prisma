@@ -1,0 +1,17 @@
+// Определения настроек
+model SettingDefinition {
+  id   Int    @id @default(autoincrement())
+  key  String @unique // 'planning_horizon'
+  name String // 'Горизонт планирования'
+
+  settingTypeId Int
+  settingType   SettingType @relation(fields: [settingTypeId], references: [id], onDelete: Restrict)
+
+  maxValues Int @default(1) // 0 = unlimited, 1 = single, 3 = max three
+
+  options         SettingOption[]
+  sectionSettings SectionSetting[]
+
+  @@index([key])
+  @@index([settingTypeId])
+}

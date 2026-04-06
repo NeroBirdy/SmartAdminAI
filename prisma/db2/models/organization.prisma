@@ -1,0 +1,41 @@
+enum OrgType {
+  EDUCATION_CENTER // Образовательный центр
+  SPORTS_CLUB // Спортивный клуб или секция
+  CREATIVE_STUDIO // Творческая студия или мастерская
+  SCIENCE_CLUB // Научно-технический кружок
+  CHILDREN_CAMP // Детский лагерь
+  PRIVATE_KINDERGARTEN // Частный детский сад
+  SECTION // Секция при организации
+}
+
+enum Focus {
+  SPORTS // Спорт
+  FOREIGN_LANGUAGES // Изучение иностранных языков
+  SCHOOL_PREP // Подготовка к школе/экзаменам
+  ART // Рисование и творчество
+  DANCE // Танцы
+  SCIENCE // Наука и эксперименты
+  THEATER // Театр и актерское мастерство
+  PROGRAMMING // Программирование и технологии
+}
+
+enum VisitModel {
+  PAID // Платно
+  FREE // Бесплатно
+}
+
+model Organization {
+  id         Int        @id @default(autoincrement())
+  name       String
+  type       OrgType
+  focus      Focus
+  visitModel VisitModel
+  cityId     Int
+
+  city              City               @relation(fields: [cityId], references: [id])
+  employees         Employee[]
+  groups            Group[]
+  subscriptionTypes SubscriptionType[]
+  schedule          WorkSchedule[]
+  programs          Program[]
+}

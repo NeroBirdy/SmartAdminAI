@@ -5,24 +5,28 @@
     <div class="second-frame-text main-text-sm">{{ item.text }}</div>
   </div>
   <div class="btn-block">
-    <ui-button
-      v-if="item.done"
-      @click="handleRecommendationButtonClick()"
-      class="header-sm done-btn-pushed"
-    >
-      <img src="../../../assets/icons/check.svg" />
-    </ui-button>
-    <ui-button
-      v-else
-      @click="handleRecommendationButtonClick()"
-      class="header-sm done-btn"
-    >
-      Выполнено
-    </ui-button>
+    <Transition name="btn" mode="out-in">
+      <ui-button
+        v-if="item.done"
+        @click="handleRecommendationButtonClick()"
+        class="header-sm done-btn-pushed"
+      >
+        <component :is="checkImg" />
+      </ui-button>
+      <ui-button
+        v-else
+        @click="handleRecommendationButtonClick()"
+        class="header-sm done-btn"
+      >
+        Выполнено
+      </ui-button>
+    </Transition>
   </div>
 </template>
 
 <script lang="ts" setup>
+import checkImg from "~/assets/icons/check.svg";
+
 type Recommendation = {
   id: number;
   title: string;
@@ -36,7 +40,7 @@ const props = defineProps<{
 
 const handleRecommendationButtonClick = async () => {
   try {
-    await $fetch("/api/changeDoneState", {
+    await $fetch("/api/risks/changeDoneState", {
       method: "POST",
       body: { id: props.item.id, done: !props.item.done },
     });
@@ -89,5 +93,20 @@ const handleRecommendationButtonClick = async () => {
   background-color: #e9f3ff;
   padding: 8px;
   margin-right: 20px;
+}
+
+.btn-enter-active,
+.btn-leave-active {
+  transition: all 0.2s ease;
+}
+
+.btn-enter-from {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.btn-leave-to {
+  opacity: 0;
+  transform: scale(0.8);
 }
 </style>

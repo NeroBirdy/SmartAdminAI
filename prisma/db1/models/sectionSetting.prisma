@@ -1,0 +1,15 @@
+// Выбранные значения для секции
+model SectionSetting {
+  id                  Int @id @default(autoincrement())
+  sectionId           Int
+  settingDefinitionId Int
+  settingOptionId     Int
+
+  section           Section           @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  settingOption     SettingOption     @relation(fields: [settingOptionId], references: [id], onDelete: Cascade)
+  settingDefinition SettingDefinition @relation(fields: [settingDefinitionId], references: [id], onDelete: Cascade)
+
+  @@index([sectionId])
+  @@index([settingOptionId])
+  @@index([settingDefinitionId])
+}

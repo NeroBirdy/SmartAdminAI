@@ -6,13 +6,26 @@
     </div>
 
     <div class="rightSide">
-      <img class="icon" src="../../assets/icons/headset.png" alt="" />
-      <img class="icon icon-bell" src="../../assets/icons/bell.png" alt="" />
+      <component
+        :is="WrechIcon"
+        class="icon"
+        :class="{ active: isDevMenuOpen }"
+        alt="Иконка режима разработчика"
+        @click="toggleDevMenu()"
+      />
+      <img class="icon icon-headset" src="~/assets/icons/headset.png" alt="" />
+      <img class="icon icon-bell" src="~/assets/icons/bell.png" alt="" />
       <p class="header-sm user-name">Евгений П.</p>
-      <img class="user-img" src="../../assets/icons/user_pic.png" alt="" />
+      <img class="user-img" src="~/assets/icons/user_pic.png" alt="" />
     </div>
   </div>
 </template>
+
+<script lang="ts" setup>
+import WrechIcon from "~/assets/icons/wrench.svg";
+
+const { isDevMenuOpen, toggleDevMenu } = useDevMenu();
+</script>
 
 <style scoped>
 .header {
@@ -33,7 +46,7 @@
 }
 
 .back-btn {
-  background-image: url(../../assets/icons/arrow_left.png);
+  background-image: url(~/assets/icons/arrow_left.png);
   background-position: center;
   background-repeat: no-repeat;
   width: 40px;
@@ -55,11 +68,21 @@
 }
 
 .icon {
+  overflow: visible;
   margin: auto;
   width: 24px;
   height: 24px;
   margin-left: 0;
   margin-right: 0;
+  transition: 0.2s;
+}
+
+.icon.active {
+  filter: saturate(5);
+}
+
+.icon-headset {
+  margin-left: 20px;
 }
 
 .icon-bell {

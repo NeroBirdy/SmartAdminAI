@@ -16,16 +16,19 @@
     "dotenv": "^17.3.1",
     "gigachat": "^0.0.18",
     "markdown-table": "^3.0.4",
+    "node-vk-bot-api": "^3.5.0",
     "nuxt": "^4.3.0",
     "tablemark": "^4.1.0",
+    "vite-svg-loader": "^5.1.1",
     "vk-io": "^4.10.1",
     "vue": "^3.5.27",
     "vue-router": "^4.6.4",
     "vue-sonner": "^2.0.9"
   },
   "devDependencies": {
-    "@types/node": "^25.3.5",
+    "@types/node": "^25.5.2",
     "prettier": "3.8.1",
-    "prisma": "^7.4.2"
+    "prisma": "^7.4.2",
+    "tsx": "^4.21.0"
   }
 }

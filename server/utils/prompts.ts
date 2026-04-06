@@ -3,8 +3,8 @@ export { prompts, initPrompts };
 const prisma = usePrisma();
 
 const prompts = {
-  instructionRisk: "",
-  instructionRec: "",
+  promptRisk: "",
+  promptRec: "",
 };
 
 let isInitialized = false;
@@ -25,13 +25,13 @@ async function initPrompts(): Promise<void> {
     return prompt.text;
   };
 
-  const [instructionRisk, instructionRec] = await Promise.all([
-    getPrompt(5),
-    getPrompt(6),
+  const [promptRec, promptRisk] = await Promise.all([
+    getPrompt(1),
+    getPrompt(2),
   ]);
 
-  prompts.instructionRisk = instructionRisk;
-  prompts.instructionRec = instructionRec;
+  prompts.promptRisk = promptRisk;
+  prompts.promptRec = promptRec;
 
   isInitialized = true;
 }

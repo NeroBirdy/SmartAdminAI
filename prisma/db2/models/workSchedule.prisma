@@ -1,0 +1,26 @@
+enum DayOfWeek {
+  MON
+  TUE
+  WED
+  THU
+  FRI
+  SAT
+  SUN
+}
+
+model WorkSchedule {
+  id           Int       @id @default(autoincrement())
+  dayOfWeek    DayOfWeek
+  isWorkingDay Boolean   @default(true)
+  startWork    DateTime @db2.Time(0)
+  endWork      DateTime @db2.Time(0)
+
+  // Полиморфная связь — заполняется только одно из трёх полей
+  organizationId Int?
+  employeeId     Int?
+  venueId        Int?
+
+  organization Organization? @relation(fields: [organizationId], references: [id])
+  employee     Employee?     @relation(fields: [employeeId], references: [id])
+  venue        Venue?        @relation(fields: [venueId], references: [id])
+}
