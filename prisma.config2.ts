@@ -4,12 +4,12 @@ import "dotenv/config";
 import { defineConfig } from "prisma/config";
 
 export default defineConfig({
-  schema: "prisma/db1/",
+  schema: "prisma/db2/",
   migrations: {
-    path: "prisma/migrations1",
-    seed: "tsx prisma/seed1.ts",
+    path: "prisma/migrations2",
+    seed: "tsx prisma/seed2.ts",
   },
   datasource: {
-    url: process.env["DATABASE_URL_1"],
+    url: process.env["DATABASE_URL_2"],
   },
 });

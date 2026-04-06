@@ -1,0 +1,7 @@
+model Schedule {
+  id      Int @id @default(autoincrement())
+  groupId Int
+
+  group   Group    @relation(fields: [groupId], references: [id])
+  lessons Lesson[]
+}

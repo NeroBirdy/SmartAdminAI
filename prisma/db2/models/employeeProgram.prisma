@@ -1,0 +1,9 @@
+model EmployeeProgram {
+  id         Int @id @default(autoincrement())
+  employeeId Int @unique
+
+  employee Employee  @relation(fields: [employeeId], references: [id])
+  programs Program[]
+  groups   Group[]
+  lessons  Lesson[]
+}

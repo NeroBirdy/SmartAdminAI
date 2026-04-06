@@ -1,0 +1,30 @@
+enum Gender {
+  M // Мужской
+  F // Женский
+}
+
+enum ClientType {
+  ADULT // Взрослый
+  CHILD // Ребёнок
+}
+
+enum ClientStatus {
+  WAITING // Ожидает распределения
+  ASSIGNED // Распределён в группу
+  ARCHIVED // В архиве
+}
+
+model Client {
+  id          Int          @id @default(autoincrement())
+  firstName   String
+  lastName    String
+  gender      Gender
+  birthDate   DateTime
+  accountType ClientType
+  groupId     Int?
+  status      ClientStatus @default(WAITING)
+  accessCode  Int          @unique
+
+  group         Group?               @relation(fields: [groupId], references: [id])
+  subscriptions ClientSubscription[]
+}

@@ -1,0 +1,12 @@
+model SubscriptionType {
+  id             Int     @id @default(autoincrement())
+  organizationId Int
+  typeName       String
+  visitCount     Int
+  hasExpiry      Boolean @default(false)
+  expiryDays     Int? // Срок действия в днях (если hasExpiry = true)
+  price          Int
+
+  organization        Organization         @relation(fields: [organizationId], references: [id])
+  clientSubscriptions ClientSubscription[]
+}
