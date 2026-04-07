@@ -29,13 +29,11 @@ export type AggregateClient = {
 export type ClientAvgAggregateOutputType = {
   id: number | null
   groupId: number | null
-  accessCode: number | null
 }
 
 export type ClientSumAggregateOutputType = {
   id: number | null
   groupId: number | null
-  accessCode: number | null
 }
 
 export type ClientMinAggregateOutputType = {
@@ -51,7 +49,7 @@ export type ClientMinAggregateOutputType = {
   accountType: $Enums.ClientType | null
   groupId: number | null
   status: $Enums.ClientStatus | null
-  accessCode: number | null
+  accessCode: string | null
 }
 
 export type ClientMaxAggregateOutputType = {
@@ -67,7 +65,7 @@ export type ClientMaxAggregateOutputType = {
   accountType: $Enums.ClientType | null
   groupId: number | null
   status: $Enums.ClientStatus | null
-  accessCode: number | null
+  accessCode: string | null
 }
 
 export type ClientCountAggregateOutputType = {
@@ -91,13 +89,11 @@ export type ClientCountAggregateOutputType = {
 export type ClientAvgAggregateInputType = {
   id?: true
   groupId?: true
-  accessCode?: true
 }
 
 export type ClientSumAggregateInputType = {
   id?: true
   groupId?: true
-  accessCode?: true
 }
 
 export type ClientMinAggregateInputType = {
@@ -248,7 +244,7 @@ export type ClientGroupByOutputType = {
   accountType: $Enums.ClientType
   groupId: number | null
   status: $Enums.ClientStatus
-  accessCode: number
+  accessCode: string
   _count: ClientCountAggregateOutputType | null
   _avg: ClientAvgAggregateOutputType | null
   _sum: ClientSumAggregateOutputType | null
@@ -287,7 +283,7 @@ export type ClientWhereInput = {
   accountType?: Prisma.EnumClientTypeFilter<"Client"> | $Enums.ClientType
   groupId?: Prisma.IntNullableFilter<"Client"> | number | null
   status?: Prisma.EnumClientStatusFilter<"Client"> | $Enums.ClientStatus
-  accessCode?: Prisma.IntFilter<"Client"> | number
+  accessCode?: Prisma.StringFilter<"Client"> | string
   group?: Prisma.XOR<Prisma.GroupNullableScalarRelationFilter, Prisma.GroupWhereInput> | null
   subscriptions?: Prisma.ClientSubscriptionListRelationFilter
 }
@@ -313,7 +309,7 @@ export type ClientOrderByWithRelationInput = {
 
 export type ClientWhereUniqueInput = Prisma.AtLeast<{
   id?: number
-  accessCode?: number
+  accessCode?: string
   AND?: Prisma.ClientWhereInput | Prisma.ClientWhereInput[]
   OR?: Prisma.ClientWhereInput[]
   NOT?: Prisma.ClientWhereInput | Prisma.ClientWhereInput[]
@@ -369,7 +365,7 @@ export type ClientScalarWhereWithAggregatesInput = {
   accountType?: Prisma.EnumClientTypeWithAggregatesFilter<"Client"> | $Enums.ClientType
   groupId?: Prisma.IntNullableWithAggregatesFilter<"Client"> | number | null
   status?: Prisma.EnumClientStatusWithAggregatesFilter<"Client"> | $Enums.ClientStatus
-  accessCode?: Prisma.IntWithAggregatesFilter<"Client"> | number
+  accessCode?: Prisma.StringWithAggregatesFilter<"Client"> | string
 }
 
 export type ClientCreateInput = {
@@ -383,7 +379,7 @@ export type ClientCreateInput = {
   lastNameParent?: string | null
   accountType: $Enums.ClientType
   status?: $Enums.ClientStatus
-  accessCode: number
+  accessCode: string
   group?: Prisma.GroupCreateNestedOneWithoutClientsInput
   subscriptions?: Prisma.ClientSubscriptionCreateNestedManyWithoutClientInput
 }
@@ -401,7 +397,7 @@ export type ClientUncheckedCreateInput = {
   accountType: $Enums.ClientType
   groupId?: number | null
   status?: $Enums.ClientStatus
-  accessCode: number
+  accessCode: string
   subscriptions?: Prisma.ClientSubscriptionUncheckedCreateNestedManyWithoutClientInput
 }
 
@@ -416,7 +412,7 @@ export type ClientUpdateInput = {
   lastNameParent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountType?: Prisma.EnumClientTypeFieldUpdateOperationsInput | $Enums.ClientType
   status?: Prisma.EnumClientStatusFieldUpdateOperationsInput | $Enums.ClientStatus
-  accessCode?: Prisma.IntFieldUpdateOperationsInput | number
+  accessCode?: Prisma.StringFieldUpdateOperationsInput | string
   group?: Prisma.GroupUpdateOneWithoutClientsNestedInput
   subscriptions?: Prisma.ClientSubscriptionUpdateManyWithoutClientNestedInput
 }
@@ -434,7 +430,7 @@ export type ClientUncheckedUpdateInput = {
   accountType?: Prisma.EnumClientTypeFieldUpdateOperationsInput | $Enums.ClientType
   groupId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumClientStatusFieldUpdateOperationsInput | $Enums.ClientStatus
-  accessCode?: Prisma.IntFieldUpdateOperationsInput | number
+  accessCode?: Prisma.StringFieldUpdateOperationsInput | string
   subscriptions?: Prisma.ClientSubscriptionUncheckedUpdateManyWithoutClientNestedInput
 }
 
@@ -451,7 +447,7 @@ export type ClientCreateManyInput = {
   accountType: $Enums.ClientType
   groupId?: number | null
   status?: $Enums.ClientStatus
-  accessCode: number
+  accessCode: string
 }
 
 export type ClientUpdateManyMutationInput = {
@@ -465,7 +461,7 @@ export type ClientUpdateManyMutationInput = {
   lastNameParent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountType?: Prisma.EnumClientTypeFieldUpdateOperationsInput | $Enums.ClientType
   status?: Prisma.EnumClientStatusFieldUpdateOperationsInput | $Enums.ClientStatus
-  accessCode?: Prisma.IntFieldUpdateOperationsInput | number
+  accessCode?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type ClientUncheckedUpdateManyInput = {
@@ -481,7 +477,7 @@ export type ClientUncheckedUpdateManyInput = {
   accountType?: Prisma.EnumClientTypeFieldUpdateOperationsInput | $Enums.ClientType
   groupId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumClientStatusFieldUpdateOperationsInput | $Enums.ClientStatus
-  accessCode?: Prisma.IntFieldUpdateOperationsInput | number
+  accessCode?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type ClientOrderByRelevanceInput = {
@@ -509,7 +505,6 @@ export type ClientCountOrderByAggregateInput = {
 export type ClientAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   groupId?: Prisma.SortOrder
-  accessCode?: Prisma.SortOrder
 }
 
 export type ClientMaxOrderByAggregateInput = {
@@ -547,7 +542,6 @@ export type ClientMinOrderByAggregateInput = {
 export type ClientSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   groupId?: Prisma.SortOrder
-  accessCode?: Prisma.SortOrder
 }
 
 export type ClientScalarRelationFilter = {
@@ -656,7 +650,7 @@ export type ClientCreateWithoutSubscriptionsInput = {
   lastNameParent?: string | null
   accountType: $Enums.ClientType
   status?: $Enums.ClientStatus
-  accessCode: number
+  accessCode: string
   group?: Prisma.GroupCreateNestedOneWithoutClientsInput
 }
 
@@ -673,7 +667,7 @@ export type ClientUncheckedCreateWithoutSubscriptionsInput = {
   accountType: $Enums.ClientType
   groupId?: number | null
   status?: $Enums.ClientStatus
-  accessCode: number
+  accessCode: string
 }
 
 export type ClientCreateOrConnectWithoutSubscriptionsInput = {
@@ -703,7 +697,7 @@ export type ClientUpdateWithoutSubscriptionsInput = {
   lastNameParent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountType?: Prisma.EnumClientTypeFieldUpdateOperationsInput | $Enums.ClientType
   status?: Prisma.EnumClientStatusFieldUpdateOperationsInput | $Enums.ClientStatus
-  accessCode?: Prisma.IntFieldUpdateOperationsInput | number
+  accessCode?: Prisma.StringFieldUpdateOperationsInput | string
   group?: Prisma.GroupUpdateOneWithoutClientsNestedInput
 }
 
@@ -720,7 +714,7 @@ export type ClientUncheckedUpdateWithoutSubscriptionsInput = {
   accountType?: Prisma.EnumClientTypeFieldUpdateOperationsInput | $Enums.ClientType
   groupId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumClientStatusFieldUpdateOperationsInput | $Enums.ClientStatus
-  accessCode?: Prisma.IntFieldUpdateOperationsInput | number
+  accessCode?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type ClientCreateWithoutGroupInput = {
@@ -734,7 +728,7 @@ export type ClientCreateWithoutGroupInput = {
   lastNameParent?: string | null
   accountType: $Enums.ClientType
   status?: $Enums.ClientStatus
-  accessCode: number
+  accessCode: string
   subscriptions?: Prisma.ClientSubscriptionCreateNestedManyWithoutClientInput
 }
 
@@ -750,7 +744,7 @@ export type ClientUncheckedCreateWithoutGroupInput = {
   lastNameParent?: string | null
   accountType: $Enums.ClientType
   status?: $Enums.ClientStatus
-  accessCode: number
+  accessCode: string
   subscriptions?: Prisma.ClientSubscriptionUncheckedCreateNestedManyWithoutClientInput
 }
 
@@ -796,7 +790,7 @@ export type ClientScalarWhereInput = {
   accountType?: Prisma.EnumClientTypeFilter<"Client"> | $Enums.ClientType
   groupId?: Prisma.IntNullableFilter<"Client"> | number | null
   status?: Prisma.EnumClientStatusFilter<"Client"> | $Enums.ClientStatus
-  accessCode?: Prisma.IntFilter<"Client"> | number
+  accessCode?: Prisma.StringFilter<"Client"> | string
 }
 
 export type ClientCreateManyGroupInput = {
@@ -811,7 +805,7 @@ export type ClientCreateManyGroupInput = {
   lastNameParent?: string | null
   accountType: $Enums.ClientType
   status?: $Enums.ClientStatus
-  accessCode: number
+  accessCode: string
 }
 
 export type ClientUpdateWithoutGroupInput = {
@@ -825,7 +819,7 @@ export type ClientUpdateWithoutGroupInput = {
   lastNameParent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountType?: Prisma.EnumClientTypeFieldUpdateOperationsInput | $Enums.ClientType
   status?: Prisma.EnumClientStatusFieldUpdateOperationsInput | $Enums.ClientStatus
-  accessCode?: Prisma.IntFieldUpdateOperationsInput | number
+  accessCode?: Prisma.StringFieldUpdateOperationsInput | string
   subscriptions?: Prisma.ClientSubscriptionUpdateManyWithoutClientNestedInput
 }
 
@@ -841,7 +835,7 @@ export type ClientUncheckedUpdateWithoutGroupInput = {
   lastNameParent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountType?: Prisma.EnumClientTypeFieldUpdateOperationsInput | $Enums.ClientType
   status?: Prisma.EnumClientStatusFieldUpdateOperationsInput | $Enums.ClientStatus
-  accessCode?: Prisma.IntFieldUpdateOperationsInput | number
+  accessCode?: Prisma.StringFieldUpdateOperationsInput | string
   subscriptions?: Prisma.ClientSubscriptionUncheckedUpdateManyWithoutClientNestedInput
 }
 
@@ -857,7 +851,7 @@ export type ClientUncheckedUpdateManyWithoutGroupInput = {
   lastNameParent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountType?: Prisma.EnumClientTypeFieldUpdateOperationsInput | $Enums.ClientType
   status?: Prisma.EnumClientStatusFieldUpdateOperationsInput | $Enums.ClientStatus
-  accessCode?: Prisma.IntFieldUpdateOperationsInput | number
+  accessCode?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -954,7 +948,7 @@ export type $ClientPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     accountType: $Enums.ClientType
     groupId: number | null
     status: $Enums.ClientStatus
-    accessCode: number
+    accessCode: string
   }, ExtArgs["result"]["client"]>
   composites: {}
 }
@@ -1338,7 +1332,7 @@ export interface ClientFieldRefs {
   readonly accountType: Prisma.FieldRef<"Client", 'ClientType'>
   readonly groupId: Prisma.FieldRef<"Client", 'Int'>
   readonly status: Prisma.FieldRef<"Client", 'ClientStatus'>
-  readonly accessCode: Prisma.FieldRef<"Client", 'Int'>
+  readonly accessCode: Prisma.FieldRef<"Client", 'String'>
 }
     
 

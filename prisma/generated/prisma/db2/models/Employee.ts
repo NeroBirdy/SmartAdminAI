@@ -29,13 +29,13 @@ export type AggregateEmployee = {
 export type EmployeeAvgAggregateOutputType = {
   id: number | null
   organizationId: number | null
-  accessCode: number | null
+  employeeProgramId: number | null
 }
 
 export type EmployeeSumAggregateOutputType = {
   id: number | null
   organizationId: number | null
-  accessCode: number | null
+  employeeProgramId: number | null
 }
 
 export type EmployeeMinAggregateOutputType = {
@@ -44,7 +44,8 @@ export type EmployeeMinAggregateOutputType = {
   lastName: string | null
   role: $Enums.EmployeeRole | null
   organizationId: number | null
-  accessCode: number | null
+  accessCode: string | null
+  employeeProgramId: number | null
 }
 
 export type EmployeeMaxAggregateOutputType = {
@@ -53,7 +54,8 @@ export type EmployeeMaxAggregateOutputType = {
   lastName: string | null
   role: $Enums.EmployeeRole | null
   organizationId: number | null
-  accessCode: number | null
+  accessCode: string | null
+  employeeProgramId: number | null
 }
 
 export type EmployeeCountAggregateOutputType = {
@@ -63,6 +65,7 @@ export type EmployeeCountAggregateOutputType = {
   role: number
   organizationId: number
   accessCode: number
+  employeeProgramId: number
   _all: number
 }
 
@@ -70,13 +73,13 @@ export type EmployeeCountAggregateOutputType = {
 export type EmployeeAvgAggregateInputType = {
   id?: true
   organizationId?: true
-  accessCode?: true
+  employeeProgramId?: true
 }
 
 export type EmployeeSumAggregateInputType = {
   id?: true
   organizationId?: true
-  accessCode?: true
+  employeeProgramId?: true
 }
 
 export type EmployeeMinAggregateInputType = {
@@ -86,6 +89,7 @@ export type EmployeeMinAggregateInputType = {
   role?: true
   organizationId?: true
   accessCode?: true
+  employeeProgramId?: true
 }
 
 export type EmployeeMaxAggregateInputType = {
@@ -95,6 +99,7 @@ export type EmployeeMaxAggregateInputType = {
   role?: true
   organizationId?: true
   accessCode?: true
+  employeeProgramId?: true
 }
 
 export type EmployeeCountAggregateInputType = {
@@ -104,6 +109,7 @@ export type EmployeeCountAggregateInputType = {
   role?: true
   organizationId?: true
   accessCode?: true
+  employeeProgramId?: true
   _all?: true
 }
 
@@ -199,7 +205,8 @@ export type EmployeeGroupByOutputType = {
   lastName: string
   role: $Enums.EmployeeRole
   organizationId: number
-  accessCode: number
+  accessCode: string
+  employeeProgramId: number | null
   _count: EmployeeCountAggregateOutputType | null
   _avg: EmployeeAvgAggregateOutputType | null
   _sum: EmployeeSumAggregateOutputType | null
@@ -231,7 +238,8 @@ export type EmployeeWhereInput = {
   lastName?: Prisma.StringFilter<"Employee"> | string
   role?: Prisma.EnumEmployeeRoleFilter<"Employee"> | $Enums.EmployeeRole
   organizationId?: Prisma.IntFilter<"Employee"> | number
-  accessCode?: Prisma.IntFilter<"Employee"> | number
+  accessCode?: Prisma.StringFilter<"Employee"> | string
+  employeeProgramId?: Prisma.IntNullableFilter<"Employee"> | number | null
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   employeeProgram?: Prisma.XOR<Prisma.EmployeeProgramNullableScalarRelationFilter, Prisma.EmployeeProgramWhereInput> | null
   workSchedules?: Prisma.WorkScheduleListRelationFilter
@@ -244,6 +252,7 @@ export type EmployeeOrderByWithRelationInput = {
   role?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
   accessCode?: Prisma.SortOrder
+  employeeProgramId?: Prisma.SortOrderInput | Prisma.SortOrder
   organization?: Prisma.OrganizationOrderByWithRelationInput
   employeeProgram?: Prisma.EmployeeProgramOrderByWithRelationInput
   workSchedules?: Prisma.WorkScheduleOrderByRelationAggregateInput
@@ -252,7 +261,7 @@ export type EmployeeOrderByWithRelationInput = {
 
 export type EmployeeWhereUniqueInput = Prisma.AtLeast<{
   id?: number
-  accessCode?: number
+  accessCode?: string
   AND?: Prisma.EmployeeWhereInput | Prisma.EmployeeWhereInput[]
   OR?: Prisma.EmployeeWhereInput[]
   NOT?: Prisma.EmployeeWhereInput | Prisma.EmployeeWhereInput[]
@@ -260,6 +269,7 @@ export type EmployeeWhereUniqueInput = Prisma.AtLeast<{
   lastName?: Prisma.StringFilter<"Employee"> | string
   role?: Prisma.EnumEmployeeRoleFilter<"Employee"> | $Enums.EmployeeRole
   organizationId?: Prisma.IntFilter<"Employee"> | number
+  employeeProgramId?: Prisma.IntNullableFilter<"Employee"> | number | null
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   employeeProgram?: Prisma.XOR<Prisma.EmployeeProgramNullableScalarRelationFilter, Prisma.EmployeeProgramWhereInput> | null
   workSchedules?: Prisma.WorkScheduleListRelationFilter
@@ -272,6 +282,7 @@ export type EmployeeOrderByWithAggregationInput = {
   role?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
   accessCode?: Prisma.SortOrder
+  employeeProgramId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.EmployeeCountOrderByAggregateInput
   _avg?: Prisma.EmployeeAvgOrderByAggregateInput
   _max?: Prisma.EmployeeMaxOrderByAggregateInput
@@ -288,16 +299,17 @@ export type EmployeeScalarWhereWithAggregatesInput = {
   lastName?: Prisma.StringWithAggregatesFilter<"Employee"> | string
   role?: Prisma.EnumEmployeeRoleWithAggregatesFilter<"Employee"> | $Enums.EmployeeRole
   organizationId?: Prisma.IntWithAggregatesFilter<"Employee"> | number
-  accessCode?: Prisma.IntWithAggregatesFilter<"Employee"> | number
+  accessCode?: Prisma.StringWithAggregatesFilter<"Employee"> | string
+  employeeProgramId?: Prisma.IntNullableWithAggregatesFilter<"Employee"> | number | null
 }
 
 export type EmployeeCreateInput = {
   firstName: string
   lastName: string
   role: $Enums.EmployeeRole
-  accessCode: number
+  accessCode: string
   organization: Prisma.OrganizationCreateNestedOneWithoutEmployeesInput
-  employeeProgram?: Prisma.EmployeeProgramCreateNestedOneWithoutEmployeeInput
+  employeeProgram?: Prisma.EmployeeProgramCreateNestedOneWithoutEmployeesInput
   workSchedules?: Prisma.WorkScheduleCreateNestedManyWithoutEmployeeInput
 }
 
@@ -307,8 +319,8 @@ export type EmployeeUncheckedCreateInput = {
   lastName: string
   role: $Enums.EmployeeRole
   organizationId: number
-  accessCode: number
-  employeeProgram?: Prisma.EmployeeProgramUncheckedCreateNestedOneWithoutEmployeeInput
+  accessCode: string
+  employeeProgramId?: number | null
   workSchedules?: Prisma.WorkScheduleUncheckedCreateNestedManyWithoutEmployeeInput
 }
 
@@ -316,9 +328,9 @@ export type EmployeeUpdateInput = {
   firstName?: Prisma.StringFieldUpdateOperationsInput | string
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
-  accessCode?: Prisma.IntFieldUpdateOperationsInput | number
+  accessCode?: Prisma.StringFieldUpdateOperationsInput | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutEmployeesNestedInput
-  employeeProgram?: Prisma.EmployeeProgramUpdateOneWithoutEmployeeNestedInput
+  employeeProgram?: Prisma.EmployeeProgramUpdateOneWithoutEmployeesNestedInput
   workSchedules?: Prisma.WorkScheduleUpdateManyWithoutEmployeeNestedInput
 }
 
@@ -328,8 +340,8 @@ export type EmployeeUncheckedUpdateInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
   organizationId?: Prisma.IntFieldUpdateOperationsInput | number
-  accessCode?: Prisma.IntFieldUpdateOperationsInput | number
-  employeeProgram?: Prisma.EmployeeProgramUncheckedUpdateOneWithoutEmployeeNestedInput
+  accessCode?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeProgramId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   workSchedules?: Prisma.WorkScheduleUncheckedUpdateManyWithoutEmployeeNestedInput
 }
 
@@ -339,14 +351,15 @@ export type EmployeeCreateManyInput = {
   lastName: string
   role: $Enums.EmployeeRole
   organizationId: number
-  accessCode: number
+  accessCode: string
+  employeeProgramId?: number | null
 }
 
 export type EmployeeUpdateManyMutationInput = {
   firstName?: Prisma.StringFieldUpdateOperationsInput | string
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
-  accessCode?: Prisma.IntFieldUpdateOperationsInput | number
+  accessCode?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type EmployeeUncheckedUpdateManyInput = {
@@ -355,7 +368,8 @@ export type EmployeeUncheckedUpdateManyInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
   organizationId?: Prisma.IntFieldUpdateOperationsInput | number
-  accessCode?: Prisma.IntFieldUpdateOperationsInput | number
+  accessCode?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeProgramId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type EmployeeOrderByRelevanceInput = {
@@ -371,12 +385,13 @@ export type EmployeeCountOrderByAggregateInput = {
   role?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
   accessCode?: Prisma.SortOrder
+  employeeProgramId?: Prisma.SortOrder
 }
 
 export type EmployeeAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
-  accessCode?: Prisma.SortOrder
+  employeeProgramId?: Prisma.SortOrder
 }
 
 export type EmployeeMaxOrderByAggregateInput = {
@@ -386,6 +401,7 @@ export type EmployeeMaxOrderByAggregateInput = {
   role?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
   accessCode?: Prisma.SortOrder
+  employeeProgramId?: Prisma.SortOrder
 }
 
 export type EmployeeMinOrderByAggregateInput = {
@@ -395,17 +411,13 @@ export type EmployeeMinOrderByAggregateInput = {
   role?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
   accessCode?: Prisma.SortOrder
+  employeeProgramId?: Prisma.SortOrder
 }
 
 export type EmployeeSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
-  accessCode?: Prisma.SortOrder
-}
-
-export type EmployeeScalarRelationFilter = {
-  is?: Prisma.EmployeeWhereInput
-  isNot?: Prisma.EmployeeWhereInput
+  employeeProgramId?: Prisma.SortOrder
 }
 
 export type EmployeeListRelationFilter = {
@@ -427,18 +439,46 @@ export type EnumEmployeeRoleFieldUpdateOperationsInput = {
   set?: $Enums.EmployeeRole
 }
 
-export type EmployeeCreateNestedOneWithoutEmployeeProgramInput = {
-  create?: Prisma.XOR<Prisma.EmployeeCreateWithoutEmployeeProgramInput, Prisma.EmployeeUncheckedCreateWithoutEmployeeProgramInput>
-  connectOrCreate?: Prisma.EmployeeCreateOrConnectWithoutEmployeeProgramInput
-  connect?: Prisma.EmployeeWhereUniqueInput
+export type EmployeeCreateNestedManyWithoutEmployeeProgramInput = {
+  create?: Prisma.XOR<Prisma.EmployeeCreateWithoutEmployeeProgramInput, Prisma.EmployeeUncheckedCreateWithoutEmployeeProgramInput> | Prisma.EmployeeCreateWithoutEmployeeProgramInput[] | Prisma.EmployeeUncheckedCreateWithoutEmployeeProgramInput[]
+  connectOrCreate?: Prisma.EmployeeCreateOrConnectWithoutEmployeeProgramInput | Prisma.EmployeeCreateOrConnectWithoutEmployeeProgramInput[]
+  createMany?: Prisma.EmployeeCreateManyEmployeeProgramInputEnvelope
+  connect?: Prisma.EmployeeWhereUniqueInput | Prisma.EmployeeWhereUniqueInput[]
 }
 
-export type EmployeeUpdateOneRequiredWithoutEmployeeProgramNestedInput = {
-  create?: Prisma.XOR<Prisma.EmployeeCreateWithoutEmployeeProgramInput, Prisma.EmployeeUncheckedCreateWithoutEmployeeProgramInput>
-  connectOrCreate?: Prisma.EmployeeCreateOrConnectWithoutEmployeeProgramInput
-  upsert?: Prisma.EmployeeUpsertWithoutEmployeeProgramInput
-  connect?: Prisma.EmployeeWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.EmployeeUpdateToOneWithWhereWithoutEmployeeProgramInput, Prisma.EmployeeUpdateWithoutEmployeeProgramInput>, Prisma.EmployeeUncheckedUpdateWithoutEmployeeProgramInput>
+export type EmployeeUncheckedCreateNestedManyWithoutEmployeeProgramInput = {
+  create?: Prisma.XOR<Prisma.EmployeeCreateWithoutEmployeeProgramInput, Prisma.EmployeeUncheckedCreateWithoutEmployeeProgramInput> | Prisma.EmployeeCreateWithoutEmployeeProgramInput[] | Prisma.EmployeeUncheckedCreateWithoutEmployeeProgramInput[]
+  connectOrCreate?: Prisma.EmployeeCreateOrConnectWithoutEmployeeProgramInput | Prisma.EmployeeCreateOrConnectWithoutEmployeeProgramInput[]
+  createMany?: Prisma.EmployeeCreateManyEmployeeProgramInputEnvelope
+  connect?: Prisma.EmployeeWhereUniqueInput | Prisma.EmployeeWhereUniqueInput[]
+}
+
+export type EmployeeUpdateManyWithoutEmployeeProgramNestedInput = {
+  create?: Prisma.XOR<Prisma.EmployeeCreateWithoutEmployeeProgramInput, Prisma.EmployeeUncheckedCreateWithoutEmployeeProgramInput> | Prisma.EmployeeCreateWithoutEmployeeProgramInput[] | Prisma.EmployeeUncheckedCreateWithoutEmployeeProgramInput[]
+  connectOrCreate?: Prisma.EmployeeCreateOrConnectWithoutEmployeeProgramInput | Prisma.EmployeeCreateOrConnectWithoutEmployeeProgramInput[]
+  upsert?: Prisma.EmployeeUpsertWithWhereUniqueWithoutEmployeeProgramInput | Prisma.EmployeeUpsertWithWhereUniqueWithoutEmployeeProgramInput[]
+  createMany?: Prisma.EmployeeCreateManyEmployeeProgramInputEnvelope
+  set?: Prisma.EmployeeWhereUniqueInput | Prisma.EmployeeWhereUniqueInput[]
+  disconnect?: Prisma.EmployeeWhereUniqueInput | Prisma.EmployeeWhereUniqueInput[]
+  delete?: Prisma.EmployeeWhereUniqueInput | Prisma.EmployeeWhereUniqueInput[]
+  connect?: Prisma.EmployeeWhereUniqueInput | Prisma.EmployeeWhereUniqueInput[]
+  update?: Prisma.EmployeeUpdateWithWhereUniqueWithoutEmployeeProgramInput | Prisma.EmployeeUpdateWithWhereUniqueWithoutEmployeeProgramInput[]
+  updateMany?: Prisma.EmployeeUpdateManyWithWhereWithoutEmployeeProgramInput | Prisma.EmployeeUpdateManyWithWhereWithoutEmployeeProgramInput[]
+  deleteMany?: Prisma.EmployeeScalarWhereInput | Prisma.EmployeeScalarWhereInput[]
+}
+
+export type EmployeeUncheckedUpdateManyWithoutEmployeeProgramNestedInput = {
+  create?: Prisma.XOR<Prisma.EmployeeCreateWithoutEmployeeProgramInput, Prisma.EmployeeUncheckedCreateWithoutEmployeeProgramInput> | Prisma.EmployeeCreateWithoutEmployeeProgramInput[] | Prisma.EmployeeUncheckedCreateWithoutEmployeeProgramInput[]
+  connectOrCreate?: Prisma.EmployeeCreateOrConnectWithoutEmployeeProgramInput | Prisma.EmployeeCreateOrConnectWithoutEmployeeProgramInput[]
+  upsert?: Prisma.EmployeeUpsertWithWhereUniqueWithoutEmployeeProgramInput | Prisma.EmployeeUpsertWithWhereUniqueWithoutEmployeeProgramInput[]
+  createMany?: Prisma.EmployeeCreateManyEmployeeProgramInputEnvelope
+  set?: Prisma.EmployeeWhereUniqueInput | Prisma.EmployeeWhereUniqueInput[]
+  disconnect?: Prisma.EmployeeWhereUniqueInput | Prisma.EmployeeWhereUniqueInput[]
+  delete?: Prisma.EmployeeWhereUniqueInput | Prisma.EmployeeWhereUniqueInput[]
+  connect?: Prisma.EmployeeWhereUniqueInput | Prisma.EmployeeWhereUniqueInput[]
+  update?: Prisma.EmployeeUpdateWithWhereUniqueWithoutEmployeeProgramInput | Prisma.EmployeeUpdateWithWhereUniqueWithoutEmployeeProgramInput[]
+  updateMany?: Prisma.EmployeeUpdateManyWithWhereWithoutEmployeeProgramInput | Prisma.EmployeeUpdateManyWithWhereWithoutEmployeeProgramInput[]
+  deleteMany?: Prisma.EmployeeScalarWhereInput | Prisma.EmployeeScalarWhereInput[]
 }
 
 export type EmployeeCreateNestedManyWithoutOrganizationInput = {
@@ -503,7 +543,7 @@ export type EmployeeCreateWithoutEmployeeProgramInput = {
   firstName: string
   lastName: string
   role: $Enums.EmployeeRole
-  accessCode: number
+  accessCode: string
   organization: Prisma.OrganizationCreateNestedOneWithoutEmployeesInput
   workSchedules?: Prisma.WorkScheduleCreateNestedManyWithoutEmployeeInput
 }
@@ -514,7 +554,7 @@ export type EmployeeUncheckedCreateWithoutEmployeeProgramInput = {
   lastName: string
   role: $Enums.EmployeeRole
   organizationId: number
-  accessCode: number
+  accessCode: string
   workSchedules?: Prisma.WorkScheduleUncheckedCreateNestedManyWithoutEmployeeInput
 }
 
@@ -523,42 +563,46 @@ export type EmployeeCreateOrConnectWithoutEmployeeProgramInput = {
   create: Prisma.XOR<Prisma.EmployeeCreateWithoutEmployeeProgramInput, Prisma.EmployeeUncheckedCreateWithoutEmployeeProgramInput>
 }
 
-export type EmployeeUpsertWithoutEmployeeProgramInput = {
-  update: Prisma.XOR<Prisma.EmployeeUpdateWithoutEmployeeProgramInput, Prisma.EmployeeUncheckedUpdateWithoutEmployeeProgramInput>
-  create: Prisma.XOR<Prisma.EmployeeCreateWithoutEmployeeProgramInput, Prisma.EmployeeUncheckedCreateWithoutEmployeeProgramInput>
-  where?: Prisma.EmployeeWhereInput
+export type EmployeeCreateManyEmployeeProgramInputEnvelope = {
+  data: Prisma.EmployeeCreateManyEmployeeProgramInput | Prisma.EmployeeCreateManyEmployeeProgramInput[]
+  skipDuplicates?: boolean
 }
 
-export type EmployeeUpdateToOneWithWhereWithoutEmployeeProgramInput = {
-  where?: Prisma.EmployeeWhereInput
+export type EmployeeUpsertWithWhereUniqueWithoutEmployeeProgramInput = {
+  where: Prisma.EmployeeWhereUniqueInput
+  update: Prisma.XOR<Prisma.EmployeeUpdateWithoutEmployeeProgramInput, Prisma.EmployeeUncheckedUpdateWithoutEmployeeProgramInput>
+  create: Prisma.XOR<Prisma.EmployeeCreateWithoutEmployeeProgramInput, Prisma.EmployeeUncheckedCreateWithoutEmployeeProgramInput>
+}
+
+export type EmployeeUpdateWithWhereUniqueWithoutEmployeeProgramInput = {
+  where: Prisma.EmployeeWhereUniqueInput
   data: Prisma.XOR<Prisma.EmployeeUpdateWithoutEmployeeProgramInput, Prisma.EmployeeUncheckedUpdateWithoutEmployeeProgramInput>
 }
 
-export type EmployeeUpdateWithoutEmployeeProgramInput = {
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
-  lastName?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
-  accessCode?: Prisma.IntFieldUpdateOperationsInput | number
-  organization?: Prisma.OrganizationUpdateOneRequiredWithoutEmployeesNestedInput
-  workSchedules?: Prisma.WorkScheduleUpdateManyWithoutEmployeeNestedInput
+export type EmployeeUpdateManyWithWhereWithoutEmployeeProgramInput = {
+  where: Prisma.EmployeeScalarWhereInput
+  data: Prisma.XOR<Prisma.EmployeeUpdateManyMutationInput, Prisma.EmployeeUncheckedUpdateManyWithoutEmployeeProgramInput>
 }
 
-export type EmployeeUncheckedUpdateWithoutEmployeeProgramInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
-  lastName?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
-  organizationId?: Prisma.IntFieldUpdateOperationsInput | number
-  accessCode?: Prisma.IntFieldUpdateOperationsInput | number
-  workSchedules?: Prisma.WorkScheduleUncheckedUpdateManyWithoutEmployeeNestedInput
+export type EmployeeScalarWhereInput = {
+  AND?: Prisma.EmployeeScalarWhereInput | Prisma.EmployeeScalarWhereInput[]
+  OR?: Prisma.EmployeeScalarWhereInput[]
+  NOT?: Prisma.EmployeeScalarWhereInput | Prisma.EmployeeScalarWhereInput[]
+  id?: Prisma.IntFilter<"Employee"> | number
+  firstName?: Prisma.StringFilter<"Employee"> | string
+  lastName?: Prisma.StringFilter<"Employee"> | string
+  role?: Prisma.EnumEmployeeRoleFilter<"Employee"> | $Enums.EmployeeRole
+  organizationId?: Prisma.IntFilter<"Employee"> | number
+  accessCode?: Prisma.StringFilter<"Employee"> | string
+  employeeProgramId?: Prisma.IntNullableFilter<"Employee"> | number | null
 }
 
 export type EmployeeCreateWithoutOrganizationInput = {
   firstName: string
   lastName: string
   role: $Enums.EmployeeRole
-  accessCode: number
-  employeeProgram?: Prisma.EmployeeProgramCreateNestedOneWithoutEmployeeInput
+  accessCode: string
+  employeeProgram?: Prisma.EmployeeProgramCreateNestedOneWithoutEmployeesInput
   workSchedules?: Prisma.WorkScheduleCreateNestedManyWithoutEmployeeInput
 }
 
@@ -567,8 +611,8 @@ export type EmployeeUncheckedCreateWithoutOrganizationInput = {
   firstName: string
   lastName: string
   role: $Enums.EmployeeRole
-  accessCode: number
-  employeeProgram?: Prisma.EmployeeProgramUncheckedCreateNestedOneWithoutEmployeeInput
+  accessCode: string
+  employeeProgramId?: number | null
   workSchedules?: Prisma.WorkScheduleUncheckedCreateNestedManyWithoutEmployeeInput
 }
 
@@ -598,25 +642,13 @@ export type EmployeeUpdateManyWithWhereWithoutOrganizationInput = {
   data: Prisma.XOR<Prisma.EmployeeUpdateManyMutationInput, Prisma.EmployeeUncheckedUpdateManyWithoutOrganizationInput>
 }
 
-export type EmployeeScalarWhereInput = {
-  AND?: Prisma.EmployeeScalarWhereInput | Prisma.EmployeeScalarWhereInput[]
-  OR?: Prisma.EmployeeScalarWhereInput[]
-  NOT?: Prisma.EmployeeScalarWhereInput | Prisma.EmployeeScalarWhereInput[]
-  id?: Prisma.IntFilter<"Employee"> | number
-  firstName?: Prisma.StringFilter<"Employee"> | string
-  lastName?: Prisma.StringFilter<"Employee"> | string
-  role?: Prisma.EnumEmployeeRoleFilter<"Employee"> | $Enums.EmployeeRole
-  organizationId?: Prisma.IntFilter<"Employee"> | number
-  accessCode?: Prisma.IntFilter<"Employee"> | number
-}
-
 export type EmployeeCreateWithoutWorkSchedulesInput = {
   firstName: string
   lastName: string
   role: $Enums.EmployeeRole
-  accessCode: number
+  accessCode: string
   organization: Prisma.OrganizationCreateNestedOneWithoutEmployeesInput
-  employeeProgram?: Prisma.EmployeeProgramCreateNestedOneWithoutEmployeeInput
+  employeeProgram?: Prisma.EmployeeProgramCreateNestedOneWithoutEmployeesInput
 }
 
 export type EmployeeUncheckedCreateWithoutWorkSchedulesInput = {
@@ -625,8 +657,8 @@ export type EmployeeUncheckedCreateWithoutWorkSchedulesInput = {
   lastName: string
   role: $Enums.EmployeeRole
   organizationId: number
-  accessCode: number
-  employeeProgram?: Prisma.EmployeeProgramUncheckedCreateNestedOneWithoutEmployeeInput
+  accessCode: string
+  employeeProgramId?: number | null
 }
 
 export type EmployeeCreateOrConnectWithoutWorkSchedulesInput = {
@@ -649,9 +681,9 @@ export type EmployeeUpdateWithoutWorkSchedulesInput = {
   firstName?: Prisma.StringFieldUpdateOperationsInput | string
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
-  accessCode?: Prisma.IntFieldUpdateOperationsInput | number
+  accessCode?: Prisma.StringFieldUpdateOperationsInput | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutEmployeesNestedInput
-  employeeProgram?: Prisma.EmployeeProgramUpdateOneWithoutEmployeeNestedInput
+  employeeProgram?: Prisma.EmployeeProgramUpdateOneWithoutEmployeesNestedInput
 }
 
 export type EmployeeUncheckedUpdateWithoutWorkSchedulesInput = {
@@ -660,8 +692,45 @@ export type EmployeeUncheckedUpdateWithoutWorkSchedulesInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
   organizationId?: Prisma.IntFieldUpdateOperationsInput | number
-  accessCode?: Prisma.IntFieldUpdateOperationsInput | number
-  employeeProgram?: Prisma.EmployeeProgramUncheckedUpdateOneWithoutEmployeeNestedInput
+  accessCode?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeProgramId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+}
+
+export type EmployeeCreateManyEmployeeProgramInput = {
+  id?: number
+  firstName: string
+  lastName: string
+  role: $Enums.EmployeeRole
+  organizationId: number
+  accessCode: string
+}
+
+export type EmployeeUpdateWithoutEmployeeProgramInput = {
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
+  accessCode?: Prisma.StringFieldUpdateOperationsInput | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutEmployeesNestedInput
+  workSchedules?: Prisma.WorkScheduleUpdateManyWithoutEmployeeNestedInput
+}
+
+export type EmployeeUncheckedUpdateWithoutEmployeeProgramInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
+  organizationId?: Prisma.IntFieldUpdateOperationsInput | number
+  accessCode?: Prisma.StringFieldUpdateOperationsInput | string
+  workSchedules?: Prisma.WorkScheduleUncheckedUpdateManyWithoutEmployeeNestedInput
+}
+
+export type EmployeeUncheckedUpdateManyWithoutEmployeeProgramInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
+  organizationId?: Prisma.IntFieldUpdateOperationsInput | number
+  accessCode?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type EmployeeCreateManyOrganizationInput = {
@@ -669,15 +738,16 @@ export type EmployeeCreateManyOrganizationInput = {
   firstName: string
   lastName: string
   role: $Enums.EmployeeRole
-  accessCode: number
+  accessCode: string
+  employeeProgramId?: number | null
 }
 
 export type EmployeeUpdateWithoutOrganizationInput = {
   firstName?: Prisma.StringFieldUpdateOperationsInput | string
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
-  accessCode?: Prisma.IntFieldUpdateOperationsInput | number
-  employeeProgram?: Prisma.EmployeeProgramUpdateOneWithoutEmployeeNestedInput
+  accessCode?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeProgram?: Prisma.EmployeeProgramUpdateOneWithoutEmployeesNestedInput
   workSchedules?: Prisma.WorkScheduleUpdateManyWithoutEmployeeNestedInput
 }
 
@@ -686,8 +756,8 @@ export type EmployeeUncheckedUpdateWithoutOrganizationInput = {
   firstName?: Prisma.StringFieldUpdateOperationsInput | string
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
-  accessCode?: Prisma.IntFieldUpdateOperationsInput | number
-  employeeProgram?: Prisma.EmployeeProgramUncheckedUpdateOneWithoutEmployeeNestedInput
+  accessCode?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeProgramId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   workSchedules?: Prisma.WorkScheduleUncheckedUpdateManyWithoutEmployeeNestedInput
 }
 
@@ -696,7 +766,8 @@ export type EmployeeUncheckedUpdateManyWithoutOrganizationInput = {
   firstName?: Prisma.StringFieldUpdateOperationsInput | string
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
-  accessCode?: Prisma.IntFieldUpdateOperationsInput | number
+  accessCode?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeProgramId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 
@@ -737,6 +808,7 @@ export type EmployeeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   role?: boolean
   organizationId?: boolean
   accessCode?: boolean
+  employeeProgramId?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   employeeProgram?: boolean | Prisma.Employee$employeeProgramArgs<ExtArgs>
   workSchedules?: boolean | Prisma.Employee$workSchedulesArgs<ExtArgs>
@@ -752,9 +824,10 @@ export type EmployeeSelectScalar = {
   role?: boolean
   organizationId?: boolean
   accessCode?: boolean
+  employeeProgramId?: boolean
 }
 
-export type EmployeeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "lastName" | "role" | "organizationId" | "accessCode", ExtArgs["result"]["employee"]>
+export type EmployeeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "lastName" | "role" | "organizationId" | "accessCode" | "employeeProgramId", ExtArgs["result"]["employee"]>
 export type EmployeeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   employeeProgram?: boolean | Prisma.Employee$employeeProgramArgs<ExtArgs>
@@ -775,7 +848,8 @@ export type $EmployeePayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     lastName: string
     role: $Enums.EmployeeRole
     organizationId: number
-    accessCode: number
+    accessCode: string
+    employeeProgramId: number | null
   }, ExtArgs["result"]["employee"]>
   composites: {}
 }
@@ -1153,7 +1227,8 @@ export interface EmployeeFieldRefs {
   readonly lastName: Prisma.FieldRef<"Employee", 'String'>
   readonly role: Prisma.FieldRef<"Employee", 'EmployeeRole'>
   readonly organizationId: Prisma.FieldRef<"Employee", 'Int'>
-  readonly accessCode: Prisma.FieldRef<"Employee", 'Int'>
+  readonly accessCode: Prisma.FieldRef<"Employee", 'String'>
+  readonly employeeProgramId: Prisma.FieldRef<"Employee", 'Int'>
 }
     
 

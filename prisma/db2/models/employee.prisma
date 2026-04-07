@@ -9,9 +9,10 @@ model Employee {
   lastName       String
   role           EmployeeRole
   organizationId Int
-  accessCode     Int          @unique
+  accessCode     String       @unique
 
-  organization    Organization     @relation(fields: [organizationId], references: [id])
-  employeeProgram EmployeeProgram?
-  workSchedules   WorkSchedule[]
+  organization      Organization     @relation(fields: [organizationId], references: [id])
+  employeeProgram   EmployeeProgram? @relation(fields: [employeeProgramId], references: [id])
+  workSchedules     WorkSchedule[]
+  employeeProgramId Int?
 }

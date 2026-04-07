@@ -1,7 +1,7 @@
 model Program {
   id             Int    @id @default(autoincrement())
   name           String
-  description    String
+  description    String @db2.Text
   organizationId Int
 
   organization Organization @relation(fields: [organizationId], references: [id])

@@ -213,8 +213,8 @@ export type WorkScheduleGroupByOutputType = {
   id: number
   dayOfWeek: $Enums.DayOfWeek
   isWorkingDay: boolean
-  startWork: Date
-  endWork: Date
+  startWork: Date | null
+  endWork: Date | null
   organizationId: number | null
   employeeId: number | null
   venueId: number | null
@@ -247,8 +247,8 @@ export type WorkScheduleWhereInput = {
   id?: Prisma.IntFilter<"WorkSchedule"> | number
   dayOfWeek?: Prisma.EnumDayOfWeekFilter<"WorkSchedule"> | $Enums.DayOfWeek
   isWorkingDay?: Prisma.BoolFilter<"WorkSchedule"> | boolean
-  startWork?: Prisma.DateTimeFilter<"WorkSchedule"> | Date | string
-  endWork?: Prisma.DateTimeFilter<"WorkSchedule"> | Date | string
+  startWork?: Prisma.DateTimeNullableFilter<"WorkSchedule"> | Date | string | null
+  endWork?: Prisma.DateTimeNullableFilter<"WorkSchedule"> | Date | string | null
   organizationId?: Prisma.IntNullableFilter<"WorkSchedule"> | number | null
   employeeId?: Prisma.IntNullableFilter<"WorkSchedule"> | number | null
   venueId?: Prisma.IntNullableFilter<"WorkSchedule"> | number | null
@@ -261,8 +261,8 @@ export type WorkScheduleOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   dayOfWeek?: Prisma.SortOrder
   isWorkingDay?: Prisma.SortOrder
-  startWork?: Prisma.SortOrder
-  endWork?: Prisma.SortOrder
+  startWork?: Prisma.SortOrderInput | Prisma.SortOrder
+  endWork?: Prisma.SortOrderInput | Prisma.SortOrder
   organizationId?: Prisma.SortOrderInput | Prisma.SortOrder
   employeeId?: Prisma.SortOrderInput | Prisma.SortOrder
   venueId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -278,8 +278,8 @@ export type WorkScheduleWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.WorkScheduleWhereInput | Prisma.WorkScheduleWhereInput[]
   dayOfWeek?: Prisma.EnumDayOfWeekFilter<"WorkSchedule"> | $Enums.DayOfWeek
   isWorkingDay?: Prisma.BoolFilter<"WorkSchedule"> | boolean
-  startWork?: Prisma.DateTimeFilter<"WorkSchedule"> | Date | string
-  endWork?: Prisma.DateTimeFilter<"WorkSchedule"> | Date | string
+  startWork?: Prisma.DateTimeNullableFilter<"WorkSchedule"> | Date | string | null
+  endWork?: Prisma.DateTimeNullableFilter<"WorkSchedule"> | Date | string | null
   organizationId?: Prisma.IntNullableFilter<"WorkSchedule"> | number | null
   employeeId?: Prisma.IntNullableFilter<"WorkSchedule"> | number | null
   venueId?: Prisma.IntNullableFilter<"WorkSchedule"> | number | null
@@ -292,8 +292,8 @@ export type WorkScheduleOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   dayOfWeek?: Prisma.SortOrder
   isWorkingDay?: Prisma.SortOrder
-  startWork?: Prisma.SortOrder
-  endWork?: Prisma.SortOrder
+  startWork?: Prisma.SortOrderInput | Prisma.SortOrder
+  endWork?: Prisma.SortOrderInput | Prisma.SortOrder
   organizationId?: Prisma.SortOrderInput | Prisma.SortOrder
   employeeId?: Prisma.SortOrderInput | Prisma.SortOrder
   venueId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -311,8 +311,8 @@ export type WorkScheduleScalarWhereWithAggregatesInput = {
   id?: Prisma.IntWithAggregatesFilter<"WorkSchedule"> | number
   dayOfWeek?: Prisma.EnumDayOfWeekWithAggregatesFilter<"WorkSchedule"> | $Enums.DayOfWeek
   isWorkingDay?: Prisma.BoolWithAggregatesFilter<"WorkSchedule"> | boolean
-  startWork?: Prisma.DateTimeWithAggregatesFilter<"WorkSchedule"> | Date | string
-  endWork?: Prisma.DateTimeWithAggregatesFilter<"WorkSchedule"> | Date | string
+  startWork?: Prisma.DateTimeNullableWithAggregatesFilter<"WorkSchedule"> | Date | string | null
+  endWork?: Prisma.DateTimeNullableWithAggregatesFilter<"WorkSchedule"> | Date | string | null
   organizationId?: Prisma.IntNullableWithAggregatesFilter<"WorkSchedule"> | number | null
   employeeId?: Prisma.IntNullableWithAggregatesFilter<"WorkSchedule"> | number | null
   venueId?: Prisma.IntNullableWithAggregatesFilter<"WorkSchedule"> | number | null
@@ -321,8 +321,8 @@ export type WorkScheduleScalarWhereWithAggregatesInput = {
 export type WorkScheduleCreateInput = {
   dayOfWeek: $Enums.DayOfWeek
   isWorkingDay?: boolean
-  startWork: Date | string
-  endWork: Date | string
+  startWork?: Date | string | null
+  endWork?: Date | string | null
   organization?: Prisma.OrganizationCreateNestedOneWithoutScheduleInput
   employee?: Prisma.EmployeeCreateNestedOneWithoutWorkSchedulesInput
   venue?: Prisma.VenueCreateNestedOneWithoutWorkSchedulesInput
@@ -332,8 +332,8 @@ export type WorkScheduleUncheckedCreateInput = {
   id?: number
   dayOfWeek: $Enums.DayOfWeek
   isWorkingDay?: boolean
-  startWork: Date | string
-  endWork: Date | string
+  startWork?: Date | string | null
+  endWork?: Date | string | null
   organizationId?: number | null
   employeeId?: number | null
   venueId?: number | null
@@ -342,8 +342,8 @@ export type WorkScheduleUncheckedCreateInput = {
 export type WorkScheduleUpdateInput = {
   dayOfWeek?: Prisma.EnumDayOfWeekFieldUpdateOperationsInput | $Enums.DayOfWeek
   isWorkingDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  startWork?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  endWork?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  startWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneWithoutScheduleNestedInput
   employee?: Prisma.EmployeeUpdateOneWithoutWorkSchedulesNestedInput
   venue?: Prisma.VenueUpdateOneWithoutWorkSchedulesNestedInput
@@ -353,8 +353,8 @@ export type WorkScheduleUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   dayOfWeek?: Prisma.EnumDayOfWeekFieldUpdateOperationsInput | $Enums.DayOfWeek
   isWorkingDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  startWork?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  endWork?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  startWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organizationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   employeeId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   venueId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -364,8 +364,8 @@ export type WorkScheduleCreateManyInput = {
   id?: number
   dayOfWeek: $Enums.DayOfWeek
   isWorkingDay?: boolean
-  startWork: Date | string
-  endWork: Date | string
+  startWork?: Date | string | null
+  endWork?: Date | string | null
   organizationId?: number | null
   employeeId?: number | null
   venueId?: number | null
@@ -374,16 +374,16 @@ export type WorkScheduleCreateManyInput = {
 export type WorkScheduleUpdateManyMutationInput = {
   dayOfWeek?: Prisma.EnumDayOfWeekFieldUpdateOperationsInput | $Enums.DayOfWeek
   isWorkingDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  startWork?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  endWork?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  startWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type WorkScheduleUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   dayOfWeek?: Prisma.EnumDayOfWeekFieldUpdateOperationsInput | $Enums.DayOfWeek
   isWorkingDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  startWork?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  endWork?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  startWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organizationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   employeeId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   venueId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -576,11 +576,15 @@ export type EnumDayOfWeekFieldUpdateOperationsInput = {
   set?: $Enums.DayOfWeek
 }
 
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
 export type WorkScheduleCreateWithoutEmployeeInput = {
   dayOfWeek: $Enums.DayOfWeek
   isWorkingDay?: boolean
-  startWork: Date | string
-  endWork: Date | string
+  startWork?: Date | string | null
+  endWork?: Date | string | null
   organization?: Prisma.OrganizationCreateNestedOneWithoutScheduleInput
   venue?: Prisma.VenueCreateNestedOneWithoutWorkSchedulesInput
 }
@@ -589,8 +593,8 @@ export type WorkScheduleUncheckedCreateWithoutEmployeeInput = {
   id?: number
   dayOfWeek: $Enums.DayOfWeek
   isWorkingDay?: boolean
-  startWork: Date | string
-  endWork: Date | string
+  startWork?: Date | string | null
+  endWork?: Date | string | null
   organizationId?: number | null
   venueId?: number | null
 }
@@ -628,8 +632,8 @@ export type WorkScheduleScalarWhereInput = {
   id?: Prisma.IntFilter<"WorkSchedule"> | number
   dayOfWeek?: Prisma.EnumDayOfWeekFilter<"WorkSchedule"> | $Enums.DayOfWeek
   isWorkingDay?: Prisma.BoolFilter<"WorkSchedule"> | boolean
-  startWork?: Prisma.DateTimeFilter<"WorkSchedule"> | Date | string
-  endWork?: Prisma.DateTimeFilter<"WorkSchedule"> | Date | string
+  startWork?: Prisma.DateTimeNullableFilter<"WorkSchedule"> | Date | string | null
+  endWork?: Prisma.DateTimeNullableFilter<"WorkSchedule"> | Date | string | null
   organizationId?: Prisma.IntNullableFilter<"WorkSchedule"> | number | null
   employeeId?: Prisma.IntNullableFilter<"WorkSchedule"> | number | null
   venueId?: Prisma.IntNullableFilter<"WorkSchedule"> | number | null
@@ -638,8 +642,8 @@ export type WorkScheduleScalarWhereInput = {
 export type WorkScheduleCreateWithoutOrganizationInput = {
   dayOfWeek: $Enums.DayOfWeek
   isWorkingDay?: boolean
-  startWork: Date | string
-  endWork: Date | string
+  startWork?: Date | string | null
+  endWork?: Date | string | null
   employee?: Prisma.EmployeeCreateNestedOneWithoutWorkSchedulesInput
   venue?: Prisma.VenueCreateNestedOneWithoutWorkSchedulesInput
 }
@@ -648,8 +652,8 @@ export type WorkScheduleUncheckedCreateWithoutOrganizationInput = {
   id?: number
   dayOfWeek: $Enums.DayOfWeek
   isWorkingDay?: boolean
-  startWork: Date | string
-  endWork: Date | string
+  startWork?: Date | string | null
+  endWork?: Date | string | null
   employeeId?: number | null
   venueId?: number | null
 }
@@ -683,8 +687,8 @@ export type WorkScheduleUpdateManyWithWhereWithoutOrganizationInput = {
 export type WorkScheduleCreateWithoutVenueInput = {
   dayOfWeek: $Enums.DayOfWeek
   isWorkingDay?: boolean
-  startWork: Date | string
-  endWork: Date | string
+  startWork?: Date | string | null
+  endWork?: Date | string | null
   organization?: Prisma.OrganizationCreateNestedOneWithoutScheduleInput
   employee?: Prisma.EmployeeCreateNestedOneWithoutWorkSchedulesInput
 }
@@ -693,8 +697,8 @@ export type WorkScheduleUncheckedCreateWithoutVenueInput = {
   id?: number
   dayOfWeek: $Enums.DayOfWeek
   isWorkingDay?: boolean
-  startWork: Date | string
-  endWork: Date | string
+  startWork?: Date | string | null
+  endWork?: Date | string | null
   organizationId?: number | null
   employeeId?: number | null
 }
@@ -729,8 +733,8 @@ export type WorkScheduleCreateManyEmployeeInput = {
   id?: number
   dayOfWeek: $Enums.DayOfWeek
   isWorkingDay?: boolean
-  startWork: Date | string
-  endWork: Date | string
+  startWork?: Date | string | null
+  endWork?: Date | string | null
   organizationId?: number | null
   venueId?: number | null
 }
@@ -738,8 +742,8 @@ export type WorkScheduleCreateManyEmployeeInput = {
 export type WorkScheduleUpdateWithoutEmployeeInput = {
   dayOfWeek?: Prisma.EnumDayOfWeekFieldUpdateOperationsInput | $Enums.DayOfWeek
   isWorkingDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  startWork?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  endWork?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  startWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneWithoutScheduleNestedInput
   venue?: Prisma.VenueUpdateOneWithoutWorkSchedulesNestedInput
 }
@@ -748,8 +752,8 @@ export type WorkScheduleUncheckedUpdateWithoutEmployeeInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   dayOfWeek?: Prisma.EnumDayOfWeekFieldUpdateOperationsInput | $Enums.DayOfWeek
   isWorkingDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  startWork?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  endWork?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  startWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organizationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   venueId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
@@ -758,8 +762,8 @@ export type WorkScheduleUncheckedUpdateManyWithoutEmployeeInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   dayOfWeek?: Prisma.EnumDayOfWeekFieldUpdateOperationsInput | $Enums.DayOfWeek
   isWorkingDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  startWork?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  endWork?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  startWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organizationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   venueId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
@@ -768,8 +772,8 @@ export type WorkScheduleCreateManyOrganizationInput = {
   id?: number
   dayOfWeek: $Enums.DayOfWeek
   isWorkingDay?: boolean
-  startWork: Date | string
-  endWork: Date | string
+  startWork?: Date | string | null
+  endWork?: Date | string | null
   employeeId?: number | null
   venueId?: number | null
 }
@@ -777,8 +781,8 @@ export type WorkScheduleCreateManyOrganizationInput = {
 export type WorkScheduleUpdateWithoutOrganizationInput = {
   dayOfWeek?: Prisma.EnumDayOfWeekFieldUpdateOperationsInput | $Enums.DayOfWeek
   isWorkingDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  startWork?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  endWork?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  startWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   employee?: Prisma.EmployeeUpdateOneWithoutWorkSchedulesNestedInput
   venue?: Prisma.VenueUpdateOneWithoutWorkSchedulesNestedInput
 }
@@ -787,8 +791,8 @@ export type WorkScheduleUncheckedUpdateWithoutOrganizationInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   dayOfWeek?: Prisma.EnumDayOfWeekFieldUpdateOperationsInput | $Enums.DayOfWeek
   isWorkingDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  startWork?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  endWork?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  startWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   employeeId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   venueId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
@@ -797,8 +801,8 @@ export type WorkScheduleUncheckedUpdateManyWithoutOrganizationInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   dayOfWeek?: Prisma.EnumDayOfWeekFieldUpdateOperationsInput | $Enums.DayOfWeek
   isWorkingDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  startWork?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  endWork?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  startWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   employeeId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   venueId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
@@ -807,8 +811,8 @@ export type WorkScheduleCreateManyVenueInput = {
   id?: number
   dayOfWeek: $Enums.DayOfWeek
   isWorkingDay?: boolean
-  startWork: Date | string
-  endWork: Date | string
+  startWork?: Date | string | null
+  endWork?: Date | string | null
   organizationId?: number | null
   employeeId?: number | null
 }
@@ -816,8 +820,8 @@ export type WorkScheduleCreateManyVenueInput = {
 export type WorkScheduleUpdateWithoutVenueInput = {
   dayOfWeek?: Prisma.EnumDayOfWeekFieldUpdateOperationsInput | $Enums.DayOfWeek
   isWorkingDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  startWork?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  endWork?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  startWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneWithoutScheduleNestedInput
   employee?: Prisma.EmployeeUpdateOneWithoutWorkSchedulesNestedInput
 }
@@ -826,8 +830,8 @@ export type WorkScheduleUncheckedUpdateWithoutVenueInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   dayOfWeek?: Prisma.EnumDayOfWeekFieldUpdateOperationsInput | $Enums.DayOfWeek
   isWorkingDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  startWork?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  endWork?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  startWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organizationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   employeeId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
@@ -836,8 +840,8 @@ export type WorkScheduleUncheckedUpdateManyWithoutVenueInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   dayOfWeek?: Prisma.EnumDayOfWeekFieldUpdateOperationsInput | $Enums.DayOfWeek
   isWorkingDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  startWork?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  endWork?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  startWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organizationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   employeeId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
@@ -889,8 +893,8 @@ export type $WorkSchedulePayload<ExtArgs extends runtime.Types.Extensions.Intern
     id: number
     dayOfWeek: $Enums.DayOfWeek
     isWorkingDay: boolean
-    startWork: Date
-    endWork: Date
+    startWork: Date | null
+    endWork: Date | null
     organizationId: number | null
     employeeId: number | null
     venueId: number | null

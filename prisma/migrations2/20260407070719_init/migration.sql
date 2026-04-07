@@ -22,10 +22,14 @@ CREATE TABLE `Client` (
     `lastName` VARCHAR(191) NOT NULL,
     `gender` ENUM('M', 'F') NOT NULL,
     `birthDate` DATETIME(3) NOT NULL,
+    `phone` VARCHAR(191) NOT NULL,
+    `email` VARCHAR(191) NOT NULL,
+    `firstNameParent` VARCHAR(191) NULL,
+    `lastNameParent` VARCHAR(191) NULL,
     `accountType` ENUM('ADULT', 'CHILD') NOT NULL,
     `groupId` INTEGER NULL,
     `status` ENUM('WAITING', 'ASSIGNED', 'ARCHIVED') NOT NULL DEFAULT 'WAITING',
-    `accessCode` INTEGER NOT NULL,
+    `accessCode` VARCHAR(191) NOT NULL,
 
     UNIQUE INDEX `Client_accessCode_key`(`accessCode`),
     PRIMARY KEY (`id`)
@@ -49,7 +53,7 @@ CREATE TABLE `Employee` (
     `lastName` VARCHAR(191) NOT NULL,
     `role` ENUM('MANAGER', 'INSTRUCTOR') NOT NULL,
     `organizationId` INTEGER NOT NULL,
-    `accessCode` INTEGER NOT NULL,
+    `accessCode` VARCHAR(191) NOT NULL,
 
     UNIQUE INDEX `Employee_accessCode_key`(`accessCode`),
     PRIMARY KEY (`id`)
@@ -59,6 +63,7 @@ CREATE TABLE `Employee` (
 CREATE TABLE `EmployeeProgram` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `employeeId` INTEGER NOT NULL,
+    `programId` INTEGER NOT NULL,
 
     UNIQUE INDEX `EmployeeProgram_employeeId_key`(`employeeId`),
     PRIMARY KEY (`id`)
@@ -119,9 +124,17 @@ CREATE TABLE `Organization` (
 CREATE TABLE `Program` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
-    `description` VARCHAR(191) NOT NULL,
+    `description` TEXT NOT NULL,
     `organizationId` INTEGER NOT NULL,
-    `employeeProgramId` INTEGER NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `ProgramVenue` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `programId` INTEGER NOT NULL,
+    `venueId` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -163,6 +176,7 @@ CREATE TABLE `Venue` (
     `name` VARCHAR(191) NOT NULL,
     `cityId` INTEGER NOT NULL,
     `address` VARCHAR(191) NOT NULL,
+    `organizationId` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -172,8 +186,8 @@ CREATE TABLE `WorkSchedule` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `dayOfWeek` ENUM('MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN') NOT NULL,
     `isWorkingDay` BOOLEAN NOT NULL DEFAULT true,
-    `startWork` TIME(0) NOT NULL,
-    `endWork` TIME(0) NOT NULL,
+    `startWork` TIME(0) NULL,
+    `endWork` TIME(0) NULL,
     `organizationId` INTEGER NULL,
     `employeeId` INTEGER NULL,
     `venueId` INTEGER NULL,
@@ -252,9 +266,6 @@ ALTER TABLE `Organization` ADD CONSTRAINT `Organization_cityId_fkey` FOREIGN KEY
 
 -- AddForeignKey
 ALTER TABLE `Program` ADD CONSTRAINT `Program_organizationId_fkey` FOREIGN KEY (`organizationId`) REFERENCES `Organization`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `Program` ADD CONSTRAINT `Program_employeeProgramId_fkey` FOREIGN KEY (`employeeProgramId`) REFERENCES `EmployeeProgram`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Schedule` ADD CONSTRAINT `Schedule_groupId_fkey` FOREIGN KEY (`groupId`) REFERENCES `Group`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

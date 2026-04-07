@@ -140,7 +140,8 @@ export const EmployeeScalarFieldEnum = {
   lastName: 'lastName',
   role: 'role',
   organizationId: 'organizationId',
-  accessCode: 'accessCode'
+  accessCode: 'accessCode',
+  employeeProgramId: 'employeeProgramId'
 } as const
 
 export type EmployeeScalarFieldEnum = (typeof EmployeeScalarFieldEnum)[keyof typeof EmployeeScalarFieldEnum]
@@ -319,7 +320,8 @@ export const ClientOrderByRelevanceFieldEnum = {
   phone: 'phone',
   email: 'email',
   firstNameParent: 'firstNameParent',
-  lastNameParent: 'lastNameParent'
+  lastNameParent: 'lastNameParent',
+  accessCode: 'accessCode'
 } as const
 
 export type ClientOrderByRelevanceFieldEnum = (typeof ClientOrderByRelevanceFieldEnum)[keyof typeof ClientOrderByRelevanceFieldEnum]
@@ -327,7 +329,8 @@ export type ClientOrderByRelevanceFieldEnum = (typeof ClientOrderByRelevanceFiel
 
 export const EmployeeOrderByRelevanceFieldEnum = {
   firstName: 'firstName',
-  lastName: 'lastName'
+  lastName: 'lastName',
+  accessCode: 'accessCode'
 } as const
 
 export type EmployeeOrderByRelevanceFieldEnum = (typeof EmployeeOrderByRelevanceFieldEnum)[keyof typeof EmployeeOrderByRelevanceFieldEnum]

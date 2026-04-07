@@ -27,7 +27,7 @@ model Client {
   accountType     ClientType
   groupId         Int?
   status          ClientStatus @default(WAITING)
-  accessCode      Int          @unique
+  accessCode      String       @unique
 
   group         Group?               @relation(fields: [groupId], references: [id])
   subscriptions ClientSubscription[]
