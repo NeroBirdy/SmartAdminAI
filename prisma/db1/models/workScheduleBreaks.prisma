@@ -1,0 +1,8 @@
+model WorkScheduleBreaks {
+  id             Int @id @default(autoincrement())
+  workScheduleId Int
+  breakId        Int
+
+  workSchedule WorkSchedule @relation(fields: [workScheduleId], references: [id], onDelete: Cascade)
+  break        Breaks       @relation(fields: [breakId], references: [id], onDelete: Cascade)
+}

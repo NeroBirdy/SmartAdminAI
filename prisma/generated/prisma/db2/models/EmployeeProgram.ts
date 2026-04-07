@@ -208,18 +208,18 @@ export type EmployeeProgramWhereInput = {
   id?: Prisma.IntFilter<"EmployeeProgram"> | number
   employeeId?: Prisma.IntFilter<"EmployeeProgram"> | number
   programId?: Prisma.IntFilter<"EmployeeProgram"> | number
+  employee?: Prisma.XOR<Prisma.EmployeeScalarRelationFilter, Prisma.EmployeeWhereInput>
   groups?: Prisma.GroupListRelationFilter
   lessons?: Prisma.LessonListRelationFilter
-  employees?: Prisma.EmployeeListRelationFilter
 }
 
 export type EmployeeProgramOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   employeeId?: Prisma.SortOrder
   programId?: Prisma.SortOrder
+  employee?: Prisma.EmployeeOrderByWithRelationInput
   groups?: Prisma.GroupOrderByRelationAggregateInput
   lessons?: Prisma.LessonOrderByRelationAggregateInput
-  employees?: Prisma.EmployeeOrderByRelationAggregateInput
 }
 
 export type EmployeeProgramWhereUniqueInput = Prisma.AtLeast<{
@@ -229,9 +229,9 @@ export type EmployeeProgramWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.EmployeeProgramWhereInput | Prisma.EmployeeProgramWhereInput[]
   employeeId?: Prisma.IntFilter<"EmployeeProgram"> | number
   programId?: Prisma.IntFilter<"EmployeeProgram"> | number
+  employee?: Prisma.XOR<Prisma.EmployeeScalarRelationFilter, Prisma.EmployeeWhereInput>
   groups?: Prisma.GroupListRelationFilter
   lessons?: Prisma.LessonListRelationFilter
-  employees?: Prisma.EmployeeListRelationFilter
 }, "id">
 
 export type EmployeeProgramOrderByWithAggregationInput = {
@@ -255,37 +255,33 @@ export type EmployeeProgramScalarWhereWithAggregatesInput = {
 }
 
 export type EmployeeProgramCreateInput = {
-  employeeId: number
   programId: number
-  groups?: Prisma.GroupCreateNestedManyWithoutInstructorInput
+  employee: Prisma.EmployeeCreateNestedOneWithoutEmployeeProgramsInput
+  groups?: Prisma.GroupCreateNestedManyWithoutEmployeeProgramInput
   lessons?: Prisma.LessonCreateNestedManyWithoutInstructorInput
-  employees?: Prisma.EmployeeCreateNestedManyWithoutEmployeeProgramInput
 }
 
 export type EmployeeProgramUncheckedCreateInput = {
   id?: number
   employeeId: number
   programId: number
-  groups?: Prisma.GroupUncheckedCreateNestedManyWithoutInstructorInput
+  groups?: Prisma.GroupUncheckedCreateNestedManyWithoutEmployeeProgramInput
   lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutInstructorInput
-  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutEmployeeProgramInput
 }
 
 export type EmployeeProgramUpdateInput = {
-  employeeId?: Prisma.IntFieldUpdateOperationsInput | number
   programId?: Prisma.IntFieldUpdateOperationsInput | number
-  groups?: Prisma.GroupUpdateManyWithoutInstructorNestedInput
+  employee?: Prisma.EmployeeUpdateOneRequiredWithoutEmployeeProgramsNestedInput
+  groups?: Prisma.GroupUpdateManyWithoutEmployeeProgramNestedInput
   lessons?: Prisma.LessonUpdateManyWithoutInstructorNestedInput
-  employees?: Prisma.EmployeeUpdateManyWithoutEmployeeProgramNestedInput
 }
 
 export type EmployeeProgramUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   employeeId?: Prisma.IntFieldUpdateOperationsInput | number
   programId?: Prisma.IntFieldUpdateOperationsInput | number
-  groups?: Prisma.GroupUncheckedUpdateManyWithoutInstructorNestedInput
+  groups?: Prisma.GroupUncheckedUpdateManyWithoutEmployeeProgramNestedInput
   lessons?: Prisma.LessonUncheckedUpdateManyWithoutInstructorNestedInput
-  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutEmployeeProgramNestedInput
 }
 
 export type EmployeeProgramCreateManyInput = {
@@ -295,7 +291,6 @@ export type EmployeeProgramCreateManyInput = {
 }
 
 export type EmployeeProgramUpdateManyMutationInput = {
-  employeeId?: Prisma.IntFieldUpdateOperationsInput | number
   programId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
@@ -305,9 +300,14 @@ export type EmployeeProgramUncheckedUpdateManyInput = {
   programId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
-export type EmployeeProgramNullableScalarRelationFilter = {
-  is?: Prisma.EmployeeProgramWhereInput | null
-  isNot?: Prisma.EmployeeProgramWhereInput | null
+export type EmployeeProgramListRelationFilter = {
+  every?: Prisma.EmployeeProgramWhereInput
+  some?: Prisma.EmployeeProgramWhereInput
+  none?: Prisma.EmployeeProgramWhereInput
+}
+
+export type EmployeeProgramOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type EmployeeProgramCountOrderByAggregateInput = {
@@ -340,25 +340,56 @@ export type EmployeeProgramSumOrderByAggregateInput = {
   programId?: Prisma.SortOrder
 }
 
+export type EmployeeProgramNullableScalarRelationFilter = {
+  is?: Prisma.EmployeeProgramWhereInput | null
+  isNot?: Prisma.EmployeeProgramWhereInput | null
+}
+
 export type EmployeeProgramScalarRelationFilter = {
   is?: Prisma.EmployeeProgramWhereInput
   isNot?: Prisma.EmployeeProgramWhereInput
 }
 
-export type EmployeeProgramCreateNestedOneWithoutEmployeesInput = {
-  create?: Prisma.XOR<Prisma.EmployeeProgramCreateWithoutEmployeesInput, Prisma.EmployeeProgramUncheckedCreateWithoutEmployeesInput>
-  connectOrCreate?: Prisma.EmployeeProgramCreateOrConnectWithoutEmployeesInput
-  connect?: Prisma.EmployeeProgramWhereUniqueInput
+export type EmployeeProgramCreateNestedManyWithoutEmployeeInput = {
+  create?: Prisma.XOR<Prisma.EmployeeProgramCreateWithoutEmployeeInput, Prisma.EmployeeProgramUncheckedCreateWithoutEmployeeInput> | Prisma.EmployeeProgramCreateWithoutEmployeeInput[] | Prisma.EmployeeProgramUncheckedCreateWithoutEmployeeInput[]
+  connectOrCreate?: Prisma.EmployeeProgramCreateOrConnectWithoutEmployeeInput | Prisma.EmployeeProgramCreateOrConnectWithoutEmployeeInput[]
+  createMany?: Prisma.EmployeeProgramCreateManyEmployeeInputEnvelope
+  connect?: Prisma.EmployeeProgramWhereUniqueInput | Prisma.EmployeeProgramWhereUniqueInput[]
 }
 
-export type EmployeeProgramUpdateOneWithoutEmployeesNestedInput = {
-  create?: Prisma.XOR<Prisma.EmployeeProgramCreateWithoutEmployeesInput, Prisma.EmployeeProgramUncheckedCreateWithoutEmployeesInput>
-  connectOrCreate?: Prisma.EmployeeProgramCreateOrConnectWithoutEmployeesInput
-  upsert?: Prisma.EmployeeProgramUpsertWithoutEmployeesInput
-  disconnect?: Prisma.EmployeeProgramWhereInput | boolean
-  delete?: Prisma.EmployeeProgramWhereInput | boolean
-  connect?: Prisma.EmployeeProgramWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.EmployeeProgramUpdateToOneWithWhereWithoutEmployeesInput, Prisma.EmployeeProgramUpdateWithoutEmployeesInput>, Prisma.EmployeeProgramUncheckedUpdateWithoutEmployeesInput>
+export type EmployeeProgramUncheckedCreateNestedManyWithoutEmployeeInput = {
+  create?: Prisma.XOR<Prisma.EmployeeProgramCreateWithoutEmployeeInput, Prisma.EmployeeProgramUncheckedCreateWithoutEmployeeInput> | Prisma.EmployeeProgramCreateWithoutEmployeeInput[] | Prisma.EmployeeProgramUncheckedCreateWithoutEmployeeInput[]
+  connectOrCreate?: Prisma.EmployeeProgramCreateOrConnectWithoutEmployeeInput | Prisma.EmployeeProgramCreateOrConnectWithoutEmployeeInput[]
+  createMany?: Prisma.EmployeeProgramCreateManyEmployeeInputEnvelope
+  connect?: Prisma.EmployeeProgramWhereUniqueInput | Prisma.EmployeeProgramWhereUniqueInput[]
+}
+
+export type EmployeeProgramUpdateManyWithoutEmployeeNestedInput = {
+  create?: Prisma.XOR<Prisma.EmployeeProgramCreateWithoutEmployeeInput, Prisma.EmployeeProgramUncheckedCreateWithoutEmployeeInput> | Prisma.EmployeeProgramCreateWithoutEmployeeInput[] | Prisma.EmployeeProgramUncheckedCreateWithoutEmployeeInput[]
+  connectOrCreate?: Prisma.EmployeeProgramCreateOrConnectWithoutEmployeeInput | Prisma.EmployeeProgramCreateOrConnectWithoutEmployeeInput[]
+  upsert?: Prisma.EmployeeProgramUpsertWithWhereUniqueWithoutEmployeeInput | Prisma.EmployeeProgramUpsertWithWhereUniqueWithoutEmployeeInput[]
+  createMany?: Prisma.EmployeeProgramCreateManyEmployeeInputEnvelope
+  set?: Prisma.EmployeeProgramWhereUniqueInput | Prisma.EmployeeProgramWhereUniqueInput[]
+  disconnect?: Prisma.EmployeeProgramWhereUniqueInput | Prisma.EmployeeProgramWhereUniqueInput[]
+  delete?: Prisma.EmployeeProgramWhereUniqueInput | Prisma.EmployeeProgramWhereUniqueInput[]
+  connect?: Prisma.EmployeeProgramWhereUniqueInput | Prisma.EmployeeProgramWhereUniqueInput[]
+  update?: Prisma.EmployeeProgramUpdateWithWhereUniqueWithoutEmployeeInput | Prisma.EmployeeProgramUpdateWithWhereUniqueWithoutEmployeeInput[]
+  updateMany?: Prisma.EmployeeProgramUpdateManyWithWhereWithoutEmployeeInput | Prisma.EmployeeProgramUpdateManyWithWhereWithoutEmployeeInput[]
+  deleteMany?: Prisma.EmployeeProgramScalarWhereInput | Prisma.EmployeeProgramScalarWhereInput[]
+}
+
+export type EmployeeProgramUncheckedUpdateManyWithoutEmployeeNestedInput = {
+  create?: Prisma.XOR<Prisma.EmployeeProgramCreateWithoutEmployeeInput, Prisma.EmployeeProgramUncheckedCreateWithoutEmployeeInput> | Prisma.EmployeeProgramCreateWithoutEmployeeInput[] | Prisma.EmployeeProgramUncheckedCreateWithoutEmployeeInput[]
+  connectOrCreate?: Prisma.EmployeeProgramCreateOrConnectWithoutEmployeeInput | Prisma.EmployeeProgramCreateOrConnectWithoutEmployeeInput[]
+  upsert?: Prisma.EmployeeProgramUpsertWithWhereUniqueWithoutEmployeeInput | Prisma.EmployeeProgramUpsertWithWhereUniqueWithoutEmployeeInput[]
+  createMany?: Prisma.EmployeeProgramCreateManyEmployeeInputEnvelope
+  set?: Prisma.EmployeeProgramWhereUniqueInput | Prisma.EmployeeProgramWhereUniqueInput[]
+  disconnect?: Prisma.EmployeeProgramWhereUniqueInput | Prisma.EmployeeProgramWhereUniqueInput[]
+  delete?: Prisma.EmployeeProgramWhereUniqueInput | Prisma.EmployeeProgramWhereUniqueInput[]
+  connect?: Prisma.EmployeeProgramWhereUniqueInput | Prisma.EmployeeProgramWhereUniqueInput[]
+  update?: Prisma.EmployeeProgramUpdateWithWhereUniqueWithoutEmployeeInput | Prisma.EmployeeProgramUpdateWithWhereUniqueWithoutEmployeeInput[]
+  updateMany?: Prisma.EmployeeProgramUpdateManyWithWhereWithoutEmployeeInput | Prisma.EmployeeProgramUpdateManyWithWhereWithoutEmployeeInput[]
+  deleteMany?: Prisma.EmployeeProgramScalarWhereInput | Prisma.EmployeeProgramScalarWhereInput[]
 }
 
 export type EmployeeProgramCreateNestedOneWithoutGroupsInput = {
@@ -367,10 +398,12 @@ export type EmployeeProgramCreateNestedOneWithoutGroupsInput = {
   connect?: Prisma.EmployeeProgramWhereUniqueInput
 }
 
-export type EmployeeProgramUpdateOneRequiredWithoutGroupsNestedInput = {
+export type EmployeeProgramUpdateOneWithoutGroupsNestedInput = {
   create?: Prisma.XOR<Prisma.EmployeeProgramCreateWithoutGroupsInput, Prisma.EmployeeProgramUncheckedCreateWithoutGroupsInput>
   connectOrCreate?: Prisma.EmployeeProgramCreateOrConnectWithoutGroupsInput
   upsert?: Prisma.EmployeeProgramUpsertWithoutGroupsInput
+  disconnect?: Prisma.EmployeeProgramWhereInput | boolean
+  delete?: Prisma.EmployeeProgramWhereInput | boolean
   connect?: Prisma.EmployeeProgramWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.EmployeeProgramUpdateToOneWithWhereWithoutGroupsInput, Prisma.EmployeeProgramUpdateWithoutGroupsInput>, Prisma.EmployeeProgramUncheckedUpdateWithoutGroupsInput>
 }
@@ -389,57 +422,58 @@ export type EmployeeProgramUpdateOneRequiredWithoutLessonsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.EmployeeProgramUpdateToOneWithWhereWithoutLessonsInput, Prisma.EmployeeProgramUpdateWithoutLessonsInput>, Prisma.EmployeeProgramUncheckedUpdateWithoutLessonsInput>
 }
 
-export type EmployeeProgramCreateWithoutEmployeesInput = {
-  employeeId: number
+export type EmployeeProgramCreateWithoutEmployeeInput = {
   programId: number
-  groups?: Prisma.GroupCreateNestedManyWithoutInstructorInput
+  groups?: Prisma.GroupCreateNestedManyWithoutEmployeeProgramInput
   lessons?: Prisma.LessonCreateNestedManyWithoutInstructorInput
 }
 
-export type EmployeeProgramUncheckedCreateWithoutEmployeesInput = {
+export type EmployeeProgramUncheckedCreateWithoutEmployeeInput = {
   id?: number
-  employeeId: number
   programId: number
-  groups?: Prisma.GroupUncheckedCreateNestedManyWithoutInstructorInput
+  groups?: Prisma.GroupUncheckedCreateNestedManyWithoutEmployeeProgramInput
   lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutInstructorInput
 }
 
-export type EmployeeProgramCreateOrConnectWithoutEmployeesInput = {
+export type EmployeeProgramCreateOrConnectWithoutEmployeeInput = {
   where: Prisma.EmployeeProgramWhereUniqueInput
-  create: Prisma.XOR<Prisma.EmployeeProgramCreateWithoutEmployeesInput, Prisma.EmployeeProgramUncheckedCreateWithoutEmployeesInput>
+  create: Prisma.XOR<Prisma.EmployeeProgramCreateWithoutEmployeeInput, Prisma.EmployeeProgramUncheckedCreateWithoutEmployeeInput>
 }
 
-export type EmployeeProgramUpsertWithoutEmployeesInput = {
-  update: Prisma.XOR<Prisma.EmployeeProgramUpdateWithoutEmployeesInput, Prisma.EmployeeProgramUncheckedUpdateWithoutEmployeesInput>
-  create: Prisma.XOR<Prisma.EmployeeProgramCreateWithoutEmployeesInput, Prisma.EmployeeProgramUncheckedCreateWithoutEmployeesInput>
-  where?: Prisma.EmployeeProgramWhereInput
+export type EmployeeProgramCreateManyEmployeeInputEnvelope = {
+  data: Prisma.EmployeeProgramCreateManyEmployeeInput | Prisma.EmployeeProgramCreateManyEmployeeInput[]
+  skipDuplicates?: boolean
 }
 
-export type EmployeeProgramUpdateToOneWithWhereWithoutEmployeesInput = {
-  where?: Prisma.EmployeeProgramWhereInput
-  data: Prisma.XOR<Prisma.EmployeeProgramUpdateWithoutEmployeesInput, Prisma.EmployeeProgramUncheckedUpdateWithoutEmployeesInput>
+export type EmployeeProgramUpsertWithWhereUniqueWithoutEmployeeInput = {
+  where: Prisma.EmployeeProgramWhereUniqueInput
+  update: Prisma.XOR<Prisma.EmployeeProgramUpdateWithoutEmployeeInput, Prisma.EmployeeProgramUncheckedUpdateWithoutEmployeeInput>
+  create: Prisma.XOR<Prisma.EmployeeProgramCreateWithoutEmployeeInput, Prisma.EmployeeProgramUncheckedCreateWithoutEmployeeInput>
 }
 
-export type EmployeeProgramUpdateWithoutEmployeesInput = {
-  employeeId?: Prisma.IntFieldUpdateOperationsInput | number
-  programId?: Prisma.IntFieldUpdateOperationsInput | number
-  groups?: Prisma.GroupUpdateManyWithoutInstructorNestedInput
-  lessons?: Prisma.LessonUpdateManyWithoutInstructorNestedInput
+export type EmployeeProgramUpdateWithWhereUniqueWithoutEmployeeInput = {
+  where: Prisma.EmployeeProgramWhereUniqueInput
+  data: Prisma.XOR<Prisma.EmployeeProgramUpdateWithoutEmployeeInput, Prisma.EmployeeProgramUncheckedUpdateWithoutEmployeeInput>
 }
 
-export type EmployeeProgramUncheckedUpdateWithoutEmployeesInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  employeeId?: Prisma.IntFieldUpdateOperationsInput | number
-  programId?: Prisma.IntFieldUpdateOperationsInput | number
-  groups?: Prisma.GroupUncheckedUpdateManyWithoutInstructorNestedInput
-  lessons?: Prisma.LessonUncheckedUpdateManyWithoutInstructorNestedInput
+export type EmployeeProgramUpdateManyWithWhereWithoutEmployeeInput = {
+  where: Prisma.EmployeeProgramScalarWhereInput
+  data: Prisma.XOR<Prisma.EmployeeProgramUpdateManyMutationInput, Prisma.EmployeeProgramUncheckedUpdateManyWithoutEmployeeInput>
+}
+
+export type EmployeeProgramScalarWhereInput = {
+  AND?: Prisma.EmployeeProgramScalarWhereInput | Prisma.EmployeeProgramScalarWhereInput[]
+  OR?: Prisma.EmployeeProgramScalarWhereInput[]
+  NOT?: Prisma.EmployeeProgramScalarWhereInput | Prisma.EmployeeProgramScalarWhereInput[]
+  id?: Prisma.IntFilter<"EmployeeProgram"> | number
+  employeeId?: Prisma.IntFilter<"EmployeeProgram"> | number
+  programId?: Prisma.IntFilter<"EmployeeProgram"> | number
 }
 
 export type EmployeeProgramCreateWithoutGroupsInput = {
-  employeeId: number
   programId: number
+  employee: Prisma.EmployeeCreateNestedOneWithoutEmployeeProgramsInput
   lessons?: Prisma.LessonCreateNestedManyWithoutInstructorInput
-  employees?: Prisma.EmployeeCreateNestedManyWithoutEmployeeProgramInput
 }
 
 export type EmployeeProgramUncheckedCreateWithoutGroupsInput = {
@@ -447,7 +481,6 @@ export type EmployeeProgramUncheckedCreateWithoutGroupsInput = {
   employeeId: number
   programId: number
   lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutInstructorInput
-  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutEmployeeProgramInput
 }
 
 export type EmployeeProgramCreateOrConnectWithoutGroupsInput = {
@@ -467,10 +500,9 @@ export type EmployeeProgramUpdateToOneWithWhereWithoutGroupsInput = {
 }
 
 export type EmployeeProgramUpdateWithoutGroupsInput = {
-  employeeId?: Prisma.IntFieldUpdateOperationsInput | number
   programId?: Prisma.IntFieldUpdateOperationsInput | number
+  employee?: Prisma.EmployeeUpdateOneRequiredWithoutEmployeeProgramsNestedInput
   lessons?: Prisma.LessonUpdateManyWithoutInstructorNestedInput
-  employees?: Prisma.EmployeeUpdateManyWithoutEmployeeProgramNestedInput
 }
 
 export type EmployeeProgramUncheckedUpdateWithoutGroupsInput = {
@@ -478,22 +510,19 @@ export type EmployeeProgramUncheckedUpdateWithoutGroupsInput = {
   employeeId?: Prisma.IntFieldUpdateOperationsInput | number
   programId?: Prisma.IntFieldUpdateOperationsInput | number
   lessons?: Prisma.LessonUncheckedUpdateManyWithoutInstructorNestedInput
-  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutEmployeeProgramNestedInput
 }
 
 export type EmployeeProgramCreateWithoutLessonsInput = {
-  employeeId: number
   programId: number
-  groups?: Prisma.GroupCreateNestedManyWithoutInstructorInput
-  employees?: Prisma.EmployeeCreateNestedManyWithoutEmployeeProgramInput
+  employee: Prisma.EmployeeCreateNestedOneWithoutEmployeeProgramsInput
+  groups?: Prisma.GroupCreateNestedManyWithoutEmployeeProgramInput
 }
 
 export type EmployeeProgramUncheckedCreateWithoutLessonsInput = {
   id?: number
   employeeId: number
   programId: number
-  groups?: Prisma.GroupUncheckedCreateNestedManyWithoutInstructorInput
-  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutEmployeeProgramInput
+  groups?: Prisma.GroupUncheckedCreateNestedManyWithoutEmployeeProgramInput
 }
 
 export type EmployeeProgramCreateOrConnectWithoutLessonsInput = {
@@ -513,18 +542,39 @@ export type EmployeeProgramUpdateToOneWithWhereWithoutLessonsInput = {
 }
 
 export type EmployeeProgramUpdateWithoutLessonsInput = {
-  employeeId?: Prisma.IntFieldUpdateOperationsInput | number
   programId?: Prisma.IntFieldUpdateOperationsInput | number
-  groups?: Prisma.GroupUpdateManyWithoutInstructorNestedInput
-  employees?: Prisma.EmployeeUpdateManyWithoutEmployeeProgramNestedInput
+  employee?: Prisma.EmployeeUpdateOneRequiredWithoutEmployeeProgramsNestedInput
+  groups?: Prisma.GroupUpdateManyWithoutEmployeeProgramNestedInput
 }
 
 export type EmployeeProgramUncheckedUpdateWithoutLessonsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   employeeId?: Prisma.IntFieldUpdateOperationsInput | number
   programId?: Prisma.IntFieldUpdateOperationsInput | number
-  groups?: Prisma.GroupUncheckedUpdateManyWithoutInstructorNestedInput
-  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutEmployeeProgramNestedInput
+  groups?: Prisma.GroupUncheckedUpdateManyWithoutEmployeeProgramNestedInput
+}
+
+export type EmployeeProgramCreateManyEmployeeInput = {
+  id?: number
+  programId: number
+}
+
+export type EmployeeProgramUpdateWithoutEmployeeInput = {
+  programId?: Prisma.IntFieldUpdateOperationsInput | number
+  groups?: Prisma.GroupUpdateManyWithoutEmployeeProgramNestedInput
+  lessons?: Prisma.LessonUpdateManyWithoutInstructorNestedInput
+}
+
+export type EmployeeProgramUncheckedUpdateWithoutEmployeeInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  programId?: Prisma.IntFieldUpdateOperationsInput | number
+  groups?: Prisma.GroupUncheckedUpdateManyWithoutEmployeeProgramNestedInput
+  lessons?: Prisma.LessonUncheckedUpdateManyWithoutInstructorNestedInput
+}
+
+export type EmployeeProgramUncheckedUpdateManyWithoutEmployeeInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  programId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 
@@ -535,13 +585,11 @@ export type EmployeeProgramUncheckedUpdateWithoutLessonsInput = {
 export type EmployeeProgramCountOutputType = {
   groups: number
   lessons: number
-  employees: number
 }
 
 export type EmployeeProgramCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   groups?: boolean | EmployeeProgramCountOutputTypeCountGroupsArgs
   lessons?: boolean | EmployeeProgramCountOutputTypeCountLessonsArgs
-  employees?: boolean | EmployeeProgramCountOutputTypeCountEmployeesArgs
 }
 
 /**
@@ -568,21 +616,14 @@ export type EmployeeProgramCountOutputTypeCountLessonsArgs<ExtArgs extends runti
   where?: Prisma.LessonWhereInput
 }
 
-/**
- * EmployeeProgramCountOutputType without action
- */
-export type EmployeeProgramCountOutputTypeCountEmployeesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.EmployeeWhereInput
-}
-
 
 export type EmployeeProgramSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   employeeId?: boolean
   programId?: boolean
+  employee?: boolean | Prisma.EmployeeDefaultArgs<ExtArgs>
   groups?: boolean | Prisma.EmployeeProgram$groupsArgs<ExtArgs>
   lessons?: boolean | Prisma.EmployeeProgram$lessonsArgs<ExtArgs>
-  employees?: boolean | Prisma.EmployeeProgram$employeesArgs<ExtArgs>
   _count?: boolean | Prisma.EmployeeProgramCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["employeeProgram"]>
 
@@ -596,18 +637,18 @@ export type EmployeeProgramSelectScalar = {
 
 export type EmployeeProgramOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "employeeId" | "programId", ExtArgs["result"]["employeeProgram"]>
 export type EmployeeProgramInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  employee?: boolean | Prisma.EmployeeDefaultArgs<ExtArgs>
   groups?: boolean | Prisma.EmployeeProgram$groupsArgs<ExtArgs>
   lessons?: boolean | Prisma.EmployeeProgram$lessonsArgs<ExtArgs>
-  employees?: boolean | Prisma.EmployeeProgram$employeesArgs<ExtArgs>
   _count?: boolean | Prisma.EmployeeProgramCountOutputTypeDefaultArgs<ExtArgs>
 }
 
 export type $EmployeeProgramPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "EmployeeProgram"
   objects: {
+    employee: Prisma.$EmployeePayload<ExtArgs>
     groups: Prisma.$GroupPayload<ExtArgs>[]
     lessons: Prisma.$LessonPayload<ExtArgs>[]
-    employees: Prisma.$EmployeePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -953,9 +994,9 @@ readonly fields: EmployeeProgramFieldRefs;
  */
 export interface Prisma__EmployeeProgramClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  employee<T extends Prisma.EmployeeDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EmployeeDefaultArgs<ExtArgs>>): Prisma.Prisma__EmployeeClient<runtime.Types.Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   groups<T extends Prisma.EmployeeProgram$groupsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EmployeeProgram$groupsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   lessons<T extends Prisma.EmployeeProgram$lessonsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EmployeeProgram$lessonsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LessonPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  employees<T extends Prisma.EmployeeProgram$employeesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EmployeeProgram$employeesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1376,30 +1417,6 @@ export type EmployeeProgram$lessonsArgs<ExtArgs extends runtime.Types.Extensions
   take?: number
   skip?: number
   distinct?: Prisma.LessonScalarFieldEnum | Prisma.LessonScalarFieldEnum[]
-}
-
-/**
- * EmployeeProgram.employees
- */
-export type EmployeeProgram$employeesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Employee
-   */
-  select?: Prisma.EmployeeSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Employee
-   */
-  omit?: Prisma.EmployeeOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.EmployeeInclude<ExtArgs> | null
-  where?: Prisma.EmployeeWhereInput
-  orderBy?: Prisma.EmployeeOrderByWithRelationInput | Prisma.EmployeeOrderByWithRelationInput[]
-  cursor?: Prisma.EmployeeWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.EmployeeScalarFieldEnum | Prisma.EmployeeScalarFieldEnum[]
 }
 
 /**

@@ -215,6 +215,7 @@ export type ProgramWhereInput = {
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   lessons?: Prisma.LessonListRelationFilter
   modules?: Prisma.ModuleListRelationFilter
+  groups?: Prisma.GroupListRelationFilter
 }
 
 export type ProgramOrderByWithRelationInput = {
@@ -225,6 +226,7 @@ export type ProgramOrderByWithRelationInput = {
   organization?: Prisma.OrganizationOrderByWithRelationInput
   lessons?: Prisma.LessonOrderByRelationAggregateInput
   modules?: Prisma.ModuleOrderByRelationAggregateInput
+  groups?: Prisma.GroupOrderByRelationAggregateInput
   _relevance?: Prisma.ProgramOrderByRelevanceInput
 }
 
@@ -239,6 +241,7 @@ export type ProgramWhereUniqueInput = Prisma.AtLeast<{
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   lessons?: Prisma.LessonListRelationFilter
   modules?: Prisma.ModuleListRelationFilter
+  groups?: Prisma.GroupListRelationFilter
 }, "id">
 
 export type ProgramOrderByWithAggregationInput = {
@@ -269,6 +272,7 @@ export type ProgramCreateInput = {
   organization: Prisma.OrganizationCreateNestedOneWithoutProgramsInput
   lessons?: Prisma.LessonCreateNestedManyWithoutProgramInput
   modules?: Prisma.ModuleCreateNestedManyWithoutProgramInput
+  groups?: Prisma.GroupCreateNestedManyWithoutProgramInput
 }
 
 export type ProgramUncheckedCreateInput = {
@@ -278,6 +282,7 @@ export type ProgramUncheckedCreateInput = {
   organizationId: number
   lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutProgramInput
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutProgramInput
+  groups?: Prisma.GroupUncheckedCreateNestedManyWithoutProgramInput
 }
 
 export type ProgramUpdateInput = {
@@ -286,6 +291,7 @@ export type ProgramUpdateInput = {
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutProgramsNestedInput
   lessons?: Prisma.LessonUpdateManyWithoutProgramNestedInput
   modules?: Prisma.ModuleUpdateManyWithoutProgramNestedInput
+  groups?: Prisma.GroupUpdateManyWithoutProgramNestedInput
 }
 
 export type ProgramUncheckedUpdateInput = {
@@ -295,6 +301,7 @@ export type ProgramUncheckedUpdateInput = {
   organizationId?: Prisma.IntFieldUpdateOperationsInput | number
   lessons?: Prisma.LessonUncheckedUpdateManyWithoutProgramNestedInput
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutProgramNestedInput
+  groups?: Prisma.GroupUncheckedUpdateManyWithoutProgramNestedInput
 }
 
 export type ProgramCreateManyInput = {
@@ -368,6 +375,20 @@ export type ProgramSumOrderByAggregateInput = {
   organizationId?: Prisma.SortOrder
 }
 
+export type ProgramCreateNestedOneWithoutGroupsInput = {
+  create?: Prisma.XOR<Prisma.ProgramCreateWithoutGroupsInput, Prisma.ProgramUncheckedCreateWithoutGroupsInput>
+  connectOrCreate?: Prisma.ProgramCreateOrConnectWithoutGroupsInput
+  connect?: Prisma.ProgramWhereUniqueInput
+}
+
+export type ProgramUpdateOneRequiredWithoutGroupsNestedInput = {
+  create?: Prisma.XOR<Prisma.ProgramCreateWithoutGroupsInput, Prisma.ProgramUncheckedCreateWithoutGroupsInput>
+  connectOrCreate?: Prisma.ProgramCreateOrConnectWithoutGroupsInput
+  upsert?: Prisma.ProgramUpsertWithoutGroupsInput
+  connect?: Prisma.ProgramWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProgramUpdateToOneWithWhereWithoutGroupsInput, Prisma.ProgramUpdateWithoutGroupsInput>, Prisma.ProgramUncheckedUpdateWithoutGroupsInput>
+}
+
 export type ProgramCreateNestedOneWithoutLessonsInput = {
   create?: Prisma.XOR<Prisma.ProgramCreateWithoutLessonsInput, Prisma.ProgramUncheckedCreateWithoutLessonsInput>
   connectOrCreate?: Prisma.ProgramCreateOrConnectWithoutLessonsInput
@@ -438,11 +459,62 @@ export type ProgramUncheckedUpdateManyWithoutOrganizationNestedInput = {
   deleteMany?: Prisma.ProgramScalarWhereInput | Prisma.ProgramScalarWhereInput[]
 }
 
+export type ProgramCreateWithoutGroupsInput = {
+  name: string
+  description: string
+  organization: Prisma.OrganizationCreateNestedOneWithoutProgramsInput
+  lessons?: Prisma.LessonCreateNestedManyWithoutProgramInput
+  modules?: Prisma.ModuleCreateNestedManyWithoutProgramInput
+}
+
+export type ProgramUncheckedCreateWithoutGroupsInput = {
+  id?: number
+  name: string
+  description: string
+  organizationId: number
+  lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutProgramInput
+  modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutProgramInput
+}
+
+export type ProgramCreateOrConnectWithoutGroupsInput = {
+  where: Prisma.ProgramWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProgramCreateWithoutGroupsInput, Prisma.ProgramUncheckedCreateWithoutGroupsInput>
+}
+
+export type ProgramUpsertWithoutGroupsInput = {
+  update: Prisma.XOR<Prisma.ProgramUpdateWithoutGroupsInput, Prisma.ProgramUncheckedUpdateWithoutGroupsInput>
+  create: Prisma.XOR<Prisma.ProgramCreateWithoutGroupsInput, Prisma.ProgramUncheckedCreateWithoutGroupsInput>
+  where?: Prisma.ProgramWhereInput
+}
+
+export type ProgramUpdateToOneWithWhereWithoutGroupsInput = {
+  where?: Prisma.ProgramWhereInput
+  data: Prisma.XOR<Prisma.ProgramUpdateWithoutGroupsInput, Prisma.ProgramUncheckedUpdateWithoutGroupsInput>
+}
+
+export type ProgramUpdateWithoutGroupsInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutProgramsNestedInput
+  lessons?: Prisma.LessonUpdateManyWithoutProgramNestedInput
+  modules?: Prisma.ModuleUpdateManyWithoutProgramNestedInput
+}
+
+export type ProgramUncheckedUpdateWithoutGroupsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.IntFieldUpdateOperationsInput | number
+  lessons?: Prisma.LessonUncheckedUpdateManyWithoutProgramNestedInput
+  modules?: Prisma.ModuleUncheckedUpdateManyWithoutProgramNestedInput
+}
+
 export type ProgramCreateWithoutLessonsInput = {
   name: string
   description: string
   organization: Prisma.OrganizationCreateNestedOneWithoutProgramsInput
   modules?: Prisma.ModuleCreateNestedManyWithoutProgramInput
+  groups?: Prisma.GroupCreateNestedManyWithoutProgramInput
 }
 
 export type ProgramUncheckedCreateWithoutLessonsInput = {
@@ -451,6 +523,7 @@ export type ProgramUncheckedCreateWithoutLessonsInput = {
   description: string
   organizationId: number
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutProgramInput
+  groups?: Prisma.GroupUncheckedCreateNestedManyWithoutProgramInput
 }
 
 export type ProgramCreateOrConnectWithoutLessonsInput = {
@@ -474,6 +547,7 @@ export type ProgramUpdateWithoutLessonsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutProgramsNestedInput
   modules?: Prisma.ModuleUpdateManyWithoutProgramNestedInput
+  groups?: Prisma.GroupUpdateManyWithoutProgramNestedInput
 }
 
 export type ProgramUncheckedUpdateWithoutLessonsInput = {
@@ -482,6 +556,7 @@ export type ProgramUncheckedUpdateWithoutLessonsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   organizationId?: Prisma.IntFieldUpdateOperationsInput | number
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutProgramNestedInput
+  groups?: Prisma.GroupUncheckedUpdateManyWithoutProgramNestedInput
 }
 
 export type ProgramCreateWithoutModulesInput = {
@@ -489,6 +564,7 @@ export type ProgramCreateWithoutModulesInput = {
   description: string
   organization: Prisma.OrganizationCreateNestedOneWithoutProgramsInput
   lessons?: Prisma.LessonCreateNestedManyWithoutProgramInput
+  groups?: Prisma.GroupCreateNestedManyWithoutProgramInput
 }
 
 export type ProgramUncheckedCreateWithoutModulesInput = {
@@ -497,6 +573,7 @@ export type ProgramUncheckedCreateWithoutModulesInput = {
   description: string
   organizationId: number
   lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutProgramInput
+  groups?: Prisma.GroupUncheckedCreateNestedManyWithoutProgramInput
 }
 
 export type ProgramCreateOrConnectWithoutModulesInput = {
@@ -520,6 +597,7 @@ export type ProgramUpdateWithoutModulesInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutProgramsNestedInput
   lessons?: Prisma.LessonUpdateManyWithoutProgramNestedInput
+  groups?: Prisma.GroupUpdateManyWithoutProgramNestedInput
 }
 
 export type ProgramUncheckedUpdateWithoutModulesInput = {
@@ -528,6 +606,7 @@ export type ProgramUncheckedUpdateWithoutModulesInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   organizationId?: Prisma.IntFieldUpdateOperationsInput | number
   lessons?: Prisma.LessonUncheckedUpdateManyWithoutProgramNestedInput
+  groups?: Prisma.GroupUncheckedUpdateManyWithoutProgramNestedInput
 }
 
 export type ProgramCreateWithoutOrganizationInput = {
@@ -535,6 +614,7 @@ export type ProgramCreateWithoutOrganizationInput = {
   description: string
   lessons?: Prisma.LessonCreateNestedManyWithoutProgramInput
   modules?: Prisma.ModuleCreateNestedManyWithoutProgramInput
+  groups?: Prisma.GroupCreateNestedManyWithoutProgramInput
 }
 
 export type ProgramUncheckedCreateWithoutOrganizationInput = {
@@ -543,6 +623,7 @@ export type ProgramUncheckedCreateWithoutOrganizationInput = {
   description: string
   lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutProgramInput
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutProgramInput
+  groups?: Prisma.GroupUncheckedCreateNestedManyWithoutProgramInput
 }
 
 export type ProgramCreateOrConnectWithoutOrganizationInput = {
@@ -592,6 +673,7 @@ export type ProgramUpdateWithoutOrganizationInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   lessons?: Prisma.LessonUpdateManyWithoutProgramNestedInput
   modules?: Prisma.ModuleUpdateManyWithoutProgramNestedInput
+  groups?: Prisma.GroupUpdateManyWithoutProgramNestedInput
 }
 
 export type ProgramUncheckedUpdateWithoutOrganizationInput = {
@@ -600,6 +682,7 @@ export type ProgramUncheckedUpdateWithoutOrganizationInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   lessons?: Prisma.LessonUncheckedUpdateManyWithoutProgramNestedInput
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutProgramNestedInput
+  groups?: Prisma.GroupUncheckedUpdateManyWithoutProgramNestedInput
 }
 
 export type ProgramUncheckedUpdateManyWithoutOrganizationInput = {
@@ -616,11 +699,13 @@ export type ProgramUncheckedUpdateManyWithoutOrganizationInput = {
 export type ProgramCountOutputType = {
   lessons: number
   modules: number
+  groups: number
 }
 
 export type ProgramCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lessons?: boolean | ProgramCountOutputTypeCountLessonsArgs
   modules?: boolean | ProgramCountOutputTypeCountModulesArgs
+  groups?: boolean | ProgramCountOutputTypeCountGroupsArgs
 }
 
 /**
@@ -647,6 +732,13 @@ export type ProgramCountOutputTypeCountModulesArgs<ExtArgs extends runtime.Types
   where?: Prisma.ModuleWhereInput
 }
 
+/**
+ * ProgramCountOutputType without action
+ */
+export type ProgramCountOutputTypeCountGroupsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.GroupWhereInput
+}
+
 
 export type ProgramSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -656,6 +748,7 @@ export type ProgramSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   lessons?: boolean | Prisma.Program$lessonsArgs<ExtArgs>
   modules?: boolean | Prisma.Program$modulesArgs<ExtArgs>
+  groups?: boolean | Prisma.Program$groupsArgs<ExtArgs>
   _count?: boolean | Prisma.ProgramCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["program"]>
 
@@ -673,6 +766,7 @@ export type ProgramInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   lessons?: boolean | Prisma.Program$lessonsArgs<ExtArgs>
   modules?: boolean | Prisma.Program$modulesArgs<ExtArgs>
+  groups?: boolean | Prisma.Program$groupsArgs<ExtArgs>
   _count?: boolean | Prisma.ProgramCountOutputTypeDefaultArgs<ExtArgs>
 }
 
@@ -682,6 +776,7 @@ export type $ProgramPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     organization: Prisma.$OrganizationPayload<ExtArgs>
     lessons: Prisma.$LessonPayload<ExtArgs>[]
     modules: Prisma.$ModulePayload<ExtArgs>[]
+    groups: Prisma.$GroupPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1031,6 +1126,7 @@ export interface Prisma__ProgramClient<T, Null = never, ExtArgs extends runtime.
   organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   lessons<T extends Prisma.Program$lessonsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Program$lessonsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LessonPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   modules<T extends Prisma.Program$modulesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Program$modulesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ModulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  groups<T extends Prisma.Program$groupsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Program$groupsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1452,6 +1548,30 @@ export type Program$modulesArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.ModuleScalarFieldEnum | Prisma.ModuleScalarFieldEnum[]
+}
+
+/**
+ * Program.groups
+ */
+export type Program$groupsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Group
+   */
+  select?: Prisma.GroupSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Group
+   */
+  omit?: Prisma.GroupOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GroupInclude<ExtArgs> | null
+  where?: Prisma.GroupWhereInput
+  orderBy?: Prisma.GroupOrderByWithRelationInput | Prisma.GroupOrderByWithRelationInput[]
+  cursor?: Prisma.GroupWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.GroupScalarFieldEnum | Prisma.GroupScalarFieldEnum[]
 }
 
 /**

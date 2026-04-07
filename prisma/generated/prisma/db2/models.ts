@@ -8,7 +8,6 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/Breaks.js'
 export type * from './models/City.js'
 export type * from './models/Client.js'
 export type * from './models/ClientSubscription.js'
@@ -24,6 +23,4 @@ export type * from './models/Schedule.js'
 export type * from './models/SubscriptionType.js'
 export type * from './models/Topic.js'
 export type * from './models/Venue.js'
-export type * from './models/WorkSchedule.js'
-export type * from './models/WorkScheduleBreaks.js'
 export type * from './commonInputTypes.js'

@@ -563,6 +563,10 @@ export type EnumGenderFieldUpdateOperationsInput = {
   set?: $Enums.Gender
 }
 
+export type DateTimeFieldUpdateOperationsInput = {
+  set?: Date | string
+}
+
 export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
 }

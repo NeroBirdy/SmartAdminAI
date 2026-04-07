@@ -384,6 +384,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 
 export const ModelName = {
+  Breaks: 'Breaks',
   Prompt: 'Prompt',
   Recommendation: 'Recommendation',
   Risk: 'Risk',
@@ -394,7 +395,9 @@ export const ModelName = {
   SettingDefinition: 'SettingDefinition',
   SettingOption: 'SettingOption',
   SettingType: 'SettingType',
-  Users: 'Users'
+  Users: 'Users',
+  WorkSchedule: 'WorkSchedule',
+  WorkScheduleBreaks: 'WorkScheduleBreaks'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -410,10 +413,76 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "prompt" | "recommendation" | "risk" | "section" | "sectionAISetting" | "sectionSetting" | "settingAI" | "settingDefinition" | "settingOption" | "settingType" | "users"
+    modelProps: "breaks" | "prompt" | "recommendation" | "risk" | "section" | "sectionAISetting" | "sectionSetting" | "settingAI" | "settingDefinition" | "settingOption" | "settingType" | "users" | "workSchedule" | "workScheduleBreaks"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
+    Breaks: {
+      payload: Prisma.$BreaksPayload<ExtArgs>
+      fields: Prisma.BreaksFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BreaksFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreaksPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BreaksFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreaksPayload>
+        }
+        findFirst: {
+          args: Prisma.BreaksFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreaksPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BreaksFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreaksPayload>
+        }
+        findMany: {
+          args: Prisma.BreaksFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreaksPayload>[]
+        }
+        create: {
+          args: Prisma.BreaksCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreaksPayload>
+        }
+        createMany: {
+          args: Prisma.BreaksCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.BreaksDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreaksPayload>
+        }
+        update: {
+          args: Prisma.BreaksUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreaksPayload>
+        }
+        deleteMany: {
+          args: Prisma.BreaksDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BreaksUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.BreaksUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreaksPayload>
+        }
+        aggregate: {
+          args: Prisma.BreaksAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBreaks>
+        }
+        groupBy: {
+          args: Prisma.BreaksGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BreaksGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BreaksCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BreaksCountAggregateOutputType> | number
+        }
+      }
+    }
     Prompt: {
       payload: Prisma.$PromptPayload<ExtArgs>
       fields: Prisma.PromptFieldRefs
@@ -1140,6 +1209,138 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    WorkSchedule: {
+      payload: Prisma.$WorkSchedulePayload<ExtArgs>
+      fields: Prisma.WorkScheduleFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.WorkScheduleFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkSchedulePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.WorkScheduleFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkSchedulePayload>
+        }
+        findFirst: {
+          args: Prisma.WorkScheduleFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkSchedulePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.WorkScheduleFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkSchedulePayload>
+        }
+        findMany: {
+          args: Prisma.WorkScheduleFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkSchedulePayload>[]
+        }
+        create: {
+          args: Prisma.WorkScheduleCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkSchedulePayload>
+        }
+        createMany: {
+          args: Prisma.WorkScheduleCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.WorkScheduleDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkSchedulePayload>
+        }
+        update: {
+          args: Prisma.WorkScheduleUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkSchedulePayload>
+        }
+        deleteMany: {
+          args: Prisma.WorkScheduleDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.WorkScheduleUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.WorkScheduleUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkSchedulePayload>
+        }
+        aggregate: {
+          args: Prisma.WorkScheduleAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWorkSchedule>
+        }
+        groupBy: {
+          args: Prisma.WorkScheduleGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WorkScheduleGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.WorkScheduleCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WorkScheduleCountAggregateOutputType> | number
+        }
+      }
+    }
+    WorkScheduleBreaks: {
+      payload: Prisma.$WorkScheduleBreaksPayload<ExtArgs>
+      fields: Prisma.WorkScheduleBreaksFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.WorkScheduleBreaksFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkScheduleBreaksPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.WorkScheduleBreaksFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkScheduleBreaksPayload>
+        }
+        findFirst: {
+          args: Prisma.WorkScheduleBreaksFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkScheduleBreaksPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.WorkScheduleBreaksFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkScheduleBreaksPayload>
+        }
+        findMany: {
+          args: Prisma.WorkScheduleBreaksFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkScheduleBreaksPayload>[]
+        }
+        create: {
+          args: Prisma.WorkScheduleBreaksCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkScheduleBreaksPayload>
+        }
+        createMany: {
+          args: Prisma.WorkScheduleBreaksCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.WorkScheduleBreaksDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkScheduleBreaksPayload>
+        }
+        update: {
+          args: Prisma.WorkScheduleBreaksUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkScheduleBreaksPayload>
+        }
+        deleteMany: {
+          args: Prisma.WorkScheduleBreaksDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.WorkScheduleBreaksUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.WorkScheduleBreaksUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkScheduleBreaksPayload>
+        }
+        aggregate: {
+          args: Prisma.WorkScheduleBreaksAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWorkScheduleBreaks>
+        }
+        groupBy: {
+          args: Prisma.WorkScheduleBreaksGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WorkScheduleBreaksGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.WorkScheduleBreaksCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WorkScheduleBreaksCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1177,6 +1378,15 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 } as const)
 
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
+
+
+export const BreaksScalarFieldEnum = {
+  id: 'id',
+  startTime: 'startTime',
+  endTime: 'endTime'
+} as const
+
+export type BreaksScalarFieldEnum = (typeof BreaksScalarFieldEnum)[keyof typeof BreaksScalarFieldEnum]
 
 
 export const PromptScalarFieldEnum = {
@@ -1291,6 +1501,29 @@ export const UsersScalarFieldEnum = {
 } as const
 
 export type UsersScalarFieldEnum = (typeof UsersScalarFieldEnum)[keyof typeof UsersScalarFieldEnum]
+
+
+export const WorkScheduleScalarFieldEnum = {
+  id: 'id',
+  dayOfWeek: 'dayOfWeek',
+  isWorkingDay: 'isWorkingDay',
+  startWork: 'startWork',
+  endWork: 'endWork',
+  organizationId: 'organizationId',
+  employeeId: 'employeeId',
+  venueId: 'venueId'
+} as const
+
+export type WorkScheduleScalarFieldEnum = (typeof WorkScheduleScalarFieldEnum)[keyof typeof WorkScheduleScalarFieldEnum]
+
+
+export const WorkScheduleBreaksScalarFieldEnum = {
+  id: 'id',
+  workScheduleId: 'workScheduleId',
+  breakId: 'breakId'
+} as const
+
+export type WorkScheduleBreaksScalarFieldEnum = (typeof WorkScheduleBreaksScalarFieldEnum)[keyof typeof WorkScheduleBreaksScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1417,6 +1650,13 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
 
 
 /**
+ * Reference to a field of type 'DateTime'
+ */
+export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+    
+
+
+/**
  * Reference to a field of type 'String'
  */
 export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String'>
@@ -1431,13 +1671,6 @@ export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
 
 
 /**
- * Reference to a field of type 'DateTime'
- */
-export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
-    
-
-
-/**
  * Reference to a field of type 'Json'
  */
 export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
@@ -1448,6 +1681,13 @@ export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'J
  * Reference to a field of type 'QueryMode'
  */
 export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+/**
+ * Reference to a field of type 'DayOfWeek'
+ */
+export type EnumDayOfWeekFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DayOfWeek'>
     
 
 
@@ -1552,6 +1792,7 @@ export type PrismaClientOptions = ({
   comments?: runtime.SqlCommenterPlugin[]
 }
 export type GlobalOmitConfig = {
+  breaks?: Prisma.BreaksOmit
   prompt?: Prisma.PromptOmit
   recommendation?: Prisma.RecommendationOmit
   risk?: Prisma.RiskOmit
@@ -1563,6 +1804,8 @@ export type GlobalOmitConfig = {
   settingOption?: Prisma.SettingOptionOmit
   settingType?: Prisma.SettingTypeOmit
   users?: Prisma.UsersOmit
+  workSchedule?: Prisma.WorkScheduleOmit
+  workScheduleBreaks?: Prisma.WorkScheduleBreaksOmit
 }
 
 /* Types for Logging */

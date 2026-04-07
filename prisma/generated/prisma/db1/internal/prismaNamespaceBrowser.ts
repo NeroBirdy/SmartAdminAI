@@ -51,6 +51,7 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
+  Breaks: 'Breaks',
   Prompt: 'Prompt',
   Recommendation: 'Recommendation',
   Risk: 'Risk',
@@ -61,7 +62,9 @@ export const ModelName = {
   SettingDefinition: 'SettingDefinition',
   SettingOption: 'SettingOption',
   SettingType: 'SettingType',
-  Users: 'Users'
+  Users: 'Users',
+  WorkSchedule: 'WorkSchedule',
+  WorkScheduleBreaks: 'WorkScheduleBreaks'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -78,6 +81,15 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 } as const)
 
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
+
+
+export const BreaksScalarFieldEnum = {
+  id: 'id',
+  startTime: 'startTime',
+  endTime: 'endTime'
+} as const
+
+export type BreaksScalarFieldEnum = (typeof BreaksScalarFieldEnum)[keyof typeof BreaksScalarFieldEnum]
 
 
 export const PromptScalarFieldEnum = {
@@ -192,6 +204,29 @@ export const UsersScalarFieldEnum = {
 } as const
 
 export type UsersScalarFieldEnum = (typeof UsersScalarFieldEnum)[keyof typeof UsersScalarFieldEnum]
+
+
+export const WorkScheduleScalarFieldEnum = {
+  id: 'id',
+  dayOfWeek: 'dayOfWeek',
+  isWorkingDay: 'isWorkingDay',
+  startWork: 'startWork',
+  endWork: 'endWork',
+  organizationId: 'organizationId',
+  employeeId: 'employeeId',
+  venueId: 'venueId'
+} as const
+
+export type WorkScheduleScalarFieldEnum = (typeof WorkScheduleScalarFieldEnum)[keyof typeof WorkScheduleScalarFieldEnum]
+
+
+export const WorkScheduleBreaksScalarFieldEnum = {
+  id: 'id',
+  workScheduleId: 'workScheduleId',
+  breakId: 'breakId'
+} as const
+
+export type WorkScheduleBreaksScalarFieldEnum = (typeof WorkScheduleBreaksScalarFieldEnum)[keyof typeof WorkScheduleBreaksScalarFieldEnum]
 
 
 export const SortOrder = {

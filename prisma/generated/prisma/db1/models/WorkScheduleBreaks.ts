@@ -208,12 +208,16 @@ export type WorkScheduleBreaksWhereInput = {
   id?: Prisma.IntFilter<"WorkScheduleBreaks"> | number
   workScheduleId?: Prisma.IntFilter<"WorkScheduleBreaks"> | number
   breakId?: Prisma.IntFilter<"WorkScheduleBreaks"> | number
+  workSchedule?: Prisma.XOR<Prisma.WorkScheduleScalarRelationFilter, Prisma.WorkScheduleWhereInput>
+  break?: Prisma.XOR<Prisma.BreaksScalarRelationFilter, Prisma.BreaksWhereInput>
 }
 
 export type WorkScheduleBreaksOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   workScheduleId?: Prisma.SortOrder
   breakId?: Prisma.SortOrder
+  workSchedule?: Prisma.WorkScheduleOrderByWithRelationInput
+  break?: Prisma.BreaksOrderByWithRelationInput
 }
 
 export type WorkScheduleBreaksWhereUniqueInput = Prisma.AtLeast<{
@@ -223,6 +227,8 @@ export type WorkScheduleBreaksWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.WorkScheduleBreaksWhereInput | Prisma.WorkScheduleBreaksWhereInput[]
   workScheduleId?: Prisma.IntFilter<"WorkScheduleBreaks"> | number
   breakId?: Prisma.IntFilter<"WorkScheduleBreaks"> | number
+  workSchedule?: Prisma.XOR<Prisma.WorkScheduleScalarRelationFilter, Prisma.WorkScheduleWhereInput>
+  break?: Prisma.XOR<Prisma.BreaksScalarRelationFilter, Prisma.BreaksWhereInput>
 }, "id">
 
 export type WorkScheduleBreaksOrderByWithAggregationInput = {
@@ -246,8 +252,8 @@ export type WorkScheduleBreaksScalarWhereWithAggregatesInput = {
 }
 
 export type WorkScheduleBreaksCreateInput = {
-  workScheduleId: number
-  breakId: number
+  workSchedule: Prisma.WorkScheduleCreateNestedOneWithoutWorkScheduleBreaksInput
+  break: Prisma.BreaksCreateNestedOneWithoutWorkScheduleBreaksInput
 }
 
 export type WorkScheduleBreaksUncheckedCreateInput = {
@@ -257,8 +263,8 @@ export type WorkScheduleBreaksUncheckedCreateInput = {
 }
 
 export type WorkScheduleBreaksUpdateInput = {
-  workScheduleId?: Prisma.IntFieldUpdateOperationsInput | number
-  breakId?: Prisma.IntFieldUpdateOperationsInput | number
+  workSchedule?: Prisma.WorkScheduleUpdateOneRequiredWithoutWorkScheduleBreaksNestedInput
+  break?: Prisma.BreaksUpdateOneRequiredWithoutWorkScheduleBreaksNestedInput
 }
 
 export type WorkScheduleBreaksUncheckedUpdateInput = {
@@ -274,14 +280,23 @@ export type WorkScheduleBreaksCreateManyInput = {
 }
 
 export type WorkScheduleBreaksUpdateManyMutationInput = {
-  workScheduleId?: Prisma.IntFieldUpdateOperationsInput | number
-  breakId?: Prisma.IntFieldUpdateOperationsInput | number
+
 }
 
 export type WorkScheduleBreaksUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   workScheduleId?: Prisma.IntFieldUpdateOperationsInput | number
   breakId?: Prisma.IntFieldUpdateOperationsInput | number
+}
+
+export type WorkScheduleBreaksListRelationFilter = {
+  every?: Prisma.WorkScheduleBreaksWhereInput
+  some?: Prisma.WorkScheduleBreaksWhereInput
+  none?: Prisma.WorkScheduleBreaksWhereInput
+}
+
+export type WorkScheduleBreaksOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type WorkScheduleBreaksCountOrderByAggregateInput = {
@@ -314,12 +329,215 @@ export type WorkScheduleBreaksSumOrderByAggregateInput = {
   breakId?: Prisma.SortOrder
 }
 
+export type WorkScheduleBreaksCreateNestedManyWithoutBreakInput = {
+  create?: Prisma.XOR<Prisma.WorkScheduleBreaksCreateWithoutBreakInput, Prisma.WorkScheduleBreaksUncheckedCreateWithoutBreakInput> | Prisma.WorkScheduleBreaksCreateWithoutBreakInput[] | Prisma.WorkScheduleBreaksUncheckedCreateWithoutBreakInput[]
+  connectOrCreate?: Prisma.WorkScheduleBreaksCreateOrConnectWithoutBreakInput | Prisma.WorkScheduleBreaksCreateOrConnectWithoutBreakInput[]
+  createMany?: Prisma.WorkScheduleBreaksCreateManyBreakInputEnvelope
+  connect?: Prisma.WorkScheduleBreaksWhereUniqueInput | Prisma.WorkScheduleBreaksWhereUniqueInput[]
+}
+
+export type WorkScheduleBreaksUncheckedCreateNestedManyWithoutBreakInput = {
+  create?: Prisma.XOR<Prisma.WorkScheduleBreaksCreateWithoutBreakInput, Prisma.WorkScheduleBreaksUncheckedCreateWithoutBreakInput> | Prisma.WorkScheduleBreaksCreateWithoutBreakInput[] | Prisma.WorkScheduleBreaksUncheckedCreateWithoutBreakInput[]
+  connectOrCreate?: Prisma.WorkScheduleBreaksCreateOrConnectWithoutBreakInput | Prisma.WorkScheduleBreaksCreateOrConnectWithoutBreakInput[]
+  createMany?: Prisma.WorkScheduleBreaksCreateManyBreakInputEnvelope
+  connect?: Prisma.WorkScheduleBreaksWhereUniqueInput | Prisma.WorkScheduleBreaksWhereUniqueInput[]
+}
+
+export type WorkScheduleBreaksUpdateManyWithoutBreakNestedInput = {
+  create?: Prisma.XOR<Prisma.WorkScheduleBreaksCreateWithoutBreakInput, Prisma.WorkScheduleBreaksUncheckedCreateWithoutBreakInput> | Prisma.WorkScheduleBreaksCreateWithoutBreakInput[] | Prisma.WorkScheduleBreaksUncheckedCreateWithoutBreakInput[]
+  connectOrCreate?: Prisma.WorkScheduleBreaksCreateOrConnectWithoutBreakInput | Prisma.WorkScheduleBreaksCreateOrConnectWithoutBreakInput[]
+  upsert?: Prisma.WorkScheduleBreaksUpsertWithWhereUniqueWithoutBreakInput | Prisma.WorkScheduleBreaksUpsertWithWhereUniqueWithoutBreakInput[]
+  createMany?: Prisma.WorkScheduleBreaksCreateManyBreakInputEnvelope
+  set?: Prisma.WorkScheduleBreaksWhereUniqueInput | Prisma.WorkScheduleBreaksWhereUniqueInput[]
+  disconnect?: Prisma.WorkScheduleBreaksWhereUniqueInput | Prisma.WorkScheduleBreaksWhereUniqueInput[]
+  delete?: Prisma.WorkScheduleBreaksWhereUniqueInput | Prisma.WorkScheduleBreaksWhereUniqueInput[]
+  connect?: Prisma.WorkScheduleBreaksWhereUniqueInput | Prisma.WorkScheduleBreaksWhereUniqueInput[]
+  update?: Prisma.WorkScheduleBreaksUpdateWithWhereUniqueWithoutBreakInput | Prisma.WorkScheduleBreaksUpdateWithWhereUniqueWithoutBreakInput[]
+  updateMany?: Prisma.WorkScheduleBreaksUpdateManyWithWhereWithoutBreakInput | Prisma.WorkScheduleBreaksUpdateManyWithWhereWithoutBreakInput[]
+  deleteMany?: Prisma.WorkScheduleBreaksScalarWhereInput | Prisma.WorkScheduleBreaksScalarWhereInput[]
+}
+
+export type WorkScheduleBreaksUncheckedUpdateManyWithoutBreakNestedInput = {
+  create?: Prisma.XOR<Prisma.WorkScheduleBreaksCreateWithoutBreakInput, Prisma.WorkScheduleBreaksUncheckedCreateWithoutBreakInput> | Prisma.WorkScheduleBreaksCreateWithoutBreakInput[] | Prisma.WorkScheduleBreaksUncheckedCreateWithoutBreakInput[]
+  connectOrCreate?: Prisma.WorkScheduleBreaksCreateOrConnectWithoutBreakInput | Prisma.WorkScheduleBreaksCreateOrConnectWithoutBreakInput[]
+  upsert?: Prisma.WorkScheduleBreaksUpsertWithWhereUniqueWithoutBreakInput | Prisma.WorkScheduleBreaksUpsertWithWhereUniqueWithoutBreakInput[]
+  createMany?: Prisma.WorkScheduleBreaksCreateManyBreakInputEnvelope
+  set?: Prisma.WorkScheduleBreaksWhereUniqueInput | Prisma.WorkScheduleBreaksWhereUniqueInput[]
+  disconnect?: Prisma.WorkScheduleBreaksWhereUniqueInput | Prisma.WorkScheduleBreaksWhereUniqueInput[]
+  delete?: Prisma.WorkScheduleBreaksWhereUniqueInput | Prisma.WorkScheduleBreaksWhereUniqueInput[]
+  connect?: Prisma.WorkScheduleBreaksWhereUniqueInput | Prisma.WorkScheduleBreaksWhereUniqueInput[]
+  update?: Prisma.WorkScheduleBreaksUpdateWithWhereUniqueWithoutBreakInput | Prisma.WorkScheduleBreaksUpdateWithWhereUniqueWithoutBreakInput[]
+  updateMany?: Prisma.WorkScheduleBreaksUpdateManyWithWhereWithoutBreakInput | Prisma.WorkScheduleBreaksUpdateManyWithWhereWithoutBreakInput[]
+  deleteMany?: Prisma.WorkScheduleBreaksScalarWhereInput | Prisma.WorkScheduleBreaksScalarWhereInput[]
+}
+
+export type WorkScheduleBreaksCreateNestedManyWithoutWorkScheduleInput = {
+  create?: Prisma.XOR<Prisma.WorkScheduleBreaksCreateWithoutWorkScheduleInput, Prisma.WorkScheduleBreaksUncheckedCreateWithoutWorkScheduleInput> | Prisma.WorkScheduleBreaksCreateWithoutWorkScheduleInput[] | Prisma.WorkScheduleBreaksUncheckedCreateWithoutWorkScheduleInput[]
+  connectOrCreate?: Prisma.WorkScheduleBreaksCreateOrConnectWithoutWorkScheduleInput | Prisma.WorkScheduleBreaksCreateOrConnectWithoutWorkScheduleInput[]
+  createMany?: Prisma.WorkScheduleBreaksCreateManyWorkScheduleInputEnvelope
+  connect?: Prisma.WorkScheduleBreaksWhereUniqueInput | Prisma.WorkScheduleBreaksWhereUniqueInput[]
+}
+
+export type WorkScheduleBreaksUncheckedCreateNestedManyWithoutWorkScheduleInput = {
+  create?: Prisma.XOR<Prisma.WorkScheduleBreaksCreateWithoutWorkScheduleInput, Prisma.WorkScheduleBreaksUncheckedCreateWithoutWorkScheduleInput> | Prisma.WorkScheduleBreaksCreateWithoutWorkScheduleInput[] | Prisma.WorkScheduleBreaksUncheckedCreateWithoutWorkScheduleInput[]
+  connectOrCreate?: Prisma.WorkScheduleBreaksCreateOrConnectWithoutWorkScheduleInput | Prisma.WorkScheduleBreaksCreateOrConnectWithoutWorkScheduleInput[]
+  createMany?: Prisma.WorkScheduleBreaksCreateManyWorkScheduleInputEnvelope
+  connect?: Prisma.WorkScheduleBreaksWhereUniqueInput | Prisma.WorkScheduleBreaksWhereUniqueInput[]
+}
+
+export type WorkScheduleBreaksUpdateManyWithoutWorkScheduleNestedInput = {
+  create?: Prisma.XOR<Prisma.WorkScheduleBreaksCreateWithoutWorkScheduleInput, Prisma.WorkScheduleBreaksUncheckedCreateWithoutWorkScheduleInput> | Prisma.WorkScheduleBreaksCreateWithoutWorkScheduleInput[] | Prisma.WorkScheduleBreaksUncheckedCreateWithoutWorkScheduleInput[]
+  connectOrCreate?: Prisma.WorkScheduleBreaksCreateOrConnectWithoutWorkScheduleInput | Prisma.WorkScheduleBreaksCreateOrConnectWithoutWorkScheduleInput[]
+  upsert?: Prisma.WorkScheduleBreaksUpsertWithWhereUniqueWithoutWorkScheduleInput | Prisma.WorkScheduleBreaksUpsertWithWhereUniqueWithoutWorkScheduleInput[]
+  createMany?: Prisma.WorkScheduleBreaksCreateManyWorkScheduleInputEnvelope
+  set?: Prisma.WorkScheduleBreaksWhereUniqueInput | Prisma.WorkScheduleBreaksWhereUniqueInput[]
+  disconnect?: Prisma.WorkScheduleBreaksWhereUniqueInput | Prisma.WorkScheduleBreaksWhereUniqueInput[]
+  delete?: Prisma.WorkScheduleBreaksWhereUniqueInput | Prisma.WorkScheduleBreaksWhereUniqueInput[]
+  connect?: Prisma.WorkScheduleBreaksWhereUniqueInput | Prisma.WorkScheduleBreaksWhereUniqueInput[]
+  update?: Prisma.WorkScheduleBreaksUpdateWithWhereUniqueWithoutWorkScheduleInput | Prisma.WorkScheduleBreaksUpdateWithWhereUniqueWithoutWorkScheduleInput[]
+  updateMany?: Prisma.WorkScheduleBreaksUpdateManyWithWhereWithoutWorkScheduleInput | Prisma.WorkScheduleBreaksUpdateManyWithWhereWithoutWorkScheduleInput[]
+  deleteMany?: Prisma.WorkScheduleBreaksScalarWhereInput | Prisma.WorkScheduleBreaksScalarWhereInput[]
+}
+
+export type WorkScheduleBreaksUncheckedUpdateManyWithoutWorkScheduleNestedInput = {
+  create?: Prisma.XOR<Prisma.WorkScheduleBreaksCreateWithoutWorkScheduleInput, Prisma.WorkScheduleBreaksUncheckedCreateWithoutWorkScheduleInput> | Prisma.WorkScheduleBreaksCreateWithoutWorkScheduleInput[] | Prisma.WorkScheduleBreaksUncheckedCreateWithoutWorkScheduleInput[]
+  connectOrCreate?: Prisma.WorkScheduleBreaksCreateOrConnectWithoutWorkScheduleInput | Prisma.WorkScheduleBreaksCreateOrConnectWithoutWorkScheduleInput[]
+  upsert?: Prisma.WorkScheduleBreaksUpsertWithWhereUniqueWithoutWorkScheduleInput | Prisma.WorkScheduleBreaksUpsertWithWhereUniqueWithoutWorkScheduleInput[]
+  createMany?: Prisma.WorkScheduleBreaksCreateManyWorkScheduleInputEnvelope
+  set?: Prisma.WorkScheduleBreaksWhereUniqueInput | Prisma.WorkScheduleBreaksWhereUniqueInput[]
+  disconnect?: Prisma.WorkScheduleBreaksWhereUniqueInput | Prisma.WorkScheduleBreaksWhereUniqueInput[]
+  delete?: Prisma.WorkScheduleBreaksWhereUniqueInput | Prisma.WorkScheduleBreaksWhereUniqueInput[]
+  connect?: Prisma.WorkScheduleBreaksWhereUniqueInput | Prisma.WorkScheduleBreaksWhereUniqueInput[]
+  update?: Prisma.WorkScheduleBreaksUpdateWithWhereUniqueWithoutWorkScheduleInput | Prisma.WorkScheduleBreaksUpdateWithWhereUniqueWithoutWorkScheduleInput[]
+  updateMany?: Prisma.WorkScheduleBreaksUpdateManyWithWhereWithoutWorkScheduleInput | Prisma.WorkScheduleBreaksUpdateManyWithWhereWithoutWorkScheduleInput[]
+  deleteMany?: Prisma.WorkScheduleBreaksScalarWhereInput | Prisma.WorkScheduleBreaksScalarWhereInput[]
+}
+
+export type WorkScheduleBreaksCreateWithoutBreakInput = {
+  workSchedule: Prisma.WorkScheduleCreateNestedOneWithoutWorkScheduleBreaksInput
+}
+
+export type WorkScheduleBreaksUncheckedCreateWithoutBreakInput = {
+  id?: number
+  workScheduleId: number
+}
+
+export type WorkScheduleBreaksCreateOrConnectWithoutBreakInput = {
+  where: Prisma.WorkScheduleBreaksWhereUniqueInput
+  create: Prisma.XOR<Prisma.WorkScheduleBreaksCreateWithoutBreakInput, Prisma.WorkScheduleBreaksUncheckedCreateWithoutBreakInput>
+}
+
+export type WorkScheduleBreaksCreateManyBreakInputEnvelope = {
+  data: Prisma.WorkScheduleBreaksCreateManyBreakInput | Prisma.WorkScheduleBreaksCreateManyBreakInput[]
+  skipDuplicates?: boolean
+}
+
+export type WorkScheduleBreaksUpsertWithWhereUniqueWithoutBreakInput = {
+  where: Prisma.WorkScheduleBreaksWhereUniqueInput
+  update: Prisma.XOR<Prisma.WorkScheduleBreaksUpdateWithoutBreakInput, Prisma.WorkScheduleBreaksUncheckedUpdateWithoutBreakInput>
+  create: Prisma.XOR<Prisma.WorkScheduleBreaksCreateWithoutBreakInput, Prisma.WorkScheduleBreaksUncheckedCreateWithoutBreakInput>
+}
+
+export type WorkScheduleBreaksUpdateWithWhereUniqueWithoutBreakInput = {
+  where: Prisma.WorkScheduleBreaksWhereUniqueInput
+  data: Prisma.XOR<Prisma.WorkScheduleBreaksUpdateWithoutBreakInput, Prisma.WorkScheduleBreaksUncheckedUpdateWithoutBreakInput>
+}
+
+export type WorkScheduleBreaksUpdateManyWithWhereWithoutBreakInput = {
+  where: Prisma.WorkScheduleBreaksScalarWhereInput
+  data: Prisma.XOR<Prisma.WorkScheduleBreaksUpdateManyMutationInput, Prisma.WorkScheduleBreaksUncheckedUpdateManyWithoutBreakInput>
+}
+
+export type WorkScheduleBreaksScalarWhereInput = {
+  AND?: Prisma.WorkScheduleBreaksScalarWhereInput | Prisma.WorkScheduleBreaksScalarWhereInput[]
+  OR?: Prisma.WorkScheduleBreaksScalarWhereInput[]
+  NOT?: Prisma.WorkScheduleBreaksScalarWhereInput | Prisma.WorkScheduleBreaksScalarWhereInput[]
+  id?: Prisma.IntFilter<"WorkScheduleBreaks"> | number
+  workScheduleId?: Prisma.IntFilter<"WorkScheduleBreaks"> | number
+  breakId?: Prisma.IntFilter<"WorkScheduleBreaks"> | number
+}
+
+export type WorkScheduleBreaksCreateWithoutWorkScheduleInput = {
+  break: Prisma.BreaksCreateNestedOneWithoutWorkScheduleBreaksInput
+}
+
+export type WorkScheduleBreaksUncheckedCreateWithoutWorkScheduleInput = {
+  id?: number
+  breakId: number
+}
+
+export type WorkScheduleBreaksCreateOrConnectWithoutWorkScheduleInput = {
+  where: Prisma.WorkScheduleBreaksWhereUniqueInput
+  create: Prisma.XOR<Prisma.WorkScheduleBreaksCreateWithoutWorkScheduleInput, Prisma.WorkScheduleBreaksUncheckedCreateWithoutWorkScheduleInput>
+}
+
+export type WorkScheduleBreaksCreateManyWorkScheduleInputEnvelope = {
+  data: Prisma.WorkScheduleBreaksCreateManyWorkScheduleInput | Prisma.WorkScheduleBreaksCreateManyWorkScheduleInput[]
+  skipDuplicates?: boolean
+}
+
+export type WorkScheduleBreaksUpsertWithWhereUniqueWithoutWorkScheduleInput = {
+  where: Prisma.WorkScheduleBreaksWhereUniqueInput
+  update: Prisma.XOR<Prisma.WorkScheduleBreaksUpdateWithoutWorkScheduleInput, Prisma.WorkScheduleBreaksUncheckedUpdateWithoutWorkScheduleInput>
+  create: Prisma.XOR<Prisma.WorkScheduleBreaksCreateWithoutWorkScheduleInput, Prisma.WorkScheduleBreaksUncheckedCreateWithoutWorkScheduleInput>
+}
+
+export type WorkScheduleBreaksUpdateWithWhereUniqueWithoutWorkScheduleInput = {
+  where: Prisma.WorkScheduleBreaksWhereUniqueInput
+  data: Prisma.XOR<Prisma.WorkScheduleBreaksUpdateWithoutWorkScheduleInput, Prisma.WorkScheduleBreaksUncheckedUpdateWithoutWorkScheduleInput>
+}
+
+export type WorkScheduleBreaksUpdateManyWithWhereWithoutWorkScheduleInput = {
+  where: Prisma.WorkScheduleBreaksScalarWhereInput
+  data: Prisma.XOR<Prisma.WorkScheduleBreaksUpdateManyMutationInput, Prisma.WorkScheduleBreaksUncheckedUpdateManyWithoutWorkScheduleInput>
+}
+
+export type WorkScheduleBreaksCreateManyBreakInput = {
+  id?: number
+  workScheduleId: number
+}
+
+export type WorkScheduleBreaksUpdateWithoutBreakInput = {
+  workSchedule?: Prisma.WorkScheduleUpdateOneRequiredWithoutWorkScheduleBreaksNestedInput
+}
+
+export type WorkScheduleBreaksUncheckedUpdateWithoutBreakInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  workScheduleId?: Prisma.IntFieldUpdateOperationsInput | number
+}
+
+export type WorkScheduleBreaksUncheckedUpdateManyWithoutBreakInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  workScheduleId?: Prisma.IntFieldUpdateOperationsInput | number
+}
+
+export type WorkScheduleBreaksCreateManyWorkScheduleInput = {
+  id?: number
+  breakId: number
+}
+
+export type WorkScheduleBreaksUpdateWithoutWorkScheduleInput = {
+  break?: Prisma.BreaksUpdateOneRequiredWithoutWorkScheduleBreaksNestedInput
+}
+
+export type WorkScheduleBreaksUncheckedUpdateWithoutWorkScheduleInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  breakId?: Prisma.IntFieldUpdateOperationsInput | number
+}
+
+export type WorkScheduleBreaksUncheckedUpdateManyWithoutWorkScheduleInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  breakId?: Prisma.IntFieldUpdateOperationsInput | number
+}
+
 
 
 export type WorkScheduleBreaksSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   workScheduleId?: boolean
   breakId?: boolean
+  workSchedule?: boolean | Prisma.WorkScheduleDefaultArgs<ExtArgs>
+  break?: boolean | Prisma.BreaksDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["workScheduleBreaks"]>
 
 
@@ -331,10 +549,17 @@ export type WorkScheduleBreaksSelectScalar = {
 }
 
 export type WorkScheduleBreaksOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "workScheduleId" | "breakId", ExtArgs["result"]["workScheduleBreaks"]>
+export type WorkScheduleBreaksInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  workSchedule?: boolean | Prisma.WorkScheduleDefaultArgs<ExtArgs>
+  break?: boolean | Prisma.BreaksDefaultArgs<ExtArgs>
+}
 
 export type $WorkScheduleBreaksPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "WorkScheduleBreaks"
-  objects: {}
+  objects: {
+    workSchedule: Prisma.$WorkSchedulePayload<ExtArgs>
+    break: Prisma.$BreaksPayload<ExtArgs>
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     workScheduleId: number
@@ -679,6 +904,8 @@ readonly fields: WorkScheduleBreaksFieldRefs;
  */
 export interface Prisma__WorkScheduleBreaksClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  workSchedule<T extends Prisma.WorkScheduleDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WorkScheduleDefaultArgs<ExtArgs>>): Prisma.Prisma__WorkScheduleClient<runtime.Types.Result.GetResult<Prisma.$WorkSchedulePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  break<T extends Prisma.BreaksDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BreaksDefaultArgs<ExtArgs>>): Prisma.Prisma__BreaksClient<runtime.Types.Result.GetResult<Prisma.$BreaksPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -728,6 +955,10 @@ export type WorkScheduleBreaksFindUniqueArgs<ExtArgs extends runtime.Types.Exten
    */
   omit?: Prisma.WorkScheduleBreaksOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WorkScheduleBreaksInclude<ExtArgs> | null
+  /**
    * Filter, which WorkScheduleBreaks to fetch.
    */
   where: Prisma.WorkScheduleBreaksWhereUniqueInput
@@ -746,6 +977,10 @@ export type WorkScheduleBreaksFindUniqueOrThrowArgs<ExtArgs extends runtime.Type
    */
   omit?: Prisma.WorkScheduleBreaksOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WorkScheduleBreaksInclude<ExtArgs> | null
+  /**
    * Filter, which WorkScheduleBreaks to fetch.
    */
   where: Prisma.WorkScheduleBreaksWhereUniqueInput
@@ -763,6 +998,10 @@ export type WorkScheduleBreaksFindFirstArgs<ExtArgs extends runtime.Types.Extens
    * Omit specific fields from the WorkScheduleBreaks
    */
   omit?: Prisma.WorkScheduleBreaksOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WorkScheduleBreaksInclude<ExtArgs> | null
   /**
    * Filter, which WorkScheduleBreaks to fetch.
    */
@@ -812,6 +1051,10 @@ export type WorkScheduleBreaksFindFirstOrThrowArgs<ExtArgs extends runtime.Types
    */
   omit?: Prisma.WorkScheduleBreaksOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WorkScheduleBreaksInclude<ExtArgs> | null
+  /**
    * Filter, which WorkScheduleBreaks to fetch.
    */
   where?: Prisma.WorkScheduleBreaksWhereInput
@@ -860,6 +1103,10 @@ export type WorkScheduleBreaksFindManyArgs<ExtArgs extends runtime.Types.Extensi
    */
   omit?: Prisma.WorkScheduleBreaksOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WorkScheduleBreaksInclude<ExtArgs> | null
+  /**
    * Filter, which WorkScheduleBreaks to fetch.
    */
   where?: Prisma.WorkScheduleBreaksWhereInput
@@ -903,6 +1150,10 @@ export type WorkScheduleBreaksCreateArgs<ExtArgs extends runtime.Types.Extension
    */
   omit?: Prisma.WorkScheduleBreaksOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WorkScheduleBreaksInclude<ExtArgs> | null
+  /**
    * The data needed to create a WorkScheduleBreaks.
    */
   data: Prisma.XOR<Prisma.WorkScheduleBreaksCreateInput, Prisma.WorkScheduleBreaksUncheckedCreateInput>
@@ -931,6 +1182,10 @@ export type WorkScheduleBreaksUpdateArgs<ExtArgs extends runtime.Types.Extension
    * Omit specific fields from the WorkScheduleBreaks
    */
   omit?: Prisma.WorkScheduleBreaksOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WorkScheduleBreaksInclude<ExtArgs> | null
   /**
    * The data needed to update a WorkScheduleBreaks.
    */
@@ -972,6 +1227,10 @@ export type WorkScheduleBreaksUpsertArgs<ExtArgs extends runtime.Types.Extension
    */
   omit?: Prisma.WorkScheduleBreaksOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WorkScheduleBreaksInclude<ExtArgs> | null
+  /**
    * The filter to search for the WorkScheduleBreaks to update in case it exists.
    */
   where: Prisma.WorkScheduleBreaksWhereUniqueInput
@@ -997,6 +1256,10 @@ export type WorkScheduleBreaksDeleteArgs<ExtArgs extends runtime.Types.Extension
    * Omit specific fields from the WorkScheduleBreaks
    */
   omit?: Prisma.WorkScheduleBreaksOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WorkScheduleBreaksInclude<ExtArgs> | null
   /**
    * Filter which WorkScheduleBreaks to delete.
    */
@@ -1029,4 +1292,8 @@ export type WorkScheduleBreaksDefaultArgs<ExtArgs extends runtime.Types.Extensio
    * Omit specific fields from the WorkScheduleBreaks
    */
   omit?: Prisma.WorkScheduleBreaksOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WorkScheduleBreaksInclude<ExtArgs> | null
 }

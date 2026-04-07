@@ -1,5 +1,0 @@
-model Breaks {
-  id        Int      @id @default(autoincrement())
-  startTime DateTime @db2.Time(0)
-  endTime   DateTime @db2.Time(0)
-}

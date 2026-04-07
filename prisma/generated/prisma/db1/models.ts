@@ -8,6 +8,7 @@
  *
  * 🟢 You can import this file directly.
  */
+export type * from './models/Breaks.js'
 export type * from './models/Prompt.js'
 export type * from './models/Recommendation.js'
 export type * from './models/Risk.js'
@@ -19,4 +20,6 @@ export type * from './models/SettingDefinition.js'
 export type * from './models/SettingOption.js'
 export type * from './models/SettingType.js'
 export type * from './models/Users.js'
+export type * from './models/WorkSchedule.js'
+export type * from './models/WorkScheduleBreaks.js'
 export type * from './commonInputTypes.js'

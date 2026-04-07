@@ -200,12 +200,14 @@ export type BreaksWhereInput = {
   id?: Prisma.IntFilter<"Breaks"> | number
   startTime?: Prisma.DateTimeFilter<"Breaks"> | Date | string
   endTime?: Prisma.DateTimeFilter<"Breaks"> | Date | string
+  workScheduleBreaks?: Prisma.WorkScheduleBreaksListRelationFilter
 }
 
 export type BreaksOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   startTime?: Prisma.SortOrder
   endTime?: Prisma.SortOrder
+  workScheduleBreaks?: Prisma.WorkScheduleBreaksOrderByRelationAggregateInput
 }
 
 export type BreaksWhereUniqueInput = Prisma.AtLeast<{
@@ -215,6 +217,7 @@ export type BreaksWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.BreaksWhereInput | Prisma.BreaksWhereInput[]
   startTime?: Prisma.DateTimeFilter<"Breaks"> | Date | string
   endTime?: Prisma.DateTimeFilter<"Breaks"> | Date | string
+  workScheduleBreaks?: Prisma.WorkScheduleBreaksListRelationFilter
 }, "id">
 
 export type BreaksOrderByWithAggregationInput = {
@@ -240,23 +243,27 @@ export type BreaksScalarWhereWithAggregatesInput = {
 export type BreaksCreateInput = {
   startTime: Date | string
   endTime: Date | string
+  workScheduleBreaks?: Prisma.WorkScheduleBreaksCreateNestedManyWithoutBreakInput
 }
 
 export type BreaksUncheckedCreateInput = {
   id?: number
   startTime: Date | string
   endTime: Date | string
+  workScheduleBreaks?: Prisma.WorkScheduleBreaksUncheckedCreateNestedManyWithoutBreakInput
 }
 
 export type BreaksUpdateInput = {
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  workScheduleBreaks?: Prisma.WorkScheduleBreaksUpdateManyWithoutBreakNestedInput
 }
 
 export type BreaksUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  workScheduleBreaks?: Prisma.WorkScheduleBreaksUncheckedUpdateManyWithoutBreakNestedInput
 }
 
 export type BreaksCreateManyInput = {
@@ -302,6 +309,11 @@ export type BreaksSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
 }
 
+export type BreaksScalarRelationFilter = {
+  is?: Prisma.BreaksWhereInput
+  isNot?: Prisma.BreaksWhereInput
+}
+
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
 }
@@ -314,12 +326,95 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type BreaksCreateNestedOneWithoutWorkScheduleBreaksInput = {
+  create?: Prisma.XOR<Prisma.BreaksCreateWithoutWorkScheduleBreaksInput, Prisma.BreaksUncheckedCreateWithoutWorkScheduleBreaksInput>
+  connectOrCreate?: Prisma.BreaksCreateOrConnectWithoutWorkScheduleBreaksInput
+  connect?: Prisma.BreaksWhereUniqueInput
+}
+
+export type BreaksUpdateOneRequiredWithoutWorkScheduleBreaksNestedInput = {
+  create?: Prisma.XOR<Prisma.BreaksCreateWithoutWorkScheduleBreaksInput, Prisma.BreaksUncheckedCreateWithoutWorkScheduleBreaksInput>
+  connectOrCreate?: Prisma.BreaksCreateOrConnectWithoutWorkScheduleBreaksInput
+  upsert?: Prisma.BreaksUpsertWithoutWorkScheduleBreaksInput
+  connect?: Prisma.BreaksWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BreaksUpdateToOneWithWhereWithoutWorkScheduleBreaksInput, Prisma.BreaksUpdateWithoutWorkScheduleBreaksInput>, Prisma.BreaksUncheckedUpdateWithoutWorkScheduleBreaksInput>
+}
+
+export type BreaksCreateWithoutWorkScheduleBreaksInput = {
+  startTime: Date | string
+  endTime: Date | string
+}
+
+export type BreaksUncheckedCreateWithoutWorkScheduleBreaksInput = {
+  id?: number
+  startTime: Date | string
+  endTime: Date | string
+}
+
+export type BreaksCreateOrConnectWithoutWorkScheduleBreaksInput = {
+  where: Prisma.BreaksWhereUniqueInput
+  create: Prisma.XOR<Prisma.BreaksCreateWithoutWorkScheduleBreaksInput, Prisma.BreaksUncheckedCreateWithoutWorkScheduleBreaksInput>
+}
+
+export type BreaksUpsertWithoutWorkScheduleBreaksInput = {
+  update: Prisma.XOR<Prisma.BreaksUpdateWithoutWorkScheduleBreaksInput, Prisma.BreaksUncheckedUpdateWithoutWorkScheduleBreaksInput>
+  create: Prisma.XOR<Prisma.BreaksCreateWithoutWorkScheduleBreaksInput, Prisma.BreaksUncheckedCreateWithoutWorkScheduleBreaksInput>
+  where?: Prisma.BreaksWhereInput
+}
+
+export type BreaksUpdateToOneWithWhereWithoutWorkScheduleBreaksInput = {
+  where?: Prisma.BreaksWhereInput
+  data: Prisma.XOR<Prisma.BreaksUpdateWithoutWorkScheduleBreaksInput, Prisma.BreaksUncheckedUpdateWithoutWorkScheduleBreaksInput>
+}
+
+export type BreaksUpdateWithoutWorkScheduleBreaksInput = {
+  startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type BreaksUncheckedUpdateWithoutWorkScheduleBreaksInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+
+/**
+ * Count Type BreaksCountOutputType
+ */
+
+export type BreaksCountOutputType = {
+  workScheduleBreaks: number
+}
+
+export type BreaksCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  workScheduleBreaks?: boolean | BreaksCountOutputTypeCountWorkScheduleBreaksArgs
+}
+
+/**
+ * BreaksCountOutputType without action
+ */
+export type BreaksCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BreaksCountOutputType
+   */
+  select?: Prisma.BreaksCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * BreaksCountOutputType without action
+ */
+export type BreaksCountOutputTypeCountWorkScheduleBreaksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.WorkScheduleBreaksWhereInput
+}
 
 
 export type BreaksSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   startTime?: boolean
   endTime?: boolean
+  workScheduleBreaks?: boolean | Prisma.Breaks$workScheduleBreaksArgs<ExtArgs>
+  _count?: boolean | Prisma.BreaksCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["breaks"]>
 
 
@@ -331,10 +426,16 @@ export type BreaksSelectScalar = {
 }
 
 export type BreaksOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "startTime" | "endTime", ExtArgs["result"]["breaks"]>
+export type BreaksInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  workScheduleBreaks?: boolean | Prisma.Breaks$workScheduleBreaksArgs<ExtArgs>
+  _count?: boolean | Prisma.BreaksCountOutputTypeDefaultArgs<ExtArgs>
+}
 
 export type $BreaksPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Breaks"
-  objects: {}
+  objects: {
+    workScheduleBreaks: Prisma.$WorkScheduleBreaksPayload<ExtArgs>[]
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     startTime: Date
@@ -679,6 +780,7 @@ readonly fields: BreaksFieldRefs;
  */
 export interface Prisma__BreaksClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  workScheduleBreaks<T extends Prisma.Breaks$workScheduleBreaksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Breaks$workScheduleBreaksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkScheduleBreaksPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -728,6 +830,10 @@ export type BreaksFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.Intern
    */
   omit?: Prisma.BreaksOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BreaksInclude<ExtArgs> | null
+  /**
    * Filter, which Breaks to fetch.
    */
   where: Prisma.BreaksWhereUniqueInput
@@ -746,6 +852,10 @@ export type BreaksFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensions
    */
   omit?: Prisma.BreaksOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BreaksInclude<ExtArgs> | null
+  /**
    * Filter, which Breaks to fetch.
    */
   where: Prisma.BreaksWhereUniqueInput
@@ -763,6 +873,10 @@ export type BreaksFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Omit specific fields from the Breaks
    */
   omit?: Prisma.BreaksOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BreaksInclude<ExtArgs> | null
   /**
    * Filter, which Breaks to fetch.
    */
@@ -812,6 +926,10 @@ export type BreaksFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions.
    */
   omit?: Prisma.BreaksOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BreaksInclude<ExtArgs> | null
+  /**
    * Filter, which Breaks to fetch.
    */
   where?: Prisma.BreaksWhereInput
@@ -860,6 +978,10 @@ export type BreaksFindManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    */
   omit?: Prisma.BreaksOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BreaksInclude<ExtArgs> | null
+  /**
    * Filter, which Breaks to fetch.
    */
   where?: Prisma.BreaksWhereInput
@@ -903,6 +1025,10 @@ export type BreaksCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    */
   omit?: Prisma.BreaksOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BreaksInclude<ExtArgs> | null
+  /**
    * The data needed to create a Breaks.
    */
   data: Prisma.XOR<Prisma.BreaksCreateInput, Prisma.BreaksUncheckedCreateInput>
@@ -931,6 +1057,10 @@ export type BreaksUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    * Omit specific fields from the Breaks
    */
   omit?: Prisma.BreaksOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BreaksInclude<ExtArgs> | null
   /**
    * The data needed to update a Breaks.
    */
@@ -972,6 +1102,10 @@ export type BreaksUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    */
   omit?: Prisma.BreaksOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BreaksInclude<ExtArgs> | null
+  /**
    * The filter to search for the Breaks to update in case it exists.
    */
   where: Prisma.BreaksWhereUniqueInput
@@ -998,6 +1132,10 @@ export type BreaksDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    */
   omit?: Prisma.BreaksOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BreaksInclude<ExtArgs> | null
+  /**
    * Filter which Breaks to delete.
    */
   where: Prisma.BreaksWhereUniqueInput
@@ -1018,6 +1156,30 @@ export type BreaksDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
 }
 
 /**
+ * Breaks.workScheduleBreaks
+ */
+export type Breaks$workScheduleBreaksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the WorkScheduleBreaks
+   */
+  select?: Prisma.WorkScheduleBreaksSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the WorkScheduleBreaks
+   */
+  omit?: Prisma.WorkScheduleBreaksOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WorkScheduleBreaksInclude<ExtArgs> | null
+  where?: Prisma.WorkScheduleBreaksWhereInput
+  orderBy?: Prisma.WorkScheduleBreaksOrderByWithRelationInput | Prisma.WorkScheduleBreaksOrderByWithRelationInput[]
+  cursor?: Prisma.WorkScheduleBreaksWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WorkScheduleBreaksScalarFieldEnum | Prisma.WorkScheduleBreaksScalarFieldEnum[]
+}
+
+/**
  * Breaks without action
  */
 export type BreaksDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1029,4 +1191,8 @@ export type BreaksDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    * Omit specific fields from the Breaks
    */
   omit?: Prisma.BreaksOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BreaksInclude<ExtArgs> | null
 }

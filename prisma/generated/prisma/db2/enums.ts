@@ -75,16 +75,3 @@ export const VisitModel = {
 } as const
 
 export type VisitModel = (typeof VisitModel)[keyof typeof VisitModel]
-
-
-export const DayOfWeek = {
-  MON: 'MON',
-  TUE: 'TUE',
-  WED: 'WED',
-  THU: 'THU',
-  FRI: 'FRI',
-  SAT: 'SAT',
-  SUN: 'SUN'
-} as const
-
-export type DayOfWeek = (typeof DayOfWeek)[keyof typeof DayOfWeek]

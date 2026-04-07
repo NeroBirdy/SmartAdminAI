@@ -18,6 +18,11 @@ export { Prisma }
 export * as $Enums from './enums.js'
 export * from './enums.js';
 /**
+ * Model Breaks
+ * 
+ */
+export type Breaks = Prisma.BreaksModel
+/**
  * Model Prompt
  * 
  */
@@ -72,3 +77,13 @@ export type SettingType = Prisma.SettingTypeModel
  * 
  */
 export type Users = Prisma.UsersModel
+/**
+ * Model WorkSchedule
+ * 
+ */
+export type WorkSchedule = Prisma.WorkScheduleModel
+/**
+ * Model WorkScheduleBreaks
+ * 
+ */
+export type WorkScheduleBreaks = Prisma.WorkScheduleBreaksModel

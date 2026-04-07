@@ -36,6 +36,5 @@ model Organization {
   employees         Employee[]
   groups            Group[]
   subscriptionTypes SubscriptionType[]
-  schedule          WorkSchedule[]
   programs          Program[]
 }
