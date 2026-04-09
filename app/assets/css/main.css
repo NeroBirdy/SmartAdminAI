@@ -21,6 +21,7 @@
 html,
 body {
   background-color: #f8f8f8;
+  /* scrollbar-gutter: stable; */
 }
 
 .header-4xl {
@@ -87,6 +88,21 @@ body {
   font-family: "Nunito-SemiBold";
   font-size: 16px;
   color: #9da4b1;
+}
+
+.cal-md {
+  font-family: "Nunito-SemiBold";
+  font-size: 14px;
+}
+
+.cal-sm {
+  font-family: "Nunito-SemiBold";
+  font-size: 12px;
+}
+
+.cal-event-md {
+  font-family: "Nunito-Bold";
+  font-size: 12px;
 }
 
 .content {

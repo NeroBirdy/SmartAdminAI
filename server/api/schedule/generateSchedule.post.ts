@@ -1,299 +1,194 @@
-import { GigaChatSchedule } from "../../utils/gigaChat";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
+import JSON5 from "json5";
 
-const prisma = usePrisma();
+import { collectData } from "~~/server/utils/schedule/getData";
+
+import {
+  venueOrInstructorScheduleToMarkdown,
+  orgScheduleToMardown,
+  groupsToMarkdown,
+} from "../../utils/schedule/formatData";
+
 const fakeAPI = useFakeAPI();
 
-const gigaChat = new GigaChatSchedule();
+const filePath = join(
+  process.cwd(),
+  "app",
+  "assets",
+  "prompts",
+  "scheduleSystemPrompt.txt",
+);
+
+type OllamaResponse = {
+  message: {
+    role: string;
+    content: string;
+  };
+  done: boolean;
+  model: string;
+};
+
+type venueOrInstructorResult = {
+  id: number;
+  workHours: workHours[];
+  breaks: breaks[];
+};
+
+type workHours = {
+  dayOfWeek: string;
+  isWorkingDay: boolean;
+  startWork: string;
+  endWork: string;
+};
+
+type breaks = {
+  startTime: string;
+  endTime: string;
+  dayOfWeek: string;
+};
+
+type lesson = {
+  date: string;
+  startTime: string;
+  endTime: string;
+  groupId: string | number;
+  instructorId: string | number;
+  programId: string | number;
+  venueId: string | number;
+};
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
   const orgId = body.orgId;
 
-  const horizonPlanning = await getHorizonPlanning(orgId);
+  const data = await collectData(orgId);
 
-  let instructorsResult = null;
-  let venuesResult = null;
-  let orgSchedules = null;
+  const prompt = buildPrompt(data);
 
-  const instructorSettingExist = await considerOtherSetting(
-    orgId,
-    "instructors",
-  );
-  if (instructorSettingExist) {
-    const instructors = await getInstructors(orgId);
+  const response = await sendMessage(prompt);
 
-    instructorsResult = await Promise.all(
-      instructors!.map(async (instructor) => ({
-        ...instructor,
-        workHours: await getInstructorWorkHours(instructor.id),
-        breaks: await getInstructorBreaks(instructor.id),
-      })),
-    );
-
-
-  }
-
-  const areaSettingExist = await considerOtherSetting(orgId, "areas");
-  if (areaSettingExist) {
-    const venues = await getVenues(orgId);
-
-    venuesResult = await Promise.all(
-      venues!.map(async (venue) => ({
-        ...venue,
-        workHours: await getVenueWorkHours(venue.id),
-        breaks: await getVenueBreaks(venue.id),
-      })),
-    );
-  }
-
-  const scheduleSettingExit = await considerOtherSetting(orgId, "org_schedule");
-  if (scheduleSettingExit) {
-    orgSchedules = await getOrgSchedule(orgId);
-  }
-
-  const groups = await getGroups(orgId);
-
-    let prompt = `## Входные данные для генерации\n\n`;
-    prompt+=`Текущая дата: ${new Date().toLocaleDateString("ru-RU")}\n`;
-    prompt+=`Горизонт планирования: ${horizonPlanning}\n`;
-    prompt+=`Количество групп: ${groups?.length}\n`;
-    prompt+=`Количество площадок: ${venuesResult?.length}\n`;
-    prompt+=`Количество инструкторов: ${instructorsResult?.length}\n`;
-    prompt+=`График работы организации: ${JSON.stringify(orgSchedules)}\n`;
-    prompt+=`График работы площадок: ${JSON.stringify(venuesResult)}\n`;
-    prompt+=`График работы инструкторов: ${JSON.stringify(instructorsResult)}\n`;
-    prompt+=`Информация о группах: ${JSON.stringify(groups)}\n`;
-    prompt+=`Напиши полное расписание, не маленький кусочек\n`;
-    // prompt+=`Не пиши комментарии и примечаний`;
-
-  return prompt;
-//   return gigaChat.sendMessage(prompt);
+  return await saveLessons(response);
 });
 
-const formatTime = (date: Date | null) => {
-  if (!date) return null;
-  return date.toISOString().substring(11, 16);
-};
+const sendMessage = async (message: string) => {
+  const systemPrompt = await readFile(filePath, "utf-8");
 
-const formatData = <T extends { startWork: Date | null; endWork: Date | null }>(
-  dataSet: T[],
-) => {
-  return dataSet.map((data) => ({
-    ...data,
-    startWork: formatTime(data.startWork),
-    endWork: formatTime(data.endWork),
-  }));
-};
-
-const formatBreaks = <
-  T extends { startTime: Date | null; endTime: Date | null },
->(
-  breaks: T[],
-) => {
-  return breaks.map((b) => ({
-    ...b,
-    startTime: formatTime(b.startTime),
-    endTime: formatTime(b.endTime),
-  }));
-};
-
-const getHorizonPlanning = async (orgId: number) => {
-  try {
-    const sectionSetting = await prisma.sectionSetting.findFirst({
-      where: {
-        sectionId: orgId,
-        settingDefinition: { key: "schedule_planning_horizon" },
-      },
-      include: { settingOption: true },
-    });
-
-    const sectionSettingText = sectionSetting!.settingOption.name;
-
-    return sectionSettingText;
-  } catch (e) {
-    console.error("Ошибка получения горизонта планирования организации", e);
-  }
-};
-
-const considerOtherSetting = async (orgId: number, key: string) => {
-  try {
-    const exist =
-      (await prisma.sectionSetting.findFirst({
-        where: {
-          sectionId: orgId,
-          settingDefinition: { key: "schedule_consider_resources" },
-          settingOption: { key: key },
-        },
-        include: { settingOption: true },
-      })) !== null;
-    return exist;
-  } catch (e) {
-    console.error(`Ошибка проверки учитывания настройки ${key} ${orgId} `, e);
-  }
-};
-
-const getInstructors = async (orgId: number) => {
-  try {
-    const instructors = await fakeAPI.employee.findMany({
-      where: {
-        organizationId: orgId,
-        role: "INSTRUCTOR",
-      },
-      select: {
-        id: true,
-      },
-    });
-
-    return instructors;
-  } catch (e) {
-    console.error("Ошибка получения инструкторов организации", e);
-  }
-};
-
-const getInstructorWorkHours = async (instructorId: number) => {
-  try {
-    const workHours = await prisma.workSchedule.findMany({
-      where: {
-        employeeId: instructorId,
-      },
-      select: {
-        dayOfWeek: true,
-        isWorkingDay: true,
-        startWork: true,
-        endWork: true,
-      },
-    });
-    return formatData(workHours);
-  } catch (e) {
-    console.error("Ошибка получения рабочих часов инструктора", e);
-  }
-};
-
-const getInstructorBreaks = async (instructorId: number) => {
-  try {
-    const workScheduleBreaks = await prisma.workScheduleBreaks.findMany({
-      where: {
-        workSchedule: { employeeId: instructorId },
-      },
-      select: {
-        workSchedule: { select: { dayOfWeek: true } },
-        break: {
-          select: {
-            startTime: true,
-            endTime: true,
+  const response = await $fetch<OllamaResponse>(
+    "http://localhost:11434/api/chat",
+    {
+      method: "POST",
+      body: {
+        model: "gpt-oss:120b-cloud",
+        think: "medium",
+        stream: false,
+        messages: [
+          {
+            role: "system",
+            content: systemPrompt,
           },
-        },
-      },
-    });
-    const breaks = workScheduleBreaks.map((b) => ({
-      ...b.break,
-      dayOfWeek: b.workSchedule.dayOfWeek,
-    }));
-    return formatBreaks(breaks);
-  } catch (e) {
-    console.error("Ошибка получения перерывов инструктора", e);
-  }
-};
-
-const getVenues = async (orgId: number) => {
-  try {
-    const venues = await fakeAPI.venue.findMany({
-      where: {
-        organizationId: orgId,
-      },
-      select: {
-        id: true,
-      },
-    });
-
-    return venues;
-  } catch (e) {
-    console.error("Ошибка получения помещений организации", e);
-  }
-};
-
-const getVenueWorkHours = async (venueId: number) => {
-  try {
-    const workHours = await prisma.workSchedule.findMany({
-      where: {
-        venueId: venueId,
-      },
-      select: {
-        dayOfWeek: true,
-        isWorkingDay: true,
-        startWork: true,
-        endWork: true,
-      },
-    });
-    return formatData(workHours);
-  } catch (e) {
-    console.error("Ошибка получения рабочих часов помещения", e);
-  }
-};
-
-const getVenueBreaks = async (venueId: number) => {
-  try {
-    const workScheduleBreaks = await prisma.workScheduleBreaks.findMany({
-      where: {
-        workSchedule: { venueId: venueId },
-      },
-      select: {
-        workSchedule: { select: { dayOfWeek: true } },
-        break: {
-          select: {
-            startTime: true,
-            endTime: true,
+          {
+            role: "user",
+            content: message,
           },
-        },
+        ],
       },
-    });
+    },
+  );
+  return response.message.content;
+};
 
-    const breaks = workScheduleBreaks.map((b) => ({
-      ...b.break,
-      dayOfWeek: b.workSchedule.dayOfWeek,
-    }));
-    return formatBreaks(breaks);
+const buildPrompt = (data: Awaited<ReturnType<typeof collectData>>) => {
+  const {
+    horizonPlanning,
+    groups,
+    instructorsCount,
+    venuesCount,
+    groupsCount,
+    instructorsResult,
+    venuesResult,
+    orgSchedules,
+  } = data;
+
+  let prompt = `## Входные данные для генерации\n\n`;
+  // prompt += `Текущая дата: ${new Date("2026-04-05").toLocaleDateString("ru-RU")}\n`;
+  prompt += `Текущая дата: ${new Date().toLocaleDateString("ru-RU")}\n`;
+  prompt += `Горизонт планирования: ${horizonPlanning}\n`;
+  prompt += `Количество групп: ${groupsCount}\n`;
+  prompt += `Количество площадок: ${venuesCount}\n`;
+  prompt += `Количество инструкторов: ${instructorsCount}\n`;
+
+  if (orgSchedules) {
+    const orgSchedulesTable = orgScheduleToMardown(orgSchedules as workHours[]);
+    prompt += `График работы организации: ${orgSchedulesTable}\n`;
+  }
+
+  if (venuesResult) {
+    const venuesTable = venueOrInstructorScheduleToMarkdown(
+      venuesResult as venueOrInstructorResult[],
+    );
+    prompt += `График работы площадок: ${venuesTable}\n`;
+  }
+
+  if (instructorsResult) {
+    const instructorsTable = venueOrInstructorScheduleToMarkdown(
+      instructorsResult as venueOrInstructorResult[],
+    );
+    prompt += `График работы инструкторов: ${instructorsTable}\n`;
+  }
+
+  if (groups) {
+    const groupsTable = groupsToMarkdown(groups);
+    prompt += `Информация о группах: ${groupsTable}\n`;
+  }
+
+  prompt += `Напиши полное расписание, не маленький кусочек\n`;
+  prompt += `Не пиши комментарии и примечаний`;
+
+  return prompt;
+};
+
+const parseLesson = (lesson: lesson) => {
+  const [startHours, startMinutes] = lesson.startTime.split(":").map(Number);
+  const [endHours, endMinutes] = lesson.endTime.split(":").map(Number);
+
+  return {
+    date: new Date(lesson.date),
+    startTime: makeTime(startHours!, startMinutes!),
+    endTime: makeTime(endHours!, endMinutes!),
+    groupId: Number(lesson.groupId),
+    instructorId: Number(lesson.instructorId),
+    programId: Number(lesson.programId),
+    venueId: Number(lesson.venueId),
+  };
+};
+
+const saveLessons = async (content: string) => {
+  const lessons = stringToJson(content);
+  const formattedLessons = lessons.map(parseLesson);
+
+  try {
+    await fakeAPI.lesson.createMany({ data: formattedLessons });
+    return { success: true };
   } catch (e) {
-    console.error("Ошибка получения перерывов помещения", e);
+    return lessons;
   }
 };
 
-const getOrgSchedule = async (orgId: number) => {
-  try {
-    const orgSchedules = await prisma.workSchedule.findMany({
-      where: {
-        organizationId: orgId,
-      },
-      select: {
-        dayOfWeek: true,
-        isWorkingDay: true,
-        startWork: true,
-        endWork: true,
-      },
-    });
-
-    return formatData(orgSchedules);
-  } catch (e) {
-    console.error("Ошибка получения расписания организации", e);
-  }
+const makeTime = (hours: number, minutes: number) => {
+  const date = new Date(0);
+  date.setUTCHours(hours, minutes, 0, 0);
+  return date;
 };
 
-const getGroups = async (orgId: number) => {
-  try {
-    const groups = await fakeAPI.group.findMany({
-      where: { organization: { id: orgId } },
-      select: {
-        id: true,
-        instructor: { select: { id: true } },
-        defaultVenue: {
-          select: { id: true },
-        },
-        program: { select: { id: true } },
-      },
-    });
-
-    return groups;
-  } catch (e) {
-    console.error("Ошибка получения групп организации", e);
+const stringToJson = (message: string) => {
+  const match = message.match(/\[[\s\S]*\]/);
+  if (match) {
+    try {
+      const lessons = JSON5.parse(match[0]);
+      return lessons;
+    } catch (e) {
+      console.error("Ошибка парсинка респонса", message);
+    }
   }
 };

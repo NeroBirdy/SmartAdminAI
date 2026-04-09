@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <LayoutHeader />
+    <LayoutHeader>ИИ Администратор</LayoutHeader>
     <div class="content">
       <LayoutSideBar />
       <div class="center">

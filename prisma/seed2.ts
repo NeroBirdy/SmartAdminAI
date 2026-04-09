@@ -419,7 +419,7 @@ async function main() {
         name: "Рисование23",
         currentMembers: 14,
         maxMembers: 15,
-        instructorId: 3,
+        instructorId: 7,
         defaultVenueId: 3,
         programId: 1,
         ageCategory: "10-13",

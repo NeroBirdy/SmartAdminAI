@@ -11,6 +11,7 @@
         </div>
         <component
           class="card-arrow"
+          :class="{ mirrored: openCard }"
           :is="cardArrowImg"
           @click.stop="openCard = !openCard"
         />
