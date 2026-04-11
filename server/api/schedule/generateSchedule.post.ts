@@ -6,6 +6,7 @@ import { collectData } from "~~/server/utils/schedule/getData";
 
 import {
   venueOrInstructorScheduleToMarkdown,
+  formatDays,
   orgScheduleToMardown,
   groupsToMarkdown,
 } from "../../utils/schedule/formatData";
@@ -68,6 +69,8 @@ export default defineEventHandler(async (event) => {
 
   const response = await sendMessage(prompt);
 
+  // return response;
+
   return await saveLessons(response);
 });
 
@@ -100,6 +103,7 @@ const sendMessage = async (message: string) => {
 
 const buildPrompt = (data: Awaited<ReturnType<typeof collectData>>) => {
   const {
+    notWorkingDays,
     horizonPlanning,
     groups,
     instructorsCount,
@@ -111,12 +115,13 @@ const buildPrompt = (data: Awaited<ReturnType<typeof collectData>>) => {
   } = data;
 
   let prompt = `## Входные данные для генерации\n\n`;
-  // prompt += `Текущая дата: ${new Date("2026-04-05").toLocaleDateString("ru-RU")}\n`;
-  prompt += `Текущая дата: ${new Date().toLocaleDateString("ru-RU")}\n`;
+  prompt += `Текущая дата: ${new Date("2026-04-20").toLocaleDateString("ru-RU")}\n`;
+  // prompt += `Текущая дата: ${new Date().toLocaleDateString("ru-RU")}\n`;
   prompt += `Горизонт планирования: ${horizonPlanning}\n`;
   prompt += `Количество групп: ${groupsCount}\n`;
   prompt += `Количество площадок: ${venuesCount}\n`;
   prompt += `Количество инструкторов: ${instructorsCount}\n`;
+  prompt += `Не рабочие дни организации: ${formatDays(notWorkingDays!)}\n`;
 
   if (orgSchedules) {
     const orgSchedulesTable = orgScheduleToMardown(orgSchedules as workHours[]);
@@ -148,12 +153,16 @@ const buildPrompt = (data: Awaited<ReturnType<typeof collectData>>) => {
   return prompt;
 };
 
+const parseDate = (dateStr: string) => {
+  const [year, month, day] = dateStr.split("-").map(Number);
+  return new Date(Date.UTC(year!, month! - 1, day!));
+};
 const parseLesson = (lesson: lesson) => {
   const [startHours, startMinutes] = lesson.startTime.split(":").map(Number);
   const [endHours, endMinutes] = lesson.endTime.split(":").map(Number);
 
   return {
-    date: new Date(lesson.date),
+    date: parseDate(lesson.date),
     startTime: makeTime(startHours!, startMinutes!),
     endTime: makeTime(endHours!, endMinutes!),
     groupId: Number(lesson.groupId),

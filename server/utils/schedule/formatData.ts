@@ -7,6 +7,7 @@ export {
   formatBreaks,
   formatWorkHours,
   formatTime,
+  formatDays
 };
 
 type group = {
@@ -49,6 +50,10 @@ const days = <Record<string, string>>{
   FRI: "Пятница",
   SAT: "Суббота",
   SUN: "Воскресенье",
+};
+
+const formatDays = (schedule: { dayOfWeek: string }[]) => {
+  return schedule.map((s) => days[s.dayOfWeek]);
 };
 
 const venueOrInstructorScheduleToMarkdown = (items: venueOrInstructorResult[]) => {

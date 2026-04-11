@@ -36,7 +36,7 @@ export const useSchedule = () => {
   const generateGroupColors = (count: number) => {
     return Array.from({ length: count }, (_, i) => {
       const hue = (200 + (i * 360) / count) % 360;
-      return `hsl(${hue}, 70%, 55%)`;
+      return `hsl(${hue}, 70%, 37%)`;
     });
   };
 
@@ -75,14 +75,16 @@ export const useSchedule = () => {
   };
 
   const getEventsForDay = (date: Date) => {
-    return filteredEvents.value.filter((event) => {
-      const eventDate = new Date(event.date);
-      return (
-        eventDate.getDate() === date.getDate() &&
-        eventDate.getMonth() === date.getMonth() &&
-        eventDate.getFullYear() === date.getFullYear()
-      );
-    });
+    return filteredEvents.value
+      .filter((event) => {
+        const eventDate = new Date(event.date);
+        return (
+          eventDate.getDate() === date.getDate() &&
+          eventDate.getMonth() === date.getMonth() &&
+          eventDate.getFullYear() === date.getFullYear()
+        );
+      })
+      .sort((a, b) => a.startTime.localeCompare(b.startTime));
   };
 
   return {
@@ -95,6 +97,6 @@ export const useSchedule = () => {
     selectedVenues,
     getEvents,
     getEventsForDay,
-    getGroupColor
+    getGroupColor,
   };
 };

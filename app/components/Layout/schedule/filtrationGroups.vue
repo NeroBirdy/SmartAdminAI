@@ -11,6 +11,19 @@
     </div>
     <Transition @enter="onEnter" @leave="onLeave">
       <div class="list" v-if="isOpen">
+        <div class="checkbox-item" @click="toggleAllGroups">
+          <div
+            class="checkbox"
+            :style="{
+              backgroundColor: isAllGroupsSelected ? '#6a758b' : 'transparent',
+              borderColor: '#6a758b',
+            }"
+          >
+            <component :is="checkImg" v-if="isAllGroupsSelected" class="check-img" />
+          </div>
+          <p class="cal-md">Все группы</p>
+        </div>
+
         <div
           class="checkbox-item"
           v-if="isOpen"
@@ -43,7 +56,7 @@
 import checkImg from "~/assets/icons/check_cal.svg";
 import arrow from "~/assets/icons/chevron_up.svg";
 
-const { groups, venues, selectedGroups, getGroupColor } =
+const { groups, venues, selectedGroups, selectedVenues, getGroupColor } =
   inject<ReturnType<typeof useSchedule>>("schedule")!;
 
 const isOpen = ref(true);
@@ -53,6 +66,20 @@ const toggleGroup = (id: number) => {
     selectedGroups.value = selectedGroups.value.filter((g) => g !== id);
   } else {
     selectedGroups.value.push(id);
+  }
+};
+
+const isAllGroupsSelected = computed(
+  () =>
+    groups.value.length > 0 &&
+    groups.value.every((g) => selectedGroups.value.includes(g.id)),
+);
+
+const toggleAllGroups = () => {
+  if (isAllGroupsSelected.value) {
+    selectedGroups.value = [];
+  } else {
+    selectedGroups.value = groups.value.map((g) => g.id);
   }
 };
 
@@ -128,7 +155,8 @@ const onLeave = (el: Element) => {
   transform: rotate(180deg);
 }
 
-p, h1{
+p,
+h1 {
   margin: 0;
 }
 </style>

@@ -11,6 +11,22 @@
     </div>
     <Transition @enter="onEnter" @leave="onLeave">
       <div class="list" v-if="isOpen">
+        <div class="checkbox-item" @click="toggleAllVenues">
+          <div
+            class="checkbox"
+            :style="{
+              backgroundColor: isAllVenuesSelected ? '#6a758b' : 'transparent',
+              borderColor: '#6a758b',
+            }"
+          >
+            <component
+              :is="checkImg"
+              v-if="isAllVenuesSelected"
+              class="check-img"
+            />
+          </div>
+          <p class="cal-md">Все места</p>
+        </div>
         <div
           class="checkbox-item"
           v-if="isOpen"
@@ -48,6 +64,20 @@ const toggleVenue = (id: number) => {
     selectedVenues.value = selectedVenues.value.filter((g) => g !== id);
   } else {
     selectedVenues.value.push(id);
+  }
+};
+
+const isAllVenuesSelected = computed(
+  () =>
+    venues.value.length > 0 &&
+    venues.value.every((v) => selectedVenues.value.includes(v.id)),
+);
+
+const toggleAllVenues = () => {
+  if (isAllVenuesSelected.value) {
+    selectedVenues.value = [];
+  } else {
+    selectedVenues.value = venues.value.map((v) => v.id);
   }
 };
 
@@ -123,7 +153,8 @@ const onLeave = (el: Element) => {
   transform: rotate(180deg);
 }
 
-p, h1{
+p,
+h1 {
   margin: 0;
 }
 </style>

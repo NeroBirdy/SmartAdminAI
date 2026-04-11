@@ -80,6 +80,76 @@ async function main() {
     },
   });
 
+  await prisma.settingDefinition.create({
+    data: {
+      key: "schedule_instructor_change_date",
+      name: "Перенос даты и времени занятия инструктором",
+      settingTypeId: settingTypes.SINGLE_SELECT.id,
+      maxValues: 1,
+      options: {
+        create: [
+          {
+            key: "on",
+            name: "включено",
+            sortOrder: 1,
+          },
+          {
+            key: "off",
+            name: "выключено",
+            sortOrder: 2,
+          },
+        ],
+      },
+    },
+  });
+
+    await prisma.settingDefinition.create({
+    data: {
+      key: "schedule_instructor_change_venue",
+      name: "Смена помещения инструктором",
+      settingTypeId: settingTypes.SINGLE_SELECT.id,
+      maxValues: 1,
+      options: {
+        create: [
+          {
+            key: "on",
+            name: "включено",
+            sortOrder: 1,
+          },
+          {
+            key: "off",
+            name: "выключено",
+            sortOrder: 2,
+          },
+        ],
+      },
+    },
+  });
+
+      await prisma.settingDefinition.create({
+    data: {
+      key: "schedule_instructor_lesson_cancellation",
+      name: "Отмена занятия инструктором",
+      settingTypeId: settingTypes.SINGLE_SELECT.id,
+      maxValues: 1,
+      options: {
+        create: [
+          {
+            key: "on",
+            name: "включено",
+            sortOrder: 1,
+          },
+          {
+            key: "off",
+            name: "выключено",
+            sortOrder: 2,
+          },
+        ],
+      },
+    },
+  });
+
+
   console.log("✅ Created schedule_planning_horizon setting");
 
   // Учитывать ресурсы (Multi Select)

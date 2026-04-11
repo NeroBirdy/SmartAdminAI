@@ -4,6 +4,8 @@ const fakeAPI = useFakeAPI();
 import { formatWorkHours, formatBreaks } from "../schedule/formatData";
 
 export const collectData = async (orgId: number) => {
+  const notWorkingDays = await getNotWorkingDays(orgId);
+
   const [horizonPlanning, groups] = await Promise.all([
     getHorizonPlanning(orgId),
     getGroups(orgId),
@@ -53,6 +55,7 @@ export const collectData = async (orgId: number) => {
   }
 
   return {
+    notWorkingDays,
     horizonPlanning,
     groups,
     instructorsCount,
@@ -62,6 +65,19 @@ export const collectData = async (orgId: number) => {
     venuesResult,
     orgSchedules,
   };
+};
+
+const getNotWorkingDays = async (orgId: number) => {
+  try {
+    const days = await prisma.workSchedule.findMany({
+      where: { organizationId: orgId, isWorkingDay: false },
+      select: {dayOfWeek: true}
+    });
+
+    return days;
+  } catch (e) {
+    console.error("Ошибка выходных организации", e);
+  }
 };
 
 const getHorizonPlanning = async (orgId: number) => {
