@@ -9,27 +9,26 @@
           >Сегодня</ui-button
         >
         <div class="nav-header">
-          <component class="arrow-left" :is="arrow" @click="previousMonth" />
+          <component class="arrow-left" :is="arrow" @click="previousPeriod" />
           <h1 class="header-sm">{{ monthYear }}</h1>
-          <component class="arrow-right" :is="arrow" @click="nextMonth" />
+          <component class="arrow-right" :is="arrow" @click="nextPeriod" />
         </div>
         <div class="mode-buttons">
           <ui-button
             class="btn header-sm"
-            :class="{ active: mode }"
-            @click.stop="mode = true"
+            :class="{ active: type == 'month' }"
+            @click.stop="toggleType('month')"
             >Месяц</ui-button
           >
           <ui-button
             class="btn header-sm"
-            :class="{ active: !mode }"
-            @click.stop="mode = false"
+            :class="{ active: type == 'week' }"
+            @click.stop="toggleType('week')"
             >Неделя</ui-button
           >
         </div>
       </div>
-      <custom-schedule-planning-month-calendar v-if="mode" />
-      <custom-schedule-planning-week-calendar v-else />
+      <custom-schedule-planning-calendar :type="type" />
     </div>
   </div>
 </template>
@@ -38,9 +37,15 @@ import arrow from "~/assets/icons/arrow_left.svg";
 
 const today = new Date();
 
-const { currentDate } = inject<ReturnType<typeof useSchedule>>("schedule")!;
+const { expandedDate, currentDate } = inject<ReturnType<typeof useSchedule>>("schedule")!;
 
-const mode = ref(true);
+const type = ref("month");
+
+const toggleType = (changeType: string) => {
+  type.value = changeType;
+  currentDate.value = today;
+  expandedDate.value = null;
+};
 
 const currentDateButtonHandler = () => {
   if (currentDate.value != today) {
@@ -49,6 +54,18 @@ const currentDateButtonHandler = () => {
 };
 
 const currentDateCheck = () => {
+  if (type.value === "week") {
+    const date = new Date(currentDate.value);
+    const day = date.getDay();
+    const diff = day === 0 ? -6 : 1 - day;
+    const monday = new Date(date);
+    monday.setDate(date.getDate() + diff);
+    const sunday = new Date(monday);
+    sunday.setDate(monday.getDate() + 6);
+
+    return !(today >= monday && today <= sunday);
+  }
+
   return !(
     currentDate.value.getFullYear() === today.getFullYear() &&
     currentDate.value.getMonth() === today.getMonth()
@@ -56,6 +73,20 @@ const currentDateCheck = () => {
 };
 
 const monthYear = computed(() => {
+  if (type.value === "week") {
+    const date = new Date(currentDate.value);
+    const day = date.getDay();
+    const diff = day === 0 ? -6 : 1 - day;
+    const monday = new Date(date);
+    monday.setDate(date.getDate() + diff);
+    const sunday = new Date(monday);
+    sunday.setDate(monday.getDate() + 6);
+
+    const fmt = (d: Date) =>
+      d.toLocaleString("ru-RU", { day: "numeric", month: "long" });
+    return `${fmt(monday)} – ${fmt(sunday)}`;
+  }
+
   const str = currentDate.value.toLocaleString("ru-RU", {
     month: "long",
     year: "numeric",
@@ -63,25 +94,37 @@ const monthYear = computed(() => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 });
 
-const nextMonth = () => {
-  const year = currentDate.value.getFullYear();
-  const month = currentDate.value.getMonth();
+const nextPeriod = () => {
+  const date = new Date(currentDate.value);
 
+  if (type.value === "week") {
+    date.setDate(date.getDate() + 7);
+    currentDate.value = date;
+    return;
+  }
+
+  const month = date.getMonth();
   if (month === 11) {
-    currentDate.value = new Date(year + 1, 0, 1);
+    currentDate.value = new Date(date.getFullYear() + 1, 0, 1);
   } else {
-    currentDate.value = new Date(year, month + 1, 1);
+    currentDate.value = new Date(date.getFullYear(), month + 1, 1);
   }
 };
 
-const previousMonth = () => {
-  const year = currentDate.value.getFullYear();
-  const month = currentDate.value.getMonth();
+const previousPeriod = () => {
+  const date = new Date(currentDate.value);
 
+  if (type.value === "week") {
+    date.setDate(date.getDate() - 7);
+    currentDate.value = date;
+    return;
+  }
+
+  const month = date.getMonth();
   if (month === 0) {
-    currentDate.value = new Date(year - 1, 11, 1);
+    currentDate.value = new Date(date.getFullYear() - 1, 11, 1);
   } else {
-    currentDate.value = new Date(year, month - 1, 1);
+    currentDate.value = new Date(date.getFullYear(), month - 1, 1);
   }
 };
 </script>
@@ -94,7 +137,7 @@ const previousMonth = () => {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding-bottom: 22px;
+  padding-bottom: 15px;
 }
 
 .nav-header {
@@ -106,12 +149,7 @@ const previousMonth = () => {
   padding-left: 105px;
 }
 
-.arrow-left {
-  padding-left: 6px;
-}
-
 .arrow-right {
-  padding-right: 6px;
   transform: rotate(180deg);
 }
 

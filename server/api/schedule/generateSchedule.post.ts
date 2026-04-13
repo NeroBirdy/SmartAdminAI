@@ -69,8 +69,6 @@ export default defineEventHandler(async (event) => {
 
   const response = await sendMessage(prompt);
 
-  // return response;
-
   return await saveLessons(response);
 });
 
@@ -115,7 +113,7 @@ const buildPrompt = (data: Awaited<ReturnType<typeof collectData>>) => {
   } = data;
 
   let prompt = `## Входные данные для генерации\n\n`;
-  prompt += `Текущая дата: ${new Date("2026-04-20").toLocaleDateString("ru-RU")}\n`;
+  prompt += `Текущая дата: ${new Date("2026-04-13").toLocaleDateString("ru-RU")}\n`;
   // prompt += `Текущая дата: ${new Date().toLocaleDateString("ru-RU")}\n`;
   prompt += `Горизонт планирования: ${horizonPlanning}\n`;
   prompt += `Количество групп: ${groupsCount}\n`;
@@ -157,6 +155,7 @@ const parseDate = (dateStr: string) => {
   const [year, month, day] = dateStr.split("-").map(Number);
   return new Date(Date.UTC(year!, month! - 1, day!));
 };
+
 const parseLesson = (lesson: lesson) => {
   const [startHours, startMinutes] = lesson.startTime.split(":").map(Number);
   const [endHours, endMinutes] = lesson.endTime.split(":").map(Number);

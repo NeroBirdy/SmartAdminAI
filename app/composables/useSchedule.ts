@@ -14,6 +14,8 @@ export const useSchedule = () => {
     };
   };
 
+  const expandedDate = ref<Date | null>(null);
+
   const groupColors = computed(() => generateGroupColors(groups.value.length));
 
   const currentDate = ref(new Date());
@@ -88,6 +90,7 @@ export const useSchedule = () => {
   };
 
   return {
+    expandedDate,
     currentDate,
     events,
     groups,
