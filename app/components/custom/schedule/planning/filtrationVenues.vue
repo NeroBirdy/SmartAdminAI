@@ -5,7 +5,7 @@
       <component
         :is="arrow"
         class="arrow"
-        :class="{ active: isOpen }"
+        :class="activeClass"
         @click="isOpen = !isOpen"
       />
     </div>
@@ -30,7 +30,7 @@
         >
           <div
             class="checkbox"
-            :class="{ checked: selectedVenues.includes(venue.id) }"
+            :class="selectedClass(venue.id)"
           >
             <component
               :is="checkImg"
@@ -52,6 +52,14 @@ const { venues, selectedVenues } =
   inject<ReturnType<typeof useSchedule>>("schedule")!;
 
 const isOpen = ref(true);
+
+const selectedClass =(id: number) => ({
+   checked: selectedVenues.value.includes(id)
+});
+
+const activeClass = computed(() => ({
+  active: isOpen.value
+}));
 
 const toggleVenue = (id: number) => {
   if (selectedVenues.value.includes(id)) {

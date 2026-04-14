@@ -1,3 +1,6 @@
+import { updateCategory as update } from "~/api/sideBar/updateCategory";
+import { getCategories as get } from "~/api/sideBar/getCategories";
+
 type SideBarCategory = {
   id: number;
   sectionId: number;
@@ -12,18 +15,12 @@ export const useSideBarCategories = () => {
   );
 
   const getCategories = async () => {
-    const data = await $fetch("/api/sideBar/getCategories", {
-      method: "POST",
-      body: { sectionId: 1 },
-    });
+    const data = await get();
     categories.value = data.categories;
   };
 
   const updateCategory = async (id: number, enable: boolean) => {
-    await $fetch("/api/sideBar/updateCategory", {
-      method: "POST",
-      body: { id, enable },
-    });
+    update(id, enable);
     const category = categories.value?.find((c: any) => c.id === id);
     if (category) category.enable = enable;
   };

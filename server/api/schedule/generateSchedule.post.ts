@@ -30,26 +30,26 @@ type OllamaResponse = {
   model: string;
 };
 
-type venueOrInstructorResult = {
+type VenueOrInstructorResult = {
   id: number;
-  workHours: workHours[];
-  breaks: breaks[];
+  workHours: WorkHours[];
+  breaks: Breaks[];
 };
 
-type workHours = {
+type WorkHours = {
   dayOfWeek: string;
   isWorkingDay: boolean;
   startWork: string;
   endWork: string;
 };
 
-type breaks = {
+type Breaks = {
   startTime: string;
   endTime: string;
   dayOfWeek: string;
 };
 
-type lesson = {
+type Lesson = {
   date: string;
   startTime: string;
   endTime: string;
@@ -113,7 +113,7 @@ const buildPrompt = (data: Awaited<ReturnType<typeof collectData>>) => {
   } = data;
 
   let prompt = `## Входные данные для генерации\n\n`;
-  prompt += `Текущая дата: ${new Date("2026-04-13").toLocaleDateString("ru-RU")}\n`;
+  prompt += `Текущая дата: ${new Date("2026-04-27").toLocaleDateString("ru-RU")}\n`;
   // prompt += `Текущая дата: ${new Date().toLocaleDateString("ru-RU")}\n`;
   prompt += `Горизонт планирования: ${horizonPlanning}\n`;
   prompt += `Количество групп: ${groupsCount}\n`;
@@ -122,20 +122,20 @@ const buildPrompt = (data: Awaited<ReturnType<typeof collectData>>) => {
   prompt += `Не рабочие дни организации: ${formatDays(notWorkingDays!)}\n`;
 
   if (orgSchedules) {
-    const orgSchedulesTable = orgScheduleToMardown(orgSchedules as workHours[]);
+    const orgSchedulesTable = orgScheduleToMardown(orgSchedules as WorkHours[]);
     prompt += `График работы организации: ${orgSchedulesTable}\n`;
   }
 
   if (venuesResult) {
     const venuesTable = venueOrInstructorScheduleToMarkdown(
-      venuesResult as venueOrInstructorResult[],
+      venuesResult as VenueOrInstructorResult[],
     );
     prompt += `График работы площадок: ${venuesTable}\n`;
   }
 
   if (instructorsResult) {
     const instructorsTable = venueOrInstructorScheduleToMarkdown(
-      instructorsResult as venueOrInstructorResult[],
+      instructorsResult as VenueOrInstructorResult[],
     );
     prompt += `График работы инструкторов: ${instructorsTable}\n`;
   }
@@ -156,7 +156,7 @@ const parseDate = (dateStr: string) => {
   return new Date(Date.UTC(year!, month! - 1, day!));
 };
 
-const parseLesson = (lesson: lesson) => {
+const parseLesson = (lesson: Lesson) => {
   const [startHours, startMinutes] = lesson.startTime.split(":").map(Number);
   const [endHours, endMinutes] = lesson.endTime.split(":").map(Number);
 

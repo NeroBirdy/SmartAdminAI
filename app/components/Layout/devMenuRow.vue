@@ -1,5 +1,5 @@
 <template>
-  <div class="dev-menu-row" :class="{ active: isActive }" @click="handleClick">
+  <div class="dev-menu-row" :class="activeClass" @click="handleClick">
     <component :is="props.icon" class="icon" />
     <p class="header-sm">{{ text }}</p>
   </div>
@@ -16,6 +16,10 @@ const emit = defineEmits<{
 }>();
 
 const isActive = ref(false);
+
+const activeClass = computed(() => ({
+  active: isActive.value
+}));
 
 let timeoutId: ReturnType<typeof setTimeout> | null = null;
 

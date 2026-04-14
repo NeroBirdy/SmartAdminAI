@@ -23,23 +23,23 @@ type group = {
   };
 };
 
-type workHours = {
+type WorkHours = {
   dayOfWeek: string;
   isWorkingDay: boolean;
   startWork: string;
   endWork: string;
 };
 
-type breaks = {
+type Breaks = {
   startTime: string;
   endTime: string;
   dayOfWeek: string;
 };
 
-type venueOrInstructorResult = {
+type VenueOrInstructorResult = {
   id: number;
-  workHours: workHours[];
-  breaks: breaks[];
+  workHours: WorkHours[];
+  breaks: Breaks[];
 };
 
 const days = <Record<string, string>>{
@@ -56,12 +56,12 @@ const formatDays = (schedule: { dayOfWeek: string }[]) => {
   return schedule.map((s) => days[s.dayOfWeek]);
 };
 
-const venueOrInstructorScheduleToMarkdown = (items: venueOrInstructorResult[]) => {
+const venueOrInstructorScheduleToMarkdown = (items: VenueOrInstructorResult[]) => {
   const rows = items.flatMap((item) =>
-    item.workHours.map((day: workHours) => {
+    item.workHours.map((day: WorkHours) => {
       const breaks = item.breaks
-        .filter((b: breaks) => b.dayOfWeek === day.dayOfWeek)
-        .map((b: breaks) => `${b.startTime}-${b.endTime}`)
+        .filter((b: Breaks) => b.dayOfWeek === day.dayOfWeek)
+        .map((b: Breaks) => `${b.startTime}-${b.endTime}`)
         .join(", ");
 
       return [
@@ -81,7 +81,7 @@ const venueOrInstructorScheduleToMarkdown = (items: venueOrInstructorResult[]) =
   ]);
 };
 
-const orgScheduleToMardown = (orgSchedules: workHours[]) => {
+const orgScheduleToMardown = (orgSchedules: WorkHours[]) => {
   return markdownTable([
     ["День недели", "Рабочий", "Начало", "Конец"],
     ...orgSchedules!.map((day) => [

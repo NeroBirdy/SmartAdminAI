@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts" setup>
-type lesson = {
+type Lesson = {
   id: string;
   startTime: string;
   endTime: string;
@@ -35,7 +35,7 @@ type lesson = {
   color: string;
 };
 
-const { lesson } = defineProps<{ lesson: lesson }>();
+const { lesson } = defineProps<{ lesson: Lesson }>();
 
 const ellipsStyle = computed(() => ({
   backgroundColor: lesson.color,
@@ -47,7 +47,9 @@ const lessonTime = () => {
 
 const getVenueName = (name: string) => {
   const words = name.split(" ");
-  const letters = words.map((w) => w.charAt(0).toUpperCase());
+    const letters = words
+    .filter((w) => isNaN(Number(w)))
+    .map((w) => w.charAt(0).toUpperCase());
   const number = words.find((w) => !isNaN(Number(w)));
 
   return number ? `${letters.join("/")} ${number}` : letters.join("/");

@@ -1,10 +1,10 @@
 <template>
   <div class="title">
     <div class="title-left">
-      <component
+      <ui-page-toggle
         v-if="currentCategory"
+        :enabled="currentCategory?.enable"
         class="title-toggle"
-        :is="currentCategory.enable ? toggleRight : toggleLeft"
         @click.stop="
           updateCategory(currentCategory.id, !currentCategory.enable)
         "
@@ -15,9 +15,6 @@
   <PageClients />
 </template>
 <script lang="ts" setup>
-import toggleLeft from "~/assets/icons/toggle_off.svg";
-import toggleRight from "~/assets/icons/toggle_on.svg";
-
 const CATEGORY_ID = 2;
 
 const { categories, updateCategory } = useSideBarCategories();

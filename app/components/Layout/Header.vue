@@ -11,7 +11,7 @@
       <component
         :is="WrechIcon"
         class="icon"
-        :class="{ active: isDevMenuOpen }"
+        :class="activeClass"
         alt="Иконка режима разработчика"
         @click="toggleDevMenu()"
       />
@@ -28,6 +28,10 @@ const router = useRouter();
 import WrechIcon from "~/assets/icons/wrench.svg";
 
 const { isDevMenuOpen, toggleDevMenu } = useDevMenu();
+
+const activeClass = computed(() => ({
+  active: isDevMenuOpen.value
+}));
 </script>
 
 <style scoped>

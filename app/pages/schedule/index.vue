@@ -5,9 +5,7 @@
         v-if="currentCategory"
         :enabled="currentCategory?.enable"
         class="title-toggle"
-        @click.stop="
-          updateScheduleToggle
-        "
+        @click.stop="updateScheduleToggle"
       />
       <h1 class="header-lg title-text">Управление расписанием</h1>
     </div>
@@ -15,6 +13,8 @@
   <PageSchedule />
 </template>
 <script lang="ts" setup>
+import { getHorizonPlanning } from "~/api/schedule/getHorizonPlanning";
+
 const CATEGORY_ID = 1;
 
 const { categories, updateCategory } = useSideBarCategories();
@@ -25,13 +25,8 @@ type Category = {
 };
 
 const availableToToggleOn = async () => {
-  const response = await $fetch("/api/schedule/getHorizonPlanning", {
-    method: "POST",
-    body: {
-      orgId: 1,
-    },
-  });
-  return response!.isHorizonPlanning;
+  const response = await getHorizonPlanning();
+  return response.isHorizonPlanning;
 };
 
 const updateScheduleToggle = async () => {
@@ -40,13 +35,8 @@ const updateScheduleToggle = async () => {
   if (!currentCategory.value.enable) {
     if (await availableToToggleOn()) {
       updateCategory(currentCategory.value.id, true);
-    }
-    else {
-      showCustomToast(
-            "danger",
-            "Выберите горизонт планирования",
-            ""
-          );
+    } else {
+      showCustomToast("danger", "Выберите горизонт планирования", "");
     }
   } else {
     updateCategory(currentCategory.value.id, false);

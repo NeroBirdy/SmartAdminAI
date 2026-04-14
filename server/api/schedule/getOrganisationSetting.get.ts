@@ -22,8 +22,8 @@ const checkSettingOption = (dataset: { settingOption: { key: string } }) => {
 };
 
 export default defineEventHandler(async (event) => {
-  const body = await readBody(event);
-  const orgId = body.orgId;
+  const query = await getQuery(event);
+  const orgId = Number(query.orgId);
 
   let changeDate, changeVenue, cancelLesson;
 

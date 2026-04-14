@@ -1,25 +1,25 @@
-import { startOfMonth, endOfMonth, startOfWeek, endOfWeek } from "date-fns";
-import { getSchedule } from "~/api/getSchedule";
+import { startOfMonth, startOfWeek, addDays } from "date-fns";
+import { getSchedule } from "~/api/schedule/getSchedule";
 
 export const useSchedule = () => {
-  type group = {
+  type Group = {
     id: number;
     name: string;
     color: string;
   };
 
-  type venue = {
+  type Venue = {
     id: number;
     name: string;
   };
 
-  type lesson = {
+  type Lesson = {
     id: string;
     startTime: string;
     endTime: string;
     color: string;
-    group: group;
-    venue: venue;
+    group: Group;
+    venue: Venue;
   };
 
   const expandedDate = ref<Date | null>(null);
@@ -29,16 +29,14 @@ export const useSchedule = () => {
   const dateFrom = computed(() =>
     startOfWeek(startOfMonth(currentDate.value), { weekStartsOn: 1 }),
   );
-  const dateTo = computed(() =>
-    endOfWeek(endOfMonth(currentDate.value), { weekStartsOn: 1 }),
-  );
+  const dateTo = computed(() => addDays(dateFrom.value, 41));
 
   const selectedGroups = ref<number[]>([]);
   const selectedVenues = ref<number[]>([]);
 
-  const schedule = ref<Record<string, lesson[]>>({});
-  const venues = ref<venue[]>([]);
-  const groups = ref<group[]>([]);
+  const schedule = ref<Record<string, Lesson[]>>({});
+  const venues = ref<Venue[]>([]);
+  const groups = ref<Group[]>([]);
 
   const syncSelected = (
     newItems: { id: number }[],

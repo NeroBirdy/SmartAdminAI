@@ -1,8 +1,3 @@
-type ApiResponse = {
-  recommendations: Recommendation[];
-  risks: Risk[];
-};
-
 type Recommendation = {
   id: number;
   title: string;
@@ -20,11 +15,13 @@ const recommendations = ref<Recommendation[]>([]);
 const risks = ref<Risk[]>([]);
 const loading = ref(true);
 
+import { getData as getRisksData } from "~/api/risks/getData";
+
 export const useRisks = () => {
   const getData = async () => {
     loading.value = true;
     try {
-      const response = await $fetch<ApiResponse>("/api/risks/getData");
+      const response = await getRisksData();
       recommendations.value = response.recommendations;
       risks.value = response.risks;
     } catch (err) {

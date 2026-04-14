@@ -2,9 +2,7 @@
   <TransitionGroup name="tag" tag="div" class="tags-wrapper">
     <div
       class="setting-description"
-      :class="{
-        'white-back': availableToAddMore || sectionSettings.length > 1,
-      }"
+      :class="whiteBackClass"
       v-for="option in sectionSettings"
       :key="option.id"
     >
@@ -18,6 +16,7 @@
   </TransitionGroup>
 </template>
 <script lang="ts" setup>
+import { deleteSectionSetting } from "~/api/schedule/deleteSectionSetting";
 import removeImg from "~/assets/icons/remove.svg";
 
 type Setting = {
@@ -29,6 +28,10 @@ type Setting = {
 };
 
 type SectionSetting = { id: number; option_name: string; option_key: string };
+
+const whiteBackClass = computed(() => ({
+  'white-back': availableToAddMore || props.sectionSettings.length > 1
+}));
 
 const props = defineProps<{
   setting: Setting;
@@ -45,12 +48,7 @@ const availableToAddMore = computed(
 
 const deleteHandler = async (id: number) => {
   try {
-    await $fetch("/api/schedule/deleteSectionSetting", {
-      method: "POST",
-      body: {
-        id: id,
-      },
-    });
+    await deleteSectionSetting(id);
     emit("delete", id);
   } catch (err) {
     console.error("Failed to delete setting option:", err);

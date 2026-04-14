@@ -1,8 +1,8 @@
 const prisma = usePrisma();
 
 export default defineEventHandler(async (event) => {
-  const body = await readBody(event);
-  const orgId = body.orgId;
+  const query = await getQuery(event);
+  const orgId = Number(query.orgId);
 
   try {
     const setting = await prisma.sectionSetting.findFirst({

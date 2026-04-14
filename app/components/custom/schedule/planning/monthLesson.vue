@@ -1,11 +1,11 @@
 <template>
-  <div class="lesson">
+  <div class="lesson" :class="isCurrentMonthClass">
     <div class="inside-lesson" :class="expandedClass">
       <div class="text">
         <p class="name second-text">{{ lesson.group.name }}</p>
         <Transition name="fade">
           <p class="time second-text" v-if="isExpanded">
-            {{lessonTime()}}
+            {{ lessonTime() }}
           </p>
         </Transition>
       </div>
@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts" setup>
-type lesson = {
+type Lesson = {
   id: string;
   startTime: string;
   endTime: string;
@@ -31,13 +31,18 @@ type lesson = {
   };
   color: string;
 };
-const { lesson, isExpanded } = defineProps<{
-  lesson: lesson;
+const { lesson, isExpanded, isCurrentMonth } = defineProps<{
+  lesson: Lesson;
   isExpanded: boolean;
+  isCurrentMonth: boolean;
 }>();
 
 const expandedClass = computed(() => ({
   expanded: isExpanded,
+}));
+
+const isCurrentMonthClass = computed(() => ({
+  'notCurrentMonth': !isCurrentMonth,
 }));
 
 const ellipsStyle = computed(() => ({
@@ -50,6 +55,10 @@ const lessonTime = () => {
 </script>
 
 <style scoped>
+.notCurrentMonth {
+  background-color: #dedfe2 !important;
+}
+
 .lesson {
   width: 90%;
   background-color: rgb(240, 237, 237);

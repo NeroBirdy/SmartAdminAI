@@ -14,6 +14,7 @@
           <template v-for="event in lessons"
             ><CustomSchedulePlanningMonthLesson
               :lesson="event"
+              :isCurrentMonth="isCurrentMonth"
               :isExpanded="isExpanded"
           /></template>
         </div>
@@ -27,24 +28,24 @@ import plural from "plural-ru";
 import { format, lastDayOfMonth } from "date-fns";
 import { ru } from "date-fns/locale";
 
-type group = {
+type Group = {
   id: number;
   name: string;
   color: string;
 };
 
-type venue = {
+type Venue = {
   id: number;
   name: string;
 };
 
-type lesson = {
+type Lesson = {
   id: string;
   startTime: string;
   endTime: string;
   color: string;
-  group: group;
-  venue: venue;
+  group: Group;
+  venue: Venue;
 };
 
 const { expandedDate } = inject<ReturnType<typeof useSchedule>>("schedule")!;
@@ -53,7 +54,7 @@ const { date, isToday, isCurrentMonth, lessons } = defineProps<{
   date: Date;
   isToday: boolean;
   isCurrentMonth: boolean;
-  lessons: lesson[];
+  lessons: Lesson[];
 }>();
 
 const dayClasses = computed(() => ({
@@ -68,7 +69,7 @@ const currentMonthClass = computed(() => ({
 }));
 
 const expandedClass = computed(() => ({
-  expanded: isExpanded,
+  expanded: isExpanded.value,
 }));
 
 const getLessonsLengthText = () => {
