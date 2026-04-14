@@ -17,7 +17,7 @@
           >
           <div class="nav-header">
             <component class="arrow-left" :is="arrow" @click="previousPeriod" />
-            <h1 class="header-sm">{{ monthYear }}</h1>
+            <h1 class="header-sm">{{ CalendarPeriodText }}</h1>
             <component class="arrow-right" :is="arrow" @click="nextPeriod" />
           </div>
           <div class="mode-buttons">
@@ -55,13 +55,16 @@ import {
 } from "date-fns";
 import { ru } from "date-fns/locale";
 
+definePageMeta({
+  layout: "planning",
+});
+
 const today = new Date();
 
 const schedule = useSchedule();
 provide("schedule", schedule);
 
-const { expandedDate, currentDate } =
-  schedule;
+const { expandedDate, currentDate } = schedule;
 
 const type = ref("month");
 
@@ -91,7 +94,7 @@ const currentDateCheck = () => {
   return !isSameMonth(currentDate.value, today);
 };
 
-const monthYear = computed(() => {
+const CalendarPeriodText = computed(() => {
   if (type.value === "week") {
     const monday = startOfWeek(currentDate.value, { weekStartsOn: 1 });
     const sunday = endOfWeek(currentDate.value, { weekStartsOn: 1 });
@@ -105,23 +108,19 @@ const monthYear = computed(() => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 });
 
-const nextPeriod = () => {
+function nextPeriod() {
   currentDate.value =
     type.value === "week"
       ? addWeeks(currentDate.value, 1)
       : addMonths(currentDate.value, 1);
-};
+}
 
-const previousPeriod = () => {
+function previousPeriod() {
   currentDate.value =
     type.value === "week"
       ? subWeeks(currentDate.value, 1)
       : subMonths(currentDate.value, 1);
-};
-
-definePageMeta({
-  layout: "planning",
-});
+}
 </script>
 <style scoped>
 .side-bar {

@@ -1,4 +1,5 @@
 import { format } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz";
 
 const fakeAPI = useFakeAPI();
 
@@ -99,8 +100,8 @@ const groupLessonsByDate = (lessons: any[], colorMap: Map<number, string>) => {
     if (!result[dateKey]) result[dateKey] = [];
     result[dateKey].push({
       id: lesson.id,
-      startTime: format(new Date(lesson.startTime), "HH:mm"),
-      endTime: format(new Date(lesson.endTime), "HH:mm"),
+      startTime: formatInTimeZone(new Date(lesson.startTime), "UTC", "HH:mm"),
+      endTime: formatInTimeZone(new Date(lesson.endTime), "UTC", "HH:mm"),
       group: lesson.group,
       venue: lesson.venue,
       color: colorMap.get(lesson.group.id) || "#cccccc",

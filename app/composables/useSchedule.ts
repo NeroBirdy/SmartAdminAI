@@ -44,12 +44,12 @@ export const useSchedule = () => {
   ) => {
     if (!newItems.length) return;
     const newIds = newItems.map((i) => i.id);
-    isUpdating = true;
+    isUpdating.value = true;
     selected.value = selected.value.filter((id) => newIds.includes(id));
     const toAdd = newIds.filter((id) => !selected.value.includes(id));
     selected.value.push(...toAdd);
     nextTick(() => {
-      isUpdating = false;
+      isUpdating.value = false;
     });
   };
 
@@ -73,10 +73,11 @@ export const useSchedule = () => {
     watch: [dateFrom, dateTo],
   });
 
-  let isUpdating = false;
+const isUpdating = ref(false);
 
   watch(data, (newData) => {
     if (!newData) return;
+    console.log(newData.lessons)
     schedule.value = newData.lessons || {};
     if (newData.groups?.length !== groups.value.length)
       groups.value = newData.groups;
@@ -90,7 +91,7 @@ export const useSchedule = () => {
   watch(
     [selectedGroups, selectedVenues],
     () => {
-      if (!isUpdating) refresh();
+      if (!isUpdating.value) refresh();
     },
     { deep: true },
   );

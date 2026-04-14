@@ -68,6 +68,7 @@ export default defineEventHandler(async (event) => {
   const prompt = buildPrompt(data);
 
   const response = await sendMessage(prompt);
+  console.log(response)
 
   return await saveLessons(response);
 });
@@ -113,7 +114,7 @@ const buildPrompt = (data: Awaited<ReturnType<typeof collectData>>) => {
   } = data;
 
   let prompt = `## Входные данные для генерации\n\n`;
-  prompt += `Текущая дата: ${new Date("2026-04-27").toLocaleDateString("ru-RU")}\n`;
+  prompt += `Текущая дата: ${new Date("2026-04-20").toLocaleDateString("ru-RU")}\n`;
   // prompt += `Текущая дата: ${new Date().toLocaleDateString("ru-RU")}\n`;
   prompt += `Горизонт планирования: ${horizonPlanning}\n`;
   prompt += `Количество групп: ${groupsCount}\n`;

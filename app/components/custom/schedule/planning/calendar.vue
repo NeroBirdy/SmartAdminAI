@@ -39,7 +39,7 @@ import {
   format,
 } from "date-fns";
 
-type calendarCell = {
+type CalendarCell = {
   isCurrentMonth: boolean;
   isToday: boolean;
   date: Date;
@@ -50,7 +50,7 @@ const props = defineProps<{ type: string }>();
 const { currentDate, schedule } =
   inject<ReturnType<typeof useSchedule>>("schedule")!;
 
-const weeks = ref<calendarCell[][]>([]);
+const weeks = ref<CalendarCell[][]>([]);
 
 const getLessonsForCell = (date: Date) => {
   if (!schedule.value) return [];
@@ -59,17 +59,28 @@ const getLessonsForCell = (date: Date) => {
   return schedule.value[dateKey] || [];
 };
 
-const buildCalendarGrid = () => {
+const getWeekDays = () => {
   const current = currentDate.value;
   const weekStartsOn = 1;
+  const start = startOfWeek(current, { weekStartsOn });
+  return eachDayOfInterval({
+    start,
+    end: endOfWeek(current, { weekStartsOn }),
+  });
+};
 
-  const start = props.type === "week"
-    ? startOfWeek(current, { weekStartsOn })
-    : startOfWeek(new Date(current.getFullYear(), current.getMonth(), 1), { weekStartsOn });
+const getMonthDays = () => {
+  const current = currentDate.value;
+  const start = startOfWeek(
+    new Date(current.getFullYear(), current.getMonth(), 1),
+    { weekStartsOn: 1 },
+  );
+  return Array.from({ length: 42 }, (_, i) => addDays(start, i));
+};
 
-  const days = props.type === "week"
-    ? eachDayOfInterval({ start, end: endOfWeek(current, { weekStartsOn }) })
-    : Array.from({ length: 42 }, (_, i) => addDays(start, i));
+function buildCalendarGrid() {
+  const current = currentDate.value;
+  const days = props.type === "week" ? getWeekDays() : getMonthDays();
 
   const cells = days.map((date) => ({
     date,
@@ -77,10 +88,11 @@ const buildCalendarGrid = () => {
     isToday: isToday(date),
   }));
 
-  weeks.value = props.type === "week"
-    ? [cells]
-    : Array.from({ length: 6 }, (_, i) => cells.slice(i * 7, i * 7 + 7));
-};
+  weeks.value =
+    props.type === "week"
+      ? [cells]
+      : Array.from({ length: 6 }, (_, i) => cells.slice(i * 7, i * 7 + 7));
+}
 
 buildCalendarGrid();
 

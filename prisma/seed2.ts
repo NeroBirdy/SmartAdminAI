@@ -497,6 +497,31 @@ async function main() {
     ],
   });
 
+  await prisma.programVenue.createMany({
+    data: [
+      {
+        programId: 1,
+        venueId: 1,
+      },
+      {
+        programId: 1,
+        venueId: 3,
+      },
+      {
+        programId: 2,
+        venueId: 2,
+      },
+      {
+        programId: 3,
+        venueId: 1,
+      },
+      {
+        programId: 3,
+        venueId: 3,
+      },
+    ],
+  });
+
   await prisma.client.createMany({
     data: [
       {
