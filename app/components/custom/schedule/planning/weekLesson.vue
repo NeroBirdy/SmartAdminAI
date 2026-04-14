@@ -3,33 +3,25 @@
     <div class="inside-lesson">
       <div class="ellips-text">
         <div class="text">
-          <p class="name second-text">{{ props.lesson.group.name }}</p>
+          <p class="name second-text">{{ lesson.group.name }}</p>
           <p class="time second-text">
-            {{ `${props.lesson.startTime} - ${props.lesson.endTime}` }}
+            {{ lessonTime() }}
           </p>
         </div>
         <div class="ellips-wrapper">
-          <div
-            class="ellips"
-            :style="{
-              backgroundColor: getGroupColor(props.lesson.group.id),
-            }"
-          ></div>
+          <div class="ellips" :style="ellipsStyle"></div>
         </div>
       </div>
       <p class="venue second-text">
-        {{ getVenueName(props.lesson.venue.name) }}
+        {{ getVenueName(lesson.venue.name) }}
       </p>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-const { getGroupColor } = inject<ReturnType<typeof useSchedule>>("schedule")!;
-
 type lesson = {
   id: string;
-  date: Date;
   startTime: string;
   endTime: string;
   group: {
@@ -40,14 +32,22 @@ type lesson = {
     id: number;
     name: string;
   };
+  color: string;
 };
-const props = defineProps<{ lesson: lesson }>();
+
+const { lesson } = defineProps<{ lesson: lesson }>();
+
+const ellipsStyle = computed(() => ({
+  backgroundColor: lesson.color,
+}));
+
+const lessonTime = () => {
+  return `${lesson.startTime} - ${lesson.endTime}`;
+};
 
 const getVenueName = (name: string) => {
   const words = name.split(" ");
-  const letters = words
-    .filter((w) => isNaN(Number(w)))
-    .map((w) => w.charAt(0).toUpperCase());
+  const letters = words.map((w) => w.charAt(0).toUpperCase());
   const number = words.find((w) => !isNaN(Number(w)));
 
   return number ? `${letters.join("/")} ${number}` : letters.join("/");

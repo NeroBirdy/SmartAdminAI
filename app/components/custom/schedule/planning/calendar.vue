@@ -1,15 +1,6 @@
 <template>
   <div class="calendar">
-    <div class="days-of-week">
-      <div
-        class="day-of-week cal-md"
-        v-for="value in daysOfWeek"
-        :key="value"
-        :class="{ weekend: value === 'СБ' || value === 'ВС' }"
-      >
-        {{ value }}
-      </div>
-    </div>
+    <CustomSchedulePlanningDaysOfWeek />
     <div class="inside-calendar">
       <template v-for="(week, wIndex) in weeks" :key="wIndex">
         <template v-if="props.type == 'week'">
@@ -19,6 +10,7 @@
             :date="cell.date"
             :isCurrentMonth="cell.isCurrentMonth"
             :isToday="cell.isToday"
+            :lessons="getLessonsForCell(cell.date)"
           />
         </template>
         <template v-else>
@@ -28,6 +20,7 @@
             :date="cell.date"
             :isCurrentMonth="cell.isCurrentMonth"
             :isToday="cell.isToday"
+            :lessons="getLessonsForCell(cell.date)"
           />
         </template>
       </template>
@@ -36,7 +29,15 @@
 </template>
 
 <script lang="ts" setup>
-import { isToday } from "date-fns";
+import {
+  startOfWeek,
+  endOfWeek,
+  eachDayOfInterval,
+  isSameMonth,
+  isToday,
+  addDays,
+  format,
+} from "date-fns";
 
 type calendarCell = {
   isCurrentMonth: boolean;
@@ -46,84 +47,44 @@ type calendarCell = {
 
 const props = defineProps<{ type: string }>();
 
-const { currentDate, getEvents } =
+const { currentDate, schedule } =
   inject<ReturnType<typeof useSchedule>>("schedule")!;
-
-const daysOfWeek = ["ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ", "ВС"];
 
 const weeks = ref<calendarCell[][]>([]);
 
+const getLessonsForCell = (date: Date) => {
+  if (!schedule.value) return [];
+  const dateKey = format(date, "yyyy-MM-dd");
+
+  return schedule.value[dateKey] || [];
+};
+
 const buildCalendarGrid = () => {
-  const year = currentDate.value.getFullYear();
-  const month = currentDate.value.getMonth();
+  const current = currentDate.value;
+  const weekStartsOn = 1;
 
-  if (props.type === "week") {
-    const today = new Date(currentDate.value);
-    const day = today.getDay();
-    const diff = day === 0 ? -6 : 1 - day;
-    const monday = new Date(today.setDate(today.getDate() + diff));
+  const start = props.type === "week"
+    ? startOfWeek(current, { weekStartsOn })
+    : startOfWeek(new Date(current.getFullYear(), current.getMonth(), 1), { weekStartsOn });
 
-    const cells: calendarCell[] = [];
-    for (let i = 0; i < 7; i++) {
-      const date = new Date(monday);
-      date.setDate(monday.getDate() + i);
-      cells.push({
-        date,
-        isCurrentMonth: date.getMonth() === month,
-        isToday: isToday(date),
-      });
-    }
+  const days = props.type === "week"
+    ? eachDayOfInterval({ start, end: endOfWeek(current, { weekStartsOn }) })
+    : Array.from({ length: 42 }, (_, i) => addDays(start, i));
 
-    weeks.value = [cells];
-  }
-  if (props.type === "month") {
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
+  const cells = days.map((date) => ({
+    date,
+    isCurrentMonth: isSameMonth(date, current),
+    isToday: isToday(date),
+  }));
 
-    let startOffset = firstDay.getDay() - 1;
-    if (startOffset < 0) startOffset = 6;
-
-    const cells: calendarCell[] = [];
-
-    for (let i = startOffset; i > 0; i--) {
-      const d = new Date(year, month, 0 - (i - 1));
-      cells.push({ date: d, isCurrentMonth: false, isToday: false });
-    }
-
-    for (let d = 1; d <= lastDay.getDate(); d++) {
-      const date = new Date(year, month, d);
-      cells.push({
-        date: date,
-        isCurrentMonth: true,
-        isToday: isToday(date),
-      });
-    }
-    let next = 1;
-    while (cells.length < 42) {
-      cells.push({
-        date: new Date(year, month + 1, next++),
-        isCurrentMonth: false,
-        isToday: false,
-      });
-    }
-
-    const result = [];
-    for (let i = 0; i < cells.length; i += 7) {
-      result.push(cells.slice(i, i + 7));
-    }
-
-    weeks.value = result;
-  }
+  weeks.value = props.type === "week"
+    ? [cells]
+    : Array.from({ length: 6 }, (_, i) => cells.slice(i * 7, i * 7 + 7));
 };
 
-const updateCalendar = async () => {
-  buildCalendarGrid();
-  await getEvents(currentDate.value);
-};
+buildCalendarGrid();
 
-updateCalendar();
-
-watch([currentDate, () => props.type], updateCalendar);
+watch([currentDate, () => props.type], buildCalendarGrid);
 </script>
 
 <style scoped>
@@ -131,20 +92,5 @@ watch([currentDate, () => props.type], updateCalendar);
   display: grid;
   position: relative;
   grid-template-columns: repeat(7, 1fr);
-}
-
-.days-of-week {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  padding-bottom: 5px;
-}
-
-.day-of-week {
-  text-align: center;
-  color: #9da4b1;
-}
-
-.day-of-week.weekend {
-  color: #eb754c;
 }
 </style>

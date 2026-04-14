@@ -1,105 +1,109 @@
+import { startOfMonth, endOfMonth, startOfWeek, endOfWeek } from "date-fns";
+import { getSchedule } from "~/api/getSchedule";
+
 export const useSchedule = () => {
+  type group = {
+    id: number;
+    name: string;
+    color: string;
+  };
+
+  type venue = {
+    id: number;
+    name: string;
+  };
+
   type lesson = {
     id: string;
-    date: Date;
     startTime: string;
     endTime: string;
-    group: {
-      id: number;
-      name: string;
-    };
-    venue: {
-      id: number;
-      name: string;
-    };
+    color: string;
+    group: group;
+    venue: venue;
   };
 
   const expandedDate = ref<Date | null>(null);
 
-  const groupColors = computed(() => generateGroupColors(groups.value.length));
-
   const currentDate = ref(new Date());
-  const events = ref<lesson[]>([]);
 
-  const groups = ref<{ id: number; name: string }[]>([]);
-  const venues = ref<{ id: number; name: string }[]>([]);
+  const dateFrom = computed(() =>
+    startOfWeek(startOfMonth(currentDate.value), { weekStartsOn: 1 }),
+  );
+  const dateTo = computed(() =>
+    endOfWeek(endOfMonth(currentDate.value), { weekStartsOn: 1 }),
+  );
 
   const selectedGroups = ref<number[]>([]);
   const selectedVenues = ref<number[]>([]);
 
-  const filteredEvents = computed(() => {
-    return events.value.filter((event) => {
-      const groupMatch = selectedGroups.value.includes(event.group.id);
-      const placeMatch = selectedVenues.value.includes(event.venue.id);
-      return groupMatch && placeMatch;
+  const schedule = ref<Record<string, lesson[]>>({});
+  const venues = ref<venue[]>([]);
+  const groups = ref<group[]>([]);
+
+  const syncSelected = (
+    newItems: { id: number }[],
+    selected: Ref<number[]>,
+  ) => {
+    if (!newItems.length) return;
+    const newIds = newItems.map((i) => i.id);
+    isUpdating = true;
+    selected.value = selected.value.filter((id) => newIds.includes(id));
+    const toAdd = newIds.filter((id) => !selected.value.includes(id));
+    selected.value.push(...toAdd);
+    nextTick(() => {
+      isUpdating = false;
     });
+  };
+
+  const getExceptions = (items: { id: number }[], selected: number[]) =>
+    items.filter((i) => !selected.includes(i.id)).map((i) => i.id);
+
+  const fetchSchedule = async () => {
+    const groupExceptions = getExceptions(groups.value, selectedGroups.value);
+    const venueExceptions = getExceptions(venues.value, selectedVenues.value);
+
+    return getSchedule({
+      orgId: 1,
+      dateFrom: dateFrom.value.toISOString(),
+      dateTo: dateTo.value.toISOString(),
+      groupExceptions,
+      venueExceptions,
+    });
+  };
+
+  const { data, refresh } = useAsyncData("schedule-data", fetchSchedule, {
+    watch: [dateFrom, dateTo],
   });
 
-  const generateGroupColors = (count: number) => {
-    return Array.from({ length: count }, (_, i) => {
-      const hue = (200 + (i * 360) / count) % 360;
-      return `hsl(${hue}, 70%, 37%)`;
-    });
-  };
+  let isUpdating = false;
 
-  const getGroupColor = (groupId: number) => {
-    const index = groups.value.findIndex((g) => g.id === groupId);
-    return groupColors.value[index] ?? "#3a8aef";
-  };
+  watch(data, (newData) => {
+    if (!newData) return;
+    schedule.value = newData.lessons || {};
+    if (newData.groups?.length !== groups.value.length)
+      groups.value = newData.groups;
+    if (newData.venues?.length !== venues.value.length)
+      venues.value = newData.venues;
+  });
 
-  const getEvents = async (date: Date) => {
-    try {
-      const response = await $fetch<lesson[]>("/api/schedule/getSchedule", {
-        method: "POST",
-        body: { orgId: 1, date },
-      });
-      events.value = response;
+  watch(groups, (newGroups) => syncSelected(newGroups, selectedGroups));
+  watch(venues, (newVenues) => syncSelected(newVenues, selectedVenues));
 
-      if (groups.value.length === 0) {
-        const uniqueGroups = new Map(
-          response.map((e) => [e.group.id, e.group]),
-        );
-
-        groups.value = [...uniqueGroups.values()];
-        selectedGroups.value = [...uniqueGroups.keys()];
-      }
-      if (venues.value.length === 0) {
-        const uniqueVenues = new Map(
-          response.map((e) => [e.venue.id, e.venue]),
-        );
-
-        venues.value = [...uniqueVenues.values()];
-        selectedVenues.value = [...uniqueVenues.keys()];
-      }
-    } catch (error) {
-      console.error("Ошибка получения расписания:", error);
-    }
-  };
-
-  const getEventsForDay = (date: Date) => {
-    return filteredEvents.value
-      .filter((event) => {
-        const eventDate = new Date(event.date);
-        return (
-          eventDate.getDate() === date.getDate() &&
-          eventDate.getMonth() === date.getMonth() &&
-          eventDate.getFullYear() === date.getFullYear()
-        );
-      })
-      .sort((a, b) => a.startTime.localeCompare(b.startTime));
-  };
+  watch(
+    [selectedGroups, selectedVenues],
+    () => {
+      if (!isUpdating) refresh();
+    },
+    { deep: true },
+  );
 
   return {
     expandedDate,
     currentDate,
-    events,
+    schedule,
     groups,
     venues,
-    filteredEvents,
     selectedGroups,
     selectedVenues,
-    getEvents,
-    getEventsForDay,
-    getGroupColor,
   };
 };

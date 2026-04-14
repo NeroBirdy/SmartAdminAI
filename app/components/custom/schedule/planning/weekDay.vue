@@ -1,23 +1,20 @@
 <template>
   <div
     class="calendar-month-day"
-    :class="{
-      today: props.isToday,
-    }"
+    :class="dayClasses"
   >
     <div class="inside-calendar-month-day">
       <div class="header">
         <h1 class="main-text-md">
-          {{ getDateText() }}
+          {{ dateText }}
         </h1>
-        <p class="main-text-sm" v-if="events.length">
-          {{ events.length }}
-          {{ plural(events.length, "урок", "урока", "уроков") }}
+        <p class="main-text-sm" v-if="lessons.length">
+          {{ getLessonsLengthText() }}
         </p>
       </div>
-      <div class="events" ref="eventsRef">
-        <template v-for="event in events"
-          ><CustomSchedulePlanningWeekLesson :lesson="event"
+      <div class="events">
+        <template v-for="lesson in lessons"
+          ><CustomSchedulePlanningWeekLesson :lesson="lesson"
         /></template>
       </div>
     </div>
@@ -26,46 +23,54 @@
 
 <script lang="ts" setup>
 import plural from "plural-ru";
+import { format, lastDayOfMonth } from "date-fns";
+import { ru } from "date-fns/locale";
 
-const {getEventsForDay } =
-  inject<ReturnType<typeof useSchedule>>("schedule")!;
-
-const props = defineProps<{
-  date: Date;
-  isToday: boolean;
-  isCurrentMonth: boolean;
-}>();
-
-const months = [
-  "янв",
-  "фев",
-  "мар",
-  "апр",
-  "мая",
-  "июн",
-  "июл",
-  "авг",
-  "сен",
-  "окт",
-  "ноя",
-  "дек",
-];
-
-const getDateText = () => {
-  const month = props.date.getMonth();
-  const day = props.date.getDate();
-  const lastDay = new Date(
-    props.date.getFullYear(),
-    props.date.getMonth() + 1,
-    0,
-  ).getDate();
-  if (day == 1 || day == lastDay) {
-    return `${day} ${months[month]}`;
-  }
-  return `${day}`;
+type group = {
+  id: number;
+  name: string;
+  color: string;
 };
 
-const events = computed(() => getEventsForDay(props.date));
+type venue = {
+  id: number;
+  name: string;
+};
+
+type lesson = {
+  id: string;
+  startTime: string;
+  endTime: string;
+  color: string;
+  group: group;
+  venue: venue;
+};
+
+const { date, isToday, lessons } = defineProps<{
+  date: Date;
+  isToday: boolean;
+  lessons: lesson[];
+}>();
+
+const dayClasses = computed(() => ({
+  today: isToday,
+}));
+
+const getLessonsLengthText = () => {
+  return `${lessons.length} ${plural(lessons.length, "урок", "урока", "уроков")}`;
+};
+
+const dateText = computed(() => {
+  const day = date.getDate();
+  const lastDay = lastDayOfMonth(date).getDate();
+
+  if (day === 1 || day === lastDay) {
+    return format(date, "d MMM", { locale: ru }).replace(".", "");;
+  }
+
+  return format(date, "d");
+});
+
 </script>
 
 <style scoped>

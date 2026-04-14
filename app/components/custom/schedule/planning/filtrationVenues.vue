@@ -12,13 +12,7 @@
     <Transition @enter="onEnter" @leave="onLeave">
       <div class="list" v-if="isOpen">
         <div class="checkbox-item" @click="toggleAllVenues">
-          <div
-            class="checkbox"
-            :style="{
-              backgroundColor: isAllVenuesSelected ? '#6a758b' : 'transparent',
-              borderColor: '#6a758b',
-            }"
-          >
+          <div class="checkbox" :style="allVenuesSelectedStyle">
             <component
               :is="checkImg"
               v-if="isAllVenuesSelected"
@@ -66,6 +60,11 @@ const toggleVenue = (id: number) => {
     selectedVenues.value.push(id);
   }
 };
+
+const allVenuesSelectedStyle = computed(() => ({
+  backgroundColor: isAllVenuesSelected.value ? "#6a758b" : "transparent",
+  borderColor: "#6a758b",
+}));
 
 const isAllVenuesSelected = computed(
   () =>

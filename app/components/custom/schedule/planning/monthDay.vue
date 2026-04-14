@@ -1,30 +1,17 @@
 <template>
   <div class="calendar-month-day-wrapper" ref="wrapperRef">
-    <div
-      class="calendar-month-day"
-      :class="{
-        currentMonth: !props.isCurrentMonth,
-        expanded: isExpanded,
-        upward: openUpward && isExpanded,
-        today: props.isToday,
-      }"
-      @click.stop="toggle"
-    >
+    <div class="calendar-month-day" :class="dayClasses" @click.stop="toggle">
       <div class="inside-calendar-month-day">
-        <div class="header" :class="{ expanded: isExpanded }">
-          <h1
-            class="main-text-md"
-            :class="{ currentMonth: !props.isCurrentMonth }"
-          >
-            {{ getDateText() }}
+        <div class="header" :class="expandedClass">
+          <h1 class="main-text-md" :class="currentMonthClass">
+            {{ dateText }}
           </h1>
-          <p class="main-text-sm" v-if="events.length">
-            {{ events.length }}
-            {{ plural(events.length, "урок", "урока", "уроков") }}
+          <p class="main-text-sm" v-if="lessons.length">
+            {{ getLessonsLengthText() }}
           </p>
         </div>
-        <div class="events" :class="{ expanded: isExpanded }" ref="eventsRef">
-          <template v-for="event in events"
+        <div class="events" :class="expandedClass" ref="eventsRef">
+          <template v-for="event in lessons"
             ><CustomSchedulePlanningMonthLesson
               :lesson="event"
               :isExpanded="isExpanded"
@@ -37,48 +24,71 @@
 
 <script lang="ts" setup>
 import plural from "plural-ru";
+import { format, lastDayOfMonth } from "date-fns";
+import { ru } from "date-fns/locale";
 
-const { expandedDate, getEventsForDay } =
-  inject<ReturnType<typeof useSchedule>>("schedule")!;
+type group = {
+  id: number;
+  name: string;
+  color: string;
+};
 
-const props = defineProps<{
+type venue = {
+  id: number;
+  name: string;
+};
+
+type lesson = {
+  id: string;
+  startTime: string;
+  endTime: string;
+  color: string;
+  group: group;
+  venue: venue;
+};
+
+const { expandedDate } = inject<ReturnType<typeof useSchedule>>("schedule")!;
+
+const { date, isToday, isCurrentMonth, lessons } = defineProps<{
   date: Date;
   isToday: boolean;
   isCurrentMonth: boolean;
+  lessons: lesson[];
 }>();
 
+const dayClasses = computed(() => ({
+  currentMonth: !isCurrentMonth,
+  expanded: isExpanded.value,
+  upward: openUpward.value && isExpanded.value,
+  today: isToday,
+}));
+
+const currentMonthClass = computed(() => ({
+  currentMonth: !isCurrentMonth,
+}));
+
+const expandedClass = computed(() => ({
+  expanded: isExpanded,
+}));
+
+const getLessonsLengthText = () => {
+  return `${lessons.length} ${plural(lessons.length, "урок", "урока", "уроков")}`;
+};
+
 const isExpanded = computed(
-  () => expandedDate.value?.getTime() === props.date.getTime(),
+  () => expandedDate.value?.getTime() === date.getTime(),
 );
 
-const months = [
-  "янв",
-  "фев",
-  "мар",
-  "апр",
-  "мая",
-  "июн",
-  "июл",
-  "авг",
-  "сен",
-  "окт",
-  "ноя",
-  "дек",
-];
+const dateText = computed(() => {
+  const day = date.getDate();
+  const lastDay = lastDayOfMonth(date).getDate();
 
-const getDateText = () => {
-  const month = props.date.getMonth();
-  const day = props.date.getDate();
-  const lastDay = new Date(
-    props.date.getFullYear(),
-    props.date.getMonth() + 1,
-    0,
-  ).getDate();
-  if (day == 1 || day == lastDay) {
-    return `${day} ${months[month]}`;
+  if (day === 1 || day === lastDay) {
+    return format(date, "d MMM", { locale: ru }).replace(".", "");
   }
-  return `${day}`;
-};
+
+  return format(date, "d");
+});
 
 const toggle = () => {
   if (!isExpanded.value && wrapperRef.value) {
@@ -86,15 +96,12 @@ const toggle = () => {
     const spaceBelow = window.innerHeight - rect.bottom;
     openUpward.value = spaceBelow < 324;
   }
-  expandedDate.value = isExpanded.value ? null : props.date;
+  expandedDate.value = isExpanded.value ? null : date;
 };
 
-const eventsRef = ref<HTMLElement | null>(null);
-const wrapperRef = ref<HTMLElement | null>(null);
+const eventsRef = useTemplateRef("eventsRef");
+const wrapperRef = useTemplateRef("wrapperRef");
 const openUpward = ref(false);
-
-const events = computed(() => getEventsForDay(props.date));
-watch(events, (newVal) => console.log(newVal));
 
 watch(isExpanded, (val) => {
   if (!val) {

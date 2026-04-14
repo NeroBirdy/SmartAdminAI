@@ -1,33 +1,24 @@
 <template>
   <div class="lesson">
-    <div class="inside-lesson" :class="{ expanded: props.isExpanded }">
+    <div class="inside-lesson" :class="expandedClass">
       <div class="text">
-        <p class="name second-text">{{ props.lesson.group.name }}</p>
+        <p class="name second-text">{{ lesson.group.name }}</p>
         <Transition name="fade">
-          <p class="time second-text" v-if="props.isExpanded">
-            {{ `${props.lesson.startTime} - ${props.lesson.endTime}` }}
+          <p class="time second-text" v-if="isExpanded">
+            {{lessonTime()}}
           </p>
         </Transition>
       </div>
       <div class="ellips-wrapper">
-        <div
-          class="ellips"
-          :style="{
-            backgroundColor: getGroupColor(props.lesson.group.id),
-          }"
-        ></div>
+        <div class="ellips" :style="ellipsStyle"></div>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-const { getGroupColor } =
-  inject<ReturnType<typeof useSchedule>>("schedule")!;
-
 type lesson = {
   id: string;
-  date: Date;
   startTime: string;
   endTime: string;
   group: {
@@ -38,8 +29,24 @@ type lesson = {
     id: number;
     name: string;
   };
+  color: string;
 };
-const props = defineProps<{ lesson: lesson; isExpanded: boolean }>();
+const { lesson, isExpanded } = defineProps<{
+  lesson: lesson;
+  isExpanded: boolean;
+}>();
+
+const expandedClass = computed(() => ({
+  expanded: isExpanded,
+}));
+
+const ellipsStyle = computed(() => ({
+  backgroundColor: lesson.color,
+}));
+
+const lessonTime = () => {
+  return `${lesson.startTime} - ${lesson.endTime}`;
+};
 </script>
 
 <style scoped>

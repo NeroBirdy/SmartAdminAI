@@ -5,21 +5,19 @@
       <component
         :is="arrow"
         class="arrow"
-        :class="{ active: isOpen }"
+        :class="activeClass"
         @click="isOpen = !isOpen"
       />
     </div>
     <Transition @enter="onEnter" @leave="onLeave">
       <div class="list" v-if="isOpen">
         <div class="checkbox-item" @click="toggleAllGroups">
-          <div
-            class="checkbox"
-            :style="{
-              backgroundColor: isAllGroupsSelected ? '#6a758b' : 'transparent',
-              borderColor: '#6a758b',
-            }"
-          >
-            <component :is="checkImg" v-if="isAllGroupsSelected" class="check-img" />
+          <div class="checkbox" :style="allGroupCheckBoxStyle">
+            <component
+              :is="checkImg"
+              v-if="isAllGroupsSelected"
+              class="check-img"
+            />
           </div>
           <p class="cal-md">Все группы</p>
         </div>
@@ -31,15 +29,7 @@
           :key="group.id"
           @click="toggleGroup(group.id)"
         >
-          <div
-            class="checkbox"
-            :style="{
-              backgroundColor: selectedGroups.includes(group.id)
-                ? getGroupColor(group.id)
-                : 'transparent',
-              borderColor: getGroupColor(group.id),
-            }"
-          >
+          <div class="checkbox" :style="groupCheckBoxStyle(group)">
             <component
               :is="checkImg"
               v-if="selectedGroups.includes(group.id)"
@@ -56,10 +46,26 @@
 import checkImg from "~/assets/icons/check_cal.svg";
 import arrow from "~/assets/icons/chevron_up.svg";
 
-const { groups, venues, selectedGroups, selectedVenues, getGroupColor } =
+const { groups, selectedGroups } =
   inject<ReturnType<typeof useSchedule>>("schedule")!;
 
 const isOpen = ref(true);
+
+const activeClass = computed(() => ({
+  active: isOpen.value,
+}));
+
+const allGroupCheckBoxStyle = computed(() => ({
+  backgroundColor: isAllGroupsSelected.value ? "#6a758b" : "transparent",
+  borderColor: "#6a758b",
+}));
+
+const groupCheckBoxStyle = (group: { id: number; color: string }) => ({
+  backgroundColor: selectedGroups.value.includes(group.id)
+    ? group.color
+    : "transparent",
+  borderColor: group.color,
+});
 
 const toggleGroup = (id: number) => {
   if (selectedGroups.value.includes(id)) {
