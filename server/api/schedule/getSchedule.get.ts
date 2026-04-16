@@ -66,6 +66,9 @@ const fetchFilteredLessons = (
       venue: { id: { notIn: venueExceptions } },
       date: { gte: dateFrom, lt: dateTo },
     },
+    orderBy: {
+      startTime: 'asc'
+    },
     include: {
       group: { select: { id: true, name: true } },
       venue: { select: { id: true, name: true } },

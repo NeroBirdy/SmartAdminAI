@@ -68,7 +68,6 @@ export default defineEventHandler(async (event) => {
   const prompt = buildPrompt(data);
 
   const response = await sendMessage(prompt);
-  console.log(response)
 
   return await saveLessons(response);
 });
