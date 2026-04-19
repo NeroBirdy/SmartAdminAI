@@ -1,10 +1,7 @@
 <template>
   <div
     class="category"
-    :class="{
-      'selected-category': isSelected(category),
-      pressed: isPressed(category),
-    }"
+    :class="activeClass"
     @click="selectCategory(category)"
   >
     <ui-side-bar-toggle
@@ -16,14 +13,9 @@
       v-else
       :is="pictures[category]"
       class="icon"
-      :class="{
-        active: isSelected(category),
-      }"
+      :class="isSelectedClass(category)"
     />
-    <p
-      class="category-text header-sm"
-      :class="{ active: isSelected(category) }"
-    >
+    <p class="category-text header-sm" :class="isSelectedClass(category)">
       {{ categoriesText[category] }}
     </p>
   </div>
@@ -41,6 +33,15 @@ const { categories } = useSideBarCategories();
 const props = defineProps<{
   category: string;
 }>();
+
+const isSelectedClass = (category: string) => ({
+  active: isSelected(category),
+});
+
+const activeClass = computed(() => ({
+  "selected-category": isSelected(props.category),
+  pressed: isPressed(props.category),
+}));
 
 const categoriesText: Record<string, string> = {
   risks: "Рекомендации и риски",

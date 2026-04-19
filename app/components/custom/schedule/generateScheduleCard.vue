@@ -11,12 +11,13 @@
         </div>
         <component
           class="card-arrow"
+          :class="mirroredClass"
           :is="cardArrowImg"
           @click.stop="openCard = !openCard"
         />
       </div>
     </div>
-    <div class="second-frame-content" :class="{ hidden: !openCard }">
+    <div class="second-frame-content" :class="hiddenClass">
       <custom-schedule-setting-card queryKey="schedule_planning_horizon" />
 
       <custom-schedule-setting-card queryKey="schedule_consider_resources" />
@@ -37,6 +38,14 @@ import cardArrowImg from "~/assets/icons/chevron_down.svg";
 import sparklesImg from "~/assets/icons/sparkles.svg";
 
 const openCard = ref(false);
+
+const mirroredClass = computed(() => ({
+  mirrored: openCard.value,
+}));
+
+const hiddenClass = computed(() => ({
+  hidden: !openCard.value,
+}));
 </script>
 
 <style scoped>

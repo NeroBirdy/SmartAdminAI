@@ -228,7 +228,6 @@ export type VenueWhereInput = {
   groupsDefault?: Prisma.GroupListRelationFilter
   groupsAdditional?: Prisma.GroupListRelationFilter
   lessons?: Prisma.LessonListRelationFilter
-  workSchedules?: Prisma.WorkScheduleListRelationFilter
 }
 
 export type VenueOrderByWithRelationInput = {
@@ -241,7 +240,6 @@ export type VenueOrderByWithRelationInput = {
   groupsDefault?: Prisma.GroupOrderByRelationAggregateInput
   groupsAdditional?: Prisma.GroupOrderByRelationAggregateInput
   lessons?: Prisma.LessonOrderByRelationAggregateInput
-  workSchedules?: Prisma.WorkScheduleOrderByRelationAggregateInput
   _relevance?: Prisma.VenueOrderByRelevanceInput
 }
 
@@ -258,7 +256,6 @@ export type VenueWhereUniqueInput = Prisma.AtLeast<{
   groupsDefault?: Prisma.GroupListRelationFilter
   groupsAdditional?: Prisma.GroupListRelationFilter
   lessons?: Prisma.LessonListRelationFilter
-  workSchedules?: Prisma.WorkScheduleListRelationFilter
 }, "id">
 
 export type VenueOrderByWithAggregationInput = {
@@ -293,7 +290,6 @@ export type VenueCreateInput = {
   groupsDefault?: Prisma.GroupCreateNestedManyWithoutDefaultVenueInput
   groupsAdditional?: Prisma.GroupCreateNestedManyWithoutAdditionalVenuesInput
   lessons?: Prisma.LessonCreateNestedManyWithoutVenueInput
-  workSchedules?: Prisma.WorkScheduleCreateNestedManyWithoutVenueInput
 }
 
 export type VenueUncheckedCreateInput = {
@@ -305,7 +301,6 @@ export type VenueUncheckedCreateInput = {
   groupsDefault?: Prisma.GroupUncheckedCreateNestedManyWithoutDefaultVenueInput
   groupsAdditional?: Prisma.GroupUncheckedCreateNestedManyWithoutAdditionalVenuesInput
   lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutVenueInput
-  workSchedules?: Prisma.WorkScheduleUncheckedCreateNestedManyWithoutVenueInput
 }
 
 export type VenueUpdateInput = {
@@ -316,7 +311,6 @@ export type VenueUpdateInput = {
   groupsDefault?: Prisma.GroupUpdateManyWithoutDefaultVenueNestedInput
   groupsAdditional?: Prisma.GroupUpdateManyWithoutAdditionalVenuesNestedInput
   lessons?: Prisma.LessonUpdateManyWithoutVenueNestedInput
-  workSchedules?: Prisma.WorkScheduleUpdateManyWithoutVenueNestedInput
 }
 
 export type VenueUncheckedUpdateInput = {
@@ -328,7 +322,6 @@ export type VenueUncheckedUpdateInput = {
   groupsDefault?: Prisma.GroupUncheckedUpdateManyWithoutDefaultVenueNestedInput
   groupsAdditional?: Prisma.GroupUncheckedUpdateManyWithoutAdditionalVenuesNestedInput
   lessons?: Prisma.LessonUncheckedUpdateManyWithoutVenueNestedInput
-  workSchedules?: Prisma.WorkScheduleUncheckedUpdateManyWithoutVenueNestedInput
 }
 
 export type VenueCreateManyInput = {
@@ -408,11 +401,6 @@ export type VenueSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   cityId?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
-}
-
-export type VenueNullableScalarRelationFilter = {
-  is?: Prisma.VenueWhereInput | null
-  isNot?: Prisma.VenueWhereInput | null
 }
 
 export type VenueCreateNestedManyWithoutCityInput = {
@@ -523,22 +511,6 @@ export type VenueUpdateOneRequiredWithoutLessonsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.VenueUpdateToOneWithWhereWithoutLessonsInput, Prisma.VenueUpdateWithoutLessonsInput>, Prisma.VenueUncheckedUpdateWithoutLessonsInput>
 }
 
-export type VenueCreateNestedOneWithoutWorkSchedulesInput = {
-  create?: Prisma.XOR<Prisma.VenueCreateWithoutWorkSchedulesInput, Prisma.VenueUncheckedCreateWithoutWorkSchedulesInput>
-  connectOrCreate?: Prisma.VenueCreateOrConnectWithoutWorkSchedulesInput
-  connect?: Prisma.VenueWhereUniqueInput
-}
-
-export type VenueUpdateOneWithoutWorkSchedulesNestedInput = {
-  create?: Prisma.XOR<Prisma.VenueCreateWithoutWorkSchedulesInput, Prisma.VenueUncheckedCreateWithoutWorkSchedulesInput>
-  connectOrCreate?: Prisma.VenueCreateOrConnectWithoutWorkSchedulesInput
-  upsert?: Prisma.VenueUpsertWithoutWorkSchedulesInput
-  disconnect?: Prisma.VenueWhereInput | boolean
-  delete?: Prisma.VenueWhereInput | boolean
-  connect?: Prisma.VenueWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.VenueUpdateToOneWithWhereWithoutWorkSchedulesInput, Prisma.VenueUpdateWithoutWorkSchedulesInput>, Prisma.VenueUncheckedUpdateWithoutWorkSchedulesInput>
-}
-
 export type VenueCreateWithoutCityInput = {
   name: string
   address: string
@@ -546,7 +518,6 @@ export type VenueCreateWithoutCityInput = {
   groupsDefault?: Prisma.GroupCreateNestedManyWithoutDefaultVenueInput
   groupsAdditional?: Prisma.GroupCreateNestedManyWithoutAdditionalVenuesInput
   lessons?: Prisma.LessonCreateNestedManyWithoutVenueInput
-  workSchedules?: Prisma.WorkScheduleCreateNestedManyWithoutVenueInput
 }
 
 export type VenueUncheckedCreateWithoutCityInput = {
@@ -557,7 +528,6 @@ export type VenueUncheckedCreateWithoutCityInput = {
   groupsDefault?: Prisma.GroupUncheckedCreateNestedManyWithoutDefaultVenueInput
   groupsAdditional?: Prisma.GroupUncheckedCreateNestedManyWithoutAdditionalVenuesInput
   lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutVenueInput
-  workSchedules?: Prisma.WorkScheduleUncheckedCreateNestedManyWithoutVenueInput
 }
 
 export type VenueCreateOrConnectWithoutCityInput = {
@@ -604,7 +574,6 @@ export type VenueCreateWithoutGroupsDefaultInput = {
   city: Prisma.CityCreateNestedOneWithoutVenuesInput
   groupsAdditional?: Prisma.GroupCreateNestedManyWithoutAdditionalVenuesInput
   lessons?: Prisma.LessonCreateNestedManyWithoutVenueInput
-  workSchedules?: Prisma.WorkScheduleCreateNestedManyWithoutVenueInput
 }
 
 export type VenueUncheckedCreateWithoutGroupsDefaultInput = {
@@ -615,7 +584,6 @@ export type VenueUncheckedCreateWithoutGroupsDefaultInput = {
   organizationId: number
   groupsAdditional?: Prisma.GroupUncheckedCreateNestedManyWithoutAdditionalVenuesInput
   lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutVenueInput
-  workSchedules?: Prisma.WorkScheduleUncheckedCreateNestedManyWithoutVenueInput
 }
 
 export type VenueCreateOrConnectWithoutGroupsDefaultInput = {
@@ -630,7 +598,6 @@ export type VenueCreateWithoutGroupsAdditionalInput = {
   city: Prisma.CityCreateNestedOneWithoutVenuesInput
   groupsDefault?: Prisma.GroupCreateNestedManyWithoutDefaultVenueInput
   lessons?: Prisma.LessonCreateNestedManyWithoutVenueInput
-  workSchedules?: Prisma.WorkScheduleCreateNestedManyWithoutVenueInput
 }
 
 export type VenueUncheckedCreateWithoutGroupsAdditionalInput = {
@@ -641,7 +608,6 @@ export type VenueUncheckedCreateWithoutGroupsAdditionalInput = {
   organizationId: number
   groupsDefault?: Prisma.GroupUncheckedCreateNestedManyWithoutDefaultVenueInput
   lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutVenueInput
-  workSchedules?: Prisma.WorkScheduleUncheckedCreateNestedManyWithoutVenueInput
 }
 
 export type VenueCreateOrConnectWithoutGroupsAdditionalInput = {
@@ -667,7 +633,6 @@ export type VenueUpdateWithoutGroupsDefaultInput = {
   city?: Prisma.CityUpdateOneRequiredWithoutVenuesNestedInput
   groupsAdditional?: Prisma.GroupUpdateManyWithoutAdditionalVenuesNestedInput
   lessons?: Prisma.LessonUpdateManyWithoutVenueNestedInput
-  workSchedules?: Prisma.WorkScheduleUpdateManyWithoutVenueNestedInput
 }
 
 export type VenueUncheckedUpdateWithoutGroupsDefaultInput = {
@@ -678,7 +643,6 @@ export type VenueUncheckedUpdateWithoutGroupsDefaultInput = {
   organizationId?: Prisma.IntFieldUpdateOperationsInput | number
   groupsAdditional?: Prisma.GroupUncheckedUpdateManyWithoutAdditionalVenuesNestedInput
   lessons?: Prisma.LessonUncheckedUpdateManyWithoutVenueNestedInput
-  workSchedules?: Prisma.WorkScheduleUncheckedUpdateManyWithoutVenueNestedInput
 }
 
 export type VenueUpsertWithWhereUniqueWithoutGroupsAdditionalInput = {
@@ -704,7 +668,6 @@ export type VenueCreateWithoutLessonsInput = {
   city: Prisma.CityCreateNestedOneWithoutVenuesInput
   groupsDefault?: Prisma.GroupCreateNestedManyWithoutDefaultVenueInput
   groupsAdditional?: Prisma.GroupCreateNestedManyWithoutAdditionalVenuesInput
-  workSchedules?: Prisma.WorkScheduleCreateNestedManyWithoutVenueInput
 }
 
 export type VenueUncheckedCreateWithoutLessonsInput = {
@@ -715,7 +678,6 @@ export type VenueUncheckedCreateWithoutLessonsInput = {
   organizationId: number
   groupsDefault?: Prisma.GroupUncheckedCreateNestedManyWithoutDefaultVenueInput
   groupsAdditional?: Prisma.GroupUncheckedCreateNestedManyWithoutAdditionalVenuesInput
-  workSchedules?: Prisma.WorkScheduleUncheckedCreateNestedManyWithoutVenueInput
 }
 
 export type VenueCreateOrConnectWithoutLessonsInput = {
@@ -741,7 +703,6 @@ export type VenueUpdateWithoutLessonsInput = {
   city?: Prisma.CityUpdateOneRequiredWithoutVenuesNestedInput
   groupsDefault?: Prisma.GroupUpdateManyWithoutDefaultVenueNestedInput
   groupsAdditional?: Prisma.GroupUpdateManyWithoutAdditionalVenuesNestedInput
-  workSchedules?: Prisma.WorkScheduleUpdateManyWithoutVenueNestedInput
 }
 
 export type VenueUncheckedUpdateWithoutLessonsInput = {
@@ -752,65 +713,6 @@ export type VenueUncheckedUpdateWithoutLessonsInput = {
   organizationId?: Prisma.IntFieldUpdateOperationsInput | number
   groupsDefault?: Prisma.GroupUncheckedUpdateManyWithoutDefaultVenueNestedInput
   groupsAdditional?: Prisma.GroupUncheckedUpdateManyWithoutAdditionalVenuesNestedInput
-  workSchedules?: Prisma.WorkScheduleUncheckedUpdateManyWithoutVenueNestedInput
-}
-
-export type VenueCreateWithoutWorkSchedulesInput = {
-  name: string
-  address: string
-  organizationId: number
-  city: Prisma.CityCreateNestedOneWithoutVenuesInput
-  groupsDefault?: Prisma.GroupCreateNestedManyWithoutDefaultVenueInput
-  groupsAdditional?: Prisma.GroupCreateNestedManyWithoutAdditionalVenuesInput
-  lessons?: Prisma.LessonCreateNestedManyWithoutVenueInput
-}
-
-export type VenueUncheckedCreateWithoutWorkSchedulesInput = {
-  id?: number
-  name: string
-  cityId: number
-  address: string
-  organizationId: number
-  groupsDefault?: Prisma.GroupUncheckedCreateNestedManyWithoutDefaultVenueInput
-  groupsAdditional?: Prisma.GroupUncheckedCreateNestedManyWithoutAdditionalVenuesInput
-  lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutVenueInput
-}
-
-export type VenueCreateOrConnectWithoutWorkSchedulesInput = {
-  where: Prisma.VenueWhereUniqueInput
-  create: Prisma.XOR<Prisma.VenueCreateWithoutWorkSchedulesInput, Prisma.VenueUncheckedCreateWithoutWorkSchedulesInput>
-}
-
-export type VenueUpsertWithoutWorkSchedulesInput = {
-  update: Prisma.XOR<Prisma.VenueUpdateWithoutWorkSchedulesInput, Prisma.VenueUncheckedUpdateWithoutWorkSchedulesInput>
-  create: Prisma.XOR<Prisma.VenueCreateWithoutWorkSchedulesInput, Prisma.VenueUncheckedCreateWithoutWorkSchedulesInput>
-  where?: Prisma.VenueWhereInput
-}
-
-export type VenueUpdateToOneWithWhereWithoutWorkSchedulesInput = {
-  where?: Prisma.VenueWhereInput
-  data: Prisma.XOR<Prisma.VenueUpdateWithoutWorkSchedulesInput, Prisma.VenueUncheckedUpdateWithoutWorkSchedulesInput>
-}
-
-export type VenueUpdateWithoutWorkSchedulesInput = {
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.IntFieldUpdateOperationsInput | number
-  city?: Prisma.CityUpdateOneRequiredWithoutVenuesNestedInput
-  groupsDefault?: Prisma.GroupUpdateManyWithoutDefaultVenueNestedInput
-  groupsAdditional?: Prisma.GroupUpdateManyWithoutAdditionalVenuesNestedInput
-  lessons?: Prisma.LessonUpdateManyWithoutVenueNestedInput
-}
-
-export type VenueUncheckedUpdateWithoutWorkSchedulesInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  cityId?: Prisma.IntFieldUpdateOperationsInput | number
-  address?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.IntFieldUpdateOperationsInput | number
-  groupsDefault?: Prisma.GroupUncheckedUpdateManyWithoutDefaultVenueNestedInput
-  groupsAdditional?: Prisma.GroupUncheckedUpdateManyWithoutAdditionalVenuesNestedInput
-  lessons?: Prisma.LessonUncheckedUpdateManyWithoutVenueNestedInput
 }
 
 export type VenueCreateManyCityInput = {
@@ -827,7 +729,6 @@ export type VenueUpdateWithoutCityInput = {
   groupsDefault?: Prisma.GroupUpdateManyWithoutDefaultVenueNestedInput
   groupsAdditional?: Prisma.GroupUpdateManyWithoutAdditionalVenuesNestedInput
   lessons?: Prisma.LessonUpdateManyWithoutVenueNestedInput
-  workSchedules?: Prisma.WorkScheduleUpdateManyWithoutVenueNestedInput
 }
 
 export type VenueUncheckedUpdateWithoutCityInput = {
@@ -838,7 +739,6 @@ export type VenueUncheckedUpdateWithoutCityInput = {
   groupsDefault?: Prisma.GroupUncheckedUpdateManyWithoutDefaultVenueNestedInput
   groupsAdditional?: Prisma.GroupUncheckedUpdateManyWithoutAdditionalVenuesNestedInput
   lessons?: Prisma.LessonUncheckedUpdateManyWithoutVenueNestedInput
-  workSchedules?: Prisma.WorkScheduleUncheckedUpdateManyWithoutVenueNestedInput
 }
 
 export type VenueUncheckedUpdateManyWithoutCityInput = {
@@ -855,7 +755,6 @@ export type VenueUpdateWithoutGroupsAdditionalInput = {
   city?: Prisma.CityUpdateOneRequiredWithoutVenuesNestedInput
   groupsDefault?: Prisma.GroupUpdateManyWithoutDefaultVenueNestedInput
   lessons?: Prisma.LessonUpdateManyWithoutVenueNestedInput
-  workSchedules?: Prisma.WorkScheduleUpdateManyWithoutVenueNestedInput
 }
 
 export type VenueUncheckedUpdateWithoutGroupsAdditionalInput = {
@@ -866,7 +765,6 @@ export type VenueUncheckedUpdateWithoutGroupsAdditionalInput = {
   organizationId?: Prisma.IntFieldUpdateOperationsInput | number
   groupsDefault?: Prisma.GroupUncheckedUpdateManyWithoutDefaultVenueNestedInput
   lessons?: Prisma.LessonUncheckedUpdateManyWithoutVenueNestedInput
-  workSchedules?: Prisma.WorkScheduleUncheckedUpdateManyWithoutVenueNestedInput
 }
 
 export type VenueUncheckedUpdateManyWithoutGroupsAdditionalInput = {
@@ -886,14 +784,12 @@ export type VenueCountOutputType = {
   groupsDefault: number
   groupsAdditional: number
   lessons: number
-  workSchedules: number
 }
 
 export type VenueCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   groupsDefault?: boolean | VenueCountOutputTypeCountGroupsDefaultArgs
   groupsAdditional?: boolean | VenueCountOutputTypeCountGroupsAdditionalArgs
   lessons?: boolean | VenueCountOutputTypeCountLessonsArgs
-  workSchedules?: boolean | VenueCountOutputTypeCountWorkSchedulesArgs
 }
 
 /**
@@ -927,13 +823,6 @@ export type VenueCountOutputTypeCountLessonsArgs<ExtArgs extends runtime.Types.E
   where?: Prisma.LessonWhereInput
 }
 
-/**
- * VenueCountOutputType without action
- */
-export type VenueCountOutputTypeCountWorkSchedulesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.WorkScheduleWhereInput
-}
-
 
 export type VenueSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -945,7 +834,6 @@ export type VenueSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   groupsDefault?: boolean | Prisma.Venue$groupsDefaultArgs<ExtArgs>
   groupsAdditional?: boolean | Prisma.Venue$groupsAdditionalArgs<ExtArgs>
   lessons?: boolean | Prisma.Venue$lessonsArgs<ExtArgs>
-  workSchedules?: boolean | Prisma.Venue$workSchedulesArgs<ExtArgs>
   _count?: boolean | Prisma.VenueCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["venue"]>
 
@@ -965,7 +853,6 @@ export type VenueInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   groupsDefault?: boolean | Prisma.Venue$groupsDefaultArgs<ExtArgs>
   groupsAdditional?: boolean | Prisma.Venue$groupsAdditionalArgs<ExtArgs>
   lessons?: boolean | Prisma.Venue$lessonsArgs<ExtArgs>
-  workSchedules?: boolean | Prisma.Venue$workSchedulesArgs<ExtArgs>
   _count?: boolean | Prisma.VenueCountOutputTypeDefaultArgs<ExtArgs>
 }
 
@@ -976,7 +863,6 @@ export type $VenuePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     groupsDefault: Prisma.$GroupPayload<ExtArgs>[]
     groupsAdditional: Prisma.$GroupPayload<ExtArgs>[]
     lessons: Prisma.$LessonPayload<ExtArgs>[]
-    workSchedules: Prisma.$WorkSchedulePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1328,7 +1214,6 @@ export interface Prisma__VenueClient<T, Null = never, ExtArgs extends runtime.Ty
   groupsDefault<T extends Prisma.Venue$groupsDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Venue$groupsDefaultArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   groupsAdditional<T extends Prisma.Venue$groupsAdditionalArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Venue$groupsAdditionalArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   lessons<T extends Prisma.Venue$lessonsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Venue$lessonsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LessonPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  workSchedules<T extends Prisma.Venue$workSchedulesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Venue$workSchedulesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkSchedulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1775,30 +1660,6 @@ export type Venue$lessonsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.LessonScalarFieldEnum | Prisma.LessonScalarFieldEnum[]
-}
-
-/**
- * Venue.workSchedules
- */
-export type Venue$workSchedulesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the WorkSchedule
-   */
-  select?: Prisma.WorkScheduleSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the WorkSchedule
-   */
-  omit?: Prisma.WorkScheduleOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.WorkScheduleInclude<ExtArgs> | null
-  where?: Prisma.WorkScheduleWhereInput
-  orderBy?: Prisma.WorkScheduleOrderByWithRelationInput | Prisma.WorkScheduleOrderByWithRelationInput[]
-  cursor?: Prisma.WorkScheduleWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.WorkScheduleScalarFieldEnum | Prisma.WorkScheduleScalarFieldEnum[]
 }
 
 /**

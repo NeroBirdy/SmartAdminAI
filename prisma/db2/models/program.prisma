@@ -7,4 +7,5 @@ model Program {
   organization Organization @relation(fields: [organizationId], references: [id])
   lessons      Lesson[]
   modules      Module[]
+  groups       Group[]
 }

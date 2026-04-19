@@ -252,9 +252,7 @@ export type WorkScheduleWhereInput = {
   organizationId?: Prisma.IntNullableFilter<"WorkSchedule"> | number | null
   employeeId?: Prisma.IntNullableFilter<"WorkSchedule"> | number | null
   venueId?: Prisma.IntNullableFilter<"WorkSchedule"> | number | null
-  organization?: Prisma.XOR<Prisma.OrganizationNullableScalarRelationFilter, Prisma.OrganizationWhereInput> | null
-  employee?: Prisma.XOR<Prisma.EmployeeNullableScalarRelationFilter, Prisma.EmployeeWhereInput> | null
-  venue?: Prisma.XOR<Prisma.VenueNullableScalarRelationFilter, Prisma.VenueWhereInput> | null
+  workScheduleBreaks?: Prisma.WorkScheduleBreaksListRelationFilter
 }
 
 export type WorkScheduleOrderByWithRelationInput = {
@@ -266,9 +264,7 @@ export type WorkScheduleOrderByWithRelationInput = {
   organizationId?: Prisma.SortOrderInput | Prisma.SortOrder
   employeeId?: Prisma.SortOrderInput | Prisma.SortOrder
   venueId?: Prisma.SortOrderInput | Prisma.SortOrder
-  organization?: Prisma.OrganizationOrderByWithRelationInput
-  employee?: Prisma.EmployeeOrderByWithRelationInput
-  venue?: Prisma.VenueOrderByWithRelationInput
+  workScheduleBreaks?: Prisma.WorkScheduleBreaksOrderByRelationAggregateInput
 }
 
 export type WorkScheduleWhereUniqueInput = Prisma.AtLeast<{
@@ -283,9 +279,7 @@ export type WorkScheduleWhereUniqueInput = Prisma.AtLeast<{
   organizationId?: Prisma.IntNullableFilter<"WorkSchedule"> | number | null
   employeeId?: Prisma.IntNullableFilter<"WorkSchedule"> | number | null
   venueId?: Prisma.IntNullableFilter<"WorkSchedule"> | number | null
-  organization?: Prisma.XOR<Prisma.OrganizationNullableScalarRelationFilter, Prisma.OrganizationWhereInput> | null
-  employee?: Prisma.XOR<Prisma.EmployeeNullableScalarRelationFilter, Prisma.EmployeeWhereInput> | null
-  venue?: Prisma.XOR<Prisma.VenueNullableScalarRelationFilter, Prisma.VenueWhereInput> | null
+  workScheduleBreaks?: Prisma.WorkScheduleBreaksListRelationFilter
 }, "id">
 
 export type WorkScheduleOrderByWithAggregationInput = {
@@ -323,9 +317,10 @@ export type WorkScheduleCreateInput = {
   isWorkingDay?: boolean
   startWork?: Date | string | null
   endWork?: Date | string | null
-  organization?: Prisma.OrganizationCreateNestedOneWithoutScheduleInput
-  employee?: Prisma.EmployeeCreateNestedOneWithoutWorkSchedulesInput
-  venue?: Prisma.VenueCreateNestedOneWithoutWorkSchedulesInput
+  organizationId?: number | null
+  employeeId?: number | null
+  venueId?: number | null
+  workScheduleBreaks?: Prisma.WorkScheduleBreaksCreateNestedManyWithoutWorkScheduleInput
 }
 
 export type WorkScheduleUncheckedCreateInput = {
@@ -337,6 +332,7 @@ export type WorkScheduleUncheckedCreateInput = {
   organizationId?: number | null
   employeeId?: number | null
   venueId?: number | null
+  workScheduleBreaks?: Prisma.WorkScheduleBreaksUncheckedCreateNestedManyWithoutWorkScheduleInput
 }
 
 export type WorkScheduleUpdateInput = {
@@ -344,9 +340,10 @@ export type WorkScheduleUpdateInput = {
   isWorkingDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
   startWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  organization?: Prisma.OrganizationUpdateOneWithoutScheduleNestedInput
-  employee?: Prisma.EmployeeUpdateOneWithoutWorkSchedulesNestedInput
-  venue?: Prisma.VenueUpdateOneWithoutWorkSchedulesNestedInput
+  organizationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  employeeId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  venueId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  workScheduleBreaks?: Prisma.WorkScheduleBreaksUpdateManyWithoutWorkScheduleNestedInput
 }
 
 export type WorkScheduleUncheckedUpdateInput = {
@@ -358,6 +355,7 @@ export type WorkScheduleUncheckedUpdateInput = {
   organizationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   employeeId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   venueId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  workScheduleBreaks?: Prisma.WorkScheduleBreaksUncheckedUpdateManyWithoutWorkScheduleNestedInput
 }
 
 export type WorkScheduleCreateManyInput = {
@@ -376,6 +374,9 @@ export type WorkScheduleUpdateManyMutationInput = {
   isWorkingDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
   startWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organizationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  employeeId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  venueId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type WorkScheduleUncheckedUpdateManyInput = {
@@ -387,16 +388,6 @@ export type WorkScheduleUncheckedUpdateManyInput = {
   organizationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   employeeId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   venueId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-}
-
-export type WorkScheduleListRelationFilter = {
-  every?: Prisma.WorkScheduleWhereInput
-  some?: Prisma.WorkScheduleWhereInput
-  none?: Prisma.WorkScheduleWhereInput
-}
-
-export type WorkScheduleOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
 }
 
 export type WorkScheduleCountOrderByAggregateInput = {
@@ -446,130 +437,9 @@ export type WorkScheduleSumOrderByAggregateInput = {
   venueId?: Prisma.SortOrder
 }
 
-export type WorkScheduleCreateNestedManyWithoutEmployeeInput = {
-  create?: Prisma.XOR<Prisma.WorkScheduleCreateWithoutEmployeeInput, Prisma.WorkScheduleUncheckedCreateWithoutEmployeeInput> | Prisma.WorkScheduleCreateWithoutEmployeeInput[] | Prisma.WorkScheduleUncheckedCreateWithoutEmployeeInput[]
-  connectOrCreate?: Prisma.WorkScheduleCreateOrConnectWithoutEmployeeInput | Prisma.WorkScheduleCreateOrConnectWithoutEmployeeInput[]
-  createMany?: Prisma.WorkScheduleCreateManyEmployeeInputEnvelope
-  connect?: Prisma.WorkScheduleWhereUniqueInput | Prisma.WorkScheduleWhereUniqueInput[]
-}
-
-export type WorkScheduleUncheckedCreateNestedManyWithoutEmployeeInput = {
-  create?: Prisma.XOR<Prisma.WorkScheduleCreateWithoutEmployeeInput, Prisma.WorkScheduleUncheckedCreateWithoutEmployeeInput> | Prisma.WorkScheduleCreateWithoutEmployeeInput[] | Prisma.WorkScheduleUncheckedCreateWithoutEmployeeInput[]
-  connectOrCreate?: Prisma.WorkScheduleCreateOrConnectWithoutEmployeeInput | Prisma.WorkScheduleCreateOrConnectWithoutEmployeeInput[]
-  createMany?: Prisma.WorkScheduleCreateManyEmployeeInputEnvelope
-  connect?: Prisma.WorkScheduleWhereUniqueInput | Prisma.WorkScheduleWhereUniqueInput[]
-}
-
-export type WorkScheduleUpdateManyWithoutEmployeeNestedInput = {
-  create?: Prisma.XOR<Prisma.WorkScheduleCreateWithoutEmployeeInput, Prisma.WorkScheduleUncheckedCreateWithoutEmployeeInput> | Prisma.WorkScheduleCreateWithoutEmployeeInput[] | Prisma.WorkScheduleUncheckedCreateWithoutEmployeeInput[]
-  connectOrCreate?: Prisma.WorkScheduleCreateOrConnectWithoutEmployeeInput | Prisma.WorkScheduleCreateOrConnectWithoutEmployeeInput[]
-  upsert?: Prisma.WorkScheduleUpsertWithWhereUniqueWithoutEmployeeInput | Prisma.WorkScheduleUpsertWithWhereUniqueWithoutEmployeeInput[]
-  createMany?: Prisma.WorkScheduleCreateManyEmployeeInputEnvelope
-  set?: Prisma.WorkScheduleWhereUniqueInput | Prisma.WorkScheduleWhereUniqueInput[]
-  disconnect?: Prisma.WorkScheduleWhereUniqueInput | Prisma.WorkScheduleWhereUniqueInput[]
-  delete?: Prisma.WorkScheduleWhereUniqueInput | Prisma.WorkScheduleWhereUniqueInput[]
-  connect?: Prisma.WorkScheduleWhereUniqueInput | Prisma.WorkScheduleWhereUniqueInput[]
-  update?: Prisma.WorkScheduleUpdateWithWhereUniqueWithoutEmployeeInput | Prisma.WorkScheduleUpdateWithWhereUniqueWithoutEmployeeInput[]
-  updateMany?: Prisma.WorkScheduleUpdateManyWithWhereWithoutEmployeeInput | Prisma.WorkScheduleUpdateManyWithWhereWithoutEmployeeInput[]
-  deleteMany?: Prisma.WorkScheduleScalarWhereInput | Prisma.WorkScheduleScalarWhereInput[]
-}
-
-export type WorkScheduleUncheckedUpdateManyWithoutEmployeeNestedInput = {
-  create?: Prisma.XOR<Prisma.WorkScheduleCreateWithoutEmployeeInput, Prisma.WorkScheduleUncheckedCreateWithoutEmployeeInput> | Prisma.WorkScheduleCreateWithoutEmployeeInput[] | Prisma.WorkScheduleUncheckedCreateWithoutEmployeeInput[]
-  connectOrCreate?: Prisma.WorkScheduleCreateOrConnectWithoutEmployeeInput | Prisma.WorkScheduleCreateOrConnectWithoutEmployeeInput[]
-  upsert?: Prisma.WorkScheduleUpsertWithWhereUniqueWithoutEmployeeInput | Prisma.WorkScheduleUpsertWithWhereUniqueWithoutEmployeeInput[]
-  createMany?: Prisma.WorkScheduleCreateManyEmployeeInputEnvelope
-  set?: Prisma.WorkScheduleWhereUniqueInput | Prisma.WorkScheduleWhereUniqueInput[]
-  disconnect?: Prisma.WorkScheduleWhereUniqueInput | Prisma.WorkScheduleWhereUniqueInput[]
-  delete?: Prisma.WorkScheduleWhereUniqueInput | Prisma.WorkScheduleWhereUniqueInput[]
-  connect?: Prisma.WorkScheduleWhereUniqueInput | Prisma.WorkScheduleWhereUniqueInput[]
-  update?: Prisma.WorkScheduleUpdateWithWhereUniqueWithoutEmployeeInput | Prisma.WorkScheduleUpdateWithWhereUniqueWithoutEmployeeInput[]
-  updateMany?: Prisma.WorkScheduleUpdateManyWithWhereWithoutEmployeeInput | Prisma.WorkScheduleUpdateManyWithWhereWithoutEmployeeInput[]
-  deleteMany?: Prisma.WorkScheduleScalarWhereInput | Prisma.WorkScheduleScalarWhereInput[]
-}
-
-export type WorkScheduleCreateNestedManyWithoutOrganizationInput = {
-  create?: Prisma.XOR<Prisma.WorkScheduleCreateWithoutOrganizationInput, Prisma.WorkScheduleUncheckedCreateWithoutOrganizationInput> | Prisma.WorkScheduleCreateWithoutOrganizationInput[] | Prisma.WorkScheduleUncheckedCreateWithoutOrganizationInput[]
-  connectOrCreate?: Prisma.WorkScheduleCreateOrConnectWithoutOrganizationInput | Prisma.WorkScheduleCreateOrConnectWithoutOrganizationInput[]
-  createMany?: Prisma.WorkScheduleCreateManyOrganizationInputEnvelope
-  connect?: Prisma.WorkScheduleWhereUniqueInput | Prisma.WorkScheduleWhereUniqueInput[]
-}
-
-export type WorkScheduleUncheckedCreateNestedManyWithoutOrganizationInput = {
-  create?: Prisma.XOR<Prisma.WorkScheduleCreateWithoutOrganizationInput, Prisma.WorkScheduleUncheckedCreateWithoutOrganizationInput> | Prisma.WorkScheduleCreateWithoutOrganizationInput[] | Prisma.WorkScheduleUncheckedCreateWithoutOrganizationInput[]
-  connectOrCreate?: Prisma.WorkScheduleCreateOrConnectWithoutOrganizationInput | Prisma.WorkScheduleCreateOrConnectWithoutOrganizationInput[]
-  createMany?: Prisma.WorkScheduleCreateManyOrganizationInputEnvelope
-  connect?: Prisma.WorkScheduleWhereUniqueInput | Prisma.WorkScheduleWhereUniqueInput[]
-}
-
-export type WorkScheduleUpdateManyWithoutOrganizationNestedInput = {
-  create?: Prisma.XOR<Prisma.WorkScheduleCreateWithoutOrganizationInput, Prisma.WorkScheduleUncheckedCreateWithoutOrganizationInput> | Prisma.WorkScheduleCreateWithoutOrganizationInput[] | Prisma.WorkScheduleUncheckedCreateWithoutOrganizationInput[]
-  connectOrCreate?: Prisma.WorkScheduleCreateOrConnectWithoutOrganizationInput | Prisma.WorkScheduleCreateOrConnectWithoutOrganizationInput[]
-  upsert?: Prisma.WorkScheduleUpsertWithWhereUniqueWithoutOrganizationInput | Prisma.WorkScheduleUpsertWithWhereUniqueWithoutOrganizationInput[]
-  createMany?: Prisma.WorkScheduleCreateManyOrganizationInputEnvelope
-  set?: Prisma.WorkScheduleWhereUniqueInput | Prisma.WorkScheduleWhereUniqueInput[]
-  disconnect?: Prisma.WorkScheduleWhereUniqueInput | Prisma.WorkScheduleWhereUniqueInput[]
-  delete?: Prisma.WorkScheduleWhereUniqueInput | Prisma.WorkScheduleWhereUniqueInput[]
-  connect?: Prisma.WorkScheduleWhereUniqueInput | Prisma.WorkScheduleWhereUniqueInput[]
-  update?: Prisma.WorkScheduleUpdateWithWhereUniqueWithoutOrganizationInput | Prisma.WorkScheduleUpdateWithWhereUniqueWithoutOrganizationInput[]
-  updateMany?: Prisma.WorkScheduleUpdateManyWithWhereWithoutOrganizationInput | Prisma.WorkScheduleUpdateManyWithWhereWithoutOrganizationInput[]
-  deleteMany?: Prisma.WorkScheduleScalarWhereInput | Prisma.WorkScheduleScalarWhereInput[]
-}
-
-export type WorkScheduleUncheckedUpdateManyWithoutOrganizationNestedInput = {
-  create?: Prisma.XOR<Prisma.WorkScheduleCreateWithoutOrganizationInput, Prisma.WorkScheduleUncheckedCreateWithoutOrganizationInput> | Prisma.WorkScheduleCreateWithoutOrganizationInput[] | Prisma.WorkScheduleUncheckedCreateWithoutOrganizationInput[]
-  connectOrCreate?: Prisma.WorkScheduleCreateOrConnectWithoutOrganizationInput | Prisma.WorkScheduleCreateOrConnectWithoutOrganizationInput[]
-  upsert?: Prisma.WorkScheduleUpsertWithWhereUniqueWithoutOrganizationInput | Prisma.WorkScheduleUpsertWithWhereUniqueWithoutOrganizationInput[]
-  createMany?: Prisma.WorkScheduleCreateManyOrganizationInputEnvelope
-  set?: Prisma.WorkScheduleWhereUniqueInput | Prisma.WorkScheduleWhereUniqueInput[]
-  disconnect?: Prisma.WorkScheduleWhereUniqueInput | Prisma.WorkScheduleWhereUniqueInput[]
-  delete?: Prisma.WorkScheduleWhereUniqueInput | Prisma.WorkScheduleWhereUniqueInput[]
-  connect?: Prisma.WorkScheduleWhereUniqueInput | Prisma.WorkScheduleWhereUniqueInput[]
-  update?: Prisma.WorkScheduleUpdateWithWhereUniqueWithoutOrganizationInput | Prisma.WorkScheduleUpdateWithWhereUniqueWithoutOrganizationInput[]
-  updateMany?: Prisma.WorkScheduleUpdateManyWithWhereWithoutOrganizationInput | Prisma.WorkScheduleUpdateManyWithWhereWithoutOrganizationInput[]
-  deleteMany?: Prisma.WorkScheduleScalarWhereInput | Prisma.WorkScheduleScalarWhereInput[]
-}
-
-export type WorkScheduleCreateNestedManyWithoutVenueInput = {
-  create?: Prisma.XOR<Prisma.WorkScheduleCreateWithoutVenueInput, Prisma.WorkScheduleUncheckedCreateWithoutVenueInput> | Prisma.WorkScheduleCreateWithoutVenueInput[] | Prisma.WorkScheduleUncheckedCreateWithoutVenueInput[]
-  connectOrCreate?: Prisma.WorkScheduleCreateOrConnectWithoutVenueInput | Prisma.WorkScheduleCreateOrConnectWithoutVenueInput[]
-  createMany?: Prisma.WorkScheduleCreateManyVenueInputEnvelope
-  connect?: Prisma.WorkScheduleWhereUniqueInput | Prisma.WorkScheduleWhereUniqueInput[]
-}
-
-export type WorkScheduleUncheckedCreateNestedManyWithoutVenueInput = {
-  create?: Prisma.XOR<Prisma.WorkScheduleCreateWithoutVenueInput, Prisma.WorkScheduleUncheckedCreateWithoutVenueInput> | Prisma.WorkScheduleCreateWithoutVenueInput[] | Prisma.WorkScheduleUncheckedCreateWithoutVenueInput[]
-  connectOrCreate?: Prisma.WorkScheduleCreateOrConnectWithoutVenueInput | Prisma.WorkScheduleCreateOrConnectWithoutVenueInput[]
-  createMany?: Prisma.WorkScheduleCreateManyVenueInputEnvelope
-  connect?: Prisma.WorkScheduleWhereUniqueInput | Prisma.WorkScheduleWhereUniqueInput[]
-}
-
-export type WorkScheduleUpdateManyWithoutVenueNestedInput = {
-  create?: Prisma.XOR<Prisma.WorkScheduleCreateWithoutVenueInput, Prisma.WorkScheduleUncheckedCreateWithoutVenueInput> | Prisma.WorkScheduleCreateWithoutVenueInput[] | Prisma.WorkScheduleUncheckedCreateWithoutVenueInput[]
-  connectOrCreate?: Prisma.WorkScheduleCreateOrConnectWithoutVenueInput | Prisma.WorkScheduleCreateOrConnectWithoutVenueInput[]
-  upsert?: Prisma.WorkScheduleUpsertWithWhereUniqueWithoutVenueInput | Prisma.WorkScheduleUpsertWithWhereUniqueWithoutVenueInput[]
-  createMany?: Prisma.WorkScheduleCreateManyVenueInputEnvelope
-  set?: Prisma.WorkScheduleWhereUniqueInput | Prisma.WorkScheduleWhereUniqueInput[]
-  disconnect?: Prisma.WorkScheduleWhereUniqueInput | Prisma.WorkScheduleWhereUniqueInput[]
-  delete?: Prisma.WorkScheduleWhereUniqueInput | Prisma.WorkScheduleWhereUniqueInput[]
-  connect?: Prisma.WorkScheduleWhereUniqueInput | Prisma.WorkScheduleWhereUniqueInput[]
-  update?: Prisma.WorkScheduleUpdateWithWhereUniqueWithoutVenueInput | Prisma.WorkScheduleUpdateWithWhereUniqueWithoutVenueInput[]
-  updateMany?: Prisma.WorkScheduleUpdateManyWithWhereWithoutVenueInput | Prisma.WorkScheduleUpdateManyWithWhereWithoutVenueInput[]
-  deleteMany?: Prisma.WorkScheduleScalarWhereInput | Prisma.WorkScheduleScalarWhereInput[]
-}
-
-export type WorkScheduleUncheckedUpdateManyWithoutVenueNestedInput = {
-  create?: Prisma.XOR<Prisma.WorkScheduleCreateWithoutVenueInput, Prisma.WorkScheduleUncheckedCreateWithoutVenueInput> | Prisma.WorkScheduleCreateWithoutVenueInput[] | Prisma.WorkScheduleUncheckedCreateWithoutVenueInput[]
-  connectOrCreate?: Prisma.WorkScheduleCreateOrConnectWithoutVenueInput | Prisma.WorkScheduleCreateOrConnectWithoutVenueInput[]
-  upsert?: Prisma.WorkScheduleUpsertWithWhereUniqueWithoutVenueInput | Prisma.WorkScheduleUpsertWithWhereUniqueWithoutVenueInput[]
-  createMany?: Prisma.WorkScheduleCreateManyVenueInputEnvelope
-  set?: Prisma.WorkScheduleWhereUniqueInput | Prisma.WorkScheduleWhereUniqueInput[]
-  disconnect?: Prisma.WorkScheduleWhereUniqueInput | Prisma.WorkScheduleWhereUniqueInput[]
-  delete?: Prisma.WorkScheduleWhereUniqueInput | Prisma.WorkScheduleWhereUniqueInput[]
-  connect?: Prisma.WorkScheduleWhereUniqueInput | Prisma.WorkScheduleWhereUniqueInput[]
-  update?: Prisma.WorkScheduleUpdateWithWhereUniqueWithoutVenueInput | Prisma.WorkScheduleUpdateWithWhereUniqueWithoutVenueInput[]
-  updateMany?: Prisma.WorkScheduleUpdateManyWithWhereWithoutVenueInput | Prisma.WorkScheduleUpdateManyWithWhereWithoutVenueInput[]
-  deleteMany?: Prisma.WorkScheduleScalarWhereInput | Prisma.WorkScheduleScalarWhereInput[]
+export type WorkScheduleScalarRelationFilter = {
+  is?: Prisma.WorkScheduleWhereInput
+  isNot?: Prisma.WorkScheduleWhereInput
 }
 
 export type EnumDayOfWeekFieldUpdateOperationsInput = {
@@ -580,120 +450,39 @@ export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
 }
 
-export type WorkScheduleCreateWithoutEmployeeInput = {
-  dayOfWeek: $Enums.DayOfWeek
-  isWorkingDay?: boolean
-  startWork?: Date | string | null
-  endWork?: Date | string | null
-  organization?: Prisma.OrganizationCreateNestedOneWithoutScheduleInput
-  venue?: Prisma.VenueCreateNestedOneWithoutWorkSchedulesInput
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
-export type WorkScheduleUncheckedCreateWithoutEmployeeInput = {
-  id?: number
+export type WorkScheduleCreateNestedOneWithoutWorkScheduleBreaksInput = {
+  create?: Prisma.XOR<Prisma.WorkScheduleCreateWithoutWorkScheduleBreaksInput, Prisma.WorkScheduleUncheckedCreateWithoutWorkScheduleBreaksInput>
+  connectOrCreate?: Prisma.WorkScheduleCreateOrConnectWithoutWorkScheduleBreaksInput
+  connect?: Prisma.WorkScheduleWhereUniqueInput
+}
+
+export type WorkScheduleUpdateOneRequiredWithoutWorkScheduleBreaksNestedInput = {
+  create?: Prisma.XOR<Prisma.WorkScheduleCreateWithoutWorkScheduleBreaksInput, Prisma.WorkScheduleUncheckedCreateWithoutWorkScheduleBreaksInput>
+  connectOrCreate?: Prisma.WorkScheduleCreateOrConnectWithoutWorkScheduleBreaksInput
+  upsert?: Prisma.WorkScheduleUpsertWithoutWorkScheduleBreaksInput
+  connect?: Prisma.WorkScheduleWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.WorkScheduleUpdateToOneWithWhereWithoutWorkScheduleBreaksInput, Prisma.WorkScheduleUpdateWithoutWorkScheduleBreaksInput>, Prisma.WorkScheduleUncheckedUpdateWithoutWorkScheduleBreaksInput>
+}
+
+export type WorkScheduleCreateWithoutWorkScheduleBreaksInput = {
   dayOfWeek: $Enums.DayOfWeek
   isWorkingDay?: boolean
   startWork?: Date | string | null
   endWork?: Date | string | null
   organizationId?: number | null
-  venueId?: number | null
-}
-
-export type WorkScheduleCreateOrConnectWithoutEmployeeInput = {
-  where: Prisma.WorkScheduleWhereUniqueInput
-  create: Prisma.XOR<Prisma.WorkScheduleCreateWithoutEmployeeInput, Prisma.WorkScheduleUncheckedCreateWithoutEmployeeInput>
-}
-
-export type WorkScheduleCreateManyEmployeeInputEnvelope = {
-  data: Prisma.WorkScheduleCreateManyEmployeeInput | Prisma.WorkScheduleCreateManyEmployeeInput[]
-  skipDuplicates?: boolean
-}
-
-export type WorkScheduleUpsertWithWhereUniqueWithoutEmployeeInput = {
-  where: Prisma.WorkScheduleWhereUniqueInput
-  update: Prisma.XOR<Prisma.WorkScheduleUpdateWithoutEmployeeInput, Prisma.WorkScheduleUncheckedUpdateWithoutEmployeeInput>
-  create: Prisma.XOR<Prisma.WorkScheduleCreateWithoutEmployeeInput, Prisma.WorkScheduleUncheckedCreateWithoutEmployeeInput>
-}
-
-export type WorkScheduleUpdateWithWhereUniqueWithoutEmployeeInput = {
-  where: Prisma.WorkScheduleWhereUniqueInput
-  data: Prisma.XOR<Prisma.WorkScheduleUpdateWithoutEmployeeInput, Prisma.WorkScheduleUncheckedUpdateWithoutEmployeeInput>
-}
-
-export type WorkScheduleUpdateManyWithWhereWithoutEmployeeInput = {
-  where: Prisma.WorkScheduleScalarWhereInput
-  data: Prisma.XOR<Prisma.WorkScheduleUpdateManyMutationInput, Prisma.WorkScheduleUncheckedUpdateManyWithoutEmployeeInput>
-}
-
-export type WorkScheduleScalarWhereInput = {
-  AND?: Prisma.WorkScheduleScalarWhereInput | Prisma.WorkScheduleScalarWhereInput[]
-  OR?: Prisma.WorkScheduleScalarWhereInput[]
-  NOT?: Prisma.WorkScheduleScalarWhereInput | Prisma.WorkScheduleScalarWhereInput[]
-  id?: Prisma.IntFilter<"WorkSchedule"> | number
-  dayOfWeek?: Prisma.EnumDayOfWeekFilter<"WorkSchedule"> | $Enums.DayOfWeek
-  isWorkingDay?: Prisma.BoolFilter<"WorkSchedule"> | boolean
-  startWork?: Prisma.DateTimeNullableFilter<"WorkSchedule"> | Date | string | null
-  endWork?: Prisma.DateTimeNullableFilter<"WorkSchedule"> | Date | string | null
-  organizationId?: Prisma.IntNullableFilter<"WorkSchedule"> | number | null
-  employeeId?: Prisma.IntNullableFilter<"WorkSchedule"> | number | null
-  venueId?: Prisma.IntNullableFilter<"WorkSchedule"> | number | null
-}
-
-export type WorkScheduleCreateWithoutOrganizationInput = {
-  dayOfWeek: $Enums.DayOfWeek
-  isWorkingDay?: boolean
-  startWork?: Date | string | null
-  endWork?: Date | string | null
-  employee?: Prisma.EmployeeCreateNestedOneWithoutWorkSchedulesInput
-  venue?: Prisma.VenueCreateNestedOneWithoutWorkSchedulesInput
-}
-
-export type WorkScheduleUncheckedCreateWithoutOrganizationInput = {
-  id?: number
-  dayOfWeek: $Enums.DayOfWeek
-  isWorkingDay?: boolean
-  startWork?: Date | string | null
-  endWork?: Date | string | null
   employeeId?: number | null
   venueId?: number | null
 }
 
-export type WorkScheduleCreateOrConnectWithoutOrganizationInput = {
-  where: Prisma.WorkScheduleWhereUniqueInput
-  create: Prisma.XOR<Prisma.WorkScheduleCreateWithoutOrganizationInput, Prisma.WorkScheduleUncheckedCreateWithoutOrganizationInput>
-}
-
-export type WorkScheduleCreateManyOrganizationInputEnvelope = {
-  data: Prisma.WorkScheduleCreateManyOrganizationInput | Prisma.WorkScheduleCreateManyOrganizationInput[]
-  skipDuplicates?: boolean
-}
-
-export type WorkScheduleUpsertWithWhereUniqueWithoutOrganizationInput = {
-  where: Prisma.WorkScheduleWhereUniqueInput
-  update: Prisma.XOR<Prisma.WorkScheduleUpdateWithoutOrganizationInput, Prisma.WorkScheduleUncheckedUpdateWithoutOrganizationInput>
-  create: Prisma.XOR<Prisma.WorkScheduleCreateWithoutOrganizationInput, Prisma.WorkScheduleUncheckedCreateWithoutOrganizationInput>
-}
-
-export type WorkScheduleUpdateWithWhereUniqueWithoutOrganizationInput = {
-  where: Prisma.WorkScheduleWhereUniqueInput
-  data: Prisma.XOR<Prisma.WorkScheduleUpdateWithoutOrganizationInput, Prisma.WorkScheduleUncheckedUpdateWithoutOrganizationInput>
-}
-
-export type WorkScheduleUpdateManyWithWhereWithoutOrganizationInput = {
-  where: Prisma.WorkScheduleScalarWhereInput
-  data: Prisma.XOR<Prisma.WorkScheduleUpdateManyMutationInput, Prisma.WorkScheduleUncheckedUpdateManyWithoutOrganizationInput>
-}
-
-export type WorkScheduleCreateWithoutVenueInput = {
-  dayOfWeek: $Enums.DayOfWeek
-  isWorkingDay?: boolean
-  startWork?: Date | string | null
-  endWork?: Date | string | null
-  organization?: Prisma.OrganizationCreateNestedOneWithoutScheduleInput
-  employee?: Prisma.EmployeeCreateNestedOneWithoutWorkSchedulesInput
-}
-
-export type WorkScheduleUncheckedCreateWithoutVenueInput = {
+export type WorkScheduleUncheckedCreateWithoutWorkScheduleBreaksInput = {
   id?: number
   dayOfWeek: $Enums.DayOfWeek
   isWorkingDay?: boolean
@@ -701,132 +490,36 @@ export type WorkScheduleUncheckedCreateWithoutVenueInput = {
   endWork?: Date | string | null
   organizationId?: number | null
   employeeId?: number | null
-}
-
-export type WorkScheduleCreateOrConnectWithoutVenueInput = {
-  where: Prisma.WorkScheduleWhereUniqueInput
-  create: Prisma.XOR<Prisma.WorkScheduleCreateWithoutVenueInput, Prisma.WorkScheduleUncheckedCreateWithoutVenueInput>
-}
-
-export type WorkScheduleCreateManyVenueInputEnvelope = {
-  data: Prisma.WorkScheduleCreateManyVenueInput | Prisma.WorkScheduleCreateManyVenueInput[]
-  skipDuplicates?: boolean
-}
-
-export type WorkScheduleUpsertWithWhereUniqueWithoutVenueInput = {
-  where: Prisma.WorkScheduleWhereUniqueInput
-  update: Prisma.XOR<Prisma.WorkScheduleUpdateWithoutVenueInput, Prisma.WorkScheduleUncheckedUpdateWithoutVenueInput>
-  create: Prisma.XOR<Prisma.WorkScheduleCreateWithoutVenueInput, Prisma.WorkScheduleUncheckedCreateWithoutVenueInput>
-}
-
-export type WorkScheduleUpdateWithWhereUniqueWithoutVenueInput = {
-  where: Prisma.WorkScheduleWhereUniqueInput
-  data: Prisma.XOR<Prisma.WorkScheduleUpdateWithoutVenueInput, Prisma.WorkScheduleUncheckedUpdateWithoutVenueInput>
-}
-
-export type WorkScheduleUpdateManyWithWhereWithoutVenueInput = {
-  where: Prisma.WorkScheduleScalarWhereInput
-  data: Prisma.XOR<Prisma.WorkScheduleUpdateManyMutationInput, Prisma.WorkScheduleUncheckedUpdateManyWithoutVenueInput>
-}
-
-export type WorkScheduleCreateManyEmployeeInput = {
-  id?: number
-  dayOfWeek: $Enums.DayOfWeek
-  isWorkingDay?: boolean
-  startWork?: Date | string | null
-  endWork?: Date | string | null
-  organizationId?: number | null
   venueId?: number | null
 }
 
-export type WorkScheduleUpdateWithoutEmployeeInput = {
-  dayOfWeek?: Prisma.EnumDayOfWeekFieldUpdateOperationsInput | $Enums.DayOfWeek
-  isWorkingDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  startWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  endWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  organization?: Prisma.OrganizationUpdateOneWithoutScheduleNestedInput
-  venue?: Prisma.VenueUpdateOneWithoutWorkSchedulesNestedInput
+export type WorkScheduleCreateOrConnectWithoutWorkScheduleBreaksInput = {
+  where: Prisma.WorkScheduleWhereUniqueInput
+  create: Prisma.XOR<Prisma.WorkScheduleCreateWithoutWorkScheduleBreaksInput, Prisma.WorkScheduleUncheckedCreateWithoutWorkScheduleBreaksInput>
 }
 
-export type WorkScheduleUncheckedUpdateWithoutEmployeeInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+export type WorkScheduleUpsertWithoutWorkScheduleBreaksInput = {
+  update: Prisma.XOR<Prisma.WorkScheduleUpdateWithoutWorkScheduleBreaksInput, Prisma.WorkScheduleUncheckedUpdateWithoutWorkScheduleBreaksInput>
+  create: Prisma.XOR<Prisma.WorkScheduleCreateWithoutWorkScheduleBreaksInput, Prisma.WorkScheduleUncheckedCreateWithoutWorkScheduleBreaksInput>
+  where?: Prisma.WorkScheduleWhereInput
+}
+
+export type WorkScheduleUpdateToOneWithWhereWithoutWorkScheduleBreaksInput = {
+  where?: Prisma.WorkScheduleWhereInput
+  data: Prisma.XOR<Prisma.WorkScheduleUpdateWithoutWorkScheduleBreaksInput, Prisma.WorkScheduleUncheckedUpdateWithoutWorkScheduleBreaksInput>
+}
+
+export type WorkScheduleUpdateWithoutWorkScheduleBreaksInput = {
   dayOfWeek?: Prisma.EnumDayOfWeekFieldUpdateOperationsInput | $Enums.DayOfWeek
   isWorkingDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
   startWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organizationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  venueId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-}
-
-export type WorkScheduleUncheckedUpdateManyWithoutEmployeeInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  dayOfWeek?: Prisma.EnumDayOfWeekFieldUpdateOperationsInput | $Enums.DayOfWeek
-  isWorkingDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  startWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  endWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  organizationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  venueId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-}
-
-export type WorkScheduleCreateManyOrganizationInput = {
-  id?: number
-  dayOfWeek: $Enums.DayOfWeek
-  isWorkingDay?: boolean
-  startWork?: Date | string | null
-  endWork?: Date | string | null
-  employeeId?: number | null
-  venueId?: number | null
-}
-
-export type WorkScheduleUpdateWithoutOrganizationInput = {
-  dayOfWeek?: Prisma.EnumDayOfWeekFieldUpdateOperationsInput | $Enums.DayOfWeek
-  isWorkingDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  startWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  endWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  employee?: Prisma.EmployeeUpdateOneWithoutWorkSchedulesNestedInput
-  venue?: Prisma.VenueUpdateOneWithoutWorkSchedulesNestedInput
-}
-
-export type WorkScheduleUncheckedUpdateWithoutOrganizationInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  dayOfWeek?: Prisma.EnumDayOfWeekFieldUpdateOperationsInput | $Enums.DayOfWeek
-  isWorkingDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  startWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  endWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   employeeId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   venueId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
-export type WorkScheduleUncheckedUpdateManyWithoutOrganizationInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  dayOfWeek?: Prisma.EnumDayOfWeekFieldUpdateOperationsInput | $Enums.DayOfWeek
-  isWorkingDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  startWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  endWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  employeeId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  venueId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-}
-
-export type WorkScheduleCreateManyVenueInput = {
-  id?: number
-  dayOfWeek: $Enums.DayOfWeek
-  isWorkingDay?: boolean
-  startWork?: Date | string | null
-  endWork?: Date | string | null
-  organizationId?: number | null
-  employeeId?: number | null
-}
-
-export type WorkScheduleUpdateWithoutVenueInput = {
-  dayOfWeek?: Prisma.EnumDayOfWeekFieldUpdateOperationsInput | $Enums.DayOfWeek
-  isWorkingDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  startWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  endWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  organization?: Prisma.OrganizationUpdateOneWithoutScheduleNestedInput
-  employee?: Prisma.EmployeeUpdateOneWithoutWorkSchedulesNestedInput
-}
-
-export type WorkScheduleUncheckedUpdateWithoutVenueInput = {
+export type WorkScheduleUncheckedUpdateWithoutWorkScheduleBreaksInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   dayOfWeek?: Prisma.EnumDayOfWeekFieldUpdateOperationsInput | $Enums.DayOfWeek
   isWorkingDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -834,18 +527,38 @@ export type WorkScheduleUncheckedUpdateWithoutVenueInput = {
   endWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organizationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   employeeId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  venueId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
-export type WorkScheduleUncheckedUpdateManyWithoutVenueInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  dayOfWeek?: Prisma.EnumDayOfWeekFieldUpdateOperationsInput | $Enums.DayOfWeek
-  isWorkingDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  startWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  endWork?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  organizationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  employeeId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+
+/**
+ * Count Type WorkScheduleCountOutputType
+ */
+
+export type WorkScheduleCountOutputType = {
+  workScheduleBreaks: number
 }
 
+export type WorkScheduleCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  workScheduleBreaks?: boolean | WorkScheduleCountOutputTypeCountWorkScheduleBreaksArgs
+}
+
+/**
+ * WorkScheduleCountOutputType without action
+ */
+export type WorkScheduleCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the WorkScheduleCountOutputType
+   */
+  select?: Prisma.WorkScheduleCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * WorkScheduleCountOutputType without action
+ */
+export type WorkScheduleCountOutputTypeCountWorkScheduleBreaksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.WorkScheduleBreaksWhereInput
+}
 
 
 export type WorkScheduleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -857,9 +570,8 @@ export type WorkScheduleSelect<ExtArgs extends runtime.Types.Extensions.Internal
   organizationId?: boolean
   employeeId?: boolean
   venueId?: boolean
-  organization?: boolean | Prisma.WorkSchedule$organizationArgs<ExtArgs>
-  employee?: boolean | Prisma.WorkSchedule$employeeArgs<ExtArgs>
-  venue?: boolean | Prisma.WorkSchedule$venueArgs<ExtArgs>
+  workScheduleBreaks?: boolean | Prisma.WorkSchedule$workScheduleBreaksArgs<ExtArgs>
+  _count?: boolean | Prisma.WorkScheduleCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["workSchedule"]>
 
 
@@ -877,17 +589,14 @@ export type WorkScheduleSelectScalar = {
 
 export type WorkScheduleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "dayOfWeek" | "isWorkingDay" | "startWork" | "endWork" | "organizationId" | "employeeId" | "venueId", ExtArgs["result"]["workSchedule"]>
 export type WorkScheduleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  organization?: boolean | Prisma.WorkSchedule$organizationArgs<ExtArgs>
-  employee?: boolean | Prisma.WorkSchedule$employeeArgs<ExtArgs>
-  venue?: boolean | Prisma.WorkSchedule$venueArgs<ExtArgs>
+  workScheduleBreaks?: boolean | Prisma.WorkSchedule$workScheduleBreaksArgs<ExtArgs>
+  _count?: boolean | Prisma.WorkScheduleCountOutputTypeDefaultArgs<ExtArgs>
 }
 
 export type $WorkSchedulePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "WorkSchedule"
   objects: {
-    organization: Prisma.$OrganizationPayload<ExtArgs> | null
-    employee: Prisma.$EmployeePayload<ExtArgs> | null
-    venue: Prisma.$VenuePayload<ExtArgs> | null
+    workScheduleBreaks: Prisma.$WorkScheduleBreaksPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1238,9 +947,7 @@ readonly fields: WorkScheduleFieldRefs;
  */
 export interface Prisma__WorkScheduleClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  organization<T extends Prisma.WorkSchedule$organizationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WorkSchedule$organizationArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  employee<T extends Prisma.WorkSchedule$employeeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WorkSchedule$employeeArgs<ExtArgs>>): Prisma.Prisma__EmployeeClient<runtime.Types.Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  venue<T extends Prisma.WorkSchedule$venueArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WorkSchedule$venueArgs<ExtArgs>>): Prisma.Prisma__VenueClient<runtime.Types.Result.GetResult<Prisma.$VenuePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  workScheduleBreaks<T extends Prisma.WorkSchedule$workScheduleBreaksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WorkSchedule$workScheduleBreaksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkScheduleBreaksPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1621,60 +1328,27 @@ export type WorkScheduleDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.
 }
 
 /**
- * WorkSchedule.organization
+ * WorkSchedule.workScheduleBreaks
  */
-export type WorkSchedule$organizationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type WorkSchedule$workScheduleBreaksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Organization
+   * Select specific fields to fetch from the WorkScheduleBreaks
    */
-  select?: Prisma.OrganizationSelect<ExtArgs> | null
+  select?: Prisma.WorkScheduleBreaksSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Organization
+   * Omit specific fields from the WorkScheduleBreaks
    */
-  omit?: Prisma.OrganizationOmit<ExtArgs> | null
+  omit?: Prisma.WorkScheduleBreaksOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.OrganizationInclude<ExtArgs> | null
-  where?: Prisma.OrganizationWhereInput
-}
-
-/**
- * WorkSchedule.employee
- */
-export type WorkSchedule$employeeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Employee
-   */
-  select?: Prisma.EmployeeSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Employee
-   */
-  omit?: Prisma.EmployeeOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.EmployeeInclude<ExtArgs> | null
-  where?: Prisma.EmployeeWhereInput
-}
-
-/**
- * WorkSchedule.venue
- */
-export type WorkSchedule$venueArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Venue
-   */
-  select?: Prisma.VenueSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Venue
-   */
-  omit?: Prisma.VenueOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.VenueInclude<ExtArgs> | null
-  where?: Prisma.VenueWhereInput
+  include?: Prisma.WorkScheduleBreaksInclude<ExtArgs> | null
+  where?: Prisma.WorkScheduleBreaksWhereInput
+  orderBy?: Prisma.WorkScheduleBreaksOrderByWithRelationInput | Prisma.WorkScheduleBreaksOrderByWithRelationInput[]
+  cursor?: Prisma.WorkScheduleBreaksWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WorkScheduleBreaksScalarFieldEnum | Prisma.WorkScheduleBreaksScalarFieldEnum[]
 }
 
 /**

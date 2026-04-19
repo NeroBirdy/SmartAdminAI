@@ -1,15 +1,17 @@
 <template>
   <div class="header">
     <div class="leftSide">
-      <button class="back-btn"></button>
-      <h1 class="header-xl header-text">ИИ Администратор</h1>
+      <button class="back-btn" @click="router.back()"></button>
+      <h1 class="header-xl header-text">
+        <slot />
+      </h1>
     </div>
 
     <div class="rightSide">
       <component
         :is="WrechIcon"
         class="icon"
-        :class="{ active: isDevMenuOpen }"
+        :class="activeClass"
         alt="Иконка режима разработчика"
         @click="toggleDevMenu()"
       />
@@ -22,9 +24,14 @@
 </template>
 
 <script lang="ts" setup>
+const router = useRouter();
 import WrechIcon from "~/assets/icons/wrench.svg";
 
 const { isDevMenuOpen, toggleDevMenu } = useDevMenu();
+
+const activeClass = computed(() => ({
+  active: isDevMenuOpen.value
+}));
 </script>
 
 <style scoped>

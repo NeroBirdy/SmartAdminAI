@@ -1,13 +1,4 @@
 -- CreateTable
-CREATE TABLE `Breaks` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `startTime` TIME(0) NOT NULL,
-    `endTime` TIME(0) NOT NULL,
-
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
 CREATE TABLE `City` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
@@ -65,7 +56,6 @@ CREATE TABLE `EmployeeProgram` (
     `employeeId` INTEGER NOT NULL,
     `programId` INTEGER NOT NULL,
 
-    UNIQUE INDEX `EmployeeProgram_employeeId_key`(`employeeId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -182,29 +172,6 @@ CREATE TABLE `Venue` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `WorkSchedule` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `dayOfWeek` ENUM('MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN') NOT NULL,
-    `isWorkingDay` BOOLEAN NOT NULL DEFAULT true,
-    `startWork` TIME(0) NULL,
-    `endWork` TIME(0) NULL,
-    `organizationId` INTEGER NULL,
-    `employeeId` INTEGER NULL,
-    `venueId` INTEGER NULL,
-
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `WorkScheduleBreaks` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `workScheduleId` INTEGER NOT NULL,
-    `breakId` INTEGER NOT NULL,
-
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
 CREATE TABLE `_AdditionalVenues` (
     `A` INTEGER NOT NULL,
     `B` INTEGER NOT NULL,
@@ -278,15 +245,6 @@ ALTER TABLE `Topic` ADD CONSTRAINT `Topic_moduleId_fkey` FOREIGN KEY (`moduleId`
 
 -- AddForeignKey
 ALTER TABLE `Venue` ADD CONSTRAINT `Venue_cityId_fkey` FOREIGN KEY (`cityId`) REFERENCES `City`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `WorkSchedule` ADD CONSTRAINT `WorkSchedule_organizationId_fkey` FOREIGN KEY (`organizationId`) REFERENCES `Organization`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `WorkSchedule` ADD CONSTRAINT `WorkSchedule_employeeId_fkey` FOREIGN KEY (`employeeId`) REFERENCES `Employee`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `WorkSchedule` ADD CONSTRAINT `WorkSchedule_venueId_fkey` FOREIGN KEY (`venueId`) REFERENCES `Venue`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `_AdditionalVenues` ADD CONSTRAINT `_AdditionalVenues_A_fkey` FOREIGN KEY (`A`) REFERENCES `Group`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

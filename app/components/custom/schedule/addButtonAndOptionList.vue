@@ -18,6 +18,7 @@
   </Transition>
 </template>
 <script lang="ts" setup>
+import { addSectionSetting } from "~/api/schedule/addSectionSetting";
 import plusImg from "~/assets/icons/plus.svg";
 
 type Option = {
@@ -70,14 +71,7 @@ const addHandler = async (
   settingOptionId: number,
 ) => {
   try {
-    const newSectionSetting = await $fetch("/api/schedule/addSectionSetting", {
-      method: "POST",
-      body: {
-        sectionId: sectionId,
-        settingDefinitionId: settingDefinitionId,
-        settingOptionId: settingOptionId,
-      },
-    });
+    const newSectionSetting = await addSectionSetting(sectionId, settingDefinitionId, settingOptionId);
 
     emit("add", newSectionSetting);
 

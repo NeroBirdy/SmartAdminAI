@@ -21,6 +21,8 @@
   </div>
 </template>
 <script lang="ts" setup>
+import { getSettingsByKey } from "~/api/schedule/getSettingsByKey";
+
 const props = defineProps<{
   queryKey: string;
 }>();
@@ -53,13 +55,7 @@ const getData = async () => {
     loading.value = true;
     error.value = null;
 
-    const data = await $fetch("/api/schedule/getSettingsByKey", {
-      method: "POST",
-      body: {
-        sectionId: 1,
-        key: props.queryKey,
-      },
-    });
+    const data = await getSettingsByKey(props.queryKey);
 
     setting.value = data.setting;
     options.value = data.options;

@@ -3,7 +3,7 @@ model EmployeeProgram {
   employeeId Int
   programId  Int
 
-  groups    Group[]
-  lessons   Lesson[]
-  employees Employee[]
+  employee Employee @relation(fields: [employeeId], references: [id])
+  groups   Group[]
+  lessons  Lesson[]
 }

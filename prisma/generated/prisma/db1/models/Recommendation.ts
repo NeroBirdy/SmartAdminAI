@@ -419,10 +419,6 @@ export type BoolFieldUpdateOperationsInput = {
   set?: boolean
 }
 
-export type DateTimeFieldUpdateOperationsInput = {
-  set?: Date | string
-}
-
 export type RecommendationCreateNestedManyWithoutSectionInput = {
   create?: Prisma.XOR<Prisma.RecommendationCreateWithoutSectionInput, Prisma.RecommendationUncheckedCreateWithoutSectionInput> | Prisma.RecommendationCreateWithoutSectionInput[] | Prisma.RecommendationUncheckedCreateWithoutSectionInput[]
   connectOrCreate?: Prisma.RecommendationCreateOrConnectWithoutSectionInput | Prisma.RecommendationCreateOrConnectWithoutSectionInput[]

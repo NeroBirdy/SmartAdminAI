@@ -1,4 +1,13 @@
 -- CreateTable
+CREATE TABLE `Breaks` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `startTime` TIME(0) NOT NULL,
+    `endTime` TIME(0) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `prompts` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `title` VARCHAR(191) NOT NULL,
@@ -111,6 +120,44 @@ CREATE TABLE `SettingType` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- CreateTable
+CREATE TABLE `users` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `peerId` INTEGER NOT NULL,
+    `state` VARCHAR(191) NULL,
+    `city` VARCHAR(191) NULL,
+    `citiesList` JSON NOT NULL,
+    `citiesPage` INTEGER NOT NULL DEFAULT 1,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    UNIQUE INDEX `users_peerId_key`(`peerId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `WorkSchedule` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `dayOfWeek` ENUM('MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN') NOT NULL,
+    `isWorkingDay` BOOLEAN NOT NULL DEFAULT true,
+    `startWork` TIME(0) NULL,
+    `endWork` TIME(0) NULL,
+    `organizationId` INTEGER NULL,
+    `employeeId` INTEGER NULL,
+    `venueId` INTEGER NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `WorkScheduleBreaks` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `workScheduleId` INTEGER NOT NULL,
+    `breakId` INTEGER NOT NULL,
+
+    UNIQUE INDEX `WorkScheduleBreaks_workScheduleId_breakId_key`(`workScheduleId`, `breakId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- AddForeignKey
 ALTER TABLE `recommendations` ADD CONSTRAINT `recommendations_sectionId_fkey` FOREIGN KEY (`sectionId`) REFERENCES `sections`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -137,3 +184,9 @@ ALTER TABLE `SettingDefinition` ADD CONSTRAINT `SettingDefinition_settingTypeId_
 
 -- AddForeignKey
 ALTER TABLE `SettingOption` ADD CONSTRAINT `SettingOption_settingDefinitionId_fkey` FOREIGN KEY (`settingDefinitionId`) REFERENCES `SettingDefinition`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `WorkScheduleBreaks` ADD CONSTRAINT `WorkScheduleBreaks_workScheduleId_fkey` FOREIGN KEY (`workScheduleId`) REFERENCES `WorkSchedule`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `WorkScheduleBreaks` ADD CONSTRAINT `WorkScheduleBreaks_breakId_fkey` FOREIGN KEY (`breakId`) REFERENCES `Breaks`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

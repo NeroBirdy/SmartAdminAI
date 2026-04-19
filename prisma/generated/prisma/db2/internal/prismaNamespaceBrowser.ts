@@ -51,7 +51,6 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  Breaks: 'Breaks',
   City: 'City',
   Client: 'Client',
   ClientSubscription: 'ClientSubscription',
@@ -66,9 +65,7 @@ export const ModelName = {
   Schedule: 'Schedule',
   SubscriptionType: 'SubscriptionType',
   Topic: 'Topic',
-  Venue: 'Venue',
-  WorkSchedule: 'WorkSchedule',
-  WorkScheduleBreaks: 'WorkScheduleBreaks'
+  Venue: 'Venue'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -85,15 +82,6 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 } as const)
 
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
-
-
-export const BreaksScalarFieldEnum = {
-  id: 'id',
-  startTime: 'startTime',
-  endTime: 'endTime'
-} as const
-
-export type BreaksScalarFieldEnum = (typeof BreaksScalarFieldEnum)[keyof typeof BreaksScalarFieldEnum]
 
 
 export const CityScalarFieldEnum = {
@@ -140,8 +128,7 @@ export const EmployeeScalarFieldEnum = {
   lastName: 'lastName',
   role: 'role',
   organizationId: 'organizationId',
-  accessCode: 'accessCode',
-  employeeProgramId: 'employeeProgramId'
+  accessCode: 'accessCode'
 } as const
 
 export type EmployeeScalarFieldEnum = (typeof EmployeeScalarFieldEnum)[keyof typeof EmployeeScalarFieldEnum]
@@ -166,7 +153,8 @@ export const GroupScalarFieldEnum = {
   defaultVenueId: 'defaultVenueId',
   programId: 'programId',
   comment: 'comment',
-  ageCategory: 'ageCategory'
+  ageCategory: 'ageCategory',
+  employeeProgramId: 'employeeProgramId'
 } as const
 
 export type GroupScalarFieldEnum = (typeof GroupScalarFieldEnum)[keyof typeof GroupScalarFieldEnum]
@@ -266,29 +254,6 @@ export const VenueScalarFieldEnum = {
 } as const
 
 export type VenueScalarFieldEnum = (typeof VenueScalarFieldEnum)[keyof typeof VenueScalarFieldEnum]
-
-
-export const WorkScheduleScalarFieldEnum = {
-  id: 'id',
-  dayOfWeek: 'dayOfWeek',
-  isWorkingDay: 'isWorkingDay',
-  startWork: 'startWork',
-  endWork: 'endWork',
-  organizationId: 'organizationId',
-  employeeId: 'employeeId',
-  venueId: 'venueId'
-} as const
-
-export type WorkScheduleScalarFieldEnum = (typeof WorkScheduleScalarFieldEnum)[keyof typeof WorkScheduleScalarFieldEnum]
-
-
-export const WorkScheduleBreaksScalarFieldEnum = {
-  id: 'id',
-  workScheduleId: 'workScheduleId',
-  breakId: 'breakId'
-} as const
-
-export type WorkScheduleBreaksScalarFieldEnum = (typeof WorkScheduleBreaksScalarFieldEnum)[keyof typeof WorkScheduleBreaksScalarFieldEnum]
 
 
 export const SortOrder = {

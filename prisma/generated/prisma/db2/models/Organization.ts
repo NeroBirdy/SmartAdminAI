@@ -232,7 +232,6 @@ export type OrganizationWhereInput = {
   employees?: Prisma.EmployeeListRelationFilter
   groups?: Prisma.GroupListRelationFilter
   subscriptionTypes?: Prisma.SubscriptionTypeListRelationFilter
-  schedule?: Prisma.WorkScheduleListRelationFilter
   programs?: Prisma.ProgramListRelationFilter
 }
 
@@ -247,7 +246,6 @@ export type OrganizationOrderByWithRelationInput = {
   employees?: Prisma.EmployeeOrderByRelationAggregateInput
   groups?: Prisma.GroupOrderByRelationAggregateInput
   subscriptionTypes?: Prisma.SubscriptionTypeOrderByRelationAggregateInput
-  schedule?: Prisma.WorkScheduleOrderByRelationAggregateInput
   programs?: Prisma.ProgramOrderByRelationAggregateInput
   _relevance?: Prisma.OrganizationOrderByRelevanceInput
 }
@@ -266,7 +264,6 @@ export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
   employees?: Prisma.EmployeeListRelationFilter
   groups?: Prisma.GroupListRelationFilter
   subscriptionTypes?: Prisma.SubscriptionTypeListRelationFilter
-  schedule?: Prisma.WorkScheduleListRelationFilter
   programs?: Prisma.ProgramListRelationFilter
 }, "id">
 
@@ -305,7 +302,6 @@ export type OrganizationCreateInput = {
   employees?: Prisma.EmployeeCreateNestedManyWithoutOrganizationInput
   groups?: Prisma.GroupCreateNestedManyWithoutOrganizationInput
   subscriptionTypes?: Prisma.SubscriptionTypeCreateNestedManyWithoutOrganizationInput
-  schedule?: Prisma.WorkScheduleCreateNestedManyWithoutOrganizationInput
   programs?: Prisma.ProgramCreateNestedManyWithoutOrganizationInput
 }
 
@@ -319,7 +315,6 @@ export type OrganizationUncheckedCreateInput = {
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutOrganizationInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutOrganizationInput
   subscriptionTypes?: Prisma.SubscriptionTypeUncheckedCreateNestedManyWithoutOrganizationInput
-  schedule?: Prisma.WorkScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
@@ -332,7 +327,6 @@ export type OrganizationUpdateInput = {
   employees?: Prisma.EmployeeUpdateManyWithoutOrganizationNestedInput
   groups?: Prisma.GroupUpdateManyWithoutOrganizationNestedInput
   subscriptionTypes?: Prisma.SubscriptionTypeUpdateManyWithoutOrganizationNestedInput
-  schedule?: Prisma.WorkScheduleUpdateManyWithoutOrganizationNestedInput
   programs?: Prisma.ProgramUpdateManyWithoutOrganizationNestedInput
 }
 
@@ -346,7 +340,6 @@ export type OrganizationUncheckedUpdateInput = {
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutOrganizationNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutOrganizationNestedInput
   subscriptionTypes?: Prisma.SubscriptionTypeUncheckedUpdateManyWithoutOrganizationNestedInput
-  schedule?: Prisma.WorkScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   programs?: Prisma.ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
@@ -431,11 +424,6 @@ export type OrganizationMinOrderByAggregateInput = {
 export type OrganizationSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   cityId?: Prisma.SortOrder
-}
-
-export type OrganizationNullableScalarRelationFilter = {
-  is?: Prisma.OrganizationWhereInput | null
-  isNot?: Prisma.OrganizationWhereInput | null
 }
 
 export type OrganizationCreateNestedManyWithoutCityInput = {
@@ -548,22 +536,6 @@ export type OrganizationUpdateOneRequiredWithoutSubscriptionTypesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutSubscriptionTypesInput, Prisma.OrganizationUpdateWithoutSubscriptionTypesInput>, Prisma.OrganizationUncheckedUpdateWithoutSubscriptionTypesInput>
 }
 
-export type OrganizationCreateNestedOneWithoutScheduleInput = {
-  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutScheduleInput, Prisma.OrganizationUncheckedCreateWithoutScheduleInput>
-  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutScheduleInput
-  connect?: Prisma.OrganizationWhereUniqueInput
-}
-
-export type OrganizationUpdateOneWithoutScheduleNestedInput = {
-  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutScheduleInput, Prisma.OrganizationUncheckedCreateWithoutScheduleInput>
-  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutScheduleInput
-  upsert?: Prisma.OrganizationUpsertWithoutScheduleInput
-  disconnect?: Prisma.OrganizationWhereInput | boolean
-  delete?: Prisma.OrganizationWhereInput | boolean
-  connect?: Prisma.OrganizationWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutScheduleInput, Prisma.OrganizationUpdateWithoutScheduleInput>, Prisma.OrganizationUncheckedUpdateWithoutScheduleInput>
-}
-
 export type OrganizationCreateWithoutCityInput = {
   name: string
   type: $Enums.OrgType
@@ -572,7 +544,6 @@ export type OrganizationCreateWithoutCityInput = {
   employees?: Prisma.EmployeeCreateNestedManyWithoutOrganizationInput
   groups?: Prisma.GroupCreateNestedManyWithoutOrganizationInput
   subscriptionTypes?: Prisma.SubscriptionTypeCreateNestedManyWithoutOrganizationInput
-  schedule?: Prisma.WorkScheduleCreateNestedManyWithoutOrganizationInput
   programs?: Prisma.ProgramCreateNestedManyWithoutOrganizationInput
 }
 
@@ -585,7 +556,6 @@ export type OrganizationUncheckedCreateWithoutCityInput = {
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutOrganizationInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutOrganizationInput
   subscriptionTypes?: Prisma.SubscriptionTypeUncheckedCreateNestedManyWithoutOrganizationInput
-  schedule?: Prisma.WorkScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
@@ -635,7 +605,6 @@ export type OrganizationCreateWithoutEmployeesInput = {
   city: Prisma.CityCreateNestedOneWithoutOrganizationsInput
   groups?: Prisma.GroupCreateNestedManyWithoutOrganizationInput
   subscriptionTypes?: Prisma.SubscriptionTypeCreateNestedManyWithoutOrganizationInput
-  schedule?: Prisma.WorkScheduleCreateNestedManyWithoutOrganizationInput
   programs?: Prisma.ProgramCreateNestedManyWithoutOrganizationInput
 }
 
@@ -648,7 +617,6 @@ export type OrganizationUncheckedCreateWithoutEmployeesInput = {
   cityId: number
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutOrganizationInput
   subscriptionTypes?: Prisma.SubscriptionTypeUncheckedCreateNestedManyWithoutOrganizationInput
-  schedule?: Prisma.WorkScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
@@ -676,7 +644,6 @@ export type OrganizationUpdateWithoutEmployeesInput = {
   city?: Prisma.CityUpdateOneRequiredWithoutOrganizationsNestedInput
   groups?: Prisma.GroupUpdateManyWithoutOrganizationNestedInput
   subscriptionTypes?: Prisma.SubscriptionTypeUpdateManyWithoutOrganizationNestedInput
-  schedule?: Prisma.WorkScheduleUpdateManyWithoutOrganizationNestedInput
   programs?: Prisma.ProgramUpdateManyWithoutOrganizationNestedInput
 }
 
@@ -689,7 +656,6 @@ export type OrganizationUncheckedUpdateWithoutEmployeesInput = {
   cityId?: Prisma.IntFieldUpdateOperationsInput | number
   groups?: Prisma.GroupUncheckedUpdateManyWithoutOrganizationNestedInput
   subscriptionTypes?: Prisma.SubscriptionTypeUncheckedUpdateManyWithoutOrganizationNestedInput
-  schedule?: Prisma.WorkScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   programs?: Prisma.ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
@@ -701,7 +667,6 @@ export type OrganizationCreateWithoutGroupsInput = {
   city: Prisma.CityCreateNestedOneWithoutOrganizationsInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutOrganizationInput
   subscriptionTypes?: Prisma.SubscriptionTypeCreateNestedManyWithoutOrganizationInput
-  schedule?: Prisma.WorkScheduleCreateNestedManyWithoutOrganizationInput
   programs?: Prisma.ProgramCreateNestedManyWithoutOrganizationInput
 }
 
@@ -714,7 +679,6 @@ export type OrganizationUncheckedCreateWithoutGroupsInput = {
   cityId: number
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutOrganizationInput
   subscriptionTypes?: Prisma.SubscriptionTypeUncheckedCreateNestedManyWithoutOrganizationInput
-  schedule?: Prisma.WorkScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
@@ -742,7 +706,6 @@ export type OrganizationUpdateWithoutGroupsInput = {
   city?: Prisma.CityUpdateOneRequiredWithoutOrganizationsNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutOrganizationNestedInput
   subscriptionTypes?: Prisma.SubscriptionTypeUpdateManyWithoutOrganizationNestedInput
-  schedule?: Prisma.WorkScheduleUpdateManyWithoutOrganizationNestedInput
   programs?: Prisma.ProgramUpdateManyWithoutOrganizationNestedInput
 }
 
@@ -755,7 +718,6 @@ export type OrganizationUncheckedUpdateWithoutGroupsInput = {
   cityId?: Prisma.IntFieldUpdateOperationsInput | number
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutOrganizationNestedInput
   subscriptionTypes?: Prisma.SubscriptionTypeUncheckedUpdateManyWithoutOrganizationNestedInput
-  schedule?: Prisma.WorkScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   programs?: Prisma.ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
@@ -768,7 +730,6 @@ export type OrganizationCreateWithoutProgramsInput = {
   employees?: Prisma.EmployeeCreateNestedManyWithoutOrganizationInput
   groups?: Prisma.GroupCreateNestedManyWithoutOrganizationInput
   subscriptionTypes?: Prisma.SubscriptionTypeCreateNestedManyWithoutOrganizationInput
-  schedule?: Prisma.WorkScheduleCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutProgramsInput = {
@@ -781,7 +742,6 @@ export type OrganizationUncheckedCreateWithoutProgramsInput = {
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutOrganizationInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutOrganizationInput
   subscriptionTypes?: Prisma.SubscriptionTypeUncheckedCreateNestedManyWithoutOrganizationInput
-  schedule?: Prisma.WorkScheduleUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutProgramsInput = {
@@ -809,7 +769,6 @@ export type OrganizationUpdateWithoutProgramsInput = {
   employees?: Prisma.EmployeeUpdateManyWithoutOrganizationNestedInput
   groups?: Prisma.GroupUpdateManyWithoutOrganizationNestedInput
   subscriptionTypes?: Prisma.SubscriptionTypeUpdateManyWithoutOrganizationNestedInput
-  schedule?: Prisma.WorkScheduleUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutProgramsInput = {
@@ -822,7 +781,6 @@ export type OrganizationUncheckedUpdateWithoutProgramsInput = {
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutOrganizationNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutOrganizationNestedInput
   subscriptionTypes?: Prisma.SubscriptionTypeUncheckedUpdateManyWithoutOrganizationNestedInput
-  schedule?: Prisma.WorkScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutSubscriptionTypesInput = {
@@ -833,7 +791,6 @@ export type OrganizationCreateWithoutSubscriptionTypesInput = {
   city: Prisma.CityCreateNestedOneWithoutOrganizationsInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutOrganizationInput
   groups?: Prisma.GroupCreateNestedManyWithoutOrganizationInput
-  schedule?: Prisma.WorkScheduleCreateNestedManyWithoutOrganizationInput
   programs?: Prisma.ProgramCreateNestedManyWithoutOrganizationInput
 }
 
@@ -846,7 +803,6 @@ export type OrganizationUncheckedCreateWithoutSubscriptionTypesInput = {
   cityId: number
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutOrganizationInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutOrganizationInput
-  schedule?: Prisma.WorkScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
@@ -874,7 +830,6 @@ export type OrganizationUpdateWithoutSubscriptionTypesInput = {
   city?: Prisma.CityUpdateOneRequiredWithoutOrganizationsNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutOrganizationNestedInput
   groups?: Prisma.GroupUpdateManyWithoutOrganizationNestedInput
-  schedule?: Prisma.WorkScheduleUpdateManyWithoutOrganizationNestedInput
   programs?: Prisma.ProgramUpdateManyWithoutOrganizationNestedInput
 }
 
@@ -887,73 +842,6 @@ export type OrganizationUncheckedUpdateWithoutSubscriptionTypesInput = {
   cityId?: Prisma.IntFieldUpdateOperationsInput | number
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutOrganizationNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutOrganizationNestedInput
-  schedule?: Prisma.WorkScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
-  programs?: Prisma.ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
-}
-
-export type OrganizationCreateWithoutScheduleInput = {
-  name: string
-  type: $Enums.OrgType
-  focus: $Enums.Focus
-  visitModel: $Enums.VisitModel
-  city: Prisma.CityCreateNestedOneWithoutOrganizationsInput
-  employees?: Prisma.EmployeeCreateNestedManyWithoutOrganizationInput
-  groups?: Prisma.GroupCreateNestedManyWithoutOrganizationInput
-  subscriptionTypes?: Prisma.SubscriptionTypeCreateNestedManyWithoutOrganizationInput
-  programs?: Prisma.ProgramCreateNestedManyWithoutOrganizationInput
-}
-
-export type OrganizationUncheckedCreateWithoutScheduleInput = {
-  id?: number
-  name: string
-  type: $Enums.OrgType
-  focus: $Enums.Focus
-  visitModel: $Enums.VisitModel
-  cityId: number
-  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutOrganizationInput
-  groups?: Prisma.GroupUncheckedCreateNestedManyWithoutOrganizationInput
-  subscriptionTypes?: Prisma.SubscriptionTypeUncheckedCreateNestedManyWithoutOrganizationInput
-  programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutOrganizationInput
-}
-
-export type OrganizationCreateOrConnectWithoutScheduleInput = {
-  where: Prisma.OrganizationWhereUniqueInput
-  create: Prisma.XOR<Prisma.OrganizationCreateWithoutScheduleInput, Prisma.OrganizationUncheckedCreateWithoutScheduleInput>
-}
-
-export type OrganizationUpsertWithoutScheduleInput = {
-  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutScheduleInput, Prisma.OrganizationUncheckedUpdateWithoutScheduleInput>
-  create: Prisma.XOR<Prisma.OrganizationCreateWithoutScheduleInput, Prisma.OrganizationUncheckedCreateWithoutScheduleInput>
-  where?: Prisma.OrganizationWhereInput
-}
-
-export type OrganizationUpdateToOneWithWhereWithoutScheduleInput = {
-  where?: Prisma.OrganizationWhereInput
-  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutScheduleInput, Prisma.OrganizationUncheckedUpdateWithoutScheduleInput>
-}
-
-export type OrganizationUpdateWithoutScheduleInput = {
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumOrgTypeFieldUpdateOperationsInput | $Enums.OrgType
-  focus?: Prisma.EnumFocusFieldUpdateOperationsInput | $Enums.Focus
-  visitModel?: Prisma.EnumVisitModelFieldUpdateOperationsInput | $Enums.VisitModel
-  city?: Prisma.CityUpdateOneRequiredWithoutOrganizationsNestedInput
-  employees?: Prisma.EmployeeUpdateManyWithoutOrganizationNestedInput
-  groups?: Prisma.GroupUpdateManyWithoutOrganizationNestedInput
-  subscriptionTypes?: Prisma.SubscriptionTypeUpdateManyWithoutOrganizationNestedInput
-  programs?: Prisma.ProgramUpdateManyWithoutOrganizationNestedInput
-}
-
-export type OrganizationUncheckedUpdateWithoutScheduleInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumOrgTypeFieldUpdateOperationsInput | $Enums.OrgType
-  focus?: Prisma.EnumFocusFieldUpdateOperationsInput | $Enums.Focus
-  visitModel?: Prisma.EnumVisitModelFieldUpdateOperationsInput | $Enums.VisitModel
-  cityId?: Prisma.IntFieldUpdateOperationsInput | number
-  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutOrganizationNestedInput
-  groups?: Prisma.GroupUncheckedUpdateManyWithoutOrganizationNestedInput
-  subscriptionTypes?: Prisma.SubscriptionTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   programs?: Prisma.ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
@@ -973,7 +861,6 @@ export type OrganizationUpdateWithoutCityInput = {
   employees?: Prisma.EmployeeUpdateManyWithoutOrganizationNestedInput
   groups?: Prisma.GroupUpdateManyWithoutOrganizationNestedInput
   subscriptionTypes?: Prisma.SubscriptionTypeUpdateManyWithoutOrganizationNestedInput
-  schedule?: Prisma.WorkScheduleUpdateManyWithoutOrganizationNestedInput
   programs?: Prisma.ProgramUpdateManyWithoutOrganizationNestedInput
 }
 
@@ -986,7 +873,6 @@ export type OrganizationUncheckedUpdateWithoutCityInput = {
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutOrganizationNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutOrganizationNestedInput
   subscriptionTypes?: Prisma.SubscriptionTypeUncheckedUpdateManyWithoutOrganizationNestedInput
-  schedule?: Prisma.WorkScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   programs?: Prisma.ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
@@ -1007,7 +893,6 @@ export type OrganizationCountOutputType = {
   employees: number
   groups: number
   subscriptionTypes: number
-  schedule: number
   programs: number
 }
 
@@ -1015,7 +900,6 @@ export type OrganizationCountOutputTypeSelect<ExtArgs extends runtime.Types.Exte
   employees?: boolean | OrganizationCountOutputTypeCountEmployeesArgs
   groups?: boolean | OrganizationCountOutputTypeCountGroupsArgs
   subscriptionTypes?: boolean | OrganizationCountOutputTypeCountSubscriptionTypesArgs
-  schedule?: boolean | OrganizationCountOutputTypeCountScheduleArgs
   programs?: boolean | OrganizationCountOutputTypeCountProgramsArgs
 }
 
@@ -1053,13 +937,6 @@ export type OrganizationCountOutputTypeCountSubscriptionTypesArgs<ExtArgs extend
 /**
  * OrganizationCountOutputType without action
  */
-export type OrganizationCountOutputTypeCountScheduleArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.WorkScheduleWhereInput
-}
-
-/**
- * OrganizationCountOutputType without action
- */
 export type OrganizationCountOutputTypeCountProgramsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ProgramWhereInput
 }
@@ -1076,7 +953,6 @@ export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   employees?: boolean | Prisma.Organization$employeesArgs<ExtArgs>
   groups?: boolean | Prisma.Organization$groupsArgs<ExtArgs>
   subscriptionTypes?: boolean | Prisma.Organization$subscriptionTypesArgs<ExtArgs>
-  schedule?: boolean | Prisma.Organization$scheduleArgs<ExtArgs>
   programs?: boolean | Prisma.Organization$programsArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["organization"]>
@@ -1098,7 +974,6 @@ export type OrganizationInclude<ExtArgs extends runtime.Types.Extensions.Interna
   employees?: boolean | Prisma.Organization$employeesArgs<ExtArgs>
   groups?: boolean | Prisma.Organization$groupsArgs<ExtArgs>
   subscriptionTypes?: boolean | Prisma.Organization$subscriptionTypesArgs<ExtArgs>
-  schedule?: boolean | Prisma.Organization$scheduleArgs<ExtArgs>
   programs?: boolean | Prisma.Organization$programsArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -1110,7 +985,6 @@ export type $OrganizationPayload<ExtArgs extends runtime.Types.Extensions.Intern
     employees: Prisma.$EmployeePayload<ExtArgs>[]
     groups: Prisma.$GroupPayload<ExtArgs>[]
     subscriptionTypes: Prisma.$SubscriptionTypePayload<ExtArgs>[]
-    schedule: Prisma.$WorkSchedulePayload<ExtArgs>[]
     programs: Prisma.$ProgramPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1464,7 +1338,6 @@ export interface Prisma__OrganizationClient<T, Null = never, ExtArgs extends run
   employees<T extends Prisma.Organization$employeesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$employeesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   groups<T extends Prisma.Organization$groupsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$groupsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   subscriptionTypes<T extends Prisma.Organization$subscriptionTypesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$subscriptionTypesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubscriptionTypePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  schedule<T extends Prisma.Organization$scheduleArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$scheduleArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkSchedulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   programs<T extends Prisma.Organization$programsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$programsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProgramPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1913,30 +1786,6 @@ export type Organization$subscriptionTypesArgs<ExtArgs extends runtime.Types.Ext
   take?: number
   skip?: number
   distinct?: Prisma.SubscriptionTypeScalarFieldEnum | Prisma.SubscriptionTypeScalarFieldEnum[]
-}
-
-/**
- * Organization.schedule
- */
-export type Organization$scheduleArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the WorkSchedule
-   */
-  select?: Prisma.WorkScheduleSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the WorkSchedule
-   */
-  omit?: Prisma.WorkScheduleOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.WorkScheduleInclude<ExtArgs> | null
-  where?: Prisma.WorkScheduleWhereInput
-  orderBy?: Prisma.WorkScheduleOrderByWithRelationInput | Prisma.WorkScheduleOrderByWithRelationInput[]
-  cursor?: Prisma.WorkScheduleWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.WorkScheduleScalarFieldEnum | Prisma.WorkScheduleScalarFieldEnum[]
 }
 
 /**

@@ -1,9 +1,10 @@
 const prisma = usePrisma();
 
 export default defineEventHandler(async (event) => {
-  const body = await readBody(event);
-  const { key, sectionId } = body;
+  const query = await getQuery(event);
 
+  const key = String(query.key);
+  const sectionId = Number(query.sectionId);
   if (!key || !sectionId) {
     throw createError({
       statusCode: 400,

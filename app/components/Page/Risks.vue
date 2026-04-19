@@ -1,5 +1,5 @@
 <template>
-  <ui-loader v-if="loading" />
+  <ui-loader class="loader" v-if="loading" />
 
   <Transition name="fade">
     <div v-if="!loading">
@@ -23,6 +23,10 @@ onMounted(async () => {
 });
 </script>
 <style scoped>
+.loader {
+  margin-top: 20px;
+}
+
 .fade-enter-active {
   transition: opacity 0.4s ease;
 }

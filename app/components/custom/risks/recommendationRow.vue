@@ -25,6 +25,7 @@
 </template>
 
 <script lang="ts" setup>
+import { changeDoneState } from "~/api/risks/changeDoneState";
 import checkImg from "~/assets/icons/check.svg";
 
 type Recommendation = {
@@ -40,10 +41,7 @@ const props = defineProps<{
 
 const handleRecommendationButtonClick = async () => {
   try {
-    await $fetch("/api/risks/changeDoneState", {
-      method: "POST",
-      body: { id: props.item.id, done: !props.item.done },
-    });
+    await changeDoneState(props.item.id, props.item.done);
 
     props.item.done = !props.item.done;
   } catch (error) {

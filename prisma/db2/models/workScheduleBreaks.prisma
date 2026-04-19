@@ -1,5 +1,0 @@
-model WorkScheduleBreaks {
-  id             Int @id @default(autoincrement())
-  workScheduleId Int
-  breakId        Int
-}
