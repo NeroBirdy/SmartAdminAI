@@ -26,7 +26,7 @@ type Category = {
 
 const availableToToggleOn = async () => {
   const response = await getHorizonPlanning();
-  return response.isHorizonPlanning;
+  return response!.isHorizonPlanning;
 };
 
 const updateScheduleToggle = async () => {

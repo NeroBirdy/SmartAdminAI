@@ -38,6 +38,9 @@ const getSchedule = async (type: "employee" | "venue" | "organisation", id: numb
         endWork: true,
         workScheduleBreaks: { select: { break: true } },
       },
+      orderBy: {
+        dayOfWeek: "asc"
+      }
     });
 
     if (workSchedule.length === 0) {

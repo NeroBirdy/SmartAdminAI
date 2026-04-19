@@ -3,6 +3,8 @@
     <h1 class="frame-header header-md">Графики занятости</h1>
     <div class="inside-frame">
       <custom-settings-organisation-schedule />
+      <custom-settings-employee-settings />
+      <custom-settings-venue-settings />
     </div>
   </div>
 
