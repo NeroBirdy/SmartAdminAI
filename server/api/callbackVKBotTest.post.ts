@@ -1,213 +1,10 @@
+import { log } from 'node:console';
 import { VK, Keyboard } from 'vk-io';
 
 const vk = new VK({ token: useRuntimeConfig().vkToken });
-const prisma = usePrisma();
 
-async function sendStartMessage(peerId: number) {
-    const keyboard = Keyboard.builder()
-        .textButton({ label: 'Хочу записаться', color: Keyboard.POSITIVE_COLOR, payload: { cmd: 'signup' } })
-        .row()
-        .textButton({ label: 'Уже занимаюсь', color: Keyboard.PRIMARY_COLOR, payload: { cmd: 'login' } })
-        .oneTime();
-
-    await vk.api.messages.send({
-        peer_id: peerId,
-        message: 'Привет! Я умею много крутого и т. д. ... Нажми кнопку ниже 👇',
-        keyboard,
-        random_id: Math.floor(Math.random() * 1000000)
-    });
-    return 'ok';
-}
-
-async function sendChooseCityMessage(peerId: number) {
-    const keyboard = Keyboard.builder()
-        .textButton({ label: 'Назад', color: Keyboard.POSITIVE_COLOR, payload: { cmd: 'back' } });
-
-    await vk.api.messages.send({
-        peer_id: peerId,
-        message: 'В каком городе находится секция? Напишите город или его часть',
-        keyboard,
-        random_id: Math.floor(Math.random() * 1000000)
-    });
-    return 'ok';
-}
-
-async function sendLoginMessage(peerId: number) {
-    const keyboard = Keyboard.builder()
-        .textButton({ label: 'Назад', color: Keyboard.POSITIVE_COLOR, payload: { cmd: 'back' } });
-
-    await vk.api.messages.send({
-        peer_id: peerId,
-        message: 'Введите како1-то там ключ из личного кабинета',
-        keyboard,
-        random_id: Math.floor(Math.random() * 1000000)
-    });
-    return 'ok';
-}
-
-async function sendChooseOrganizationMessage(peerId: number) {
-    const keyboard = Keyboard.builder()
-        .textButton({ label: 'Назад', color: Keyboard.POSITIVE_COLOR, payload: { cmd: 'backToChooseCity' } });
-
-    await vk.api.messages.send({
-        peer_id: peerId,
-        message: 'Как называется секция?',
-        keyboard,
-        random_id: Math.floor(Math.random() * 1000000)
-    });
-    return 'ok';
-}
-
-async function fakeAPI() {
-    return {
-        'Брянск': ['Краски и мелки', 'Краски и кисточки', 'ПроТанцы'],
-        'Екатеринбург': ['Авиомоделирование66', 'ЧемпионыБорьбы', 'Палки-Вязалки'],
-        'Москва': ['Гитарная аккадемия', 'Спортивная гимнастика', 'Лучше всех'],
-        'Ханты-Мансийск': ['Лингвомир', 'Кроль', 'Дружба'],
-        'Тюмень': [],
-        'Братск': [],
-        'Иркутск': [],
-        'Владивосток': [],
-        'Санкт-Петербург': [],
-        'Мурманск': [],
-        'Якутск': [],
-        'Омск': [],
-        'Новосибирск': [],
-        'Кемерово': [],
-    };
-}
-
-function findCities(data: Record<string, string[]>, query: string) {
-    const q = query.toLowerCase();
-
-    return Object.keys(data)
-        .filter(city => city.toLowerCase().includes(q))
-}
-
-const MAX_PAGE_SIZE = 3;
-
-function getCitiesPage(cities: string[], page: number) {
-    const totalPages = Math.max(1, Math.ceil(cities.length / MAX_PAGE_SIZE));
-    const currentPage = Math.min(Math.max(1, page), totalPages);
-
-    const start = (currentPage - 1) * MAX_PAGE_SIZE;
-    const end = start + MAX_PAGE_SIZE;
-    const slice = cities.slice(start, end);
-
-    return { slice, currentPage, totalPages };
-}
-
-function buildCitiesKeyboard(cities: string[], page: number) {
-    const { slice, currentPage, totalPages } = getCitiesPage(cities, page);
-    const keyboard = Keyboard.builder().inline();
-
-    for (const city of slice) {
-        keyboard
-            .callbackButton({
-                label: city,
-                payload: { cmd: 'choose_city', city }
-            })
-            .row();
-    }
-
-    if (totalPages > 1) {
-        if (currentPage > 1) {
-            keyboard.callbackButton({
-                label: '⬅️',
-                payload: { cmd: 'cities_page', page: currentPage - 1 }
-            });
-        }
-
-        keyboard.callbackButton({
-            label: `${currentPage}/${totalPages}`,
-            payload: { cmd: 'noop' }
-        });
-
-        if (currentPage < totalPages) {
-            keyboard.callbackButton({
-                label: '➡️',
-                payload: { cmd: 'cities_page', page: currentPage + 1 }
-            });
-        }
-
-        keyboard.row();
-    }
-
-    keyboard.callbackButton({
-        label: 'Вернуться',
-        payload: { cmd: 'backToChooseCity' }
-    });
-
-    return keyboard;
-}
-
-type SaveUserStateParams = {
-    peerId: number;
-    state?: string | null;
-    city?: string | null;
-    citiesList?: unknown;
-    citiesPage?: number;
-};
-
-async function saveUserState(params: SaveUserStateParams) {
-    const { peerId, state, city, citiesList, citiesPage } = params;
-
-    const updateData: any = {};
-
-    if (state !== undefined) {
-        updateData.state = state;
-    }
-    if (city !== undefined) {
-        updateData.city = city;
-    }
-    if (citiesList !== undefined) {
-        updateData.citiesList = citiesList;
-    }
-    if (citiesPage !== undefined) {
-        updateData.citiesPage = citiesPage;
-    }
-
-    return prisma.users.upsert({
-        where: { peerId },
-        update: updateData,
-        create: {
-            peerId,
-            state: state ?? null,
-            city: city ?? null,
-            citiesList: citiesList ?? [],
-            citiesPage: citiesPage ?? 1
-        }
-    });
-}
-
-async function getUserState(peerId: number) {
-    const user = await prisma.users.findUnique({
-        where: { peerId },
-        select: { state: true }
-    });
-
-    return user?.state || '';
-}
-
-async function getUserCityList(peerId: number): Promise<string[]> {
-    const user = await prisma.users.findUnique({
-        where: { peerId },
-        select: { citiesList: true }
-    });
-
-    const list = user?.citiesList ?? [];
-
-    return Array.isArray(list) ? (list as string[]) : [];
-}
-
-async function getUserPage(peerId: number) {
-    const user = await prisma.users.findUnique({
-        where: { peerId },
-        select: { citiesPage: true }
-    });
-
-    return user?.citiesPage || 1;
-}
+const datePickerId = Number(process.env.MINI_APP_ID);
+const ownerGroupId = Number(process.env.OWNER_GROUP_ID);
 
 export default defineEventHandler(async (event) => {
     const body = await readBody(event);
@@ -236,62 +33,100 @@ export default defineEventHandler(async (event) => {
             return 'ok';
         }
 
-        if (text === 'хочу записаться' && currentState === 'start') {
-            await sendChooseCityMessage(peerId);
-            await saveUserState({ peerId: peerId, state: 'choose_city' });
-            return 'ok';
-        }
+        switch (currentState) {
 
-        if (text === 'уже занимаюсь') {
-            await sendLoginMessage(peerId);
-            await saveUserState({ peerId: peerId, state: 'login' });
-            return 'ok';
-        }
+            case 'start':
+                if (payload.cmd === 'signup') {
+                    await sendChooseCityMessage(peerId);
+                    await saveUserState({ peerId: peerId, state: 'choose_city' });
+                    return 'ok';
+                }
+                else if (payload.cmd === 'login') {
+                    const accessCode = await getUserAccessCode(peerId);
 
-        if (payload.cmd === 'back' && (currentState === 'choose_city' || currentState === 'login')) {
-            await sendStartMessage(peerId);
-            await saveUserState({ peerId: peerId, state: 'start' });
-            return 'ok';
-        }
+                    if (accessCode === null) {
+                        await sendLoginMessage(peerId);
+                        await saveUserState({ peerId: peerId, state: 'login' });
+                    }
+                    else {
+                        await login(peerId, accessCode!);
+                        await saveUserState({ peerId: peerId, state: 'isLogined' });
+                        await sendHelloMessage(peerId);
+                    }
+                    return 'ok';
+                }
+                break;
 
-        if (currentState === 'choose_city') {
-            const apiResponse = await fakeAPI();
-            const findResult = findCities(apiResponse, text);
+            case 'choose_city':
+                if (payload.cmd === 'back') {
+                    await sendStartMessage(peerId);
+                    await saveUserState({ peerId: peerId, state: 'start' });
+                    return 'ok';
+                }
 
-            if (findResult.length === 0) {
-                await vk.api.messages.send({
-                    peer_id: peerId,
-                    message: 'Город не найден, попробуйте еще раз',
-                    random_id: Math.floor(Math.random() * 1000000)
-                });
-            } else if (findResult.length === 1) {
-                await vk.api.messages.send({
-                    peer_id: peerId,
-                    message: `Ваш город: ${findResult[0]}`,
-                    random_id: Math.floor(Math.random() * 1000000)
-                });
-                await saveUserState({ peerId: peerId, state: 'choose_organization', city: findResult[0] });
-                await sendChooseOrganizationMessage(peerId);
-            } else {
-                const keyboard = buildCitiesKeyboard(findResult, 1);
+                const apiResponse = await getCityOrganizationList();
+                const cityList = findCities(apiResponse, text);
 
-                const msgId = await vk.api.messages.send({
-                    peer_id: peerId,
-                    message: 'Выбери город:',
-                    keyboard,
-                    random_id: Date.now()
-                });
+                await chooseCity(peerId, cityList);
+                break;
 
-                await saveUserState({ peerId: peerId, state: 'cities_page', citiesList: findResult, citiesPage: 1 });
-            }
+            case 'choose_organization':
+                if (payload.cmd === 'backToChooseCity') {
+                    await sendChooseCityMessage(peerId);
+                    await saveUserState({ peerId: peerId, state: 'choose_city' });
+                    return 'ok';
+                }
+                break;
 
-            return 'ok';
-        }
+            case 'login':
+                if (payload.cmd === 'back') {
+                    await sendStartMessage(peerId);
+                    await saveUserState({ peerId: peerId, state: 'start' });
+                    return 'ok';
+                }
 
-        if (payload.cmd === 'backToChooseCity' && (currentState === 'choose_organization')) {
-            await sendChooseCityMessage(peerId);
-            await saveUserState({ peerId: peerId, state: 'choose_city' });
-            return 'ok';
+                const isLogined = await login(peerId, text);
+
+                if (isLogined) {
+                    await saveUserState({ peerId: peerId, state: 'isLogined' });
+                    await sendHelloMessage(peerId);
+                }
+                break;
+
+            case 'isLogined':
+                if (payload.cmd == 'logout') {
+                    await logout(peerId);
+                    await sendStartMessage(peerId);
+                    await saveUserState({ peerId: peerId, state: 'start' });
+                }
+                else if (payload.cmd === 'scheduleManagement') {
+                    const keyboard = await buildInstructorKeyboard(peerId);
+
+                    await sendScheduleMenagementMessage(peerId, keyboard, 'Какой-то текст');
+                    await saveUserState({ peerId: peerId, state: 'scheduleManagement' });
+                }
+                break;
+
+            case 'scheduleManagement':
+                if (payload.cmd === 'backToInstructorMenu') {
+                    await sendHelloMessage(peerId);
+                    await saveUserState({ peerId: peerId, state: 'isLogined' });
+                }
+                else if (payload.cmd === 'cancellationLesson') {
+                    const keyboard = await buildKeyboardForMiniApp(peerId, 'Открыть календарь', datePickerId, ownerGroupId);
+                    await sendCancellationLessonMessage(peerId, keyboard);
+                    await saveUserState({ peerId: peerId, state: 'cancellationLesson' });
+                }
+                break;
+
+            case 'cancellationLesson':
+                if (payload.cmd === 'back') {
+                    const keyboard = await buildInstructorKeyboard(peerId);
+
+                    await sendScheduleMenagementMessage(peerId, keyboard, 'Какой-то текст');
+                    await saveUserState({ peerId: peerId, state: 'scheduleManagement' });
+                }
+                break;
         }
     }
 
@@ -301,9 +136,15 @@ export default defineEventHandler(async (event) => {
         const eventId: string = obj.event_id;
         const msgId: number = obj.conversation_message_id;
         const payload = obj.payload || {};
+        const currentState = await getUserState(peerId);
+        let list = [];
 
-        const citiesList = await getUserCityList(peerId);
-        const currentPage = await getUserPage(peerId);
+        if (currentState === 'choose_organization') {
+            list = await getUserOrganizationsList(peerId);
+        }
+        else {
+            list = await getUserCityList(peerId);
+        }
 
         await vk.api.messages.sendMessageEventAnswer({
             event_id: eventId,
@@ -311,9 +152,9 @@ export default defineEventHandler(async (event) => {
             peer_id: peerId,
         });
 
-        if (payload.cmd === 'cities_page' && citiesList) {
+        if (payload.cmd === 'page' && list) {
             const page = Number(payload.page) || 1;
-            const keyboard = buildCitiesKeyboard(citiesList, page);
+            const keyboard = buildKeyboard(list, page, currentState);
 
             await vk.api.messages.edit({
                 peer_id: peerId,
@@ -322,7 +163,7 @@ export default defineEventHandler(async (event) => {
                 keyboard
             });
 
-            await saveUserState({ peerId: peerId, state: 'cities_page', citiesPage: page });
+            await saveUserState({ peerId: peerId, page: page });
 
             return 'ok';
         }
@@ -335,9 +176,22 @@ export default defineEventHandler(async (event) => {
                 keyboard: Keyboard.builder().inline()
             });
 
+            await saveOrganizationList(payload.city, peerId);
             await saveUserState({ peerId: peerId, state: 'choose_organization', city: payload.city });
+            await sendChooseOrganizationKeyboard(peerId);
+            return 'ok';
+        }
 
-            await sendChooseOrganizationMessage(peerId);
+        if (payload.cmd === 'choose_organization' && payload.organization) {
+            await vk.api.messages.edit({
+                peer_id: peerId,
+                conversation_message_id: msgId,
+                message: `Вы выбрали организацию: ${payload.organization}`,
+                keyboard: Keyboard.builder().inline()
+            });
+
+            await saveOrganizationList(payload.city, peerId);
+            await saveUserState({ peerId: peerId, state: 'xz', organization: payload.organization });
             return 'ok';
         }
 

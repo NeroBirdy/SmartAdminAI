@@ -187,7 +187,11 @@ export const UsersScalarFieldEnum = {
   state: 'state',
   city: 'city',
   citiesList: 'citiesList',
-  citiesPage: 'citiesPage',
+  organization: 'organization',
+  organizationsList: 'organizationsList',
+  page: 'page',
+  key: 'key',
+  role: 'role',
   createdAt: 'createdAt'
 } as const
 
@@ -298,7 +302,10 @@ export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 export const UsersOrderByRelevanceFieldEnum = {
   state: 'state',
-  city: 'city'
+  city: 'city',
+  organization: 'organization',
+  key: 'key',
+  role: 'role'
 } as const
 
 export type UsersOrderByRelevanceFieldEnum = (typeof UsersOrderByRelevanceFieldEnum)[keyof typeof UsersOrderByRelevanceFieldEnum]

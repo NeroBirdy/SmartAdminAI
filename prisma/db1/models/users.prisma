@@ -1,11 +1,15 @@
 model Users {
-  id         Int      @id @default(autoincrement())
-  peerId     Int      @unique
-  state      String?
-  city       String?
-  citiesList Json     @default("[]")
-  citiesPage Int      @default(1)
-  createdAt  DateTime @default(now())
+  id                Int      @id @default(autoincrement())
+  peerId            Int      @unique
+  state             String?
+  city              String?
+  citiesList        Json     @default("[]")
+  organization      String?
+  organizationsList Json     @default("[]")
+  page              Int      @default(1)
+  key               String?
+  role              String?
+  createdAt         DateTime @default(now())
 
   @@map("users")
 }
