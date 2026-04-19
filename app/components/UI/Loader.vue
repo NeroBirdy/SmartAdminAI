@@ -21,7 +21,6 @@
 .preloader-wrapper {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
 }
 .preloader {
   width: 48px;

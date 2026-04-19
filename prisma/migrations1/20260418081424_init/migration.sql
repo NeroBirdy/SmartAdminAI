@@ -154,6 +154,7 @@ CREATE TABLE `WorkScheduleBreaks` (
     `workScheduleId` INTEGER NOT NULL,
     `breakId` INTEGER NOT NULL,
 
+    UNIQUE INDEX `WorkScheduleBreaks_workScheduleId_breakId_key`(`workScheduleId`, `breakId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 

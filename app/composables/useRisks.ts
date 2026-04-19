@@ -21,7 +21,10 @@ export const useRisks = () => {
   const getData = async () => {
     loading.value = true;
     try {
-      const response = await getRisksData();
+      const [response] = await Promise.all([
+        getRisksData(),
+        new Promise((resolve) => setTimeout(resolve, 400)),
+      ]);
       recommendations.value = response.recommendations;
       risks.value = response.risks;
     } catch (err) {

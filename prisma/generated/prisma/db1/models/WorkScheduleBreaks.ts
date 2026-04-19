@@ -222,6 +222,7 @@ export type WorkScheduleBreaksOrderByWithRelationInput = {
 
 export type WorkScheduleBreaksWhereUniqueInput = Prisma.AtLeast<{
   id?: number
+  workScheduleId_breakId?: Prisma.WorkScheduleBreaksWorkScheduleIdBreakIdCompoundUniqueInput
   AND?: Prisma.WorkScheduleBreaksWhereInput | Prisma.WorkScheduleBreaksWhereInput[]
   OR?: Prisma.WorkScheduleBreaksWhereInput[]
   NOT?: Prisma.WorkScheduleBreaksWhereInput | Prisma.WorkScheduleBreaksWhereInput[]
@@ -229,7 +230,7 @@ export type WorkScheduleBreaksWhereUniqueInput = Prisma.AtLeast<{
   breakId?: Prisma.IntFilter<"WorkScheduleBreaks"> | number
   workSchedule?: Prisma.XOR<Prisma.WorkScheduleScalarRelationFilter, Prisma.WorkScheduleWhereInput>
   break?: Prisma.XOR<Prisma.BreaksScalarRelationFilter, Prisma.BreaksWhereInput>
-}, "id">
+}, "id" | "workScheduleId_breakId">
 
 export type WorkScheduleBreaksOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -297,6 +298,11 @@ export type WorkScheduleBreaksListRelationFilter = {
 
 export type WorkScheduleBreaksOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type WorkScheduleBreaksWorkScheduleIdBreakIdCompoundUniqueInput = {
+  workScheduleId: number
+  breakId: number
 }
 
 export type WorkScheduleBreaksCountOrderByAggregateInput = {

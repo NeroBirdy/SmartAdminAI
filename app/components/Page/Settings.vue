@@ -1,55 +1,11 @@
 <template>
   <div class="frame">
-    <h1 class="frame-header header-md">Основные настройки</h1>
+    <h1 class="frame-header header-md">Графики занятости</h1>
     <div class="inside-frame">
-      <div class="setting">
-        <p class="second-text">Поле 1</p>
-        <input class="settings-text" type="text" placeholder="Текст" />
-      </div>
-      <div class="setting">
-        <p class="second-text">Поле 2</p>
-        <input class="settings-text" type="text" placeholder="Текст" />
-      </div>
-      <div class="setting">
-        <p class="second-text">Поле 3</p>
-        <input class="settings-text" type="text" placeholder="Текст" />
-      </div>
+      <custom-settings-organisation-schedule />
     </div>
   </div>
-  <div class="frame">
-    <h1 class="frame-header header-md">Социальные сети</h1>
-    <div class="inside-frame">
-      <div class="setting">
-        <p class="second-text">Поле 1</p>
-        <input class="settings-text" type="text" placeholder="Текст" />
-      </div>
-      <div class="setting">
-        <p class="second-text">Поле 2</p>
-        <input class="settings-text" type="text" placeholder="Текст" />
-      </div>
-      <div class="setting">
-        <p class="second-text">Поле 3</p>
-        <input class="settings-text" type="text" placeholder="Текст" />
-      </div>
-    </div>
-  </div>
-  <div class="frame">
-    <h1 class="frame-header header-md">Настройки TG-бота</h1>
-    <div class="inside-frame">
-      <div class="setting">
-        <p class="second-text">Поле 1</p>
-        <input class="settings-text" type="text" placeholder="Текст" />
-      </div>
-      <div class="setting">
-        <p class="second-text">Поле 2</p>
-        <input class="settings-text" type="text" placeholder="Текст" />
-      </div>
-      <div class="setting">
-        <p class="second-text">Поле 3</p>
-        <input class="settings-text" type="text" placeholder="Текст" />
-      </div>
-    </div>
-  </div>
+
 </template>
 
 <style scoped>
