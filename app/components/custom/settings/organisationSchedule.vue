@@ -4,48 +4,53 @@
       <div class="title-texts">
         <div class="header-icon">
           <h1 class="header-sm">График работы организации</h1>
-          <component
-            class="icon"
-            :is="questionIcon"
-            @click.stop="orgScheduleOpen = !orgScheduleOpen"
+          <CustomSettingsIcon
+            :scheduleExist="scheduleExist"
+            @click="orgScheduleOpen = true"
           />
-          <Transition name="fade">
-            <div
-              class="overlay"
-              v-if="orgScheduleOpen"
-              @click.stop="orgScheduleOpen = false"
-            />
-          </Transition>
-          <Transition name="modal">
-            <custom-settings-modal-shedule
-              v-if="orgScheduleOpen"
-              type="organisation"
-              :id="1"
-              @close="orgScheduleOpen = false"
-            />
-          </Transition>
         </div>
         <p class="description main-text-sm">
           Основа для генерации вашего расписания
         </p>
       </div>
     </div>
+    <CustomSettingsModalWithOverlay
+      :isModalOpen="orgScheduleOpen"
+      type="organisation"
+      :openId="1"
+      @close="
+        (id: number, type: 'save' | 'delete' | 'null', success: boolean) =>
+          closeHandler(type, success)
+      "
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
-import questionIcon from "~/assets/icons/circle_question_mark.svg";
+import { getOrganisationSchedule } from "~/api/settings/getOrganisationSchedule";
+
+const response = await getOrganisationSchedule(1);
+
+const scheduleExist = ref(response.scheduleExist);
 
 const orgScheduleOpen = ref(false);
+
+const closeHandler = (type: "save" | "delete" | "null", success: boolean) => {
+  if (success) {
+    if (type === "save") {
+      scheduleExist.value = true;
+    }
+    if (type === "delete") {
+      scheduleExist.value = false;
+    }
+  }
+  orgScheduleOpen.value = false;
+};
 </script>
 
 <style scoped>
-.frame {
-  margin-top: 20px;
-}
-
 .second-frame-setting {
-  margin-top: 0 !important;
+  margin-top: 20px !important;
   min-height: 78px;
   margin-right: 30px;
 }
@@ -100,42 +105,5 @@ const orgScheduleOpen = ref(false);
 
 .setting-description p {
   margin: 0;
-}
-
-.modal-enter-active,
-.modal-leave-active {
-  transition:
-    opacity 0.25s ease,
-    transform 0.25s ease;
-}
-
-.modal-enter-from,
-.modal-leave-to {
-  opacity: 0;
-  transform: translateX(-50%) scale(0.85);
-}
-
-.modal-enter-to,
-.modal-leave-from {
-  opacity: 1;
-  transform: translateX(-50%) scale(1);
-}
-
-.overlay {
-  position: fixed;
-  inset: 0;
-  backdrop-filter: blur(1px);
-  background: rgba(0, 0, 0, 0.25);
-  z-index: 1;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
 }
 </style>

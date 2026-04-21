@@ -23,10 +23,11 @@ const props = defineProps<{
 
 .help {
   background-color: #e9f3ff;
-  border-radius: 25px;
+  border-radius: 16px;
   margin-top: 20px;
   margin-left: 16px;
   margin-right: 24px;
+  margin-bottom: 16px;
 }
 
 .help-header {
@@ -43,8 +44,8 @@ const props = defineProps<{
 .inside-help {
   display: flex;
   flex-direction: column;
-  padding-bottom: 15px;
-  padding-left: 20px;
-  margin-bottom: 10px;
+  margin-bottom: 16px;
+  margin-left: 20px;
+  padding-bottom: 10px;
 }
 </style>

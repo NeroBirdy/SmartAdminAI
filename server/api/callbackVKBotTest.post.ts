@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
     const body = await readBody(event);
 
     if (body.type === 'confirmation') {
-        return '2b7e895d';
+        return 'cd13c35c';
     }
 
     if (body.type === 'message_new') {

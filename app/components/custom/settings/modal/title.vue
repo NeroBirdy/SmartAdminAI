@@ -1,7 +1,7 @@
 <template>
   <div class="title-texts">
     <div class="header-icon">
-      <h1 class="header-md">График работы организации</h1>
+      <h1 class="header-md">{{ title }}</h1>
       <component class="icon" :is="closeIcon" @click.stop="emit('close')" />
     </div>
   </div>
@@ -9,6 +9,8 @@
 
 <script lang="ts" setup>
 import closeIcon from "~/assets/icons/x.svg";
+
+const props = defineProps<{ title: string }>();
 
 const emit = defineEmits<{
   (e: "close"): void;

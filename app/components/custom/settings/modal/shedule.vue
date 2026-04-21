@@ -7,7 +7,10 @@
         </div>
         <div class="full-content" v-else key="content">
           <div class="content">
-            <CustomSettingsModalTitle @close="emit('close')" />
+            <CustomSettingsModalTitle
+              :title="getTitle()"
+              @close="emit('close', props.id, 'null', false)"
+            />
             <div class="days">
               <template v-for="(day, index) in orgSchedule">
                 <custom-settings-modal-schedule-week-day
@@ -58,12 +61,19 @@ type Day = {
 };
 
 const props = defineProps<{
-  type: "employee" | "venue" | "organisation";
   id: number;
+  type: "employee" | "venue" | "organisation";
+  employee?: { firstName: string; lastName: string };
+  venue?: { name: string };
 }>();
 
 const emit = defineEmits<{
-  (e: "close"): void;
+  (
+    e: "close",
+    id: number,
+    type: "save" | "delete" | "null",
+    success: boolean,
+  ): void;
 }>();
 
 const confirmDeleteOpen = ref(false);
@@ -86,7 +96,7 @@ onMounted(async () => {
     isLoading.value = false;
     initDataDefault.value = settings.isScheduleDefault(orgSchedule.value);
   } catch (e) {
-    emit("close");
+    emit("close", props.id, "null", false);
     console.error(e);
   }
 });
@@ -94,6 +104,16 @@ onMounted(async () => {
 const settings = useSettings();
 
 provide("scheduleSettings", settings);
+
+const getTitle = () => {
+  if (props.type === "organisation") {
+    return "График работы организации";
+  } else if (props.type === "employee") {
+    return `График занятости: ${props.employee?.lastName} ${props.employee?.firstName[0]}.`;
+  } else {
+    return `График занятости: ${props.venue?.name}.`;
+  }
+};
 
 function toggleConfirmDelete() {
   confirmDeleteOpen.value = !confirmDeleteOpen.value;
@@ -114,8 +134,8 @@ function validateSchedule() {
   if (!settings.validateData(orgSchedule.value)) {
     showCustomToast(
       "warning",
-      "Неверное заполнение времени",
-      "Начальное время должна быть меньше конечного",
+      "Некорректное заполнение времени",
+      "",
     );
     return false;
   }
@@ -126,6 +146,7 @@ async function withLoading(
   fn: () => Promise<{ success: boolean }>,
   successMsg: string,
   errorMsg: string,
+  type: "save" | "delete",
 ) {
   isLoading.value = true;
   const [response] = await Promise.all([
@@ -134,7 +155,7 @@ async function withLoading(
   ]);
   if (response.success) {
     showCustomToast("success", successMsg, "");
-    emit("close");
+    emit("close", props.id, type, true);
   }
   if (!response.success) {
     isLoading.value = false;
@@ -155,16 +176,19 @@ const saveSchedule = async () => {
       ),
     "Расписание успешно сохранено",
     "Ошибка сохранения расписания",
+    "save",
   );
 };
 
 const deleteSchedule = async () => {
   const idsToDelete = orgSchedule.value.map((day: Day) => day.id);
 
+  await closeOpenIndex();
   await withLoading(
     () => deleteScheduleSettings(idsToDelete),
     "Расписание успешно удалено",
     "Ошибка удаления расписания",
+    "delete",
   );
 };
 </script>
@@ -264,7 +288,9 @@ const deleteSchedule = async () => {
 
 .confirm-enter-active,
 .confirm-leave-active {
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
 }
 
 .confirm-enter-from,
