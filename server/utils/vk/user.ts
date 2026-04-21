@@ -65,7 +65,7 @@ async function saveUserState(params: SaveUserStateParams) {
             city: city ?? null,
             citiesList: citiesList ?? [],
             page: page ?? 1,
-            organization: organization,
+            organization: organization ?? null,
             organizationsList: organizationsList ?? [],
         }
     });

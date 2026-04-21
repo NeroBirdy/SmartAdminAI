@@ -6,6 +6,15 @@ export default defineNuxtConfig({
   css: ["~/assets/css/main.css"],
   compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
+  routeRules: {
+    '/api/**': {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
+        'Access-Control-Allow-Headers': '*',
+      }
+    }
+  },
   vite: {
     server: {
       allowedHosts: ['.loca.lt', 'loca.lt', 'mean-radios-invite.loca.lt']
