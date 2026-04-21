@@ -61,14 +61,6 @@ const props = defineProps<{
   z-index: 1;
 }
 
-.overlay {
-  position: fixed;
-  inset: 0;
-  backdrop-filter: blur(1px);
-  background: rgba(0, 0, 0, 0.25);
-  z-index: 1;
-}
-
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.3s ease;

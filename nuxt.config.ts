@@ -8,7 +8,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   vite: {
     server: {
-      allowedHosts: ['.loca.lt', 'loca.lt', 'mean-radios-invite.loca.lt']
+      allowedHosts: ['.ngrok-free.dev','.loca.lt', 'loca.lt', 'mean-radios-invite.loca.lt']
     },
     plugins: [
       svgLoader()
