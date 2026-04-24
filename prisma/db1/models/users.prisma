@@ -6,6 +6,8 @@ model Users {
   citiesList        Json     @default("[]")
   organization      String?
   organizationsList Json     @default("[]")
+  venueList         Json     @default("[]")
+  dateList          Json     @default("[]")
   page              Int      @default(1)
   key               String?
   role              String?

@@ -26,7 +26,11 @@
 html,
 body {
   background-color: #f8f8f8;
-  /* scrollbar-gutter: stable; */
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
 }
 
 .header-4xl {

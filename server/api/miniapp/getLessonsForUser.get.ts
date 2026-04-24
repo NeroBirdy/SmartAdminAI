@@ -4,7 +4,8 @@ const fakeAPI = useFakeAPI();
 export default defineEventHandler(async (event) => {
   const query = await getQuery(event);
   const userId = Number(query.userId);
-  const date = String(query.date);
+  const date = new Date(String(query.date));
+  date.setHours(0, 0, 0, 0);
 
   const user = await prisma.users.findFirst({ where: { peerId: userId } });
 
@@ -26,6 +27,7 @@ export default defineEventHandler(async (event) => {
         instructorId: employee!.id,
         date: date,
       },
+      include: { group: true, venue: true },
     });
   } else if (role == "MANAGER") {
     lessons = await fakeAPI.lesson.findMany({
@@ -35,8 +37,9 @@ export default defineEventHandler(async (event) => {
           organizationId: orgId,
         },
       },
+      include: { group: true, venue: true },
     });
   }
 
-   return { lessons }; 
+  return lessons;
 });

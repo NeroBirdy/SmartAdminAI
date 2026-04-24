@@ -3,6 +3,9 @@ import { isWithinInterval, areIntervalsOverlapping, format } from "date-fns";
 const fakeAPI = useFakeAPI();
 const prisma = usePrisma();
 
+const datePickerId = Number(process.env.MINI_APP_ID);
+const ownerGroupId = Number(process.env.OWNER_GROUP_ID);
+
 type WorkHours = {
   dayOfWeek: string;
   startWork: Date;
@@ -21,6 +24,7 @@ type LessonSlot = {
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
   const lessonId = body.lessonId;
+  const userId = body.userId;
 
   const lesson = await fakeAPI.lesson.findUnique({
     where: { id: lessonId },
@@ -35,12 +39,19 @@ export default defineEventHandler(async (event) => {
 
   const programVenues = await fakeAPI.programVenue.findMany({
     where: { programId },
-    select: { venueId: true },
+    select: {
+      venue: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
   });
 
   const availableVenues = programVenues
-    .map((pv) => pv.venueId)
-    .filter((id) => id !== venueId);
+    .map((pv) => pv.venue)
+    .filter((venue) => venue.id !== venueId);
 
   const availableForWorkHours = (workHours: WorkHours[]) => {
     const dayOfWeek = format(date!, "EEE").toUpperCase();
@@ -49,9 +60,16 @@ export default defineEventHandler(async (event) => {
     if (!workDay || !workDay.isWorkingDay) return false;
 
     if (
-      !isWithinInterval(startTime!, { start: workDay.startWork, end: workDay.endWork }) ||
-      !isWithinInterval(endTime!, { start: workDay.startWork, end: workDay.endWork })
-    ) return false;
+      !isWithinInterval(startTime!, {
+        start: workDay.startWork,
+        end: workDay.endWork,
+      }) ||
+      !isWithinInterval(endTime!, {
+        start: workDay.startWork,
+        end: workDay.endWork,
+      })
+    )
+      return false;
 
     const overlapsBreak = workDay.workScheduleBreaks.some((b) =>
       areIntervalsOverlapping(
@@ -73,9 +91,9 @@ export default defineEventHandler(async (event) => {
   };
 
   const results = await Promise.all(
-    availableVenues.map(async (venueId) => {
+    availableVenues.map(async (venue) => {
       const workHours = await prisma.workSchedule.findMany({
-        where: { venueId },
+        where: { venueId: venue.id },
         select: {
           dayOfWeek: true,
           startWork: true,
@@ -88,16 +106,34 @@ export default defineEventHandler(async (event) => {
       });
 
       const lessons = await fakeAPI.lesson.findMany({
-        where: { date, venueId },
+        where: { date, venueId: venue.id },
         select: { startTime: true, endTime: true },
       });
 
       return {
-        venueId,
-        isAvailable: availableForWorkHours(workHours as WorkHours[]) && availableForLessons(lessons),
+        lessonId: lessonId,
+        venueId: venue.id,
+        venueName: venue.name,
+        isAvailable:
+          availableForWorkHours(workHours as WorkHours[]) &&
+          availableForLessons(lessons),
       };
     }),
   );
+
+  if (results.length === 0) {
+    const keyboard = await buildKeyboardForMiniApp(userId, 'Календарь', datePickerId, ownerGroupId);
+
+    await sendMessage(userId, keyboard, 'Нет доступных локаций');
+    
+  } else {
+    await saveVenue(userId, results);
+    const venueList = await createVenueList(userId);
+
+    const keyboard = await buildKeyboard(userId, 1, "changeVenue");
+
+    await sendMessage(userId, keyboard, "Выберите локацию для замены");
+  }
 
   return results;
 });

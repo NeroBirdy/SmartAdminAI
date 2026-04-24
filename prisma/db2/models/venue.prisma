@@ -1,11 +1,12 @@
 model Venue {
-  id               Int      @id @default(autoincrement())
+  id               Int            @id @default(autoincrement())
   name             String
   cityId           Int
   address          String
   organizationId   Int
-  city             City     @relation(fields: [cityId], references: [id], onDelete: Cascade)
-  groupsDefault    Group[]  @relation("DefaultVenue")
-  groupsAdditional Group[]  @relation("AdditionalVenues")
+  city             City           @relation(fields: [cityId], references: [id], onDelete: Cascade)
+  groupsDefault    Group[]        @relation("DefaultVenue")
+  groupsAdditional Group[]        @relation("AdditionalVenues")
   lessons          Lesson[]
+  programVenues    ProgramVenue[]
 }

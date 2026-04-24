@@ -4,6 +4,5 @@ model EmployeeProgram {
   programId  Int
 
   employee Employee @relation(fields: [employeeId], references: [id])
-  groups   Group[]
   lessons  Lesson[]
 }

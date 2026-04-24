@@ -3,19 +3,28 @@
     <div class="inside-setting-card">
       <h1 class="second-text">{{ setting.name }}</h1>
       <div class="btn-and-options">
-        <custom-schedule-add-button-and-option-list
-          :setting="setting"
-          :section-settings="sectionSettings"
-          :options="options"
-          :list-id="listId"
-          @add="(item: SectionSetting) => addToSectionSetting(item)"
-        />
-
-        <custom-schedule-section-option-list
-          :section-settings="sectionSettings"
-          :setting="setting"
-          @delete="(id: number) => deleteFromSectionSetting(id)"
-        />
+        <template v-if="setting.settingType.key != 'boolean'">
+          <custom-schedule-add-button-and-option-list
+            :setting="setting"
+            :section-settings="sectionSettings"
+            :options="options"
+            :list-id="listId"
+            @add="(item: SectionSetting) => addToSectionSetting(item)"
+          />
+          <custom-schedule-section-option-list
+            :section-settings="sectionSettings"
+            :setting="setting"
+            @delete="(id: number) => deleteFromSectionSetting(id)"
+          />
+        </template>
+        <template v-else>
+          <custom-schedule-setting-toggle
+            :section-settings="sectionSettings"
+            :setting="setting"
+            :options="options"
+            @update="(item: SectionSetting) => updateSectionSetting(item)"
+          />
+        </template>
       </div>
     </div>
   </div>
@@ -50,6 +59,18 @@ const deleteFromSectionSetting = (id: number) => {
   );
 };
 
+const updateSectionSetting = (item: SectionSetting) => {
+  const index = (sectionSettings.value as SectionSetting[]).findIndex(
+    (s) => s.id === item.id,
+  );
+
+  if (index !== -1) {
+    sectionSettings.value[index] = item;
+  } else {
+    sectionSettings.value.push(item);
+  }
+};
+
 const getData = async () => {
   try {
     loading.value = true;
@@ -60,6 +81,8 @@ const getData = async () => {
     setting.value = data.setting;
     options.value = data.options;
     sectionSettings.value = data.sectionSettings;
+
+    console.log(data.options);
   } catch (err) {
     error.value = err instanceof Error ? err.message : "Ошибка загрузки";
     console.error("Failed to load settings:", err);

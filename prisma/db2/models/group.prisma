@@ -10,14 +10,12 @@ model Group {
   comment        String?
   ageCategory    String
 
-  organization      Organization     @relation(fields: [organizationId], references: [id])
-  instructor        Employee         @relation(fields: [instructorId], references: [id])
-  program           Program          @relation(fields: [programId], references: [id])
-  defaultVenue      Venue            @relation("DefaultVenue", fields: [defaultVenueId], references: [id])
-  additionalVenues  Venue[]          @relation("AdditionalVenues")
-  clients           Client[]
-  lessons           Lesson[]
-  schedule          Schedule[]
-  employeeProgram   EmployeeProgram? @relation(fields: [employeeProgramId], references: [id])
-  employeeProgramId Int?
+  organization     Organization @relation(fields: [organizationId], references: [id])
+  instructor       Employee     @relation(fields: [instructorId], references: [id])
+  program          Program      @relation(fields: [programId], references: [id])
+  defaultVenue     Venue        @relation("DefaultVenue", fields: [defaultVenueId], references: [id])
+  additionalVenues Venue[]      @relation("AdditionalVenues")
+  clients          Client[]
+  lessons          Lesson[]
+  schedule         Schedule[]
 }

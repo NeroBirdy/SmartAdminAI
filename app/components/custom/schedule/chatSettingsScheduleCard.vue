@@ -4,9 +4,9 @@
       <component class="sparkle" :is="sparklesImg" />
       <div class="right">
         <div class="title-texts">
-          <h1 class="header-sm">Генерация расписания</h1>
+          <h1 class="header-sm">Управление расписанием через чат</h1>
           <p class="description main-text-sm">
-            Отслеживать сообщения требующие внимания
+            Изменять расписание через чат агента при необходимости
           </p>
         </div>
         <component
@@ -18,14 +18,21 @@
       </div>
     </div>
     <div class="second-frame-content" :class="hiddenClass">
-      <custom-schedule-setting-card queryKey="schedule_planning_horizon" />
-
-      <custom-schedule-setting-card queryKey="schedule_consider_resources" />
+      <custom-schedule-setting-card
+        queryKey="schedule_instructor_change_date"
+      />
+      <custom-schedule-setting-card
+        queryKey="schedule_instructor_change_venue"
+      />
+      <custom-schedule-setting-card
+        queryKey="schedule_instructor_change_instructor"
+      />
+      <custom-schedule-setting-card queryKey="schedule_extra_setting" />
 
       <ui-help
         title="Как это работает?"
-        text=" Вы можете задать параметры на основе которых агент создаст оптимальное расписание для ваших групп на выбранный горизонт планирования.
-         Предварительно графики и занятость необходимо указать в настройках."
+        text=" Ваши сотрудники смогут через чат-бот корректировать своё расписание при необходимости.
+         Здесь вы можете настроить их возможности, а так же установить дополнительные настройки."
       />
     </div>
   </div>
@@ -48,7 +55,7 @@ const hiddenClass = computed(() => ({
 
 <style scoped>
 .frame {
-  margin-top: 10px;
+  margin-top: 12px;
 }
 
 .inside-frame {
@@ -82,7 +89,6 @@ const hiddenClass = computed(() => ({
 }
 
 .second-frame-skills {
-  margin-top: 0 !important;
   min-height: 78px;
   margin-right: 30px;
 }
@@ -155,5 +161,6 @@ const hiddenClass = computed(() => ({
   max-height: 0;
   opacity: 0;
   overflow: hidden;
+  pointer-events: none;
 }
 </style>
