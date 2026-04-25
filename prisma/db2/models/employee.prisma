@@ -14,4 +14,5 @@ model Employee {
   organization     Organization      @relation(fields: [organizationId], references: [id])
   employeePrograms EmployeeProgram[]
   groups           Group[]
+  lessons          Lesson[]
 }

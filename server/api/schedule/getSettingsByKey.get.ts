@@ -16,6 +16,7 @@ export default defineEventHandler(async (event) => {
     where: {
       key: key,
     },
+    include: {settingType: true}
   });
 
   if (!settingDefinition) {

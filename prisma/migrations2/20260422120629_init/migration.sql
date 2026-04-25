@@ -85,6 +85,7 @@ CREATE TABLE `Lesson` (
     `instructorId` INTEGER NOT NULL,
     `programId` INTEGER NOT NULL,
     `venueId` INTEGER NOT NULL,
+    `employeeProgramId` INTEGER NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -208,7 +209,10 @@ ALTER TABLE `EmployeeProgram` ADD CONSTRAINT `EmployeeProgram_employeeId_fkey` F
 ALTER TABLE `Group` ADD CONSTRAINT `Group_organizationId_fkey` FOREIGN KEY (`organizationId`) REFERENCES `Organization`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Group` ADD CONSTRAINT `Group_instructorId_fkey` FOREIGN KEY (`instructorId`) REFERENCES `EmployeeProgram`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Group` ADD CONSTRAINT `Group_instructorId_fkey` FOREIGN KEY (`instructorId`) REFERENCES `Employee`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Group` ADD CONSTRAINT `Group_programId_fkey` FOREIGN KEY (`programId`) REFERENCES `Program`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Group` ADD CONSTRAINT `Group_defaultVenueId_fkey` FOREIGN KEY (`defaultVenueId`) REFERENCES `Venue`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -217,13 +221,16 @@ ALTER TABLE `Group` ADD CONSTRAINT `Group_defaultVenueId_fkey` FOREIGN KEY (`def
 ALTER TABLE `Lesson` ADD CONSTRAINT `Lesson_groupId_fkey` FOREIGN KEY (`groupId`) REFERENCES `Group`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Lesson` ADD CONSTRAINT `Lesson_instructorId_fkey` FOREIGN KEY (`instructorId`) REFERENCES `EmployeeProgram`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Lesson` ADD CONSTRAINT `Lesson_instructorId_fkey` FOREIGN KEY (`instructorId`) REFERENCES `Employee`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Lesson` ADD CONSTRAINT `Lesson_programId_fkey` FOREIGN KEY (`programId`) REFERENCES `Program`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Lesson` ADD CONSTRAINT `Lesson_venueId_fkey` FOREIGN KEY (`venueId`) REFERENCES `Venue`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Lesson` ADD CONSTRAINT `Lesson_employeeProgramId_fkey` FOREIGN KEY (`employeeProgramId`) REFERENCES `EmployeeProgram`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Module` ADD CONSTRAINT `Module_programId_fkey` FOREIGN KEY (`programId`) REFERENCES `Program`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

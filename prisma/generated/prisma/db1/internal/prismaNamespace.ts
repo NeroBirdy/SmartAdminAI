@@ -1498,6 +1498,8 @@ export const UsersScalarFieldEnum = {
   citiesList: 'citiesList',
   organization: 'organization',
   organizationsList: 'organizationsList',
+  venueList: 'venueList',
+  dateList: 'dateList',
   page: 'page',
   key: 'key',
   role: 'role',

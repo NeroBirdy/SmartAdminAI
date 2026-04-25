@@ -84,7 +84,7 @@ async function main() {
     data: {
       key: "schedule_instructor_change_date",
       name: "Перенос даты и времени занятия инструктором",
-      settingTypeId: settingTypes.SINGLE_SELECT.id,
+      settingTypeId: settingTypes.BOOLEAN.id,
       maxValues: 1,
       options: {
         create: [
@@ -103,11 +103,11 @@ async function main() {
     },
   });
 
-    await prisma.settingDefinition.create({
+  await prisma.settingDefinition.create({
     data: {
       key: "schedule_instructor_change_venue",
-      name: "Смена помещения инструктором",
-      settingTypeId: settingTypes.SINGLE_SELECT.id,
+      name: "Заменя площадки инструктором",
+      settingTypeId: settingTypes.BOOLEAN.id,
       maxValues: 1,
       options: {
         create: [
@@ -126,11 +126,11 @@ async function main() {
     },
   });
 
-      await prisma.settingDefinition.create({
+  await prisma.settingDefinition.create({
     data: {
       key: "schedule_instructor_lesson_cancellation",
       name: "Отмена занятия инструктором",
-      settingTypeId: settingTypes.SINGLE_SELECT.id,
+      settingTypeId: settingTypes.BOOLEAN.id,
       maxValues: 1,
       options: {
         create: [
@@ -149,6 +149,51 @@ async function main() {
     },
   });
 
+  await prisma.settingDefinition.create({
+    data: {
+      key: "schedule_instructor_change_instructor",
+      name: "Замена инструктора",
+      settingTypeId: settingTypes.BOOLEAN.id,
+      maxValues: 1,
+      options: {
+        create: [
+          {
+            key: "on",
+            name: "включено",
+            sortOrder: 1,
+          },
+          {
+            key: "off",
+            name: "выключено",
+            sortOrder: 2,
+          },
+        ],
+      },
+    },
+  });
+
+  await prisma.settingDefinition.create({
+    data: {
+      key: "schedule_extra_setting",
+      name: "Дополнительные настройки",
+      settingTypeId: settingTypes.MULTI_SELECT.id,
+      maxValues: 2,
+      options: {
+        create: [
+          {
+            key: "notify_manager",
+            name: "Уведомить руководителя",
+            sortOrder: 1,
+          },
+          {
+            key: "fix_reason",
+            name: "Фиксировать причину",
+            sortOrder: 2,
+          },
+        ],
+      },
+    },
+  });
 
   console.log("✅ Created schedule_planning_horizon setting");
 

@@ -208,12 +208,14 @@ export type ProgramVenueWhereInput = {
   id?: Prisma.IntFilter<"ProgramVenue"> | number
   programId?: Prisma.IntFilter<"ProgramVenue"> | number
   venueId?: Prisma.IntFilter<"ProgramVenue"> | number
+  venue?: Prisma.XOR<Prisma.VenueScalarRelationFilter, Prisma.VenueWhereInput>
 }
 
 export type ProgramVenueOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   programId?: Prisma.SortOrder
   venueId?: Prisma.SortOrder
+  venue?: Prisma.VenueOrderByWithRelationInput
 }
 
 export type ProgramVenueWhereUniqueInput = Prisma.AtLeast<{
@@ -223,6 +225,7 @@ export type ProgramVenueWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.ProgramVenueWhereInput | Prisma.ProgramVenueWhereInput[]
   programId?: Prisma.IntFilter<"ProgramVenue"> | number
   venueId?: Prisma.IntFilter<"ProgramVenue"> | number
+  venue?: Prisma.XOR<Prisma.VenueScalarRelationFilter, Prisma.VenueWhereInput>
 }, "id">
 
 export type ProgramVenueOrderByWithAggregationInput = {
@@ -247,7 +250,7 @@ export type ProgramVenueScalarWhereWithAggregatesInput = {
 
 export type ProgramVenueCreateInput = {
   programId: number
-  venueId: number
+  venue: Prisma.VenueCreateNestedOneWithoutProgramVenuesInput
 }
 
 export type ProgramVenueUncheckedCreateInput = {
@@ -258,7 +261,7 @@ export type ProgramVenueUncheckedCreateInput = {
 
 export type ProgramVenueUpdateInput = {
   programId?: Prisma.IntFieldUpdateOperationsInput | number
-  venueId?: Prisma.IntFieldUpdateOperationsInput | number
+  venue?: Prisma.VenueUpdateOneRequiredWithoutProgramVenuesNestedInput
 }
 
 export type ProgramVenueUncheckedUpdateInput = {
@@ -275,7 +278,6 @@ export type ProgramVenueCreateManyInput = {
 
 export type ProgramVenueUpdateManyMutationInput = {
   programId?: Prisma.IntFieldUpdateOperationsInput | number
-  venueId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type ProgramVenueUncheckedUpdateManyInput = {
@@ -314,12 +316,128 @@ export type ProgramVenueSumOrderByAggregateInput = {
   venueId?: Prisma.SortOrder
 }
 
+export type ProgramVenueListRelationFilter = {
+  every?: Prisma.ProgramVenueWhereInput
+  some?: Prisma.ProgramVenueWhereInput
+  none?: Prisma.ProgramVenueWhereInput
+}
+
+export type ProgramVenueOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
+export type ProgramVenueCreateNestedManyWithoutVenueInput = {
+  create?: Prisma.XOR<Prisma.ProgramVenueCreateWithoutVenueInput, Prisma.ProgramVenueUncheckedCreateWithoutVenueInput> | Prisma.ProgramVenueCreateWithoutVenueInput[] | Prisma.ProgramVenueUncheckedCreateWithoutVenueInput[]
+  connectOrCreate?: Prisma.ProgramVenueCreateOrConnectWithoutVenueInput | Prisma.ProgramVenueCreateOrConnectWithoutVenueInput[]
+  createMany?: Prisma.ProgramVenueCreateManyVenueInputEnvelope
+  connect?: Prisma.ProgramVenueWhereUniqueInput | Prisma.ProgramVenueWhereUniqueInput[]
+}
+
+export type ProgramVenueUncheckedCreateNestedManyWithoutVenueInput = {
+  create?: Prisma.XOR<Prisma.ProgramVenueCreateWithoutVenueInput, Prisma.ProgramVenueUncheckedCreateWithoutVenueInput> | Prisma.ProgramVenueCreateWithoutVenueInput[] | Prisma.ProgramVenueUncheckedCreateWithoutVenueInput[]
+  connectOrCreate?: Prisma.ProgramVenueCreateOrConnectWithoutVenueInput | Prisma.ProgramVenueCreateOrConnectWithoutVenueInput[]
+  createMany?: Prisma.ProgramVenueCreateManyVenueInputEnvelope
+  connect?: Prisma.ProgramVenueWhereUniqueInput | Prisma.ProgramVenueWhereUniqueInput[]
+}
+
+export type ProgramVenueUpdateManyWithoutVenueNestedInput = {
+  create?: Prisma.XOR<Prisma.ProgramVenueCreateWithoutVenueInput, Prisma.ProgramVenueUncheckedCreateWithoutVenueInput> | Prisma.ProgramVenueCreateWithoutVenueInput[] | Prisma.ProgramVenueUncheckedCreateWithoutVenueInput[]
+  connectOrCreate?: Prisma.ProgramVenueCreateOrConnectWithoutVenueInput | Prisma.ProgramVenueCreateOrConnectWithoutVenueInput[]
+  upsert?: Prisma.ProgramVenueUpsertWithWhereUniqueWithoutVenueInput | Prisma.ProgramVenueUpsertWithWhereUniqueWithoutVenueInput[]
+  createMany?: Prisma.ProgramVenueCreateManyVenueInputEnvelope
+  set?: Prisma.ProgramVenueWhereUniqueInput | Prisma.ProgramVenueWhereUniqueInput[]
+  disconnect?: Prisma.ProgramVenueWhereUniqueInput | Prisma.ProgramVenueWhereUniqueInput[]
+  delete?: Prisma.ProgramVenueWhereUniqueInput | Prisma.ProgramVenueWhereUniqueInput[]
+  connect?: Prisma.ProgramVenueWhereUniqueInput | Prisma.ProgramVenueWhereUniqueInput[]
+  update?: Prisma.ProgramVenueUpdateWithWhereUniqueWithoutVenueInput | Prisma.ProgramVenueUpdateWithWhereUniqueWithoutVenueInput[]
+  updateMany?: Prisma.ProgramVenueUpdateManyWithWhereWithoutVenueInput | Prisma.ProgramVenueUpdateManyWithWhereWithoutVenueInput[]
+  deleteMany?: Prisma.ProgramVenueScalarWhereInput | Prisma.ProgramVenueScalarWhereInput[]
+}
+
+export type ProgramVenueUncheckedUpdateManyWithoutVenueNestedInput = {
+  create?: Prisma.XOR<Prisma.ProgramVenueCreateWithoutVenueInput, Prisma.ProgramVenueUncheckedCreateWithoutVenueInput> | Prisma.ProgramVenueCreateWithoutVenueInput[] | Prisma.ProgramVenueUncheckedCreateWithoutVenueInput[]
+  connectOrCreate?: Prisma.ProgramVenueCreateOrConnectWithoutVenueInput | Prisma.ProgramVenueCreateOrConnectWithoutVenueInput[]
+  upsert?: Prisma.ProgramVenueUpsertWithWhereUniqueWithoutVenueInput | Prisma.ProgramVenueUpsertWithWhereUniqueWithoutVenueInput[]
+  createMany?: Prisma.ProgramVenueCreateManyVenueInputEnvelope
+  set?: Prisma.ProgramVenueWhereUniqueInput | Prisma.ProgramVenueWhereUniqueInput[]
+  disconnect?: Prisma.ProgramVenueWhereUniqueInput | Prisma.ProgramVenueWhereUniqueInput[]
+  delete?: Prisma.ProgramVenueWhereUniqueInput | Prisma.ProgramVenueWhereUniqueInput[]
+  connect?: Prisma.ProgramVenueWhereUniqueInput | Prisma.ProgramVenueWhereUniqueInput[]
+  update?: Prisma.ProgramVenueUpdateWithWhereUniqueWithoutVenueInput | Prisma.ProgramVenueUpdateWithWhereUniqueWithoutVenueInput[]
+  updateMany?: Prisma.ProgramVenueUpdateManyWithWhereWithoutVenueInput | Prisma.ProgramVenueUpdateManyWithWhereWithoutVenueInput[]
+  deleteMany?: Prisma.ProgramVenueScalarWhereInput | Prisma.ProgramVenueScalarWhereInput[]
+}
+
+export type ProgramVenueCreateWithoutVenueInput = {
+  programId: number
+}
+
+export type ProgramVenueUncheckedCreateWithoutVenueInput = {
+  id?: number
+  programId: number
+}
+
+export type ProgramVenueCreateOrConnectWithoutVenueInput = {
+  where: Prisma.ProgramVenueWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProgramVenueCreateWithoutVenueInput, Prisma.ProgramVenueUncheckedCreateWithoutVenueInput>
+}
+
+export type ProgramVenueCreateManyVenueInputEnvelope = {
+  data: Prisma.ProgramVenueCreateManyVenueInput | Prisma.ProgramVenueCreateManyVenueInput[]
+  skipDuplicates?: boolean
+}
+
+export type ProgramVenueUpsertWithWhereUniqueWithoutVenueInput = {
+  where: Prisma.ProgramVenueWhereUniqueInput
+  update: Prisma.XOR<Prisma.ProgramVenueUpdateWithoutVenueInput, Prisma.ProgramVenueUncheckedUpdateWithoutVenueInput>
+  create: Prisma.XOR<Prisma.ProgramVenueCreateWithoutVenueInput, Prisma.ProgramVenueUncheckedCreateWithoutVenueInput>
+}
+
+export type ProgramVenueUpdateWithWhereUniqueWithoutVenueInput = {
+  where: Prisma.ProgramVenueWhereUniqueInput
+  data: Prisma.XOR<Prisma.ProgramVenueUpdateWithoutVenueInput, Prisma.ProgramVenueUncheckedUpdateWithoutVenueInput>
+}
+
+export type ProgramVenueUpdateManyWithWhereWithoutVenueInput = {
+  where: Prisma.ProgramVenueScalarWhereInput
+  data: Prisma.XOR<Prisma.ProgramVenueUpdateManyMutationInput, Prisma.ProgramVenueUncheckedUpdateManyWithoutVenueInput>
+}
+
+export type ProgramVenueScalarWhereInput = {
+  AND?: Prisma.ProgramVenueScalarWhereInput | Prisma.ProgramVenueScalarWhereInput[]
+  OR?: Prisma.ProgramVenueScalarWhereInput[]
+  NOT?: Prisma.ProgramVenueScalarWhereInput | Prisma.ProgramVenueScalarWhereInput[]
+  id?: Prisma.IntFilter<"ProgramVenue"> | number
+  programId?: Prisma.IntFilter<"ProgramVenue"> | number
+  venueId?: Prisma.IntFilter<"ProgramVenue"> | number
+}
+
+export type ProgramVenueCreateManyVenueInput = {
+  id?: number
+  programId: number
+}
+
+export type ProgramVenueUpdateWithoutVenueInput = {
+  programId?: Prisma.IntFieldUpdateOperationsInput | number
+}
+
+export type ProgramVenueUncheckedUpdateWithoutVenueInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  programId?: Prisma.IntFieldUpdateOperationsInput | number
+}
+
+export type ProgramVenueUncheckedUpdateManyWithoutVenueInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  programId?: Prisma.IntFieldUpdateOperationsInput | number
+}
+
 
 
 export type ProgramVenueSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   programId?: boolean
   venueId?: boolean
+  venue?: boolean | Prisma.VenueDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["programVenue"]>
 
 
@@ -331,10 +449,15 @@ export type ProgramVenueSelectScalar = {
 }
 
 export type ProgramVenueOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "programId" | "venueId", ExtArgs["result"]["programVenue"]>
+export type ProgramVenueInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  venue?: boolean | Prisma.VenueDefaultArgs<ExtArgs>
+}
 
 export type $ProgramVenuePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ProgramVenue"
-  objects: {}
+  objects: {
+    venue: Prisma.$VenuePayload<ExtArgs>
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     programId: number
@@ -679,6 +802,7 @@ readonly fields: ProgramVenueFieldRefs;
  */
 export interface Prisma__ProgramVenueClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  venue<T extends Prisma.VenueDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.VenueDefaultArgs<ExtArgs>>): Prisma.Prisma__VenueClient<runtime.Types.Result.GetResult<Prisma.$VenuePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -728,6 +852,10 @@ export type ProgramVenueFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.
    */
   omit?: Prisma.ProgramVenueOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProgramVenueInclude<ExtArgs> | null
+  /**
    * Filter, which ProgramVenue to fetch.
    */
   where: Prisma.ProgramVenueWhereUniqueInput
@@ -746,6 +874,10 @@ export type ProgramVenueFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Exte
    */
   omit?: Prisma.ProgramVenueOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProgramVenueInclude<ExtArgs> | null
+  /**
    * Filter, which ProgramVenue to fetch.
    */
   where: Prisma.ProgramVenueWhereUniqueInput
@@ -763,6 +895,10 @@ export type ProgramVenueFindFirstArgs<ExtArgs extends runtime.Types.Extensions.I
    * Omit specific fields from the ProgramVenue
    */
   omit?: Prisma.ProgramVenueOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProgramVenueInclude<ExtArgs> | null
   /**
    * Filter, which ProgramVenue to fetch.
    */
@@ -812,6 +948,10 @@ export type ProgramVenueFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Exten
    */
   omit?: Prisma.ProgramVenueOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProgramVenueInclude<ExtArgs> | null
+  /**
    * Filter, which ProgramVenue to fetch.
    */
   where?: Prisma.ProgramVenueWhereInput
@@ -860,6 +1000,10 @@ export type ProgramVenueFindManyArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   omit?: Prisma.ProgramVenueOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProgramVenueInclude<ExtArgs> | null
+  /**
    * Filter, which ProgramVenues to fetch.
    */
   where?: Prisma.ProgramVenueWhereInput
@@ -903,6 +1047,10 @@ export type ProgramVenueCreateArgs<ExtArgs extends runtime.Types.Extensions.Inte
    */
   omit?: Prisma.ProgramVenueOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProgramVenueInclude<ExtArgs> | null
+  /**
    * The data needed to create a ProgramVenue.
    */
   data: Prisma.XOR<Prisma.ProgramVenueCreateInput, Prisma.ProgramVenueUncheckedCreateInput>
@@ -931,6 +1079,10 @@ export type ProgramVenueUpdateArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Omit specific fields from the ProgramVenue
    */
   omit?: Prisma.ProgramVenueOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProgramVenueInclude<ExtArgs> | null
   /**
    * The data needed to update a ProgramVenue.
    */
@@ -972,6 +1124,10 @@ export type ProgramVenueUpsertArgs<ExtArgs extends runtime.Types.Extensions.Inte
    */
   omit?: Prisma.ProgramVenueOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProgramVenueInclude<ExtArgs> | null
+  /**
    * The filter to search for the ProgramVenue to update in case it exists.
    */
   where: Prisma.ProgramVenueWhereUniqueInput
@@ -997,6 +1153,10 @@ export type ProgramVenueDeleteArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Omit specific fields from the ProgramVenue
    */
   omit?: Prisma.ProgramVenueOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProgramVenueInclude<ExtArgs> | null
   /**
    * Filter which ProgramVenue to delete.
    */
@@ -1029,4 +1189,8 @@ export type ProgramVenueDefaultArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Omit specific fields from the ProgramVenue
    */
   omit?: Prisma.ProgramVenueOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProgramVenueInclude<ExtArgs> | null
 }

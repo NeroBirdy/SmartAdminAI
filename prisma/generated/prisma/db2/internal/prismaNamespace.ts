@@ -1516,8 +1516,7 @@ export const GroupScalarFieldEnum = {
   defaultVenueId: 'defaultVenueId',
   programId: 'programId',
   comment: 'comment',
-  ageCategory: 'ageCategory',
-  employeeProgramId: 'employeeProgramId'
+  ageCategory: 'ageCategory'
 } as const
 
 export type GroupScalarFieldEnum = (typeof GroupScalarFieldEnum)[keyof typeof GroupScalarFieldEnum]
@@ -1531,7 +1530,8 @@ export const LessonScalarFieldEnum = {
   groupId: 'groupId',
   instructorId: 'instructorId',
   programId: 'programId',
-  venueId: 'venueId'
+  venueId: 'venueId',
+  employeeProgramId: 'employeeProgramId'
 } as const
 
 export type LessonScalarFieldEnum = (typeof LessonScalarFieldEnum)[keyof typeof LessonScalarFieldEnum]

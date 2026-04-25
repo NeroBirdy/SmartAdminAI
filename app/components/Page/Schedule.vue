@@ -10,6 +10,7 @@
     <h1 class="frame-header header-md">Выполняемые задачи (Skills)</h1>
     <div class="inside-frame">
       <custom-schedule-generate-schedule-card />
+      <custom-schedule-chat-settings-schedule-card />
     </div>
   </div>
 </template>

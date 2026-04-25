@@ -2,4 +2,6 @@ model ProgramVenue {
   id        Int @id @default(autoincrement())
   programId Int
   venueId   Int
+
+  venue Venue @relation(fields: [venueId], references: [id])
 }
