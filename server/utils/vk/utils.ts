@@ -82,6 +82,7 @@ async function getListFromState(peerId: number, state: string) {
 }
 
 async function setPreviousState(peerId: number, state: string) {
+  const keyboard = await buildInstructorKeyboard(peerId);
   switch (state) {
     case "choose_city":
       await sendChooseCityMessage(peerId);
@@ -94,8 +95,11 @@ async function setPreviousState(peerId: number, state: string) {
       break;
 
     case "changeVenue":
-      const keyboard = await buildInstructorKeyboard(peerId);
+      await sendScheduleMenagementMessage(peerId, keyboard, "Какой-то текст");
+      await saveUserState({ peerId: peerId, state: "scheduleManagement" });
+      break;
 
+    case "changeDate":
       await sendScheduleMenagementMessage(peerId, keyboard, "Какой-то текст");
       await saveUserState({ peerId: peerId, state: "scheduleManagement" });
       break;

@@ -1,9 +1,11 @@
+import { start } from "node:repl";
 import { Keyboard } from "vk-io";
 
 export {
   buildKeyboard,
   buildInstructorKeyboard,
   buildKeyboardForMiniApp,
+  buildKeyboardForDate,
 };
 
 async function buildKeyboard(
@@ -123,4 +125,61 @@ async function buildKeyboardForMiniApp(
       payload: { cmd: "back" },
     })
     .row();
+}
+
+
+async function buildKeyboardForDate(peerId: number, page: number, currentState: string) {
+  const userData = await getDateList(peerId);
+
+  const lessonId = userData.lessonId;
+  const options = userData.newOptions;
+  const maxPage = options.length - 1;
+
+  const safePage = Math.max(0, Math.min(page, maxPage));
+  const currentPage = options[safePage];
+
+  const keyboard = Keyboard.builder().inline();
+
+  for (const element of currentPage!.variants) {
+    keyboard
+      .callbackButton({
+        label: `${element.startTime} - ${element.endTime}`,
+        payload: {
+          cmd: currentState,
+          lessonId,
+          date: currentPage!.date,
+          startTime: element.startTime,
+          endTime: element.endTime,
+        },
+      })
+      .row();
+  }
+
+  if (safePage > 0) {
+    keyboard.callbackButton({
+      label: "⬅️",
+      payload: { cmd: "pageForDate", page: safePage - 1 },
+    });
+  }
+
+  keyboard.callbackButton({
+    label: `${currentPage!.date}`,
+    payload: { cmd: "noop" },
+  });
+
+  if (safePage < maxPage) {
+    keyboard.callbackButton({
+      label: "➡️",
+      payload: { cmd: "pageForDate", page: safePage + 1 },
+    });
+  }
+
+  keyboard.row();
+
+  keyboard.callbackButton({
+    label: "Вернуться",
+    payload: { cmd: "back", state: currentState },
+  });
+
+  return keyboard;
 }

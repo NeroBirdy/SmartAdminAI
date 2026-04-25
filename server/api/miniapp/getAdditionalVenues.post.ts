@@ -128,7 +128,6 @@ export default defineEventHandler(async (event) => {
     
   } else {
     await saveVenue(userId, results);
-    const venueList = await createVenueList(userId);
 
     const keyboard = await buildKeyboard(userId, 1, "changeVenue");
 

@@ -41,7 +41,7 @@ export default defineEventHandler(async (event) => {
     await vk.api.messages.edit({
       peer_id: userId,
       message_id: Number(res),
-      message: "Что-то пошло по пизде",
+      message: "Ошибка",
     });
   }
 });

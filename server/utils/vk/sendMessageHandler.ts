@@ -9,6 +9,8 @@ export {
   sendHelloMessage,
   sendScheduleMenagementMessage,
   sendMessage,
+  sendMessageWithoutKeyboard,
+  editMessage,
 };
 
 const vk = new VK({ token: useRuntimeConfig().vkToken });
@@ -120,7 +122,7 @@ async function sendHelloMessage(peerId: number) {
         })
         .row()
         .applicationButton({
-            label: 'Моё расписание', appId: datePickerId, ownerId: ownerGroupId
+          label: 'Моё расписание', appId: datePickerId, ownerId: ownerGroupId
         })
         .row();
       break;
@@ -135,7 +137,7 @@ async function sendHelloMessage(peerId: number) {
         })
         .row()
         .applicationButton({
-            label: 'Расписание', appId: datePickerId, ownerId: ownerGroupId
+          label: 'Расписание', appId: datePickerId, ownerId: ownerGroupId
         })
         .row();
       break;
@@ -178,5 +180,22 @@ async function sendMessage(
     message: text,
     keyboard: keyboard,
     random_id: Date.now(),
+  });
+}
+
+async function sendMessageWithoutKeyboard(peerId: number, text: string) {
+  return vk.api.messages.send({
+    peer_id: peerId,
+    message: text,
+    random_id: Date.now(),
+  });
+}
+
+
+async function editMessage(peerId: number, messageId: number, text: string) {
+  return vk.api.messages.edit({
+    peer_id: peerId,
+    message_id: Number(messageId),
+    message: text,
   });
 }

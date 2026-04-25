@@ -16,6 +16,8 @@ export {
   chooseCity,
   saveVenue,
   getVenue,
+  saveDateList,
+  getDateList,
 };
 
 const vk = new VK({ token: useRuntimeConfig().vkToken });
@@ -41,6 +43,21 @@ type dbVenue = {
 };
 
 type dbVenueList = dbVenue[];
+
+type Variant = {
+  startTime: string;
+  endTime: string;
+};
+
+type DateOption = {
+  date: string;
+  variants: Variant[];
+};
+
+type DateList = {
+  lessonId: string;
+  newOptions: DateOption[];
+};
 
 async function saveUserState(params: SaveUserStateParams) {
   const {
@@ -74,19 +91,19 @@ async function saveUserState(params: SaveUserStateParams) {
     updateData.organization = organizationsList;
   }
 
-    return prisma.users.upsert({
-        where: { peerId },
-        update: updateData,
-        create: {
-            peerId,
-            state: state ?? null,
-            city: city ?? null,
-            citiesList: citiesList ?? [],
-            page: page ?? 1,
-            organization: organization ?? null,
-            organizationsList: organizationsList ?? [],
-        }
-    });
+  return prisma.users.upsert({
+    where: { peerId },
+    update: updateData,
+    create: {
+      peerId,
+      state: state ?? null,
+      city: city ?? null,
+      citiesList: citiesList ?? [],
+      page: page ?? 1,
+      organization: organization ?? null,
+      organizationsList: organizationsList ?? [],
+    }
+  });
 }
 
 async function saveOrganizationList(city: string, peerId: number) {
@@ -289,6 +306,32 @@ async function getVenue(peerId: number): Promise<dbVenueList> {
   });
 
   const venueList = (user?.venueList ?? []) as dbVenueList;
+
+  return venueList;
+}
+
+
+async function saveDateList(peerId: number, dateList: DateList) {
+  return prisma.users.upsert({
+    where: { peerId },
+    update: {
+      dateList: dateList,
+    },
+    create: {
+      peerId,
+      dateList: dateList ?? [],
+    },
+  });
+}
+
+
+async function getDateList(peerId: number) {
+  const user = await prisma.users.findUnique({
+    where: { peerId },
+    select: { dateList: true },
+  });
+
+  const venueList = (user?.dateList ?? []) as DateList;
 
   return venueList;
 }

@@ -10,6 +10,7 @@ import {
   getVenueBreaks,
   getOrgSchedule,
 } from "~~/server/utils/schedule/getData";
+import { buildKeyboardForDate } from "~~/server/utils/vk/keyboardBuilder";
 
 type OllamaResponse = {
   message: {
@@ -34,6 +35,7 @@ const prisma = usePrisma();
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
   const lessonId = body.lessonId;
+  const userId = body.userId;
 
   const lesson = await fakeAPI.lesson.findUnique({
     where: { id: lessonId },
@@ -100,10 +102,26 @@ export default defineEventHandler(async (event) => {
   prompt += `${JSON.stringify(formattedLessonSchedule)}\n`;
   prompt += "Пиши без комментариев";
 
-  return await sendMessage(prompt);
+  let res;
+
+  res = await sendMessageWithoutKeyboard(userId, "Подождите");
+
+  const response = await sendRequest(prompt);
+
+  await editMessage(userId, Number(res), "Готово");
+
+  const newDateList = JSON.parse(response);
+  await saveDateList(userId, newDateList);
+
+  const currentState = await getUserState(userId);
+  const keyboard = await buildKeyboardForDate(userId, 0, currentState);
+
+  await sendMessage(userId, keyboard, "Выберите дату и время");
+
+  return newDateList;
 });
 
-const sendMessage = async (message: string) => {
+const sendRequest = async (message: string) => {
   const systemPrompt = await readFile(filePath, "utf-8");
 
   const response = await $fetch<OllamaResponse>(
@@ -127,5 +145,6 @@ const sendMessage = async (message: string) => {
       },
     },
   );
+
   return response.message.content;
 };
