@@ -195,6 +195,34 @@ async function main() {
     },
   });
 
+  await prisma.settingDefinition.create({
+    data: {
+      key: "staff_extra_setting",
+      name: "Дополнительные настройки",
+      settingTypeId: settingTypes.MULTI_SELECT.id,
+      maxValues: 3,
+      options: {
+        create: [
+          {
+            key: "notify_manager",
+            name: "Уведомить руководителя",
+            sortOrder: 1,
+          },
+          {
+            key: "fix_reason",
+            name: "Фиксировать причину",
+            sortOrder: 2,
+          },
+          {
+            key: "consider_instructor_schedule",
+            name: "Учитывать график инструкторов",
+            sortOrder: 2,
+          },
+        ],
+      },
+    },
+  });
+
   console.log("✅ Created schedule_planning_horizon setting");
 
   // Учитывать ресурсы (Multi Select)

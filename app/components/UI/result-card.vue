@@ -2,7 +2,7 @@
   <div class="frame second-frame-results">
     <div class="inside-frame">
       <div class="second-frame-up">
-        <p class="second-frame-text main-text-md">{{ title }}</p>
+        <p class="second-frame-text main-text-sm">{{ title }}</p>
         <component class="second-frame-img" :is="ellipsisImg" />
       </div>
       <h1 class="second-frame-header-text header-2xl">{{ text }}</h1>
@@ -50,7 +50,14 @@ defineProps<{
   align-self: center;
 }
 
+.second-frame-text {
+  margin-top: 19px;
+  margin-bottom: 11px;
+  color: #8590a5;
+}
+
 .second-frame-header-text {
   margin: 0;
+  color: #2b3850;
 }
 </style>
