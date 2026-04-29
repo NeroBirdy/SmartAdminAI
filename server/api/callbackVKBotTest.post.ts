@@ -167,6 +167,9 @@ export default defineEventHandler(async (event) => {
                     );
                     await saveUserState({ peerId: peerId, state: "changeInstructor" });
                 }
+                else if (payload.cmd === "requestChangeDate") {
+
+                }
                 break;
 
             case "cancellationLesson":
@@ -333,6 +336,41 @@ export default defineEventHandler(async (event) => {
                 },
                 keepalive: true,
             });
+            return "ok";
+        }
+
+        if (payload.cmd == "cancellationLesson") {
+            $fetch("/api/miniapp/deleteLesson", {
+                method: "GET",
+                query: {
+                    lessonId: payload.lessonId,
+                    userId: payload.userId,
+                },
+                keepalive: true,
+            });
+            return "ok";
+        }
+
+        if (payload.cmd === "requestCancellationLesson") {
+            const managerId = await getMenagerId();
+            const keyboard = await buildConfirmKeyboard({cmd: "confirmRequestCancellationLesson", lessonId: payload.lessonId, userId: payload.userId});
+
+            await sendRequestForManager(managerId!, keyboard, "Запрос на отмену занятия");
+            return "ok";
+        }
+
+        if (payload.cmd === "confirmRequestCancellationLesson") {
+            await sendMessageWithoutKeyboard(payload.userId, "Ваш запрос одобрен");
+
+            $fetch("/api/miniapp/deleteLesson", {
+                method: "GET",
+                query: {
+                    lessonId: payload.lessonId,
+                    userId: payload.userId,
+                },
+                keepalive: true,
+            });
+            return "ok";
         }
 
         if (payload.cmd === "back") {

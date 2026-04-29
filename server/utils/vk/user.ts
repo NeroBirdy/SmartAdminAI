@@ -18,6 +18,7 @@ export {
   getVenue,
   saveDateList,
   getDateList,
+  getMenagerId,
 };
 
 const vk = new VK({ token: useRuntimeConfig().vkToken });
@@ -245,7 +246,7 @@ async function getPermission(peerId: number) {
   return {
     changeDate: true,
     changeVenue: true,
-    cancellationLesson: true,
+    cancellationLesson: false,
     changeInstructor: true,
   };
 }
@@ -334,4 +335,12 @@ async function getDateList(peerId: number) {
   const venueList = (user?.dateList ?? []) as DateList;
 
   return venueList;
+}
+
+async function getMenagerId() {
+  const userData = await prisma.users.findFirst({
+    where: { role: "MANAGER" },
+    select: { peerId: true },
+  });
+  return userData?.peerId;
 }

@@ -6,6 +6,7 @@ export {
   buildInstructorKeyboard,
   buildKeyboardForMiniApp,
   buildKeyboardForDate,
+  buildConfirmKeyboard,
 };
 
 async function buildKeyboard(
@@ -73,6 +74,15 @@ async function buildInstructorKeyboard(peerId: number) {
         payload: { cmd: "changeDate" },
       })
       .row();
+  else {
+    keyboard
+      .textButton({
+        label: "Запросить перенос даты",
+        color: Keyboard.PRIMARY_COLOR,
+        payload: { cmd: "requestChangeDate" },
+      })
+      .row();
+  }
   if (permission.changeVenue)
     keyboard
       .textButton({
@@ -81,6 +91,15 @@ async function buildInstructorKeyboard(peerId: number) {
         payload: { cmd: "changeVenue" },
       })
       .row();
+  else {
+    keyboard
+      .textButton({
+        label: "Запросить замену локации",
+        color: Keyboard.PRIMARY_COLOR,
+        payload: { cmd: "requestChangeVenue" },
+      })
+      .row();
+  }
   if (permission.cancellationLesson)
     keyboard
       .textButton({
@@ -89,6 +108,15 @@ async function buildInstructorKeyboard(peerId: number) {
         payload: { cmd: "cancellationLesson" },
       })
       .row();
+  else {
+    keyboard
+      .textButton({
+        label: "Запросить отмену занятия",
+        color: Keyboard.PRIMARY_COLOR,
+        payload: { cmd: "cancellationLesson" },
+      })
+      .row();
+  }
   if (permission.changeInstructor)
     keyboard
       .textButton({
@@ -179,6 +207,23 @@ async function buildKeyboardForDate(peerId: number, page: number, currentState: 
   keyboard.callbackButton({
     label: "Вернуться",
     payload: { cmd: "back", state: currentState },
+  });
+
+  return keyboard;
+}
+
+
+async function buildConfirmKeyboard(payload: {}) {
+  const keyboard = Keyboard.builder().inline();
+
+  keyboard.callbackButton({
+    label: "Да",
+    payload: payload,
+  });
+
+  keyboard.callbackButton({
+    label: "нет",
+    payload: {cmd: "-"}
   });
 
   return keyboard;

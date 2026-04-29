@@ -7,33 +7,17 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event);
   const lessonId = body.lessonId;
   const userId = body.userId;
-  let res;
 
-  try {
-    res = await vk.api.messages.send({
-      peer_id: userId,
-      message: "Подождите",
-      random_id: Date.now(),
-    });
+  const currentState = getUserState(userId);
+  
+  const permission = await getPermission(userId);
 
-    await fakeAPI.lesson.delete({ where: { id: lessonId } });
-    // ЛОГ
-
-    await Promise.all([
-      new Promise((resolve) => setTimeout(resolve, 2000)),
-      vk.api.messages.edit({
-        peer_id: userId,
-        message_id: Number(res),
-        message: "Занятие удалено",
-      }),
-    ]);
-  } catch (e) {
-    console.error("Ошибка удаления урока", e);
-
-    await vk.api.messages.edit({
-      peer_id: userId,
-      message_id: Number(res),
-      message: "Ошибка",
-    });
+  if (permission.cancellationLesson) {
+    const keyboard = await buildConfirmKeyboard({cmd: currentState, lessonId: lessonId, userId: userId});
+    await sendConfirmMessage(userId, keyboard, "Точно отменить?");
+  }
+  else {
+    const keyboard = await buildConfirmKeyboard({cmd: "requestCancellationLesson", lessonId: lessonId, userId: userId});
+    await sendConfirmMessage(userId, keyboard, "Точно отменить?");
   }
 });

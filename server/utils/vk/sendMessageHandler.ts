@@ -1,3 +1,4 @@
+import { measureMemory } from "node:vm";
 import { VK, Keyboard } from "vk-io";
 
 export {
@@ -11,6 +12,8 @@ export {
   sendMessage,
   sendMessageWithoutKeyboard,
   editMessage,
+  sendConfirmMessage,
+  sendRequestForManager,
 };
 
 const vk = new VK({ token: useRuntimeConfig().vkToken });
@@ -197,5 +200,25 @@ async function editMessage(peerId: number, messageId: number, text: string) {
     peer_id: peerId,
     message_id: Number(messageId),
     message: text,
+  });
+}
+
+
+async function sendConfirmMessage(peerId: number, keyboard: Keyboard, text: string) {
+  return vk.api.messages.send({
+    peer_id: peerId,
+    message: text,
+    keyboard: keyboard,
+    random_id: Date.now(),
+  });
+}
+
+
+async function sendRequestForManager(peerId: number, keyboard:Keyboard, text: string) {
+  return vk.api.messages.send ({
+    peer_id: peerId,
+    message: text,
+    keyboard: keyboard,
+    random_id: Date.now(),
   });
 }
