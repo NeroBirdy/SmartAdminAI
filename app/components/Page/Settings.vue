@@ -5,9 +5,9 @@
       <custom-settings-organisation-schedule />
       <custom-settings-employee-settings />
       <custom-settings-venue-settings />
+      <custom-settings-loggined-employee />
     </div>
   </div>
-
 </template>
 
 <style scoped>

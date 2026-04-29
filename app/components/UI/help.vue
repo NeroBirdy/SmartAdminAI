@@ -2,9 +2,7 @@
   <div class="help">
     <div class="inside-help">
       <h1 class="help-header main-text-sm">{{ props.title }}</h1>
-      <p class="help-p main-text-sm">
-        {{ props.text }}
-      </p>
+      <p class="help-p main-text-sm" >{{ props.text }} <a :href="props.link">Ссылка</a></p>
     </div>
   </div>
 </template>
@@ -13,6 +11,7 @@
 const props = defineProps<{
   title: string;
   text: string;
+  link?: string;
 }>();
 </script>
 
@@ -39,6 +38,11 @@ const props = defineProps<{
 .help-p {
   padding-top: 3px;
   margin: 0;
+}
+
+.help-p :deep(a) {
+  color: #2c71e4;
+  text-decoration: none;
 }
 
 .inside-help {
