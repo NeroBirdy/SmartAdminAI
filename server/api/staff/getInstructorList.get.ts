@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
   const orgId = Number(query.orgId);
 
   const instructors = await fakeAPI.employee.findMany({
-    where: { role: "INSTRUCTOR" },
+    where: { role: "INSTRUCTOR", organizationId: orgId },
     select: {
       accessCode: true,
       firstName: true,
