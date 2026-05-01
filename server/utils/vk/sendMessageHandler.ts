@@ -14,6 +14,8 @@ export {
   editMessage,
   sendConfirmMessage,
   sendRequestForManager,
+  sendChangeInstructorRequest,
+  deleteMessage,
 };
 
 const vk = new VK({ token: useRuntimeConfig().vkToken });
@@ -214,11 +216,35 @@ async function sendConfirmMessage(peerId: number, keyboard: Keyboard, text: stri
 }
 
 
-async function sendRequestForManager(peerId: number, keyboard:Keyboard, text: string) {
-  return vk.api.messages.send ({
+async function sendRequestForManager(peerId: number, keyboard: Keyboard, text: string) {
+  return vk.api.messages.send({
     peer_id: peerId,
     message: text,
     keyboard: keyboard,
     random_id: Date.now(),
+  });
+}
+
+
+async function sendChangeInstructorRequest(peerId: number, peerIdList: number[], randomId: number, lessonId: number) {
+  await sendMessageWithoutKeyboard(peerId, "Запрос отправлен");
+
+  for (const id of peerIdList) {
+    if (Number(id) !== 0) {
+      const keyboard = await buildConfirmKeyboard({ cmd: "confirmChangeInstructor", ownerId: peerId, randomId: randomId, lessonId: lessonId });
+
+      const res = await sendMessage(Number(id), keyboard, "Сможешь подменить?");
+      const userId = await getUserIdByPeerId(id);
+
+      await saveNewMessage(userId!, Number(res), randomId);
+    }
+  }
+}
+
+
+async function deleteMessage(messageId: number) {
+  await vk.api.messages.delete({
+    message_ids: messageId,
+    delete_for_all: 1,
   });
 }

@@ -19,6 +19,9 @@ export {
   saveDateList,
   getDateList,
   getMenagerId,
+  getInstructorKey,
+  getInstructorPeerId,
+  getUserIdByPeerId,
 };
 
 const vk = new VK({ token: useRuntimeConfig().vkToken });
@@ -337,10 +340,41 @@ async function getDateList(peerId: number) {
   return venueList;
 }
 
+
 async function getMenagerId() {
   const userData = await prisma.users.findFirst({
     where: { role: "MANAGER" },
     select: { peerId: true },
   });
   return userData?.peerId;
+}
+
+
+async function getInstructorKey(userId: number) {
+  const user = await fakeApi.employee.findFirst({
+    where: {id: userId},
+    select: {accessCode: true},
+  });
+
+  return user?.accessCode;
+}
+
+
+async function getInstructorPeerId(key: string) {
+  const user = await prisma.users.findFirst({
+    where: {key: key},
+    select: {peerId: true},
+  });
+
+  return user?.peerId || 0;
+}
+
+
+async function getUserIdByPeerId(peerId: number) {
+  const user = await prisma.users.findFirst({
+    where: {peerId: peerId},
+    select: {id: true},
+  });
+
+  return user?.id;
 }

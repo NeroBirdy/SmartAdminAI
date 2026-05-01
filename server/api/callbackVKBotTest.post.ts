@@ -378,6 +378,29 @@ export default defineEventHandler(async (event) => {
             return "ok";
         }
 
+        if (payload.cmd === "getAvailableInstructor") {
+            const instructors = await $fetch("/api/miniapp/getAvailableInstructorsForLesson", {
+                method: "GET",
+                query: {
+                    lessonId: payload.lessonId,
+                },
+                keepalive: true,
+            });
+
+            const randomId = generateRandomId(1, 1000000);
+            const peerIdList = await getPeerIdList(instructors);
+
+            await sendChangeInstructorRequest(peerId, peerIdList, randomId, payload.lessonId);
+        }
+
+        if (payload.cmd === "confirmChangeInstructor") {
+            await sendMessageWithoutKeyboard(payload.ownerId, "Вас заменит другой инструктор");
+
+            await deleteChangeInstructorMessage(peerId, payload.randomId);
+
+            await updateInstructor(payload.lessonId, peerId);
+        }
+
         if (payload.cmd === "back") {
             await vk.api.messages.delete({
                 peer_id: peerId,
