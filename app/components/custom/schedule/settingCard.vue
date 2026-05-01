@@ -82,7 +82,6 @@ const getData = async () => {
     options.value = data.options;
     sectionSettings.value = data.sectionSettings;
 
-    console.log(data.options);
   } catch (err) {
     error.value = err instanceof Error ? err.message : "Ошибка загрузки";
     console.error("Failed to load settings:", err);

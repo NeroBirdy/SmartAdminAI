@@ -21,10 +21,11 @@ const { categories, updateCategory } = useSideBarCategories();
 
 type Category = {
   id: number;
+  settingAIId: number;
   enable: boolean;
 };
 
 const currentCategory = computed<Category | undefined>(() =>
-  categories.value?.find((c: Category) => c.id === CATEGORY_ID),
+  categories.value?.find((c: Category) => c.settingAIId === CATEGORY_ID),
 );
 </script>

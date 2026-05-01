@@ -31,13 +31,7 @@ export default defineEventHandler(async (event) => {
 
   const startTimeObj = parseTime(startTime);
   const endTimeObj = parseTime(endTime);
-
-  console.log(startTimeObj);
-  console.log(endTimeObj);
-  console.log(date);
-  console.log(dateObj);
-  console.log(utcDateObj);
-
+  
   let res;
 
   try {

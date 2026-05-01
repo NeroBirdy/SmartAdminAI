@@ -11,7 +11,11 @@
   </div>
 </template>
 <script lang="ts" setup>
-const { categories } = useSideBarCategories();
+const { categories, getCategories } = useSideBarCategories();
+
+onMounted(() => {
+  if (!categories.value) getCategories();
+});
 </script>
 <style scoped>
 .side-bar {

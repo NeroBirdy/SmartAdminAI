@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
   const query = await getQuery(event);
   const userId = Number(query.userId);
   const date = new Date(String(query.date));
-  date.setHours(0, 0, 0, 0);
+  date.setHours(19, 0, 0, 0);
 
   const user = await prisma.users.findFirst({ where: { peerId: userId } });
 

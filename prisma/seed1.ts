@@ -106,7 +106,7 @@ async function main() {
   await prisma.settingDefinition.create({
     data: {
       key: "schedule_instructor_change_venue",
-      name: "Заменя площадки инструктором",
+      name: "Замена площадки инструктором",
       settingTypeId: settingTypes.BOOLEAN.id,
       maxValues: 1,
       options: {

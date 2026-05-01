@@ -52,7 +52,6 @@ const timeValue = computed({
     return new Time(date.getUTCHours(), date.getUTCMinutes());
   },
   set: (val: Time | null) => {
-    console.log(val);
     if (!val) return;
 
     const baseDate = modelValue.value || new Date();
