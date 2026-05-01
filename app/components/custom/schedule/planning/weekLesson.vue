@@ -59,7 +59,7 @@ const getVenueName = (name: string) => {
 <style scoped>
 .lesson {
   width: 90%;
-  background-color: rgb(240, 237, 237);
+  background-color: #f5f5f7;
   border-radius: 7px;
   margin-top: 5px;
 }

@@ -56,12 +56,12 @@ const lessonTime = () => {
 
 <style scoped>
 .notCurrentMonth {
-  background-color: #dedfe2 !important;
+  background-color: #ebebeb !important;
 }
 
 .lesson {
   width: 90%;
-  background-color: rgb(240, 237, 237);
+  background-color: #f5f5f7;
   border-radius: 7px;
   margin-top: 5px;
 }

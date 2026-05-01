@@ -79,7 +79,7 @@ const dateText = computed(() => {
   margin-left: 2.5px;
   margin-right: 2.5px;
   margin-bottom: 5px;
-  background-color: #dedfe2;
+  background-color: #e8e9eb;
   border-radius: 7px;
   z-index: 1;
 }
