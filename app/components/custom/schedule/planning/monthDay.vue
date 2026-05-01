@@ -127,7 +127,7 @@ watch(isExpanded, (val) => {
   right: 0;
   min-height: 108px;
   height: 108px;
-  background-color: #dedfe2;
+  background-color: #e8e9eb;
   border-radius: 7px;
   transition:
     min-height 0.3s ease,
@@ -145,7 +145,7 @@ watch(isExpanded, (val) => {
 }
 
 .calendar-month-day.today:hover {
-  background-color: #f7ce99;
+  background-color: #f7ce99 !important;
 }
 
 .calendar-month-day.expanded {
@@ -163,11 +163,11 @@ watch(isExpanded, (val) => {
 }
 
 .calendar-month-day:hover {
-  background-color: #cdced3;
+  background-color: #cdced3 !important;
 }
 
 .calendar-month-day.currentMonth {
-  background-color: #efeff0;
+  background-color: #f5f5f7;
 }
 
 .inside-calendar-month-day {
