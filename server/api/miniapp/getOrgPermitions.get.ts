@@ -1,4 +1,5 @@
 const prisma = usePrisma();
+const fakeAPI = useFakeAPI();
 
 const getSectionSetting = (orgId: number, key: string) => {
   return prisma.sectionSetting.findFirst({
@@ -23,23 +24,49 @@ const checkSettingOption = (dataset: { settingOption: { key: string } }) => {
 
 export default defineEventHandler(async (event) => {
   const query = await getQuery(event);
-  const orgId = Number(query.orgId);
+  const userId = Number(query.userId);
 
-  let changeDate, changeVenue, cancelLesson;
+  const user = await prisma.users.findFirst({
+    where: {
+      peerId: userId,
+    },
+    select: { key: true },
+  });
 
-  const [changeDateDB, changeVenueDB, cancelLessonDB] = await Promise.all([
+  const employee = await fakeAPI.employee.findFirst({
+    where: {
+      accessCode: user?.key!,
+    },
+    select: {
+      organizationId: true,
+    },
+  });
+
+  const orgId = employee?.organizationId!;
+
+  let changeDate, changeVenue, cancellationLesson, changeInstructor;
+
+  const [
+    changeDateDB,
+    changeVenueDB,
+    cancellationLessonDB,
+    changeInstructorDB,
+  ] = await Promise.all([
     getSectionSetting(orgId, "schedule_instructor_change_date"),
     getSectionSetting(orgId, "schedule_instructor_change_venue"),
     getSectionSetting(orgId, "schedule_instructor_lesson_cancellation"),
+    getSectionSetting(orgId, "schedule_instructor_change_instructor"),
   ]);
 
   changeDate = checkSettingOption(changeDateDB!);
   changeVenue = checkSettingOption(changeVenueDB!);
-  cancelLesson = checkSettingOption(cancelLessonDB!);
+  cancellationLesson = checkSettingOption(cancellationLessonDB!);
+  changeInstructor = checkSettingOption(changeInstructorDB!);
 
   return {
     changeDate,
     changeVenue,
-    cancelLesson,
+    cancellationLesson,
+    changeInstructor,
   };
 });

@@ -28,7 +28,7 @@ export default defineEventHandler(async (event) => {
 
     const currentState = await getUserState(peerId);
 
-    if (text) {
+    if (message.text) {
       if (currentState != "login") {
         text = message.text?.toLowerCase();
       } else {
