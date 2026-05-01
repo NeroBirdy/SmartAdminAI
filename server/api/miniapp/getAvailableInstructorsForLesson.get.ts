@@ -22,13 +22,25 @@ export default defineEventHandler(async (event) => {
   const query = await getQuery(event);
   const lessonId = Number(query.lessonId);
 
-  const lesson = await fakeAPI.lesson.findUnique({ where: { id: lessonId } });
+  const lesson = await fakeAPI.lesson.findUnique({
+    where: { id: lessonId },
+    include: { instructor: true },
+  });
 
   const date = lesson?.date;
   const startTime = lesson!.startTime;
   const endTime = lesson!.endTime;
   const programId = lesson?.programId;
   const initialInstructorId = lesson?.instructorId;
+  const orgId = lesson?.instructor.organizationId;
+
+  const considerWorkHours = await prisma.sectionSetting.findFirst({
+    where: {
+      sectionId: orgId,
+      settingDefinition: { key: "staff_extra_setting" },
+      settingOption: { key: "consider_instructor_schedule" },
+    },
+  });
 
   const instructors = await fakeAPI.employeeProgram.findMany({
     where: { programId, employeeId: { not: initialInstructorId } },
@@ -97,8 +109,9 @@ export default defineEventHandler(async (event) => {
       return {
         id,
         isAvailable:
-          availableForWorkHours(workHours as WorkHours[]) &&
-          availableForLessons(lessons),
+          (considerWorkHours
+            ? availableForWorkHours(workHours as WorkHours[])
+            : true) && availableForLessons(lessons),
       };
     }),
   );
