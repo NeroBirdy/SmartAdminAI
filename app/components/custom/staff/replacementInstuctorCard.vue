@@ -13,7 +13,7 @@
           <custom-staff-warning />
         </div>
         <component
-          v-if="!isWarning"
+          v-if="isWarning"
           class="card-arrow"
           :class="mirroredClass"
           :is="cardArrowImg"
@@ -21,7 +21,7 @@
         />
       </div>
     </div>
-    <div class="second-frame-content" v-if="!isWarning" :class="hiddenClass">
+    <div class="second-frame-content" v-if="isWarning" :class="hiddenClass">
       <custom-schedule-setting-card queryKey="staff_extra_setting" />
       <ui-help
         title="Как это работает?"

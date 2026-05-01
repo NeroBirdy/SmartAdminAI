@@ -18,8 +18,6 @@ export default defineEventHandler(async (event) => {
 
   const { date, userId } = body;
 
-  console.log(date, userId);
-
   if (!date || !userId) {
     event.node.res.statusCode = 400;
     return { ok: false, error: 'date or userId missing' };

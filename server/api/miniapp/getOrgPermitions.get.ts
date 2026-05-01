@@ -46,27 +46,29 @@ export default defineEventHandler(async (event) => {
 
   let changeDate, changeVenue, cancellationLesson, changeInstructor;
 
-  const [
-    changeDateDB,
-    changeVenueDB,
-    cancellationLessonDB,
-    changeInstructorDB,
-  ] = await Promise.all([
-    getSectionSetting(orgId, "schedule_instructor_change_date"),
-    getSectionSetting(orgId, "schedule_instructor_change_venue"),
-    getSectionSetting(orgId, "schedule_instructor_lesson_cancellation"),
-    getSectionSetting(orgId, "schedule_instructor_change_instructor"),
-  ]);
+  const [changeDateDB, changeVenueDB, cancellationLessonDB] = await Promise.all(
+    [
+      getSectionSetting(orgId, "schedule_instructor_change_date"),
+      getSectionSetting(orgId, "schedule_instructor_change_venue"),
+      getSectionSetting(orgId, "schedule_instructor_lesson_cancellation"),
+    ],
+  );
+  const changeInstructorDB = await prisma.sectionAISetting.findFirst({
+    where: {
+      sectionId: orgId,
+      settingAIId: 3,
+    },
+  });
 
   changeDate = checkSettingOption(changeDateDB!);
   changeVenue = checkSettingOption(changeVenueDB!);
   cancellationLesson = checkSettingOption(cancellationLessonDB!);
-  changeInstructor = checkSettingOption(changeInstructorDB!);
+  changeInstructor = changeInstructorDB ? changeInstructorDB.enable : false;
 
   return {
     changeDate,
     changeVenue,
     cancellationLesson,
-    changeInstructor,
+    changeInstructor: changeInstructor,
   };
 });

@@ -25,7 +25,7 @@
         queryKey="schedule_instructor_change_venue"
       />
       <custom-schedule-setting-card
-        queryKey="schedule_instructor_change_instructor"
+        queryKey="schedule_instructor_lesson_cancellation"
       />
       <custom-schedule-setting-card queryKey="schedule_extra_setting" />
 

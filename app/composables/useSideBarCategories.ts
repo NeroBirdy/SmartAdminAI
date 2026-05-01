@@ -25,9 +25,5 @@ export const useSideBarCategories = () => {
     if (category) category.enable = enable;
   };
 
-  onMounted(() => {
-    if (!categories.value) getCategories();
-  });
-
-  return { categories, updateCategory };
+  return { categories, getCategories, updateCategory };
 };

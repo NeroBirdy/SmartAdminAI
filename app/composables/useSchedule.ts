@@ -77,7 +77,6 @@ const isUpdating = ref(false);
 
   watch(data, (newData) => {
     if (!newData) return;
-    console.log(newData.lessons)
     schedule.value = newData.lessons || {};
     if (newData.groups?.length !== groups.value.length)
       groups.value = newData.groups;
