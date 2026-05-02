@@ -213,17 +213,17 @@ async function buildKeyboardForDate(peerId: number, page: number, currentState: 
 }
 
 
-async function buildConfirmKeyboard(payload: {}) {
+async function buildConfirmKeyboard(confirmPayload: {}, denyPayload: {}) {
   const keyboard = Keyboard.builder().inline();
 
   keyboard.callbackButton({
     label: "Да",
-    payload: payload,
+    payload: confirmPayload,
   });
 
   keyboard.callbackButton({
     label: "нет",
-    payload: {cmd: "-"}
+    payload: denyPayload,
   });
 
   return keyboard;

@@ -1,6 +1,6 @@
 const fakeAPI = useFakeAPI();
 
-import { VK, Keyboard } from "vk-io";
+import { VK, Keyboard, getRandomId } from "vk-io";
 const vk = new VK({ token: useRuntimeConfig().vkToken });
 
 export default defineEventHandler(async (event) => {
@@ -8,16 +8,19 @@ export default defineEventHandler(async (event) => {
   const lessonId = body.lessonId;
   const userId = body.userId;
 
-  const currentState = getUserState(userId);
-  
   const permission = await getPermission(userId);
 
+  const id = await getUserIdByPeerId(userId);
+  const randomId = generateRandomId(1, 1000000);
+
   if (permission.cancellationLesson) {
-    const keyboard = await buildConfirmKeyboard({cmd: currentState, lessonId: lessonId, userId: userId});
-    await sendConfirmMessage(userId, keyboard, "Точно отменить?");
+    const keyboard = await buildConfirmKeyboard({ cmd: "cancellationLesson", lessonId: lessonId, userId: userId, randomId: randomId }, { cmd: "denyCancellationLesson", randomId: randomId });
+    const messageId = await sendConfirmMessage(userId, keyboard, "Точно отменить?");
+    await saveNewMessage(id!, Number(messageId), randomId);
   }
   else {
-    const keyboard = await buildConfirmKeyboard({cmd: "requestCancellationLesson", lessonId: lessonId, userId: userId});
-    await sendConfirmMessage(userId, keyboard, "Точно отменить?");
+    const keyboard = await buildConfirmKeyboard({ cmd: "requestCancellationLesson", lessonId: lessonId, userId: userId, randomId: randomId }, { cmd: "denyCancellationLesson", randomId: randomId });
+    const messageId = await sendConfirmMessage(userId, keyboard, "Точно отменить?");
+    await saveNewMessage(id!, Number(messageId), randomId);
   }
 });

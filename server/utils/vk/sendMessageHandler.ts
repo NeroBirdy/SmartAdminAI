@@ -231,7 +231,7 @@ async function sendChangeInstructorRequest(peerId: number, peerIdList: number[],
 
   for (const id of peerIdList) {
     if (Number(id) !== 0) {
-      const keyboard = await buildConfirmKeyboard({ cmd: "confirmChangeInstructor", ownerId: peerId, randomId: randomId, lessonId: lessonId });
+      const keyboard = await buildConfirmKeyboard({ cmd: "confirmChangeInstructor", ownerId: peerId, randomId: randomId, lessonId: lessonId }, {cmd: "deny", randomId: randomId, ownerId: peerId});
 
       const res = await sendMessage(Number(id), keyboard, "Сможешь подменить?");
       const userId = await getUserIdByPeerId(id);

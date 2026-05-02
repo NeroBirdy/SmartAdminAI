@@ -353,14 +353,33 @@ export default defineEventHandler(async (event) => {
                 },
                 keepalive: true,
             });
+
+            const id = await getUserIdByPeerId(peerId);
+            const messageId = await getMessageId(id!, payload.randomId);
+
+            await deleteMessage(messageId);
+            await deleteMessageFromDb(messageId);
+
             return "ok";
         }
 
         if (payload.cmd === "requestCancellationLesson") {
             const managerId = await getMenagerId();
-            const keyboard = await buildConfirmKeyboard({ cmd: "confirmRequestCancellationLesson", lessonId: payload.lessonId, userId: payload.userId });
 
-            await sendRequestForManager(managerId!, keyboard, "Запрос на отмену занятия");
+            const id = await getUserIdByPeerId(managerId!);
+            const randomId = generateRandomId(1, 10000000);
+
+            const keyboard = await buildConfirmKeyboard({ cmd: "confirmRequestCancellationLesson", lessonId: payload.lessonId, userId: payload.userId, randomId: randomId }, {cmd: "denyRequestCancellationLesson", randomId: randomId, userId: payload.userId});
+
+            const messageId = await sendRequestForManager(managerId!, keyboard, "Запрос на отмену занятия");
+            await saveNewMessage(id!, Number(messageId)!, randomId);
+
+            const uid = await getUserIdByPeerId(peerId);
+            const umessageId = await getMessageId(uid!, payload.randomId);
+
+            await deleteMessage(umessageId);
+            await deleteMessageFromDb(umessageId);
+
             return "ok";
         }
 
@@ -375,6 +394,13 @@ export default defineEventHandler(async (event) => {
                 },
                 keepalive: true,
             });
+
+            const id = await getUserIdByPeerId(peerId);
+            const messageId = await getMessageId(id!, payload.randomId);
+
+            await deleteMessage(messageId);
+            await deleteMessageFromDb(messageId);
+
             return "ok";
         }
 
@@ -386,6 +412,19 @@ export default defineEventHandler(async (event) => {
                 },
                 keepalive: true,
             });
+
+            const id = await getUserIdByPeerId(peerId);
+            const messageId = await getMessageId(id!, payload.randomId);
+
+            await deleteMessage(messageId);
+            await deleteMessageFromDb(messageId);
+
+            const isAvailable = checkAvailableInstructor(instructors);
+
+            if (!isAvailable) {
+                await sendMessageWithoutKeyboard(peerId, "Нет доступных для замены инструкторов");
+                return "ok";
+            }
 
             const randomId = generateRandomId(1, 1000000);
             const peerIdList = await getPeerIdList(instructors);
@@ -399,6 +438,53 @@ export default defineEventHandler(async (event) => {
             await deleteChangeInstructorMessage(peerId, payload.randomId);
 
             await updateInstructor(payload.lessonId, peerId);
+        }
+
+        if (payload.cmd === "denyCancellationLesson") {
+            const id = await getUserIdByPeerId(peerId);
+            const messageId = await getMessageId(id!, payload.randomId);
+
+            await deleteMessage(messageId);
+            await deleteMessageFromDb(messageId);
+        }
+
+        if (payload.cmd === "denyRequestCancellationLesson") {
+            const id = await getUserIdByPeerId(peerId);
+            const messageId = await getMessageId(id!, payload.randomId);
+
+            await deleteMessage(messageId);
+            await deleteMessageFromDb(messageId);
+
+            await sendMessageWithoutKeyboard(payload.userId, "Ваш запрос отклонен");
+        }
+
+        if (payload.cmd === "cancelGetAvailableInstructor") {
+            const id = await getUserIdByPeerId(peerId);
+            const messageId = await getMessageId(id!, payload.randomId);
+
+            await deleteMessage(messageId);
+            await deleteMessageFromDb(messageId);
+        }
+
+        if (payload.cmd === "deny") {
+            try {
+                const id = await getUserIdByPeerId(peerId);
+                const messageId = await getMessageId(id!, payload.randomId);
+
+                if (messageId === 0) return "ok";
+
+                await deleteMessage(messageId);
+                await deleteMessageFromDb(messageId);
+
+                const messagesCount = await checkMessagesCount(payload.randomId);
+
+                if (messagesCount === 0) {
+                    await sendMessageWithoutKeyboard(payload.ownerId, "Все отказались");
+                }
+            }
+            catch (e) {
+                console.log(e);
+            }
         }
 
         if (payload.cmd === "back") {

@@ -249,7 +249,7 @@ async function getPermission(peerId: number) {
   return {
     changeDate: true,
     changeVenue: true,
-    cancellationLesson: false,
+    cancellationLesson: true,
     changeInstructor: true,
   };
 }

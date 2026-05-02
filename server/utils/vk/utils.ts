@@ -16,6 +16,9 @@ export {
   deleteChangeInstructorMessage,
   deleteMessageFromDb,
   updateInstructor,
+  getMessageId,
+  checkAvailableInstructor,
+  checkMessagesCount,
 };
 
 const fakeApi = useFakeAPI();
@@ -200,22 +203,22 @@ async function saveNewMessage(userId: number, messageId: number, randomId: numbe
 
 async function deleteMessageFromDb(messageId: number) {
   const message = await prisma.messages.findFirst({
-    where: {messageId: messageId},
-    select: {id: true},
+    where: { messageId: messageId },
+    select: { id: true },
   });
 
   return await prisma.messages.delete({
-    where: {id: message?.id},
+    where: { id: message?.id },
   });
 }
 
 
-async function deleteChangeInstructorMessage(peerId:number, randomId: number) {
+async function deleteChangeInstructorMessage(peerId: number, randomId: number) {
   const ownerId = await getUserIdByPeerId(peerId);
 
   const messages = await prisma.messages.findMany({
-    where: {randomId:randomId},
-    select: {userId: true, messageId: true},
+    where: { randomId: randomId },
+    select: { userId: true, messageId: true },
   });
 
   for (const message of messages) {
@@ -235,9 +238,42 @@ async function updateInstructor(lessonId: number, peerId: number) {
   const id = await getUserIdByPeerId(peerId);
 
   return await fakeApi.lesson.update({
-    where: {id: Number(lessonId)},
+    where: { id: Number(lessonId) },
     data: {
       instructorId: Number(id),
     }
   });
+}
+
+
+async function getMessageId(userId: number, randomId: number) {
+  const data = await prisma.messages.findFirst({
+    where: { userId: userId, randomId: randomId },
+    select: { messageId: true },
+  });
+
+  return data?.messageId || 0;
+}
+
+
+function checkAvailableInstructor(instructorsList: Instructor[]) {
+  let isAvailable = false;
+
+  for (const instructor of instructorsList) {
+    if (instructor.isAvailable) {
+      isAvailable = true;
+      return isAvailable;
+    }
+  }
+
+  return isAvailable;
+}
+
+
+async function checkMessagesCount(randomId: number) {
+  const count = await prisma.messages.count({
+    where: { randomId },
+  });
+
+  return count;
 }
