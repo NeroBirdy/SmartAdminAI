@@ -176,20 +176,15 @@ async function main() {
     data: {
       key: "schedule_extra_setting",
       name: "Дополнительные настройки",
-      settingTypeId: settingTypes.MULTI_SELECT.id,
-      maxValues: 2,
+      settingTypeId: settingTypes.SINGLE_SELECT.id,
+      maxValues: 1,
       options: {
         create: [
           {
             key: "notify_manager",
             name: "Уведомить руководителя",
             sortOrder: 1,
-          },
-          {
-            key: "fix_reason",
-            name: "Фиксировать причину",
-            sortOrder: 2,
-          },
+          }, 
         ],
       },
     },
@@ -207,11 +202,6 @@ async function main() {
             key: "notify_manager",
             name: "Уведомить руководителя",
             sortOrder: 1,
-          },
-          {
-            key: "fix_reason",
-            name: "Фиксировать причину",
-            sortOrder: 2,
           },
           {
             key: "consider_instructor_schedule",
