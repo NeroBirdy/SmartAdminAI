@@ -10,15 +10,27 @@ export {
   createVenueList,
   findVenueDataFromName,
   deleteLastBotMessage,
+  generateRandomId,
+  getPeerIdList,
+  saveNewMessage,
+  deleteChangeInstructorMessage,
+  deleteMessageFromDb,
+  updateInstructor,
 };
 
 const fakeApi = useFakeAPI();
+const prisma = usePrisma();
 const vk = new VK({ token: useRuntimeConfig().vkToken });
 
 type VenueIds = {
   venueId: number;
   lessonId: number;
 };
+
+type Instructor = {
+  id: number
+  isAvailable: boolean
+}
 
 function findCities(data: Record<string, string[]>, query: string) {
   const q = query.toLowerCase();
@@ -151,3 +163,81 @@ async function deleteLastBotMessage(peerId: number, ownerGroupId: number) {
 }
 
 
+function generateRandomId(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
+
+async function getPeerIdList(instructorsList: Instructor[]) {
+  const peerIdList = await Promise.all(
+    instructorsList.map(async (instructor) => {
+      if (!instructor.isAvailable) {
+        return 0;
+      }
+
+      const key = await getInstructorKey(instructor.id);
+      const peerId = await getInstructorPeerId(key!);
+
+
+      return peerId;
+    })
+  )
+
+  return peerIdList
+}
+
+
+async function saveNewMessage(userId: number, messageId: number, randomId: number) {
+  return prisma.messages.create({
+    data: {
+      userId: userId,
+      messageId: messageId,
+      randomId: randomId,
+    }
+  });
+}
+
+
+async function deleteMessageFromDb(messageId: number) {
+  const message = await prisma.messages.findFirst({
+    where: {messageId: messageId},
+    select: {id: true},
+  });
+
+  return await prisma.messages.delete({
+    where: {id: message?.id},
+  });
+}
+
+
+async function deleteChangeInstructorMessage(peerId:number, randomId: number) {
+  const ownerId = await getUserIdByPeerId(peerId);
+
+  const messages = await prisma.messages.findMany({
+    where: {randomId:randomId},
+    select: {userId: true, messageId: true},
+  });
+
+  for (const message of messages) {
+    if (message.userId === ownerId) {
+      await editMessage(peerId, message.messageId, "Вы согласились");
+    }
+    else {
+      await deleteMessage(message.messageId);
+    }
+
+    await deleteMessageFromDb(message.messageId);
+  }
+}
+
+
+async function updateInstructor(lessonId: number, peerId: number) {
+  const id = await getUserIdByPeerId(peerId);
+
+  return await fakeApi.lesson.update({
+    where: {id: Number(lessonId)},
+    data: {
+      instructorId: Number(id),
+    }
+  });
+}

@@ -23,6 +23,11 @@ export * from './enums.js';
  */
 export type Breaks = Prisma.BreaksModel
 /**
+ * Model Messages
+ * 
+ */
+export type Messages = Prisma.MessagesModel
+/**
  * Model Prompt
  * 
  */

@@ -52,6 +52,7 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   Breaks: 'Breaks',
+  Messages: 'Messages',
   Prompt: 'Prompt',
   Recommendation: 'Recommendation',
   Risk: 'Risk',
@@ -90,6 +91,17 @@ export const BreaksScalarFieldEnum = {
 } as const
 
 export type BreaksScalarFieldEnum = (typeof BreaksScalarFieldEnum)[keyof typeof BreaksScalarFieldEnum]
+
+
+export const MessagesScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  messageId: 'messageId',
+  randomId: 'randomId',
+  createdAt: 'createdAt'
+} as const
+
+export type MessagesScalarFieldEnum = (typeof MessagesScalarFieldEnum)[keyof typeof MessagesScalarFieldEnum]
 
 
 export const PromptScalarFieldEnum = {

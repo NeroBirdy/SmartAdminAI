@@ -1,0 +1,7 @@
+model Messages {
+    id        Int      @id @default(autoincrement())
+    userId    Int
+    messageId Int
+    randomId  Int
+    createdAt DateTime @default(now())
+}
