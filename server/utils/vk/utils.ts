@@ -19,6 +19,7 @@ export {
   getMessageId,
   checkAvailableInstructor,
   checkMessagesCount,
+  getPrograms,
 };
 
 const fakeApi = useFakeAPI();
@@ -91,6 +92,11 @@ async function getListFromState(peerId: number, state: string) {
     case "changeVenue":
       list = await createVenueList(peerId);
       break;
+
+    case "choose_program":
+      const orgId = await getUserOrgId(peerId);
+      list = await getPrograms(orgId!);
+      break;
   }
 
   return list;
@@ -107,6 +113,11 @@ async function setPreviousState(peerId: number, state: string) {
     case "choose_organization":
       await sendChooseCityMessage(peerId);
       await saveUserState({ peerId: peerId, state: "choose_city" });
+      break;
+
+    case "choose_program":
+      await sendChooseOrganizationKeyboard(peerId);
+      await saveUserState({ peerId: peerId, state: "choose_organization" });
       break;
 
     case "changeVenue":
@@ -276,4 +287,16 @@ async function checkMessagesCount(randomId: number) {
   });
 
   return count;
+}
+
+
+async function getPrograms(orgId: number) {
+  const programs = await fakeApi.program.findMany({
+    where: { organizationId: orgId },
+    select: { name: true },
+  });
+
+  return programs.map((program) => {
+    return program.name;
+  });
 }

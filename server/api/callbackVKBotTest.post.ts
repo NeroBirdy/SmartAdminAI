@@ -302,9 +302,29 @@ export default defineEventHandler(async (event) => {
             await saveOrganizationList(payload.select, peerId);
             await saveUserState({
                 peerId: peerId,
-                state: "xz",
+                state: "choose_program",
                 organization: payload.select,
             });
+
+            await sendChooseProgramMessage(peerId);
+            return "ok";
+        }
+
+        if (payload.cmd === "choose_program") {
+            await vk.api.messages.edit({
+                peer_id: peerId,
+                conversation_message_id: msgId,
+                message: `Вы выбрали программу: ${payload.select}`,
+                keyboard: Keyboard.builder().inline(),
+            });
+
+            await saveProgram(peerId, payload.select);
+            await saveUserState({
+                peerId: peerId,
+                state: "xz",
+                program: payload.select,
+            });
+
             return "ok";
         }
 

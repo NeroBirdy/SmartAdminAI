@@ -213,6 +213,7 @@ export const UsersScalarFieldEnum = {
   citiesList: 'citiesList',
   organization: 'organization',
   organizationsList: 'organizationsList',
+  program: 'program',
   venueList: 'venueList',
   dateList: 'dateList',
   page: 'page',
@@ -353,6 +354,7 @@ export const UsersOrderByRelevanceFieldEnum = {
   state: 'state',
   city: 'city',
   organization: 'organization',
+  program: 'program',
   key: 'key',
   role: 'role'
 } as const

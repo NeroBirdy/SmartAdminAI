@@ -22,6 +22,8 @@ export {
   getInstructorKey,
   getInstructorPeerId,
   getUserIdByPeerId,
+  getUserOrgId,
+  saveProgram,
 };
 
 const vk = new VK({ token: useRuntimeConfig().vkToken });
@@ -35,6 +37,7 @@ type SaveUserStateParams = {
   city?: string | null;
   citiesList?: unknown;
   page?: number;
+  program?: string;
   organization?: string;
   organizationsList?: unknown;
 };
@@ -70,6 +73,7 @@ async function saveUserState(params: SaveUserStateParams) {
     city,
     citiesList,
     page,
+    program,
     organization,
     organizationsList,
   } = params;
@@ -88,6 +92,9 @@ async function saveUserState(params: SaveUserStateParams) {
   if (page !== undefined) {
     updateData.page = page;
   }
+  if (program !== undefined) {
+    updateData.program = program;
+  }
   if (organization !== undefined) {
     updateData.organization = organization;
   }
@@ -104,6 +111,7 @@ async function saveUserState(params: SaveUserStateParams) {
       city: city ?? null,
       citiesList: citiesList ?? [],
       page: page ?? 1,
+      program: program ?? null,
       organization: organization ?? null,
       organizationsList: organizationsList ?? [],
     }
@@ -352,8 +360,8 @@ async function getMenagerId() {
 
 async function getInstructorKey(userId: number) {
   const user = await fakeApi.employee.findFirst({
-    where: {id: userId},
-    select: {accessCode: true},
+    where: { id: userId },
+    select: { accessCode: true },
   });
 
   return user?.accessCode;
@@ -362,8 +370,8 @@ async function getInstructorKey(userId: number) {
 
 async function getInstructorPeerId(key: string) {
   const user = await prisma.users.findFirst({
-    where: {key: key},
-    select: {peerId: true},
+    where: { key: key },
+    select: { peerId: true },
   });
 
   return user?.peerId || 0;
@@ -372,9 +380,43 @@ async function getInstructorPeerId(key: string) {
 
 async function getUserIdByPeerId(peerId: number) {
   const user = await prisma.users.findFirst({
-    where: {peerId: peerId},
-    select: {id: true},
+    where: { peerId: peerId },
+    select: { id: true },
   });
 
   return user?.id;
+}
+
+
+async function getUserOrgId(peerId: number) {
+  const userData = await prisma.users.findFirst({
+    where: { peerId: peerId },
+    select: { organization: true, city: true }
+  });
+
+  if (!userData?.city || !userData?.organization) {
+    return null;
+  }
+
+  const city = await fakeApi.city.findFirst({
+    where: { name: userData?.city },
+    select: { id: true },
+  });
+
+  const orgId = await fakeApi.organization.findFirst({
+    where: {name: userData.organization, cityId: city?.id},
+    select: {id: true},
+  });
+
+  return orgId?.id;
+}
+
+
+async function saveProgram(peerId: number, program: string) {
+  return await prisma.users.update({
+    where: {peerId: peerId},
+    data: {
+      program: program,
+    }
+  });
 }

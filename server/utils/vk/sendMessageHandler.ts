@@ -16,6 +16,7 @@ export {
   sendRequestForManager,
   sendChangeInstructorRequest,
   deleteMessage,
+  sendChooseProgramMessage,
 };
 
 const vk = new VK({ token: useRuntimeConfig().vkToken });
@@ -80,8 +81,6 @@ async function sendLoginMessage(peerId: number) {
 }
 
 async function sendChooseOrganizationKeyboard(peerId: number) {
-  const organizationsList = await getUserOrganizationsList(peerId);
-
   const keyboard = await buildKeyboard(peerId, 1, "choose_organization");
   await vk.api.messages.send({
     peer_id: peerId,
@@ -247,4 +246,10 @@ async function deleteMessage(messageId: number) {
     message_ids: messageId,
     delete_for_all: 1,
   });
+}
+
+
+async function sendChooseProgramMessage(peerId: number) {
+  const keyboard = await buildKeyboard(peerId, 1, "choose_program");
+  await sendMessage(peerId, keyboard, "Выберите программу");
 }

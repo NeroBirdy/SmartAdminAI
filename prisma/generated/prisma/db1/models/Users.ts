@@ -44,6 +44,7 @@ export type UsersMinAggregateOutputType = {
   state: string | null
   city: string | null
   organization: string | null
+  program: string | null
   page: number | null
   key: string | null
   role: string | null
@@ -56,6 +57,7 @@ export type UsersMaxAggregateOutputType = {
   state: string | null
   city: string | null
   organization: string | null
+  program: string | null
   page: number | null
   key: string | null
   role: string | null
@@ -70,6 +72,7 @@ export type UsersCountAggregateOutputType = {
   citiesList: number
   organization: number
   organizationsList: number
+  program: number
   venueList: number
   dateList: number
   page: number
@@ -98,6 +101,7 @@ export type UsersMinAggregateInputType = {
   state?: true
   city?: true
   organization?: true
+  program?: true
   page?: true
   key?: true
   role?: true
@@ -110,6 +114,7 @@ export type UsersMaxAggregateInputType = {
   state?: true
   city?: true
   organization?: true
+  program?: true
   page?: true
   key?: true
   role?: true
@@ -124,6 +129,7 @@ export type UsersCountAggregateInputType = {
   citiesList?: true
   organization?: true
   organizationsList?: true
+  program?: true
   venueList?: true
   dateList?: true
   page?: true
@@ -227,6 +233,7 @@ export type UsersGroupByOutputType = {
   citiesList: runtime.JsonValue
   organization: string | null
   organizationsList: runtime.JsonValue
+  program: string | null
   venueList: runtime.JsonValue
   dateList: runtime.JsonValue
   page: number
@@ -266,6 +273,7 @@ export type UsersWhereInput = {
   citiesList?: Prisma.JsonFilter<"Users">
   organization?: Prisma.StringNullableFilter<"Users"> | string | null
   organizationsList?: Prisma.JsonFilter<"Users">
+  program?: Prisma.StringNullableFilter<"Users"> | string | null
   venueList?: Prisma.JsonFilter<"Users">
   dateList?: Prisma.JsonFilter<"Users">
   page?: Prisma.IntFilter<"Users"> | number
@@ -282,6 +290,7 @@ export type UsersOrderByWithRelationInput = {
   citiesList?: Prisma.SortOrder
   organization?: Prisma.SortOrderInput | Prisma.SortOrder
   organizationsList?: Prisma.SortOrder
+  program?: Prisma.SortOrderInput | Prisma.SortOrder
   venueList?: Prisma.SortOrder
   dateList?: Prisma.SortOrder
   page?: Prisma.SortOrder
@@ -302,6 +311,7 @@ export type UsersWhereUniqueInput = Prisma.AtLeast<{
   citiesList?: Prisma.JsonFilter<"Users">
   organization?: Prisma.StringNullableFilter<"Users"> | string | null
   organizationsList?: Prisma.JsonFilter<"Users">
+  program?: Prisma.StringNullableFilter<"Users"> | string | null
   venueList?: Prisma.JsonFilter<"Users">
   dateList?: Prisma.JsonFilter<"Users">
   page?: Prisma.IntFilter<"Users"> | number
@@ -318,6 +328,7 @@ export type UsersOrderByWithAggregationInput = {
   citiesList?: Prisma.SortOrder
   organization?: Prisma.SortOrderInput | Prisma.SortOrder
   organizationsList?: Prisma.SortOrder
+  program?: Prisma.SortOrderInput | Prisma.SortOrder
   venueList?: Prisma.SortOrder
   dateList?: Prisma.SortOrder
   page?: Prisma.SortOrder
@@ -342,6 +353,7 @@ export type UsersScalarWhereWithAggregatesInput = {
   citiesList?: Prisma.JsonWithAggregatesFilter<"Users">
   organization?: Prisma.StringNullableWithAggregatesFilter<"Users"> | string | null
   organizationsList?: Prisma.JsonWithAggregatesFilter<"Users">
+  program?: Prisma.StringNullableWithAggregatesFilter<"Users"> | string | null
   venueList?: Prisma.JsonWithAggregatesFilter<"Users">
   dateList?: Prisma.JsonWithAggregatesFilter<"Users">
   page?: Prisma.IntWithAggregatesFilter<"Users"> | number
@@ -357,6 +369,7 @@ export type UsersCreateInput = {
   citiesList?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   organization?: string | null
   organizationsList?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  program?: string | null
   venueList?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dateList?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   page?: number
@@ -373,6 +386,7 @@ export type UsersUncheckedCreateInput = {
   citiesList?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   organization?: string | null
   organizationsList?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  program?: string | null
   venueList?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dateList?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   page?: number
@@ -388,6 +402,7 @@ export type UsersUpdateInput = {
   citiesList?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   organization?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organizationsList?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  program?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueList?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dateList?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   page?: Prisma.IntFieldUpdateOperationsInput | number
@@ -404,6 +419,7 @@ export type UsersUncheckedUpdateInput = {
   citiesList?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   organization?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organizationsList?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  program?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueList?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dateList?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   page?: Prisma.IntFieldUpdateOperationsInput | number
@@ -420,6 +436,7 @@ export type UsersCreateManyInput = {
   citiesList?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   organization?: string | null
   organizationsList?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  program?: string | null
   venueList?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dateList?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   page?: number
@@ -435,6 +452,7 @@ export type UsersUpdateManyMutationInput = {
   citiesList?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   organization?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organizationsList?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  program?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueList?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dateList?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   page?: Prisma.IntFieldUpdateOperationsInput | number
@@ -451,6 +469,7 @@ export type UsersUncheckedUpdateManyInput = {
   citiesList?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   organization?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organizationsList?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  program?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueList?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dateList?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   page?: Prisma.IntFieldUpdateOperationsInput | number
@@ -473,6 +492,7 @@ export type UsersCountOrderByAggregateInput = {
   citiesList?: Prisma.SortOrder
   organization?: Prisma.SortOrder
   organizationsList?: Prisma.SortOrder
+  program?: Prisma.SortOrder
   venueList?: Prisma.SortOrder
   dateList?: Prisma.SortOrder
   page?: Prisma.SortOrder
@@ -493,6 +513,7 @@ export type UsersMaxOrderByAggregateInput = {
   state?: Prisma.SortOrder
   city?: Prisma.SortOrder
   organization?: Prisma.SortOrder
+  program?: Prisma.SortOrder
   page?: Prisma.SortOrder
   key?: Prisma.SortOrder
   role?: Prisma.SortOrder
@@ -505,6 +526,7 @@ export type UsersMinOrderByAggregateInput = {
   state?: Prisma.SortOrder
   city?: Prisma.SortOrder
   organization?: Prisma.SortOrder
+  program?: Prisma.SortOrder
   page?: Prisma.SortOrder
   key?: Prisma.SortOrder
   role?: Prisma.SortOrder
@@ -531,6 +553,7 @@ export type UsersSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   citiesList?: boolean
   organization?: boolean
   organizationsList?: boolean
+  program?: boolean
   venueList?: boolean
   dateList?: boolean
   page?: boolean
@@ -549,6 +572,7 @@ export type UsersSelectScalar = {
   citiesList?: boolean
   organization?: boolean
   organizationsList?: boolean
+  program?: boolean
   venueList?: boolean
   dateList?: boolean
   page?: boolean
@@ -557,7 +581,7 @@ export type UsersSelectScalar = {
   createdAt?: boolean
 }
 
-export type UsersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "peerId" | "state" | "city" | "citiesList" | "organization" | "organizationsList" | "venueList" | "dateList" | "page" | "key" | "role" | "createdAt", ExtArgs["result"]["users"]>
+export type UsersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "peerId" | "state" | "city" | "citiesList" | "organization" | "organizationsList" | "program" | "venueList" | "dateList" | "page" | "key" | "role" | "createdAt", ExtArgs["result"]["users"]>
 
 export type $UsersPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Users"
@@ -570,6 +594,7 @@ export type $UsersPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     citiesList: runtime.JsonValue
     organization: string | null
     organizationsList: runtime.JsonValue
+    program: string | null
     venueList: runtime.JsonValue
     dateList: runtime.JsonValue
     page: number
@@ -952,6 +977,7 @@ export interface UsersFieldRefs {
   readonly citiesList: Prisma.FieldRef<"Users", 'Json'>
   readonly organization: Prisma.FieldRef<"Users", 'String'>
   readonly organizationsList: Prisma.FieldRef<"Users", 'Json'>
+  readonly program: Prisma.FieldRef<"Users", 'String'>
   readonly venueList: Prisma.FieldRef<"Users", 'Json'>
   readonly dateList: Prisma.FieldRef<"Users", 'Json'>
   readonly page: Prisma.FieldRef<"Users", 'Int'>
