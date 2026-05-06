@@ -3,21 +3,14 @@ import { session } from '../../bot/middlewares';
 
 export {
   saveUserState,
-  saveOrganizationList,
   getUserState,
-  getUserCityList,
-  getUserPage,
-  getUserOrganizationsList,
   setUserAccessCode,
   getUserAccessCode,
   login,
   logout,
   getUserRole,
   getPermission,
-  saveVenue,
-  getVenue,
   saveDateList,
-  getDateList,
   getMenagerId,
   getInstructorKey,
   getInstructorPeerId,
@@ -38,11 +31,10 @@ type SaveUserStateParams = {
   peerId: number;
   state?: string | null;
   city?: string | null;
-  citiesList?: unknown;
-  page?: number;
   program?: string;
   organization?: string;
-  organizationsList?: unknown;
+  key?: string;
+  role?: string;
 };
 
 type dbVenue = {
@@ -74,11 +66,10 @@ async function saveUserState(params: SaveUserStateParams) {
     peerId,
     state,
     city,
-    citiesList,
-    page,
     program,
     organization,
-    organizationsList,
+    key,
+    role,
   } = params;
 
   const updateData: any = {};
@@ -89,20 +80,17 @@ async function saveUserState(params: SaveUserStateParams) {
   if (city !== undefined) {
     updateData.city = city;
   }
-  if (citiesList !== undefined) {
-    updateData.citiesList = citiesList;
-  }
-  if (page !== undefined) {
-    updateData.page = page;
-  }
   if (program !== undefined) {
     updateData.program = program;
   }
   if (organization !== undefined) {
     updateData.organization = organization;
   }
-  if (organizationsList !== undefined) {
-    updateData.organization = organizationsList;
+  if (key !== undefined) {
+    updateData.key = key;
+  }
+  if (role !== undefined) {
+    updateData.role = role;
   }
 
   return prisma.users.upsert({
@@ -112,31 +100,14 @@ async function saveUserState(params: SaveUserStateParams) {
       peerId,
       state: state ?? null,
       city: city ?? null,
-      citiesList: citiesList ?? [],
-      page: page ?? 1,
       program: program ?? null,
       organization: organization ?? null,
-      organizationsList: organizationsList ?? [],
+      key: key ?? null,
+      role: role ?? null,
     }
   });
 }
 
-async function saveOrganizationList(city: string, peerId: number) {
-  const response = await getCityOrganizationList();
-
-  const organizationsList = findOrganizations(response, city);
-
-  return prisma.users.upsert({
-    where: { peerId },
-    update: {
-      organizationsList: organizationsList,
-    },
-    create: {
-      peerId,
-      organizationsList: organizationsList ?? [],
-    },
-  });
-}
 
 async function getUserState(peerId: number) {
   const user = await prisma.users.findUnique({
@@ -145,37 +116,6 @@ async function getUserState(peerId: number) {
   });
 
   return user?.state || "";
-}
-
-async function getUserCityList(peerId: number): Promise<string[]> {
-  const user = await prisma.users.findUnique({
-    where: { peerId },
-    select: { citiesList: true },
-  });
-
-  const list = user?.citiesList ?? [];
-
-  return Array.isArray(list) ? (list as string[]) : [];
-}
-
-async function getUserPage(peerId: number) {
-  const user = await prisma.users.findUnique({
-    where: { peerId },
-    select: { page: true },
-  });
-
-  return user?.page || 1;
-}
-
-async function getUserOrganizationsList(peerId: number): Promise<string[]> {
-  const user = await prisma.users.findUnique({
-    where: { peerId },
-    select: { organizationsList: true },
-  });
-
-  const list = user?.organizationsList ?? [];
-
-  return Array.isArray(list) ? (list as string[]) : [];
 }
 
 async function setUserAccessCode(
@@ -261,31 +201,6 @@ async function getPermission(peerId: number) {
   };
 }
 
-async function saveVenue(peerId: number, venueList: dbVenueList) {
-  return prisma.users.upsert({
-    where: { peerId },
-    update: {
-      venueList: venueList,
-    },
-    create: {
-      peerId,
-      venueList: venueList ?? [],
-    },
-  });
-}
-
-async function getVenue(peerId: number): Promise<dbVenueList> {
-  const user = await prisma.users.findUnique({
-    where: { peerId },
-    select: { venueList: true },
-  });
-
-  const venueList = (user?.venueList ?? []) as dbVenueList;
-
-  return venueList;
-}
-
-
 async function saveDateList(peerId: number, dateList: DateList) {
   return prisma.users.upsert({
     where: { peerId },
@@ -298,19 +213,6 @@ async function saveDateList(peerId: number, dateList: DateList) {
     },
   });
 }
-
-
-async function getDateList(peerId: number) {
-  const user = await prisma.users.findUnique({
-    where: { peerId },
-    select: { dateList: true },
-  });
-
-  const venueList = (user?.dateList ?? []) as DateList;
-
-  return venueList;
-}
-
 
 async function getMenagerId() {
   const userData = await prisma.users.findFirst({
@@ -411,7 +313,7 @@ async function setUserSession(peerId: number, sessionData: SessionData) {
 }
 
 
-async function createNewUser(isChild: boolean, gender: string, name: string, surname: string, birthdate: string, phone: string, email: string, parentName?: string, parentSurname?: string) {
+async function createNewUser(isChild: boolean, gender: string, name: string, surname: string, birthdate: string, phone: string, email: string, key: string, parentName?: string, parentSurname?: string) {
   const [dd, mm, yyyy] = birthdate.split('.');
   const date = new Date(Date.UTC(Number(yyyy), Number(mm) - 1, Number(dd), 0, 0, 0, 0));
 
@@ -428,7 +330,7 @@ async function createNewUser(isChild: boolean, gender: string, name: string, sur
         lastNameParent: parentSurname,
         accountType: "CHILD",
         status: "WAITING",
-        accessCode: generateCode(),
+        accessCode: key,
       }
     });
   }
@@ -443,7 +345,7 @@ async function createNewUser(isChild: boolean, gender: string, name: string, sur
         email: email,
         accountType: "ADULT",
         status: "WAITING",
-        accessCode: generateCode(),
+        accessCode: key,
       }
     });
   }

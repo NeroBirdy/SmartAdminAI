@@ -289,21 +289,24 @@ export const registrationScene = new StepScene('registration', [
         let registration = false;
 
         if (context.scene.step.firstTime) {
+            const key = generateCode();
+            
             if (isChild) {
-                registration = await createNewUser(isChild, gender, name, surname, birthdate, phone, email, parentName, parentSurname);
+                registration = await createNewUser(isChild, gender, name, surname, birthdate, phone, email, key, parentName, parentSurname);
             }
             else {
-                registration = await createNewUser(isChild, gender, name, surname, birthdate, phone, email);
+                registration = await createNewUser(isChild, gender, name, surname, birthdate, phone, email, key);
             }
 
             if (registration) {
+                await saveUserState({peerId: context.peerId, key: key, role: "CLIENT"});
                 context.send("Регистрация прошла успешно");
+                return context.scene.enter("trialLessons");
             }
             else {
                 context.send("Ошибка во время регистрации");
+                return context.scene.leave();
             }
-
-            return context.scene.leave();
         }
     }
 ]);

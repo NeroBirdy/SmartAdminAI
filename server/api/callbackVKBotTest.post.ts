@@ -70,7 +70,7 @@ export default defineEventHandler(async (event) => {
 
                 await saveUserState({ peerId: peerId, citiesList: cityList });
 
-                await chooseCity(peerId, cityList);
+                // await chooseCity(peerId, cityList);
                 break;
 
             case "choose_organization":
@@ -245,14 +245,14 @@ export default defineEventHandler(async (event) => {
 
         if (payload.cmd === "page") {
             const page = Number(payload.page) || 1;
-            const keyboard = await buildKeyboard(peerId, page, currentState);
+            // const keyboard = await buildKeyboard(peerId, page, currentState);
 
-            await vk.api.messages.edit({
-                peer_id: peerId,
-                conversation_message_id: msgId,
-                message: "Выбери город:",
-                keyboard,
-            });
+            // await vk.api.messages.edit({
+            //     peer_id: peerId,
+            //     conversation_message_id: msgId,
+            //     message: "Выбери город:",
+            //     keyboard,
+            // });
 
             await saveUserState({ peerId: peerId, page: page });
 
@@ -261,14 +261,14 @@ export default defineEventHandler(async (event) => {
 
         if (payload.cmd === "pageForDate") {
             const page = Number(payload.page) || 0;
-            const keyboard = await buildKeyboardForDate(peerId, page, currentState);
+            // const keyboard = await buildKeyboardForDate(peerId, page, currentState);
 
-            await vk.api.messages.edit({
-                peer_id: peerId,
-                conversation_message_id: msgId,
-                message: "Выберите дату и время:",
-                keyboard,
-            });
+            // await vk.api.messages.edit({
+            //     peer_id: peerId,
+            //     conversation_message_id: msgId,
+            //     message: "Выберите дату и время:",
+            //     keyboard,
+            // });
         }
 
         if (payload.cmd === "choose_city") {
@@ -327,20 +327,20 @@ export default defineEventHandler(async (event) => {
         }
 
         if (payload.cmd === "changeVenue") {
-            const venueData = await findVenueDataFromName(peerId, payload.select);
-            const { venueId, lessonId } = venueData!;
+            // const venueData = await findVenueDataFromName(peerId, payload.select);
+            // const { venueId, lessonId } = venueData!;
 
             await deleteLastBotMessage(peerId, ownerGroupId);
 
-            $fetch("/api/miniapp/updateLesson", {
-                method: "GET",
-                query: {
-                    venueId: venueId,
-                    lessonId: lessonId,
-                    userId: peerId,
-                },
-                keepalive: true,
-            });
+            // $fetch("/api/miniapp/updateLesson", {
+            //     method: "GET",
+            //     query: {
+            //         venueId: venueId,
+            //         lessonId: lessonId,
+            //         userId: peerId,
+            //     },
+            //     keepalive: true,
+            // });
 
             return "ok";
         }

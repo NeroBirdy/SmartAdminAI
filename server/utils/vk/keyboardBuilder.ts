@@ -9,6 +9,7 @@ export {
   buildKeyboardForMiniApp,
   buildKeyboardForDate,
   buildConfirmKeyboard,
+  buildKeyboardForTrialLesson,
 };
 
 async function buildStartKeyboard() {
@@ -268,6 +269,82 @@ async function buildConfirmKeyboard(confirmPayload: {}, denyPayload: {}) {
   keyboard.callbackButton({
     label: "нет",
     payload: denyPayload,
+  });
+
+  return keyboard;
+}
+
+type TrialLesson = {
+  id: number,
+  date: string,
+  startTime: string,
+  endTime: string,
+  groupId: number,
+  instructorId: number,
+  programId: number,
+  venueId: number,
+  employeeProgramId: number,
+}
+
+type TrialDate = {
+  date: string,
+  lessons: TrialLesson[],
+}
+
+async function buildKeyboardForTrialLesson(trialLessonList: TrialDate[], page: number) {
+  const maxPage = trialLessonList.length - 1;
+  const safePage = Math.max(0, Math.min(page, maxPage));
+
+  const currentPage = trialLessonList[safePage];
+  const date = currentPage?.date.split("T")[0];
+
+  const keyboard = Keyboard.builder().inline();
+
+
+  for (const lesson of currentPage?.lessons!) {
+    keyboard
+      .callbackButton({
+        label: `${timeFromIsoToLocalHm(lesson.startTime)} - ${timeFromIsoToLocalHm(lesson.endTime)}`,
+        payload: {
+          cmd: "selectTrialLesson",
+          lessonId: lesson.id,
+          date: date,
+          startTime: timeFromIsoToLocalHm(lesson.startTime),
+          endTime: timeFromIsoToLocalHm(lesson.endTime),
+          groupId: lesson.groupId,
+          instructorId: lesson.instructorId,
+          programId: lesson.programId,
+          venueId: lesson.venueId,
+          employeeProgramId: lesson.employeeProgramId,
+        },
+      })
+      .row();
+  }
+
+  if (safePage > 0) {
+    keyboard.callbackButton({
+      label: "⬅️",
+      payload: { cmd: "pageForTrialLesson", page: safePage - 1 },
+    });
+  }
+
+  keyboard.callbackButton({
+    label: `${date}`,
+    payload: { cmd: "noop" },
+  });
+
+  if (safePage < maxPage) {
+    keyboard.callbackButton({
+      label: "➡️",
+      payload: { cmd: "pageForTrialLesson", page: safePage + 1 },
+    });
+  }
+
+  keyboard.row();
+
+  keyboard.callbackButton({
+    label: "Вернуться",
+    payload: { cmd: "back", state: "return" },
   });
 
   return keyboard;

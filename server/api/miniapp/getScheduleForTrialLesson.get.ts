@@ -4,7 +4,7 @@ const fakeAPI = useFakeAPI();
 export default defineEventHandler(async (event) => {
   const query = await getQuery(event);
   const userId = Number(query.userId);
-  const user = await prisma.users.findUnique({ where: { id: userId } });
+  const user = await prisma.users.findUnique({ where: { peerId: userId } });
   const client = await fakeAPI.client.findFirst({
     where: {
       accessCode: String(user?.key),

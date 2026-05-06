@@ -23,6 +23,15 @@ export function registerEventHandler() {
             await editMessage(context.peerId, context.session.messageId, 'Выберите дату и время', keyboard);
         }
 
+        if (payload.cmd === "pageForTrialLesson") {
+            const page = Number(payload.page);
+            const list = context.session.lists?.trialLessons || [];
+
+            const keyboard = await buildKeyboardForTrialLesson(list, page);
+
+            await editMessage(context.peerId, context.session.messageId, 'Выберите дату и время', keyboard);
+        }
+
         if (payload.cmd === 'select') {
             const listKey = payload.listKey as string;
             const value = payload.select as string;
@@ -102,6 +111,12 @@ export function registerEventHandler() {
                 },
                 keepalive: true,
             });
+        }
+
+        if (payload.cmd === "selectTrialLesson") {
+            await deleteMessage(context.session.messageId);
+            context.send(`Вы записаны на занятие: ${payload.date} в ${payload.startTime}`);
+            // запись на выбранное пробное занятие
         }
 
         if (payload.cmd == "cancellationLesson") {

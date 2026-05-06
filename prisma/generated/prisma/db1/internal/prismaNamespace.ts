@@ -1573,13 +1573,8 @@ export const UsersScalarFieldEnum = {
   peerId: 'peerId',
   state: 'state',
   city: 'city',
-  citiesList: 'citiesList',
   organization: 'organization',
-  organizationsList: 'organizationsList',
   program: 'program',
-  venueList: 'venueList',
-  dateList: 'dateList',
-  page: 'page',
   key: 'key',
   role: 'role',
   createdAt: 'createdAt'
@@ -1617,13 +1612,6 @@ export const SortOrder = {
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
-
-
-export const JsonNullValueInput = {
-  JsonNull: JsonNull
-} as const
-
-export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const PromptOrderByRelevanceFieldEnum = {
@@ -1688,23 +1676,6 @@ export const SettingTypeOrderByRelevanceFieldEnum = {
 export type SettingTypeOrderByRelevanceFieldEnum = (typeof SettingTypeOrderByRelevanceFieldEnum)[keyof typeof SettingTypeOrderByRelevanceFieldEnum]
 
 
-export const JsonNullValueFilter = {
-  DbNull: DbNull,
-  JsonNull: JsonNull,
-  AnyNull: AnyNull
-} as const
-
-export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
-
-
-export const QueryMode = {
-  default: 'default',
-  insensitive: 'insensitive'
-} as const
-
-export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
-
-
 export const NullsOrder = {
   first: 'first',
   last: 'last'
@@ -1756,20 +1727,6 @@ export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 
  * Reference to a field of type 'Boolean'
  */
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
-    
-
-
-/**
- * Reference to a field of type 'Json'
- */
-export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
-    
-
-
-/**
- * Reference to a field of type 'QueryMode'
- */
-export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 

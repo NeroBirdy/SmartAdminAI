@@ -31,6 +31,10 @@ export function registerMessageHandler() {
             case "backToScheduleManagement":
                 return ctx.scene.enter("scheduleManagement");
 
+            case "getTrialLessons": {
+                return ctx.scene.enter("trialLessons");
+            }
+
         }
 
         return next();
