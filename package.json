@@ -14,6 +14,8 @@
     "@fullcalendar/vue3": "^6.1.20",
     "@prisma/adapter-mariadb": "^7.4.2",
     "@prisma/client": "^7.4.2",
+    "@vk-io/scenes": "^1.2.1",
+    "@vk-io/session": "^2.2.1",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
     "dotenv": "^17.3.1",

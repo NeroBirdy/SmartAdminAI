@@ -1,6 +1,4 @@
-import { log } from "node:console";
 import { VK, Keyboard } from "vk-io";
-import { buildKeyboardForDate } from "../utils/vk/keyboardBuilder";
 
 const vk = new VK({ token: useRuntimeConfig().vkToken });
 

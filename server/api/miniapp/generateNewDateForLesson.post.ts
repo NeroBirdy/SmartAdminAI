@@ -111,12 +111,18 @@ export default defineEventHandler(async (event) => {
   await editMessage(userId, Number(res), "Готово");
 
   const newDateList = JSON.parse(response);
-  await saveDateList(userId, newDateList);
 
-  const currentState = await getUserState(userId);
-  const keyboard = await buildKeyboardForDate(userId, 0, currentState);
+  const userSession = await getUserSession(userId);
+  userSession.lists = {
+    ...(userSession.lists || {}),
+    date: newDateList,
+  };
 
-  await sendMessage(userId, keyboard, "Выберите дату и время");
+  const keyboard = await buildKeyboardForDate(0, newDateList);
+  const messageId = await sendMessage(userId, keyboard, "Выберите дату и время");
+
+  userSession.messageId = Number(messageId);
+  await setUserSession(userId, userSession);
 
   return newDateList;
 });

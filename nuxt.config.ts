@@ -30,6 +30,6 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     vkToken:
-      "vk1.a._0Dq8tOE0Qg4UbRzeHJLoHwyl1Qy4CGKdziXZz5eEhZ__tzMWMyrjw8C-jjHtNlo2MmOqB9sf2x43g8ja6Eb8xrkemOp1m1RjRdCqUzhNX8cZsRUJcsaXK6GP0M3LwUDnJBVD1O4s0HLJZNH7V5cJwdo_3hQcuGPGnhKF0lpLO7-Wpyc-stORYD3wgyMd7vXT623umJ5Gk_b3uq6TDq5Lg",
+      "vk1.a.T2Kc7YTRzlX-G2h_OfwxsdqxwDONPahQdFgaMKXHIGCSljy0tCXvrz0z3AbnR7PreVf6A08XfH9zNd-w77VBfIhp6vtJHChrxW_134E_6n0zDFPeIE7BPdii_Cba07uCyaNK0ED8blobkVwPKCPZSmxoVuPOd0og9qIhwHH1bvyxZtcFZolf8uKD4Z4QCReMpDL383YjbcxguFQgmgRciQ",
   },
 });

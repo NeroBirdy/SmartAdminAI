@@ -2,6 +2,8 @@ import { start } from "node:repl";
 import { Keyboard } from "vk-io";
 
 export {
+  buildStartKeyboard,
+  buildBackButton,
   buildKeyboard,
   buildInstructorKeyboard,
   buildKeyboardForMiniApp,
@@ -9,12 +11,41 @@ export {
   buildConfirmKeyboard,
 };
 
+async function buildStartKeyboard() {
+  const keyboard = Keyboard.builder()
+    .textButton({
+      label: "Хочу записаться",
+      color: Keyboard.POSITIVE_COLOR,
+      payload: { cmd: "signup" },
+    })
+    .row()
+    .textButton({
+      label: "Войти в систему",
+      color: Keyboard.PRIMARY_COLOR,
+      payload: { cmd: "login" },
+    })
+    .oneTime();
+
+  return keyboard;
+}
+
+async function buildBackButton() {
+  const keyboard = Keyboard.builder().textButton({
+    label: "Назад",
+    color: Keyboard.POSITIVE_COLOR,
+    payload: { cmd: "back" },
+  });
+
+  return keyboard;
+}
+
+type ListKey = 'city' | 'organization' | 'program' | "venue" | string;
+
 async function buildKeyboard(
-  peerId: number,
+  array: string[],
   page: number,
-  currentState: string,
+  listKey: ListKey,
 ) {
-  const array = await getListFromState(peerId, currentState);
 
   const { slice, currentPage, totalPages } = getPage(array!, page);
   const keyboard = Keyboard.builder().inline();
@@ -24,7 +55,8 @@ async function buildKeyboard(
       .callbackButton({
         label: element,
         payload: {
-          cmd: currentState,
+          cmd: "select",
+          listKey,
           select: element,
         },
       })
@@ -35,19 +67,19 @@ async function buildKeyboard(
     if (currentPage > 1) {
       keyboard.callbackButton({
         label: "⬅️",
-        payload: { cmd: "page", page: currentPage - 1 },
+        payload: { cmd: "page", page: currentPage - 1, listKey },
       });
     }
 
     keyboard.callbackButton({
       label: `${currentPage}/${totalPages}`,
-      payload: { cmd: "noop" },
+      payload: { cmd: "noop", listKey },
     });
 
     if (currentPage < totalPages) {
       keyboard.callbackButton({
         label: "➡️",
-        payload: { cmd: "page", page: currentPage + 1 },
+        payload: { cmd: "page", page: currentPage + 1, listKey },
       });
     }
 
@@ -56,7 +88,7 @@ async function buildKeyboard(
 
   keyboard.callbackButton({
     label: "Вернуться",
-    payload: { cmd: "back", state: currentState },
+    payload: { cmd: "back", listKey },
   });
 
   return keyboard;
@@ -150,17 +182,29 @@ async function buildKeyboardForMiniApp(
     .textButton({
       label: "Назад",
       color: Keyboard.POSITIVE_COLOR,
-      payload: { cmd: "back" },
+      payload: { cmd: "backToScheduleManagement" },
     })
     .row();
 }
 
+type Variant = {
+  startTime: String,
+  endTime: String,
+}
 
-async function buildKeyboardForDate(peerId: number, page: number, currentState: string) {
-  const userData = await getDateList(peerId);
+type NewOption = {
+  date: String,
+  variants: Variant[],
+}
 
-  const lessonId = userData.lessonId;
-  const options = userData.newOptions;
+type NewDateList = {
+  lessonId: number,
+  newOptions: NewOption[],
+}
+
+async function buildKeyboardForDate(page: number, dateList: NewDateList) {
+  const lessonId = dateList.lessonId;
+  const options = dateList.newOptions;
   const maxPage = options.length - 1;
 
   const safePage = Math.max(0, Math.min(page, maxPage));
@@ -173,7 +217,7 @@ async function buildKeyboardForDate(peerId: number, page: number, currentState: 
       .callbackButton({
         label: `${element.startTime} - ${element.endTime}`,
         payload: {
-          cmd: currentState,
+          cmd: "selectDate",
           lessonId,
           date: currentPage!.date,
           startTime: element.startTime,
@@ -206,7 +250,7 @@ async function buildKeyboardForDate(peerId: number, page: number, currentState: 
 
   keyboard.callbackButton({
     label: "Вернуться",
-    payload: { cmd: "back", state: currentState },
+    payload: { cmd: "back", state: "selectDate" },
   });
 
   return keyboard;

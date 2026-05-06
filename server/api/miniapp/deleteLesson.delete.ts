@@ -1,8 +1,3 @@
-const fakeAPI = useFakeAPI();
-
-import { VK, Keyboard, getRandomId } from "vk-io";
-const vk = new VK({ token: useRuntimeConfig().vkToken });
-
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
   const lessonId = body.lessonId;
@@ -23,4 +18,5 @@ export default defineEventHandler(async (event) => {
     const messageId = await sendConfirmMessage(userId, keyboard, "Точно отменить?");
     await saveNewMessage(id!, Number(messageId), randomId);
   }
+  return "ok";
 });

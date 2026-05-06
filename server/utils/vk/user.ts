@@ -1,4 +1,5 @@
-import { VK, Keyboard } from "vk-io";
+import { VK } from "vk-io";
+import { session } from '../../bot/middlewares';
 
 export {
   saveUserState,
@@ -13,7 +14,6 @@ export {
   logout,
   getUserRole,
   getPermission,
-  chooseCity,
   saveVenue,
   getVenue,
   saveDateList,
@@ -24,6 +24,9 @@ export {
   getUserIdByPeerId,
   getUserOrgId,
   saveProgram,
+  getUserSession,
+  setUserSession,
+  createNewUser,
 };
 
 const vk = new VK({ token: useRuntimeConfig().vkToken });
@@ -214,11 +217,6 @@ async function login(peerId: number, key: string) {
     let role;
 
     if (!client && !employee) {
-      await vk.api.messages.send({
-        peer_id: peerId,
-        message: "Неверный код",
-        random_id: Date.now(),
-      });
       return false;
     } else if (client && !employee) {
       user = client;
@@ -241,6 +239,7 @@ async function logout(peerId: number) {
     where: { peerId },
     data: {
       key: null,
+      role: null,
     },
   });
 }
@@ -257,45 +256,9 @@ async function getPermission(peerId: number) {
   return {
     changeDate: true,
     changeVenue: true,
-    cancellationLesson: true,
+    cancellationLesson: false,
     changeInstructor: true,
   };
-}
-
-async function chooseCity(peerId: number, cityList: string[]) {
-  if (cityList!.length === 0) {
-    await vk.api.messages.send({
-      peer_id: peerId,
-      message: "Город не найден, попробуйте еще раз",
-      random_id: Math.floor(Math.random() * 1000000),
-    });
-  } else if (cityList!.length === 1) {
-    await vk.api.messages.send({
-      peer_id: peerId,
-      message: `Ваш город: ${cityList![0]}`,
-      random_id: Math.floor(Math.random() * 1000000),
-    });
-    await saveOrganizationList(cityList![0]!, peerId);
-    await saveUserState({
-      peerId: peerId,
-      state: "choose_organization",
-      city: cityList![0],
-    });
-    await sendChooseOrganizationKeyboard(peerId);
-  } else {
-    const keyboard = await buildKeyboard(peerId, 1, "choose_city");
-
-    const msgId = await vk.api.messages.send({
-      peer_id: peerId,
-      message: "Выберите город:",
-      keyboard,
-      random_id: Date.now(),
-    });
-
-    await saveUserState({ peerId: peerId, citiesList: cityList, page: 1 });
-  }
-
-  return "ok";
 }
 
 async function saveVenue(peerId: number, venueList: dbVenueList) {
@@ -404,8 +367,8 @@ async function getUserOrgId(peerId: number) {
   });
 
   const orgId = await fakeApi.organization.findFirst({
-    where: {name: userData.organization, cityId: city?.id},
-    select: {id: true},
+    where: { name: userData.organization, cityId: city?.id },
+    select: { id: true },
   });
 
   return orgId?.id;
@@ -414,9 +377,75 @@ async function getUserOrgId(peerId: number) {
 
 async function saveProgram(peerId: number, program: string) {
   return await prisma.users.update({
-    where: {peerId: peerId},
+    where: { peerId: peerId },
     data: {
       program: program,
     }
   });
+}
+
+
+async function getUserSession(peerId: number) {
+  const storage: any = (session as any).storage;
+  const sessionKey = String(peerId);
+  const userSession =
+    (await storage.get?.(sessionKey)) ??
+    (await storage.read?.(sessionKey)) ??
+    {};
+
+  return userSession;
+}
+
+type SessionData = any;
+
+async function setUserSession(peerId: number, sessionData: SessionData) {
+  const storage: any = (session as any).storage;
+  if (storage.set) {
+    return storage.set(peerId, sessionData);
+  }
+  if (storage.write) {
+    return storage.write(peerId, sessionData);
+  }
+
+  storage[peerId] = sessionData;
+}
+
+
+async function createNewUser(isChild: boolean, gender: string, name: string, surname: string, birthdate: string, phone: string, email: string, parentName?: string, parentSurname?: string) {
+  const [dd, mm, yyyy] = birthdate.split('.');
+  const date = new Date(Date.UTC(Number(yyyy), Number(mm) - 1, Number(dd), 0, 0, 0, 0));
+
+  if (isChild) {
+    await fakeApi.client.create({
+      data: {
+        firstName: name,
+        lastName: surname,
+        gender: gender === "male" ? "M" : "F",
+        birthDate: date,
+        phone: phone,
+        email: email,
+        firstNameParent: parentName,
+        lastNameParent: parentSurname,
+        accountType: "CHILD",
+        status: "WAITING",
+        accessCode: generateCode(),
+      }
+    });
+  }
+  else {
+    await fakeApi.client.create({
+      data: {
+        firstName: name,
+        lastName: surname,
+        gender: gender === "male" ? "M" : "F",
+        birthDate: date,
+        phone: phone,
+        email: email,
+        accountType: "ADULT",
+        status: "WAITING",
+        accessCode: generateCode(),
+      }
+    });
+  }
+  return true;
 }

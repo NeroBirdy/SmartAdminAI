@@ -23,8 +23,8 @@ type LessonSlot = {
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
-  const lessonId = body.lessonId;
-  const userId = body.userId;
+  const lessonId = Number(body.lessonId);
+  const userId = Number(body.userId);
 
   const lesson = await fakeAPI.lesson.findUnique({
     where: { id: lessonId },
@@ -121,17 +121,26 @@ export default defineEventHandler(async (event) => {
     }),
   );
 
-  if (results.length === 0) {
+  const venueList = await createVenueList(results);
+
+  if (results.length === 0 || venueList.length === 0) {
     const keyboard = await buildKeyboardForMiniApp(userId, 'Календарь', datePickerId, ownerGroupId);
-
     await sendMessage(userId, keyboard, 'Нет доступных локаций');
+  }
+  else {
+    const userSession = await getUserSession(userId);
+    userSession.lists = {
+      ...(userSession.lists || {}),
+      venue: results,
+    };
+
+    const keyboard = await buildKeyboard(venueList, 1, "venue");
+
+    const messageId = await sendMessage(userId, keyboard, "Выберите локацию для замены");
+    userSession.messageId = messageId;
+
+    await setUserSession(userId, userSession);
     
-  } else {
-    await saveVenue(userId, results);
-
-    const keyboard = await buildKeyboard(userId, 1, "changeVenue");
-
-    await sendMessage(userId, keyboard, "Выберите локацию для замены");
   }
 
   return results;

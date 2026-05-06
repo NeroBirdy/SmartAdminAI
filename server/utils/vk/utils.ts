@@ -5,7 +5,6 @@ export {
   findOrganizations,
   getPage,
   getCityOrganizationList,
-  getListFromState,
   setPreviousState,
   createVenueList,
   findVenueDataFromName,
@@ -20,6 +19,11 @@ export {
   checkAvailableInstructor,
   checkMessagesCount,
   getPrograms,
+  getListTitle,
+  isValidDate,
+  isValidPhone,
+  isValidEmail,
+  generateCode,
 };
 
 const fakeApi = useFakeAPI();
@@ -77,31 +81,6 @@ async function getCityOrganizationList() {
   return result;
 }
 
-async function getListFromState(peerId: number, state: string) {
-  let list;
-
-  switch (state) {
-    case "choose_city":
-      list = await getUserCityList(peerId);
-      break;
-
-    case "choose_organization":
-      list = await getUserOrganizationsList(peerId);
-      break;
-
-    case "changeVenue":
-      list = await createVenueList(peerId);
-      break;
-
-    case "choose_program":
-      const orgId = await getUserOrgId(peerId);
-      list = await getPrograms(orgId!);
-      break;
-  }
-
-  return list;
-}
-
 async function setPreviousState(peerId: number, state: string) {
   const keyboard = await buildInstructorKeyboard(peerId);
   switch (state) {
@@ -132,15 +111,20 @@ async function setPreviousState(peerId: number, state: string) {
   }
 }
 
-async function createVenueList(peerId: number): Promise<string[]> {
-  const venueList = await getVenue(peerId);
-  const array = venueList.map((venue) => venue.venueName);
-  return array;
+type Venue = {
+  lessonId: number,
+  venueId: number,
+  venueName: string,
+  isAvailable: boolean,
 }
 
-async function findVenueDataFromName(peerId: number, name: string) {
-  const venueList = await getVenue(peerId);
+async function createVenueList(venueList: Venue[]): Promise<string[]> {
+  return venueList
+    .filter(v => v.isAvailable)
+    .map(v => v.venueName);
+}
 
+async function findVenueDataFromName(venueList: Venue[], name: string) {
   const venue = venueList.find((v) => v.venueName === name);
 
   if (!venue) {
@@ -299,4 +283,57 @@ async function getPrograms(orgId: number) {
   return programs.map((program) => {
     return program.name;
   });
+}
+
+function getListTitle(listKey: string): string {
+  switch (listKey) {
+    case 'city':
+      return '📋 Выберите город:';
+    case 'organization':
+      return '📋 Выберите организацию:';
+    case 'program':
+      return '📋 Выберите программу:';
+    default:
+      return '📋 Выберите вариант:';
+  }
+}
+
+
+function isValidDate(value: string): boolean {
+    const regex = /^(\d{2})\.(\d{2})\.(\d{4})$/;
+    const match = value.match(regex);
+    if (!match) return false;
+    const day = parseInt(match[1]!);
+    const month = parseInt(match[2]!);
+    const year = parseInt(match[3]!);
+    if (month < 1 || month > 12) return false;
+    if (day < 1 || day > 31) return false;
+    if (year < 1900 || year > new Date().getFullYear()) return false;
+    const date = new Date(year, month - 1, day);
+    return (
+        date.getFullYear() === year &&
+        date.getMonth() === month - 1 &&
+        date.getDate() === day
+    );
+}
+
+function isValidPhone(value: string): boolean {
+    const cleaned = value.replace(/[\s\-\(\)]/g, '');
+    return /^(\+7|8|7)?9\d{9}$/.test(cleaned);
+}
+
+function isValidEmail(value: string): boolean {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+function generateCode(length = 20): string {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+
+  for (let i = 0; i < length; i++) {
+    const index = Math.floor(Math.random() * chars.length);
+    result += chars[index];
+  }
+
+  return result;
 }

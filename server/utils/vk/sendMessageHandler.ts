@@ -53,7 +53,7 @@ async function sendChooseCityMessage(peerId: number) {
     label: "Назад",
     color: Keyboard.POSITIVE_COLOR,
     payload: { cmd: "back" },
-  });
+  }).oneTime();
 
   await vk.api.messages.send({
     peer_id: peerId,
@@ -196,11 +196,12 @@ async function sendMessageWithoutKeyboard(peerId: number, text: string) {
 }
 
 
-async function editMessage(peerId: number, messageId: number, text: string) {
+async function editMessage(peerId: number, messageId: number, text: string, keyboard?: Keyboard) {
   return vk.api.messages.edit({
     peer_id: peerId,
     message_id: Number(messageId),
     message: text,
+    keyboard: keyboard,
   });
 }
 
