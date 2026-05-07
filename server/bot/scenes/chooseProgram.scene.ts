@@ -15,7 +15,7 @@ export const chooseProgramScene = new StepScene('chooseProgram', [
             const keyboard = await buildKeyboard(programList!, 1, "program");
 
             const message = await context.send({
-                message: "Выберите организацию: ",
+                message: "Выберите программу: ",
                 keyboard: keyboard,
             })
 

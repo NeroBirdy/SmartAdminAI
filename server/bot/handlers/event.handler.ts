@@ -66,6 +66,11 @@ export function registerEventHandler() {
                         `Вы выбрали программу: ${value}`,
                     );
                     context.session.program = value;
+
+                    if(await checkUserRegistration(context.peerId)) {
+                        context.send("Предлагаем посетить пробное занятие");
+                        return context.scene.enter("trialLessons");
+                    }
                     return context.scene.enter("registration");
 
                 case "venue":

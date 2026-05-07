@@ -5,7 +5,6 @@ export {
   sendStartMessage,
   sendChooseCityMessage,
   sendLoginMessage,
-  sendChooseOrganizationKeyboard,
   sendCompleteLoginMessage,
   sendHelloMessage,
   sendScheduleMenagementMessage,
@@ -16,7 +15,8 @@ export {
   sendRequestForManager,
   sendChangeInstructorRequest,
   deleteMessage,
-  sendChooseProgramMessage,
+  sendGroupInfo,
+  sendSubscriptionInfo,
 };
 
 const vk = new VK({ token: useRuntimeConfig().vkToken });
@@ -80,15 +80,6 @@ async function sendLoginMessage(peerId: number) {
   return "ok";
 }
 
-async function sendChooseOrganizationKeyboard(peerId: number) {
-  const keyboard = await buildKeyboard(peerId, 1, "choose_organization");
-  await vk.api.messages.send({
-    peer_id: peerId,
-    message: "Выберите организацию",
-    keyboard: keyboard,
-    random_id: Date.now(),
-  });
-}
 
 async function sendCompleteLoginMessage(
   peerId: number,
@@ -113,8 +104,12 @@ async function sendHelloMessage(peerId: number) {
   switch (role) {
     case "CLIENT":
       message = `Добро пожаловать в бот нашей детской секции! Мы рады, что вы выбрали нас для развития вашего ребёнка. Здесь вы сможете в пару кликов отслеживать расписание, абонементы, видеть прогресс юного спортсмена и задать вопросы. Так же я уведомлю вас о важных событиях и изменениях. Выберите нужный раздел!`;
-      
-      keyboard.textButton({label: "Записаться на пробное занятие", payload: {cmd: "getTrialLessons"}}).row();
+
+      keyboard.textButton({ label: "Задать вопрос", payload: { cmd: "askQuestion" } }).row();
+      keyboard.textButton({ label: "О моей группе", payload: { cmd: "groupInfo" } }).row();
+      keyboard.textButton({ label: "Абонемент", payload: { cmd: "subscriptionInfo" } }).row();
+      keyboard.textButton({ label: "Расписание", payload: { cmd: "checkSchedule" } }).row();
+      keyboard.textButton({ label: "Сменить программу", payload: { cmd: "changeProgram" } }).row();
       break;
 
     case "INSTRUCTOR":
@@ -233,7 +228,7 @@ async function sendChangeInstructorRequest(peerId: number, peerIdList: number[],
 
   for (const id of peerIdList) {
     if (Number(id) !== 0) {
-      const keyboard = await buildConfirmKeyboard({ cmd: "confirmChangeInstructor", ownerId: peerId, randomId: randomId, lessonId: lessonId }, {cmd: "deny", randomId: randomId, ownerId: peerId});
+      const keyboard = await buildConfirmKeyboard({ cmd: "confirmChangeInstructor", ownerId: peerId, randomId: randomId, lessonId: lessonId }, { cmd: "deny", randomId: randomId, ownerId: peerId });
 
       const res = await sendMessage(Number(id), keyboard, "Сможешь подменить?");
       const userId = await getUserIdByPeerId(id);
@@ -252,7 +247,33 @@ async function deleteMessage(messageId: number) {
 }
 
 
-async function sendChooseProgramMessage(peerId: number) {
-  const keyboard = await buildKeyboard(peerId, 1, "choose_program");
-  await sendMessage(peerId, keyboard, "Выберите программу");
+async function sendGroupInfo(peerId: number) {
+  const userKey = await getUserAccessCode(peerId);
+
+  const group = await getClientGroup(userKey!);
+
+  return await vk.api.messages.send({
+    peer_id: peerId,
+    random_id: Date.now(),
+    message: `Информация о вашей группе:\nНазвание организации: ${group.organization}\nПрограмма: ${group.program}\nГруппа: ${group.groupName}\nИнструктор: ${group.instructor}\nЛокация: ${group.venueName}, расположена по адресу ${group.venueAddress}`,
+  });
+}
+
+async function sendSubscriptionInfo(peerId: number) {
+  const userKey = await getUserAccessCode(peerId);
+
+  const subscription = await getSubscriptionInfo(userKey!);
+
+  let message = `Информация об абонементе \n`;
+  message += `Тип: ${subscription.type}\n`;
+  if (subscription.date) {
+    message += `Действует до: ${subscription.date}\n`
+  }
+  message += `Остаток посещений: ${subscription.remainingVisits}`
+
+  return await vk.api.messages.send({
+    peer_id: peerId,
+    random_id: Date.now(),
+    message: message,
+  });
 }

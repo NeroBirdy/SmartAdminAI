@@ -1,11 +1,12 @@
 import { VK, Keyboard } from "vk-io";
+import { format } from "date-fns";
+import { ru } from "date-fns/locale";
 
 export {
   findCities,
   findOrganizations,
   getPage,
   getCityOrganizationList,
-  setPreviousState,
   createVenueList,
   findVenueDataFromName,
   deleteLastBotMessage,
@@ -25,6 +26,8 @@ export {
   isValidEmail,
   generateCode,
   timeFromIsoToLocalHm,
+  getClientGroup,
+  getSubscriptionInfo,
 };
 
 const fakeApi = useFakeAPI();
@@ -80,36 +83,6 @@ async function getCityOrganizationList() {
   );
 
   return result;
-}
-
-async function setPreviousState(peerId: number, state: string) {
-  const keyboard = await buildInstructorKeyboard(peerId);
-  switch (state) {
-    case "choose_city":
-      await sendChooseCityMessage(peerId);
-      await saveUserState({ peerId: peerId, state: "choose_city" });
-      break;
-
-    case "choose_organization":
-      await sendChooseCityMessage(peerId);
-      await saveUserState({ peerId: peerId, state: "choose_city" });
-      break;
-
-    case "choose_program":
-      await sendChooseOrganizationKeyboard(peerId);
-      await saveUserState({ peerId: peerId, state: "choose_organization" });
-      break;
-
-    case "changeVenue":
-      await sendScheduleMenagementMessage(peerId, keyboard, "Какой-то текст");
-      await saveUserState({ peerId: peerId, state: "scheduleManagement" });
-      break;
-
-    case "changeDate":
-      await sendScheduleMenagementMessage(peerId, keyboard, "Какой-то текст");
-      await saveUserState({ peerId: peerId, state: "scheduleManagement" });
-      break;
-  }
 }
 
 type Venue = {
@@ -301,30 +274,30 @@ function getListTitle(listKey: string): string {
 
 
 function isValidDate(value: string): boolean {
-    const regex = /^(\d{2})\.(\d{2})\.(\d{4})$/;
-    const match = value.match(regex);
-    if (!match) return false;
-    const day = parseInt(match[1]!);
-    const month = parseInt(match[2]!);
-    const year = parseInt(match[3]!);
-    if (month < 1 || month > 12) return false;
-    if (day < 1 || day > 31) return false;
-    if (year < 1900 || year > new Date().getFullYear()) return false;
-    const date = new Date(year, month - 1, day);
-    return (
-        date.getFullYear() === year &&
-        date.getMonth() === month - 1 &&
-        date.getDate() === day
-    );
+  const regex = /^(\d{2})\.(\d{2})\.(\d{4})$/;
+  const match = value.match(regex);
+  if (!match) return false;
+  const day = parseInt(match[1]!);
+  const month = parseInt(match[2]!);
+  const year = parseInt(match[3]!);
+  if (month < 1 || month > 12) return false;
+  if (day < 1 || day > 31) return false;
+  if (year < 1900 || year > new Date().getFullYear()) return false;
+  const date = new Date(year, month - 1, day);
+  return (
+    date.getFullYear() === year &&
+    date.getMonth() === month - 1 &&
+    date.getDate() === day
+  );
 }
 
 function isValidPhone(value: string): boolean {
-    const cleaned = value.replace(/[\s\-\(\)]/g, '');
-    return /^(\+7|8|7)?9\d{9}$/.test(cleaned);
+  const cleaned = value.replace(/[\s\-\(\)]/g, '');
+  return /^(\+7|8|7)?9\d{9}$/.test(cleaned);
 }
 
 function isValidEmail(value: string): boolean {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
 function generateCode(length = 20): string {
@@ -346,4 +319,58 @@ function timeFromIsoToLocalHm(iso: string): string {
   const minutes = date.getMinutes().toString().padStart(2, '0');
 
   return `${hours}:${minutes}`;
+}
+
+
+async function getClientGroup(key: string) {
+  const clientData = await fakeApi.client.findFirst({
+    where: { accessCode: key },
+    select: { groupId: true },
+  });
+
+  const user = await getUser({ key: key });
+
+  const group = await fakeApi.group.findFirst({
+    where: { id: clientData?.groupId! },
+    select: { name: true, instructorId: true, defaultVenueId: true },
+  });
+
+  const instructor = await fakeApi.employee.findFirst({
+    where: { id: group?.instructorId },
+    select: { firstName: true, lastName: true },
+  });
+
+  const venue = await fakeApi.venue.findFirst({
+    where: { id: group?.defaultVenueId },
+    select: { name: true, address: true },
+  });
+
+  return {
+    organization: user?.organization,
+    program: user?.program,
+    groupName: group?.name,
+    instructor: instructor?.lastName + " " + instructor?.firstName,
+    venueName: venue?.name,
+    venueAddress: venue?.address,
+  }
+}
+
+async function getSubscriptionInfo(key: string) {
+  const client = await fakeApi.client.findFirst({ where: { accessCode: key } });
+
+  const clientSubscription = await fakeApi.clientSubscription.findFirst({
+    where: {
+      clientId: client?.id,
+    }, include: { subscriptionType: true }
+  });
+
+  const today = new Date();
+  const date = today.setDate(today.getDate() + clientSubscription?.subscriptionType.expiryDays!);
+  const fmtDate = format(date, "dd.MM.yyyy", { locale: ru });
+  
+  return {
+    type: clientSubscription?.subscriptionType.typeName,
+    date: clientSubscription?.subscriptionType.hasExpiry ? fmtDate : null,
+    remainingVisits: clientSubscription?.remainingVisits,
+  };
 }

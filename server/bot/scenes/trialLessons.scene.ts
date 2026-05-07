@@ -1,5 +1,4 @@
 import { StepScene } from '@vk-io/scenes';
-import { Keyboard } from 'vk-io';
 
 export const trialLesonsScene = new StepScene('trialLessons', [
     async (context) => {

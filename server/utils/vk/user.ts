@@ -20,6 +20,8 @@ export {
   getUserSession,
   setUserSession,
   createNewUser,
+  checkUserRegistration,
+  getUser,
 };
 
 const vk = new VK({ token: useRuntimeConfig().vkToken });
@@ -350,4 +352,35 @@ async function createNewUser(isChild: boolean, gender: string, name: string, sur
     });
   }
   return true;
+}
+
+
+async function checkUserRegistration(peerId: number) {
+  const userData = await prisma.users.findFirst({
+    where: { peerId: peerId },
+    select: { key: true },
+  });
+
+  if (userData?.key !== null) {
+    const client = await fakeApi.client.findFirst({
+      where: { accessCode: userData?.key! },
+      select: { id: true },
+    });
+    return !!client;
+  }
+  else {
+    return false;
+  }
+}
+
+type UserParam = {
+  peerId?: number,
+  key?: string
+}
+
+
+async function getUser(userParam: UserParam) {
+  return await prisma.users.findFirst({
+    where: {peerId: userParam.peerId, key: userParam.key},
+  });
 }

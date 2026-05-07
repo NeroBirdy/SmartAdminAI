@@ -3,13 +3,6 @@ import { vk } from '../vk';
 export function registerMessageHandler() {
     vk.updates.on('message_new', async (ctx, next) => {
         const cmd = ctx.messagePayload?.cmd;
-        console.log('MSG:', {
-            peerId: ctx.peerId,
-            senderId: ctx.senderId,
-            text: ctx.text,
-            scene: ctx.scene?.current,
-            session: ctx.session,
-        });
 
         if (ctx.text?.trim().toLocaleLowerCase() === 'начать') {
             return ctx.scene.enter("start");
@@ -31,10 +24,25 @@ export function registerMessageHandler() {
             case "backToScheduleManagement":
                 return ctx.scene.enter("scheduleManagement");
 
-            case "getTrialLessons": {
-                return ctx.scene.enter("trialLessons");
+            case "changeProgram": {
+                return ctx.scene.enter("chooseProgram");
             }
 
+            case "askQuestion": {
+                return ctx.scene.enter("askQuestion");
+            }
+
+            case "groupInfo": {
+                return await sendGroupInfo(ctx.peerId);
+            }
+
+            case "subscriptionInfo": {
+                return await sendSubscriptionInfo(ctx.peerId);
+            }
+
+            case "checkSchedule": {
+                return;
+            }
         }
 
         return next();
