@@ -48,6 +48,7 @@ const getClientInfo = async (key: string) => {
       lastName: true,
       gender: true,
       birthDate: true,
+      subscriptions: { include: { subscriptionType: true } },
       group: {
         include: {
           defaultVenue: true,

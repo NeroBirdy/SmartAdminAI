@@ -113,7 +113,7 @@ const buildPrompt = (data: Awaited<ReturnType<typeof collectData>>) => {
   } = data;
 
   let prompt = `## Входные данные для генерации\n\n`;
-  prompt += `Текущая дата: ${new Date("2026-05-04").toLocaleDateString("ru-RU")}\n`;
+  prompt += `Текущая дата: ${new Date("2026-05-11").toLocaleDateString("ru-RU")}\n`;
   // prompt += `Текущая дата: ${new Date().toLocaleDateString("ru-RU")}\n`;
   prompt += `Горизонт планирования: ${horizonPlanning}\n`;
   prompt += `Количество групп: ${groupsCount}\n`;
