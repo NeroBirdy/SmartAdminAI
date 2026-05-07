@@ -61,8 +61,7 @@ export default defineEventHandler(async (event) => {
       return `👥Группа: ${group.name}
       Инструктор: ${group.instructor}
       Площадка проведения: ${group.venue}
-      Расписание на 14 дней:
-      ${schedule}`;
+      Расписание на 14 дней:\n${schedule}`;
     }),
   );
 
@@ -87,7 +86,7 @@ async function getLessons(groupId: number, today: Date, twoWeeksLater: Date) {
   return lessons
     .map(
       (lesson) =>
-        `${format(lesson.date, "dd.MM")} - ${format(lesson.startTime, "HH.mm")}`,
+        `      ${format(lesson.date, "dd.MM")} - ${format(lesson.startTime, "HH.mm")}`,
     )
     .join("\n");
 }

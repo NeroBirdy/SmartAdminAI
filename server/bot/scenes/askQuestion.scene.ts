@@ -21,6 +21,20 @@ export const askQuestionScene = new StepScene('askQuestion', [
             return context.scene.leave();
         }
 
-        // логика ответа на вопрос пользователя
+        const text = context.text?.trim();
+        const message = await context.send("Пожалуйста подождите");
+
+        const response = await $fetch("/api/miniapp/QA", {
+                method: "POST",
+                body: {
+                    userId: context.peerId,
+                    question: text,
+                },
+                keepalive: true,
+            });
+
+        await editMessage(context.peerId, message.id, response);
+
+        // если не ответит то отправить менеджеру
     }
 ]);
