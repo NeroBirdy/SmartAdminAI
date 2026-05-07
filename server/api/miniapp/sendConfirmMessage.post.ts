@@ -1,7 +1,7 @@
 export default defineEventHandler(async (event) => {
-    const query = await readBody(event);
-    const lessonId = Number(query.lessonId);
-    const userId = Number(query.userId);
+    const body = await readBody(event);
+    const lessonId = Number(body.lessonId);
+    const userId = Number(body.userId);
 
     const id = await getUserIdByPeerId(userId);
     const randomId = await generateRandomId(1, 1000000);
