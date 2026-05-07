@@ -68,6 +68,7 @@ export default defineEventHandler(async (event) => {
   return {
     success: true,
     message: messages.join("\n\n"),
+    groups: groups.map((group) => group.name),
   };
 });
 
