@@ -1,3 +1,5 @@
+import { format } from "date-fns";
+
 const prisma = usePrisma();
 const fakeAPI = useFakeAPI();
 
@@ -13,7 +15,7 @@ export default defineEventHandler(async (event) => {
 
   const organisation = await fakeAPI.organization.findFirst({
     where: { city: { name: user?.city! }, name: user?.organization! },
-    include: { groups: true },
+    include: { groups: { include: { defaultVenue: true, instructor: true } } },
   });
 
   const program = await fakeAPI.program.findFirst({
@@ -28,17 +30,23 @@ export default defineEventHandler(async (event) => {
   const groups = organisation?.groups
     .filter((group) => {
       if (group.programId !== program!.id) return false;
+      if (group.maxMembers < group.currentMembers + 1) return false;
 
       const [minAge, maxAge] = group.ageCategory.split("-").map(Number);
       return clientAge >= minAge! && clientAge <= maxAge!;
     })
-    .map((group) => group.id);
+    .map((group) => ({
+      id: group.id,
+      name: group.name,
+      instructor: group.instructor.firstName + " " + group.instructor.lastName,
+      venue: group.defaultVenue.name + ", " + group.defaultVenue.address,
+    }));
 
   if (!groups?.length) {
     return {
       success: false,
-      message:
-        "Извините, под ваши параметры в данный момент нет доступных групп в организации, мы передадим информацию сотрудникам.",
+      message: `Извините наши группы в данный момент переполнены. 
+         Мы передадим информацию сотрудникам и сообщим если появятся доступные места!`,
     };
   }
 
@@ -46,9 +54,27 @@ export default defineEventHandler(async (event) => {
   const twoWeeksLater = new Date();
   twoWeeksLater.setDate(today.getDate() + 14);
 
+  const messages = await Promise.all(
+    groups.map(async (group) => {
+      const schedule = await getLessons(group.id, today, twoWeeksLater);
+      return `👥Группа: ${group.name}
+      Инструктор: ${group.instructor}
+      Площадка проведения: ${group.venue}
+      Расписание на 14 дней:
+      ${schedule}`;
+    }),
+  );
+
+  return {
+    success: true,
+    message: messages.join("\n\n"),
+  };
+});
+
+async function getLessons(groupId: number, today: Date, twoWeeksLater: Date) {
   const lessons = await fakeAPI.lesson.findMany({
     where: {
-      groupId: { in: groups },
+      groupId: groupId,
       date: {
         gte: today,
         lte: twoWeeksLater,
@@ -56,32 +82,13 @@ export default defineEventHandler(async (event) => {
     },
   });
 
-  if (!lessons?.length) {
-    return {
-      success: false,
-      message: `Извините у организации в данный момент нет актуального расписания на ближайший период, мы передадим информацию сотрудникам.\n🙁Попробуйте отправить запрос позже.`,
-    };
-  }
-
-  const groupedByDate = lessons.reduce(
-    (acc, lesson) => {
-      const dateKey = lesson.date.toISOString().split("T")[0];
-      if (!acc[dateKey!]) {
-        acc[dateKey!] = { date: dateKey!, lessons: [] };
-      }
-      acc[dateKey!]!.lessons.push(lesson);
-      return acc;
-    },
-    {} as Record<string, { date: string; lessons: typeof lessons }>,
-  );
-
-  return {
-    success: true,
-    data: Object.values(groupedByDate).sort((a, b) =>
-      a.date.localeCompare(b.date),
-    ),
-  };
-});
+  return lessons
+    .map(
+      (lesson) =>
+        `${format(lesson.date, "dd.MM")} - ${format(lesson.startTime, "HH.mm")}`,
+    )
+    .join("\n");
+}
 
 function getAge(birthDate: string): number {
   const birth = new Date(birthDate);
