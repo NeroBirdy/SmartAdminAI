@@ -9,6 +9,7 @@ import { scheduleManagementScene } from './scheduleManagement.scene';
 import { registrationScene } from './registration.scene';
 import { trialLesonsScene } from './trialLessons.scene';
 import { askQuestionScene } from './askQuestion.scene';
+import {chooseGroupScene} from './chooseGroup.scene';
 
 export function registerScenes() {
     sceneManager.addScenes([
@@ -22,5 +23,6 @@ export function registerScenes() {
         registrationScene,
         trialLesonsScene,
         askQuestionScene,
+        chooseGroupScene,
     ]);
 }

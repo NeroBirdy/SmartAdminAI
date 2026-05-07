@@ -47,6 +47,7 @@ export default defineEventHandler(async (event) => {
       success: false,
       message: `Извините наши группы в данный момент переполнены. 
          Мы передадим информацию сотрудникам и сообщим если появятся доступные места!`,
+      groups: [],
     };
   }
 
@@ -68,7 +69,7 @@ export default defineEventHandler(async (event) => {
   return {
     success: true,
     message: messages.join("\n\n"),
-    groups: groups.map((group) => group.name),
+    groups: groups.map((group) => ({ id: group.id, name: group.name })),
   };
 });
 

@@ -22,6 +22,7 @@ export {
   createNewUser,
   checkUserRegistration,
   getUser,
+  setUserGroup,
 };
 
 const vk = new VK({ token: useRuntimeConfig().vkToken });
@@ -139,7 +140,7 @@ async function getUserAccessCode(peerId: number) {
     where: { peerId: peerId },
     select: { key: true },
   });
-  return data?.key;
+  return data?.key || "";
 }
 
 async function login(peerId: number, key: string) {
@@ -195,12 +196,15 @@ async function getUserRole(peerId: number) {
 }
 
 async function getPermission(peerId: number) {
-  return {
-    changeDate: true,
-    changeVenue: true,
-    cancellationLesson: false,
-    changeInstructor: true,
-  };
+  const permission = await $fetch("/api/miniapp/getOrgPermitions", {
+    method: "GET",
+    query: {
+      userId: peerId,
+    },
+    keepalive: true,
+  });
+
+  return permission;
 }
 
 async function saveDateList(peerId: number, dateList: DateList) {
@@ -381,6 +385,17 @@ type UserParam = {
 
 async function getUser(userParam: UserParam) {
   return await prisma.users.findFirst({
-    where: {peerId: userParam.peerId, key: userParam.key},
+    where: { peerId: userParam.peerId, key: userParam.key },
+  });
+}
+
+async function setUserGroup(peerId: number, groupId: number) {
+  const userKey = await getUserAccessCode(peerId);
+
+  return await fakeApi.client.update({
+    where: { accessCode: userKey },
+    data: {
+      groupId: groupId,
+    },
   });
 }

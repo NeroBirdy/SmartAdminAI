@@ -41,7 +41,7 @@ export function registerMessageHandler() {
             }
 
             case "checkSchedule": {
-                return;
+                return await sendScheduleForClient(ctx.peerId);
             }
         }
 

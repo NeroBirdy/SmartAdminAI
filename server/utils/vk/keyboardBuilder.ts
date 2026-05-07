@@ -1,4 +1,3 @@
-import { start } from "node:repl";
 import { Keyboard } from "vk-io";
 
 export {
@@ -10,6 +9,7 @@ export {
   buildKeyboardForDate,
   buildConfirmKeyboard,
   buildKeyboardForTrialLesson,
+  buildKeyboardForGroup,
 };
 
 async function buildStartKeyboard() {
@@ -96,7 +96,21 @@ async function buildKeyboard(
 }
 
 async function buildInstructorKeyboard(peerId: number) {
-  const permission = await getPermission(peerId);
+  const role = await getUserRole(peerId);
+
+  let permission;
+  if (role === "MANAGER") {
+    permission = {
+      changeDate: true,
+      changeVenue: true,
+      cancellationLesson: true,
+      changeInstructor: true,
+    }
+  }
+  else {
+    permission = await getPermission(peerId);
+  }
+  
   const keyboard = Keyboard.builder();
 
   if (permission.changeDate)
@@ -346,6 +360,72 @@ async function buildKeyboardForTrialLesson(trialLessonList: TrialDate[], page: n
     label: "Вернуться",
     payload: { cmd: "back", state: "return" },
   });
+
+  return keyboard;
+}
+
+type Group = {
+  id: number,
+  name: string,
+}
+
+async function buildKeyboardForGroup(groupsList: Group[], page: number) {
+  const maxPageSize = 3;
+
+  const total = groupsList.length;
+  const totalPages = Math.max(1, Math.ceil(total / maxPageSize));
+
+  const currentPage = Math.min(Math.max(1, page), totalPages);
+
+  const start = (currentPage - 1) * maxPageSize;
+  const end = start + maxPageSize;
+  const slice = groupsList.slice(start, end);
+
+  const keyboard = Keyboard.builder().inline();
+
+  for (const group of slice) {
+    keyboard
+      .callbackButton({
+        label: group.name,
+        payload: {
+          cmd: 'selectGroup',
+          groupId: group.id,
+          groupName: group.name,
+        },
+      })
+      .row();
+  }
+
+  if (totalPages > 1) {
+    if (currentPage > 1) {
+      keyboard.callbackButton({
+        label: '⬅️',
+        payload: {
+          cmd: 'pageGroup',
+          page: currentPage - 1,
+        },
+      });
+    }
+
+    keyboard.callbackButton({
+      label: `${currentPage}/${totalPages}`,
+      payload: {
+        cmd: 'noop_group',
+      },
+    });
+
+    if (currentPage < totalPages) {
+      keyboard.callbackButton({
+        label: '➡️',
+        payload: {
+          cmd: 'pageGroup',
+          page: currentPage + 1,
+        },
+      });
+    }
+
+    keyboard.row();
+  }
 
   return keyboard;
 }

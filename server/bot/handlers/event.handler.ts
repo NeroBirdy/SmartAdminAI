@@ -122,6 +122,37 @@ export function registerEventHandler() {
             await deleteMessage(context.session.messageId);
             context.send(`Вы записаны на занятие: ${payload.date} в ${payload.startTime}`);
             // запись на выбранное пробное занятие
+
+            const keyboard = await buildConfirmKeyboard({cmd: "confirmSelectionGroup"}, {cmd: "denySelectionGroup"});
+            const message =  await context.send({
+                message: "Мы рады, что вы посетили наше пробное занятие, надеемся вам всё понравилось!\n\nХотите подберем вам группы для регулярного посещения?",
+                keyboard: keyboard,
+            });
+
+            context.session.messageId = message.id;
+        }
+
+        if (payload.cmd === "selectGroup") {
+            await editMessage(context.peerId, context.session.messageId, `Вы записаны в группу: ${payload.groupName}`);
+            await setUserGroup(context.peerId, payload.groupId);
+        }
+
+        if (payload.cmd === "pageGroup") {
+            const page = Number(payload.page);
+            const list = context.session.lists?.groups;
+
+            const keyboard = await buildKeyboardForGroup(list, page);
+
+            await editMessage(context.peerId, context.session.messageId, context.session.message, keyboard);
+        }
+
+        if (payload.cmd === "confirmSelectionGroup") {
+            await deleteMessage(context.session.messageId);
+            return context.scene.enter("chooseGroup");
+        }
+
+        if (payload.cmd === "denySelectionGroup") {
+            await deleteMessage(context.session.messageId);
         }
 
         if (payload.cmd == "cancellationLesson") {

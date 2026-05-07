@@ -39,6 +39,7 @@ export default defineEventHandler(async (event) => {
       success: false,
       message:
         "Извините, под ваши параметры в данный момент нет доступных групп в организации, мы передадим информацию сотрудникам.",
+      data: [],
     };
   }
 
@@ -60,6 +61,7 @@ export default defineEventHandler(async (event) => {
     return {
       success: false,
       message: `Извините у организации в данный момент нет актуального расписания на ближайший период, мы передадим информацию сотрудникам.\n🙁Попробуйте отправить запрос позже.`,
+      data: [],
     };
   }
 
@@ -77,6 +79,7 @@ export default defineEventHandler(async (event) => {
 
   return {
     success: true,
+    message: "",
     data: Object.values(groupedByDate).sort((a, b) =>
       a.date.localeCompare(b.date),
     ),

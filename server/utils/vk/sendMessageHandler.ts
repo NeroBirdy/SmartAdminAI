@@ -1,4 +1,5 @@
 import { measureMemory } from "node:vm";
+import { format } from "date-fns";
 import { VK, Keyboard } from "vk-io";
 
 export {
@@ -17,6 +18,7 @@ export {
   deleteMessage,
   sendGroupInfo,
   sendSubscriptionInfo,
+  sendScheduleForClient
 };
 
 const vk = new VK({ token: useRuntimeConfig().vkToken });
@@ -270,6 +272,25 @@ async function sendSubscriptionInfo(peerId: number) {
     message += `Действует до: ${subscription.date}\n`
   }
   message += `Остаток посещений: ${subscription.remainingVisits}`
+
+  return await vk.api.messages.send({
+    peer_id: peerId,
+    random_id: Date.now(),
+    message: message,
+  });
+}
+
+async function sendScheduleForClient(peerId: number) {
+  const userKey = await getUserAccessCode(peerId);
+
+  const lessons = await getLessonsForClient(userKey!);
+
+  let message = `Расписание \n`;
+  message += lessons
+    .map((lesson) =>
+      `${format(lesson.date, "dd.MM")} - ${format(lesson.startTime, "HH.mm")}`
+      ,)
+    .join("\n");
 
   return await vk.api.messages.send({
     peer_id: peerId,

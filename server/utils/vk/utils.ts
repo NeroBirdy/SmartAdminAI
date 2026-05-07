@@ -28,6 +28,7 @@ export {
   timeFromIsoToLocalHm,
   getClientGroup,
   getSubscriptionInfo,
+  getLessonsForClient
 };
 
 const fakeApi = useFakeAPI();
@@ -367,10 +368,29 @@ async function getSubscriptionInfo(key: string) {
   const today = new Date();
   const date = today.setDate(today.getDate() + clientSubscription?.subscriptionType.expiryDays!);
   const fmtDate = format(date, "dd.MM.yyyy", { locale: ru });
-  
+
   return {
     type: clientSubscription?.subscriptionType.typeName,
     date: clientSubscription?.subscriptionType.hasExpiry ? fmtDate : null,
     remainingVisits: clientSubscription?.remainingVisits,
   };
+}
+
+async function getLessonsForClient(key: string) {
+  const client = await fakeApi.client.findFirst({ where: { accessCode: key } });
+
+  const start = new Date();
+  const end = new Date();
+  end.setDate(start.getDate() + 14);
+  const lessons = await fakeApi.lesson.findMany({
+    where: {
+      groupId: client?.groupId!,
+      date: {
+        gte: start,
+        lte: end,
+      },
+    }
+  });
+
+  return lessons;
 }
