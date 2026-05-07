@@ -85,6 +85,7 @@ const getOrganisationInfo = async (key: string) => {
     where: { id: client?.group?.organizationId },
     include: {
       city: true,
+      subscriptionTypes: true,
       employees: {
         select: {
           id: true,
@@ -115,7 +116,7 @@ const getOrganisationInfo = async (key: string) => {
               },
             },
           },
-          program: true,
+          program: { include: { modules: { include: { topics: true } } } },
         },
       },
     },
