@@ -2,6 +2,10 @@ import { vk } from '../vk';
 
 export function registerMessageHandler() {
     vk.updates.on('message_new', async (ctx, next) => {
+        if (ctx.isChat) {
+            return next();
+        }
+
         const cmd = ctx.messagePayload?.cmd;
 
         if (ctx.text?.trim().toLocaleLowerCase() === 'начать') {
