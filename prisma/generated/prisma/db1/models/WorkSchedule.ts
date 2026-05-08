@@ -450,14 +450,6 @@ export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
 }
 
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type WorkScheduleCreateNestedOneWithoutWorkScheduleBreaksInput = {
   create?: Prisma.XOR<Prisma.WorkScheduleCreateWithoutWorkScheduleBreaksInput, Prisma.WorkScheduleUncheckedCreateWithoutWorkScheduleBreaksInput>
   connectOrCreate?: Prisma.WorkScheduleCreateOrConnectWithoutWorkScheduleBreaksInput

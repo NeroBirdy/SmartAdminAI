@@ -1,5 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
+import { ChangeType } from "~~/prisma/generated/prisma/db1/client";
 
 type OllamaResponse = {
   message: {
@@ -37,7 +38,7 @@ export default defineEventHandler(async (event) => {
   prompt += `Вопрос:\n`;
   prompt += `${question}`;
 
-  return await sendRequest(prompt);
+  return await sendRequest(prompt, question);
 });
 
 const getClientInfo = async (key: string) => {
@@ -125,7 +126,7 @@ const getOrganisationInfo = async (key: string) => {
   return organisation;
 };
 
-const sendRequest = async (message: string) => {
+const sendRequest = async (message: string, question: string) => {
   const systemPrompt = await readFile(filePath, "utf-8");
 
   const response = await $fetch<OllamaResponse>(
@@ -149,6 +150,14 @@ const sendRequest = async (message: string) => {
       },
     },
   );
+  const answer = response.message.content;
+  //LOG Вопрос Ответ
+  await createLog(
+    null,
+    ChangeType.QUESTION_ANSWER,
+    {},
+    { question: question, answer: answer },
+  );
 
-  return response.message.content;
+  return answer;
 };

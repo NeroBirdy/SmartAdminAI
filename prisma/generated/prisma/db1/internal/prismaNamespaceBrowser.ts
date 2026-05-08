@@ -52,6 +52,7 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   Breaks: 'Breaks',
+  Log: 'Log',
   Messages: 'Messages',
   Prompt: 'Prompt',
   Recommendation: 'Recommendation',
@@ -91,6 +92,18 @@ export const BreaksScalarFieldEnum = {
 } as const
 
 export type BreaksScalarFieldEnum = (typeof BreaksScalarFieldEnum)[keyof typeof BreaksScalarFieldEnum]
+
+
+export const LogScalarFieldEnum = {
+  id: 'id',
+  employeeId: 'employeeId',
+  changeType: 'changeType',
+  oldValue: 'oldValue',
+  newValue: 'newValue',
+  createdAt: 'createdAt'
+} as const
+
+export type LogScalarFieldEnum = (typeof LogScalarFieldEnum)[keyof typeof LogScalarFieldEnum]
 
 
 export const MessagesScalarFieldEnum = {
@@ -251,6 +264,38 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
+
+
+export const QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+} as const
+
+export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
 export const PromptOrderByRelevanceFieldEnum = {
   title: 'title',
   text: 'text'
@@ -311,14 +356,6 @@ export const SettingTypeOrderByRelevanceFieldEnum = {
 } as const
 
 export type SettingTypeOrderByRelevanceFieldEnum = (typeof SettingTypeOrderByRelevanceFieldEnum)[keyof typeof SettingTypeOrderByRelevanceFieldEnum]
-
-
-export const NullsOrder = {
-  first: 'first',
-  last: 'last'
-} as const
-
-export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
 export const UsersOrderByRelevanceFieldEnum = {

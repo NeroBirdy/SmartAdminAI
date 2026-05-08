@@ -9,6 +9,21 @@
 * 🟢 You can import this file directly.
 */
 
+export const ChangeType = {
+  DATE_CHANGE: 'DATE_CHANGE',
+  VENUE_CHANGE: 'VENUE_CHANGE',
+  LESSON_CANCELLATION: 'LESSON_CANCELLATION',
+  INSTRUCTOR_CHANGE: 'INSTRUCTOR_CHANGE',
+  LESSON_CREATE: 'LESSON_CREATE',
+  QUESTION_ANSWER: 'QUESTION_ANSWER',
+  ASSIGNED_TO_GROUP: 'ASSIGNED_TO_GROUP',
+  SCHEDULED_TRIAL_LESSON: 'SCHEDULED_TRIAL_LESSON',
+  SELECTION_INSTRUCTOR_CHANGE: 'SELECTION_INSTRUCTOR_CHANGE'
+} as const
+
+export type ChangeType = (typeof ChangeType)[keyof typeof ChangeType]
+
+
 export const DayOfWeek = {
   MON: 'MON',
   TUE: 'TUE',

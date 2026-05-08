@@ -9,6 +9,7 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/Breaks.js'
+export type * from './models/Log.js'
 export type * from './models/Messages.js'
 export type * from './models/Prompt.js'
 export type * from './models/Recommendation.js'

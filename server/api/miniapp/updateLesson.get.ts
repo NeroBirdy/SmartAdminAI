@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
         venueId: venueId,
       },
     });
-    // ЛОГ
+    // LOG
 
     await Promise.all([
       new Promise((resolve) => setTimeout(resolve, 2000)),

@@ -385,6 +385,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   Breaks: 'Breaks',
+  Log: 'Log',
   Messages: 'Messages',
   Prompt: 'Prompt',
   Recommendation: 'Recommendation',
@@ -414,7 +415,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "breaks" | "messages" | "prompt" | "recommendation" | "risk" | "section" | "sectionAISetting" | "sectionSetting" | "settingAI" | "settingDefinition" | "settingOption" | "settingType" | "users" | "workSchedule" | "workScheduleBreaks"
+    modelProps: "breaks" | "log" | "messages" | "prompt" | "recommendation" | "risk" | "section" | "sectionAISetting" | "sectionSetting" | "settingAI" | "settingDefinition" | "settingOption" | "settingType" | "users" | "workSchedule" | "workScheduleBreaks"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -481,6 +482,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.BreaksCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.BreaksCountAggregateOutputType> | number
+        }
+      }
+    }
+    Log: {
+      payload: Prisma.$LogPayload<ExtArgs>
+      fields: Prisma.LogFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.LogFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LogPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.LogFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LogPayload>
+        }
+        findFirst: {
+          args: Prisma.LogFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LogPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.LogFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LogPayload>
+        }
+        findMany: {
+          args: Prisma.LogFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LogPayload>[]
+        }
+        create: {
+          args: Prisma.LogCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LogPayload>
+        }
+        createMany: {
+          args: Prisma.LogCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.LogDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LogPayload>
+        }
+        update: {
+          args: Prisma.LogUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LogPayload>
+        }
+        deleteMany: {
+          args: Prisma.LogDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.LogUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.LogUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LogPayload>
+        }
+        aggregate: {
+          args: Prisma.LogAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateLog>
+        }
+        groupBy: {
+          args: Prisma.LogGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LogGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.LogCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LogCountAggregateOutputType> | number
         }
       }
     }
@@ -1456,6 +1523,18 @@ export const BreaksScalarFieldEnum = {
 export type BreaksScalarFieldEnum = (typeof BreaksScalarFieldEnum)[keyof typeof BreaksScalarFieldEnum]
 
 
+export const LogScalarFieldEnum = {
+  id: 'id',
+  employeeId: 'employeeId',
+  changeType: 'changeType',
+  oldValue: 'oldValue',
+  newValue: 'newValue',
+  createdAt: 'createdAt'
+} as const
+
+export type LogScalarFieldEnum = (typeof LogScalarFieldEnum)[keyof typeof LogScalarFieldEnum]
+
+
 export const MessagesScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -1614,6 +1693,38 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
+
+
+export const QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+} as const
+
+export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
 export const PromptOrderByRelevanceFieldEnum = {
   title: 'title',
   text: 'text'
@@ -1676,14 +1787,6 @@ export const SettingTypeOrderByRelevanceFieldEnum = {
 export type SettingTypeOrderByRelevanceFieldEnum = (typeof SettingTypeOrderByRelevanceFieldEnum)[keyof typeof SettingTypeOrderByRelevanceFieldEnum]
 
 
-export const NullsOrder = {
-  first: 'first',
-  last: 'last'
-} as const
-
-export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
-
-
 export const UsersOrderByRelevanceFieldEnum = {
   state: 'state',
   city: 'city',
@@ -1713,6 +1816,27 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'DateTime'
  */
 export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+    
+
+
+/**
+ * Reference to a field of type 'ChangeType'
+ */
+export type EnumChangeTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChangeType'>
+    
+
+
+/**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -1839,6 +1963,7 @@ export type PrismaClientOptions = ({
 }
 export type GlobalOmitConfig = {
   breaks?: Prisma.BreaksOmit
+  log?: Prisma.LogOmit
   messages?: Prisma.MessagesOmit
   prompt?: Prisma.PromptOmit
   recommendation?: Prisma.RecommendationOmit
