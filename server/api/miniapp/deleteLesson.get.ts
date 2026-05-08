@@ -1,6 +1,7 @@
 const fakeAPI = useFakeAPI();
 
 import { VK, Keyboard } from "vk-io";
+import { ChangeType } from "~~/prisma/generated/prisma/db1/enums";
 const vk = new VK({ token: useRuntimeConfig().vkToken });
 
 export default defineEventHandler(async (event) => {
@@ -8,6 +9,10 @@ export default defineEventHandler(async (event) => {
 
   const lessonId = Number(query.lessonId);
   const userId = Number(query.userId);
+
+  const user = await getUser({ peerId: userId });
+  const employee = await getEmployee(user?.key!);
+
   let res;
 
   try {
@@ -18,7 +23,14 @@ export default defineEventHandler(async (event) => {
     });
 
     await fakeAPI.lesson.delete({ where: { id: lessonId } });
-    // ЛОГ
+
+    //LOG Отмена занятия
+    await createLog(
+      employee!.id,
+      ChangeType.LESSON_CANCELLATION,
+      { id: lessonId },
+      {},
+    );
 
     await Promise.all([
       new Promise((resolve) => setTimeout(resolve, 2000)),

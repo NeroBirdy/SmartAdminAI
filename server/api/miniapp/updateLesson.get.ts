@@ -1,14 +1,19 @@
-const fakeAPI = useFakeAPI();
-
+import { ChangeType } from "~~/prisma/generated/prisma/db1/client";
 import { VK, Keyboard } from "vk-io";
 const vk = new VK({ token: useRuntimeConfig().vkToken });
 
+const fakeAPI = useFakeAPI();
+
 export default defineEventHandler(async (event) => {
-  const query = getQuery(event)
+  const query = getQuery(event);
 
   const lessonId = Number(query.lessonId);
   const userId = Number(query.userId);
   const venueId = Number(query.venueId);
+
+  const user = await getUser({ peerId: userId });
+
+  const employee = await getEmployee(user?.key!);
 
   let res;
 
@@ -19,13 +24,24 @@ export default defineEventHandler(async (event) => {
       random_id: Date.now(),
     });
 
+    const lesson = await fakeAPI.lesson.findUnique({
+      where: { id: lessonId },
+    });
+
     await fakeAPI.lesson.update({
       where: { id: lessonId },
       data: {
         venueId: venueId,
       },
     });
-    // LOG
+
+    //LOG Смена помещения
+    await createLog(
+      employee!.id,
+      ChangeType.VENUE_CHANGE,
+      { id: lesson!.id, venueId: lesson!.venueId },
+      { id: lesson!.id, venueId: venueId },
+    );
 
     await Promise.all([
       new Promise((resolve) => setTimeout(resolve, 2000)),

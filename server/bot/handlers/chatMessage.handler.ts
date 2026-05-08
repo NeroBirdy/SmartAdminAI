@@ -45,5 +45,7 @@ export function registerChatMessageHandler() {
         const userMention = `[id${ctx.senderId}|ответ для вас]`;
 
         ctx.send(`${userMention}\n\n${response}`)
+
+        //LOG Обработка сообщений в беседе
     });
 }

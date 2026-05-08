@@ -1,10 +1,10 @@
-import { ChangeType } from "~~/prisma/generated/prisma/db1/client";
-const fakeAPI = useFakeAPI();
-const prisma = usePrisma();
-
 import { VK, Keyboard } from "vk-io";
 import { format } from "date-fns";
+import { ChangeType } from "~~/prisma/generated/prisma/db1/client";
 const vk = new VK({ token: useRuntimeConfig().vkToken });
+
+const fakeAPI = useFakeAPI();
+const prisma = usePrisma();
 
 export default defineEventHandler(async (event) => {
   const query = getQuery(event);
@@ -13,9 +13,7 @@ export default defineEventHandler(async (event) => {
   const userId = Number(query.userId);
 
   const user = await prisma.users.findFirst({ where: { peerId: userId } });
-  const employee = await fakeAPI.employee.findFirst({
-    where: { accessCode: user?.key! },
-  });
+  const employee = await getEmployee(user?.key!);
 
   const date = query.date as string;
   const startTime = query.startTime as string;
@@ -61,20 +59,18 @@ export default defineEventHandler(async (event) => {
     });
 
     //LOG Перенос занятия на другую дату
-    await prisma.log.create({
-      data: {
-        employeeId: employee!.id,
-        changeType: ChangeType.DATE_CHANGE,
-        oldValue: {
-          id: oldLesson?.id,
-          date: format(oldLesson?.date!, "dd.MM.yyyy"),
-        },
-        newValue: {
-          id: newLesson?.id,
-          date: format(newLesson?.date!, "dd.MM.yyyy"),
-        },
+    await createLog(
+      employee!.id,
+      ChangeType.DATE_CHANGE,
+      {
+        id: oldLesson?.id,
+        date: format(oldLesson?.date!, "dd.MM.yyyy"),
       },
-    });
+      {
+        id: newLesson?.id,
+        date: format(newLesson?.date!, "dd.MM.yyyy"),
+      },
+    );
 
     await Promise.all([
       new Promise((resolve) => setTimeout(resolve, 2000)),

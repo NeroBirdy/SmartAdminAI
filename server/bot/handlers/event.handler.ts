@@ -1,3 +1,4 @@
+import { getEmployee } from "~~/server/utils/vk/user";
 import { vk } from "../vk";
 import { ChangeType } from "~~/prisma/generated/prisma/db1/client";
 
@@ -320,6 +321,17 @@ export function registerEventHandler() {
 
       const randomId = generateRandomId(1, 1000000);
       const peerIdList = await getPeerIdList(instructors);
+
+      const user = await getUser({ peerId: context.peerId });
+      const employee = await getEmployee(user?.key!);
+
+      //LOG Подбор замены инструктора
+      await createLog(
+        employee!.id,
+        ChangeType.SELECTION_INSTRUCTOR_CHANGE,
+        {},
+        { id: payload.lessonId },
+      );
 
       await sendChangeInstructorRequest(
         context.peerId,

@@ -24,6 +24,7 @@ export {
   checkUserRegistration,
   getUser,
   getClient,
+  getEmployee,
   setUserGroup,
 };
 
@@ -386,6 +387,12 @@ async function getUser(userParam: UserParam) {
 
 async function getClient(key: string) {
   return await fakeApi.client.findFirst({
+    where: { accessCode: key },
+  });
+}
+
+async function getEmployee(key: string) {
+  return await fakeApi.employee.findFirst({
     where: { accessCode: key },
   });
 }
