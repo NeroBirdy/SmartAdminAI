@@ -1,36 +1,26 @@
 <template>
   <Transition name="modal">
-    <custom-settings-modal-shedule
+    <custom-logs-modal-logs
       v-if="isModalOpen"
       :type="type"
-      :id="openId"
-      :employee="props.employee"
-      :venue="props.venue"
-      @close="(id, type, success) => emit('close', id, type, success)"
+      @close="emit('close')"
     />
   </Transition>
   <Transition name="fade">
-    <div class="overlay" v-if="isModalOpen" @click.stop="emit('instaClose')" />
+    <div class="overlay" v-if="isModalOpen" @click.stop="emit('close')" />
   </Transition>
 </template>
 
 <script lang="ts" setup>
-const emit = defineEmits<{
-  (
-    e: "close",
-    id: number,
-    type: "save" | "delete" | "null",
-    success: boolean,
-  ): void;
-  (e: "instaClose"): void;
-}>();
+import type { ChangeType } from "~~/prisma/generated/prisma/db1/enums";
 
 const props = defineProps<{
   isModalOpen: boolean;
-  openId: number;
-  type: "organisation" | "employee" | "venue";
-  employee?: { id: number; firstName: string; lastName: string };
-  venue?: { id: number; name: string };
+  type: ChangeType;
+}>();
+
+const emit = defineEmits<{
+  (e: "close"): void;
 }>();
 
 watch(

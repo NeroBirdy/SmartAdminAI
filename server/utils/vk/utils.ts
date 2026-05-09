@@ -210,8 +210,8 @@ async function updateInstructor(lessonId: number, peerId: number) {
   await createLog(
     lesson!.instructorId,
     ChangeType.INSTRUCTOR_CHANGE,
-    { id: lesson!.id, instructorId: lesson!.instructorId },
-    { id: lesson!.id, instructorId: employee!.id },
+    { lessonId: lesson!.id, instructorId: lesson!.instructorId },
+    { lessonId: lesson!.id, instructorId: employee!.id },
   );
 
   return await fakeApi.lesson.update({

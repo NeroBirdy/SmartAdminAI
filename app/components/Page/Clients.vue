@@ -2,10 +2,9 @@
   <div class="frame">
     <h1 class="frame-header header-md">Результаты</h1>
     <div class="inside-frame row">
-      <ui-result-card title="Назначено пробных занятий" text="24" />
-      <ui-result-card title="Распределено клиентов в группу" text="24" />
-      <ui-result-card title="Обработано сообщений в общем чате" text="24" />
-      <ui-result-card title="Консультаций клиентов" text="24" />
+      <ui-result-card title="Назначено пробных занятий" type="SCHEDULED_TRIAL_LESSON" />
+      <ui-result-card title="Распределено клиентов в группу" type="ASSIGNED_TO_GROUP" />
+      <ui-result-card title="Консультаций клиентов" type="QUESTION_ANSWER" />
     </div>
   </div>
   <div class="frame">

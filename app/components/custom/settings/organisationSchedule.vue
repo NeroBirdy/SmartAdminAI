@@ -22,6 +22,7 @@
         (id: number, type: 'save' | 'delete' | 'null', success: boolean) =>
           closeHandler(type, success)
       "
+      @instaClose="orgScheduleOpen = false"
     />
   </div>
 </template>

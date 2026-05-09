@@ -174,15 +174,15 @@ const parseLesson = (lesson: Lesson) => {
   };
 };
 
-const saveLessons = async (content: string)  => {
+const saveLessons = async (content: string) => {
   const lessons = stringToJson(content);
   const formattedLessons = lessons.map(parseLesson);
 
-try {
+  try {
     const createdLessons = await Promise.all(
       formattedLessons.map((lesson: PrismaLesson) =>
-        fakeAPI.lesson.create({ data: lesson })
-      )
+        fakeAPI.lesson.create({ data: lesson }),
+      ),
     );
 
     //LOG Генерация Урока
@@ -190,7 +190,7 @@ try {
       data: createdLessons.map((lesson) => ({
         changeType: ChangeType.LESSON_CREATE,
         oldValue: {},
-        newValue: lesson, 
+        newValue: { lessonId: lesson.id },
       })),
     });
 

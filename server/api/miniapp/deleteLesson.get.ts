@@ -28,7 +28,7 @@ export default defineEventHandler(async (event) => {
     await createLog(
       employee!.id,
       ChangeType.LESSON_CANCELLATION,
-      { id: lessonId },
+      { lessonId: lessonId },
       {},
     );
 

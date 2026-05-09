@@ -63,12 +63,14 @@ export default defineEventHandler(async (event) => {
       employee!.id,
       ChangeType.DATE_CHANGE,
       {
-        id: oldLesson?.id,
-        date: format(oldLesson?.date!, "dd.MM.yyyy"),
+        lessonId: oldLesson!.id,
+        date: oldLesson!.date,
+        startTime: oldLesson!.startTime,
       },
       {
-        id: newLesson?.id,
-        date: format(newLesson?.date!, "dd.MM.yyyy"),
+        lessonId: newLesson!.id,
+        date: newLesson!.date,
+        startTime: newLesson!.startTime,
       },
     );
 

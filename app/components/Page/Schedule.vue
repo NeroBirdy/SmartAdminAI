@@ -2,8 +2,8 @@
   <div class="frame">
     <h1 class="frame-header header-md">Результаты</h1>
     <div class="inside-frame row">
-      <ui-result-card title="Создано занятий" text="24" />
-      <ui-result-card title="Перенесено занятий" text="24" />
+      <ui-result-card title="Создано занятий" type="LESSON_CREATE" />
+      <ui-result-card title="Перенесено занятий" type="DATE_CHANGE" />
     </div>
   </div>
   <div class="frame">

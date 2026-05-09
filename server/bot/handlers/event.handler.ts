@@ -330,7 +330,7 @@ export function registerEventHandler() {
         employee!.id,
         ChangeType.SELECTION_INSTRUCTOR_CHANGE,
         {},
-        { id: payload.lessonId },
+        { lessonId: payload.lessonId },
       );
 
       await sendChangeInstructorRequest(

@@ -195,7 +195,7 @@ const deleteSchedule = async () => {
 
 <style scoped>
 .setting {
-  position: absolute;
+  position: fixed;
   top: 40px;
   left: 50%;
   transform: translateX(-50%);

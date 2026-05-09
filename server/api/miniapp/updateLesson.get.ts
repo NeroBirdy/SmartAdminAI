@@ -39,8 +39,8 @@ export default defineEventHandler(async (event) => {
     await createLog(
       employee!.id,
       ChangeType.VENUE_CHANGE,
-      { id: lesson!.id, venueId: lesson!.venueId },
-      { id: lesson!.id, venueId: venueId },
+      { lessonId: lesson!.id, venueId: lesson!.venueId },
+      { lessonId: lesson!.id, venueId: venueId },
     );
 
     await Promise.all([

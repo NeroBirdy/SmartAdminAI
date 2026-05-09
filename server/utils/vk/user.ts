@@ -415,13 +415,13 @@ async function setUserGroup(peerId: number, groupId: number) {
     null,
     ChangeType.ASSIGNED_TO_GROUP,
     {
-      id: oldValue?.id,
+      clientId: oldValue?.id,
       firstName: oldValue?.firstName,
       lastName: oldValue?.lastName,
       groupId: oldValue?.groupId,
     },
     {
-      id: newValue?.id,
+      clientId: newValue?.id,
       firstName: newValue?.firstName,
       lastName: newValue?.lastName,
       groupId: newValue?.groupId,
