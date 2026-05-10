@@ -34,12 +34,14 @@
 </template>
 
 <script lang="ts" setup>
-import type { JsonValue } from "@prisma/client/runtime/client";
 import { format } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
 import { ru } from "date-fns/locale";
+
 import arrow from "~/assets/icons/chevron_down.svg";
+
 import type { ChangeType } from "~~/prisma/generated/prisma/db1/enums";
+
 type DisplayField = { title: string; text: string };
 type ChangeField = {
   title: string;

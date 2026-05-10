@@ -20,7 +20,7 @@ const props = defineProps<{ display: { title: string; text: string }[] }>();
   flex-direction: column;
   width: 95%;
   align-self: center;
-  background-color: #dee2e6;
+  background-color: #e4e7eb;
   border-radius: 8px;
   margin-bottom: 5px;
 }

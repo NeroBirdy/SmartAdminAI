@@ -1,11 +1,30 @@
 <template>
   <div class="display-field">
-    <p class="display-title header-sm">{{ display.title }}</p>
+    <div class="icon-title">
+      <component class="icon" :is="getIcon()" />
+      <p class="display-title header-sm">{{ display.title }}</p>
+    </div>
     <p class="display-text main-text-sm">{{ display.text }}</p>
   </div>
 </template>
 <script lang="ts" setup>
-defineProps<{ display: { title: string; text: string } }>();
+import lessonIcon from "~/assets/icons/book.svg";
+import groupIcon from "~/assets/icons/users.svg";
+import dateIcon from "~/assets/icons/calendar.svg";
+import clientIcon from "~/assets/icons/user.svg";
+
+const props = defineProps<{ display: { title: string; text: string } }>();
+
+const titleIcon: Record<string, string> = {
+  Занятие: lessonIcon,
+  Группа: groupIcon,
+  Дата: dateIcon,
+  Клиент: clientIcon,
+};
+
+function getIcon() {
+  return titleIcon[props.display.title];
+}
 </script>
 
 <style scoped>
@@ -14,9 +33,26 @@ defineProps<{ display: { title: string; text: string } }>();
   flex-direction: row;
   justify-content: space-between;
   align-self: center;
-  width: 95%;
+  align-items: center;
+  width: 100%;
   padding-top: 2.5px;
   padding-bottom: 2.5px;
+}
+
+.icon-title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.icon {
+  stroke: #9ca4aa;
+  margin-right: 10px;
+  margin-left: 5px;
+}
+
+.display-text {
+  margin-right: 10px;
 }
 
 .header-sm,
