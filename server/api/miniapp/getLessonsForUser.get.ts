@@ -7,6 +7,13 @@ export default defineEventHandler(async (event) => {
   const date = new Date(String(query.date));
   date.setHours(19, 0, 0, 0);
 
+  const today = new Date();
+  today.setHours(19, 0, 0, 0);
+
+  if (today > date) {
+    return {};
+  }
+
   const user = await prisma.users.findFirst({ where: { peerId: userId } });
 
   if (!user) {
