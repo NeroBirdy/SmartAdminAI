@@ -17,5 +17,5 @@ type Risk = {
 };
 
 export const getData = async () => {
-    return await $fetch<ApiResponse>("/api/risks/getData")
-}
+  return await $fetch<ApiResponse>("/api/risks/getData");
+};

@@ -1,7 +1,10 @@
 import { GigaChatAnalitics } from "../../utils/gigaChat";
 import { prompts } from "../../utils/prompts";
 import { subMonths, isBefore } from "date-fns";
-import { Risk, Recommendation } from "../../../prisma/generated/prisma/db1/client";
+import {
+  Risk,
+  Recommendation,
+} from "../../../prisma/generated/prisma/db1/client";
 
 const prisma = usePrisma();
 

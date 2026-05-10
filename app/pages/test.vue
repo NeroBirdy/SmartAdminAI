@@ -3,14 +3,13 @@
     <CustomSchedulePlanningDaysOfWeek />
     <div class="inside-calendar">
       <template v-for="(week, wIndex) in weeks" :key="wIndex">
-          <CustomTestMonthDay
-            v-for="(cell, cIndex) in week"
-            :key="cIndex"
-            :date="cell.date"
-            :isCurrentMonth="cell.isCurrentMonth"
-            :isToday="cell.isToday"
-          />
-  
+        <CustomTestMonthDay
+          v-for="(cell, cIndex) in week"
+          :key="cIndex"
+          :date="cell.date"
+          :isCurrentMonth="cell.isCurrentMonth"
+          :isToday="cell.isToday"
+        />
       </template>
     </div>
   </div>

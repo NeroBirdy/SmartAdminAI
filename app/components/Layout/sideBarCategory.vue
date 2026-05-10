@@ -1,9 +1,5 @@
 <template>
-  <div
-    class="category"
-    :class="activeClass"
-    @click="selectCategory(category)"
-  >
+  <div class="category" :class="activeClass" @click="selectCategory(category)">
     <ui-side-bar-toggle
       v-if="['schedule', 'clients', 'staff'].includes(category)"
       :enabled="pictures[category] === toggleRight"

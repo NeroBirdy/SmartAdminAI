@@ -28,10 +28,7 @@
           :key="venue.id"
           @click="toggleVenue(venue.id)"
         >
-          <div
-            class="checkbox"
-            :class="selectedClass(venue.id)"
-          >
+          <div class="checkbox" :class="selectedClass(venue.id)">
             <component
               :is="checkImg"
               v-if="selectedVenues.includes(venue.id)"
@@ -53,12 +50,12 @@ const { venues, selectedVenues } =
 
 const isOpen = ref(true);
 
-const selectedClass =(id: number) => ({
-   checked: selectedVenues.value.includes(id)
+const selectedClass = (id: number) => ({
+  checked: selectedVenues.value.includes(id),
 });
 
 const activeClass = computed(() => ({
-  active: isOpen.value
+  active: isOpen.value,
 }));
 
 const toggleVenue = (id: number) => {

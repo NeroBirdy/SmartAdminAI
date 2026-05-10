@@ -42,7 +42,7 @@ const expandedClass = computed(() => ({
 }));
 
 const isCurrentMonthClass = computed(() => ({
-  'notCurrentMonth': !isCurrentMonth,
+  notCurrentMonth: !isCurrentMonth,
 }));
 
 const ellipsStyle = computed(() => ({

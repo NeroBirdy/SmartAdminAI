@@ -119,7 +119,11 @@ export default defineEventHandler(async (event) => {
   };
 
   const keyboard = await buildKeyboardForDate(0, newDateList);
-  const messageId = await sendMessage(userId, keyboard, "Выберите дату и время");
+  const messageId = await sendMessage(
+    userId,
+    keyboard,
+    "Выберите дату и время",
+  );
 
   userSession.messageId = Number(messageId);
   await setUserSession(userId, userSession);

@@ -71,7 +71,11 @@ const addHandler = async (
   settingOptionId: number,
 ) => {
   try {
-    const newSectionSetting = await addSectionSetting(sectionId, settingDefinitionId, settingOptionId);
+    const newSectionSetting = await addSectionSetting(
+      sectionId,
+      settingDefinitionId,
+      settingOptionId,
+    );
 
     emit("add", newSectionSetting);
 

@@ -30,7 +30,7 @@ import WrechIcon from "~/assets/icons/wrench.svg";
 const { isDevMenuOpen, toggleDevMenu } = useDevMenu();
 
 const activeClass = computed(() => ({
-  active: isDevMenuOpen.value
+  active: isDevMenuOpen.value,
 }));
 </script>
 

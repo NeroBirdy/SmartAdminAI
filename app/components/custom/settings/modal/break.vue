@@ -57,7 +57,7 @@ const hasError = computed(
 .line {
   width: 16px;
   height: 2.5px;
-  background-color:#6a758b;
+  background-color: #6a758b;
   border-radius: 5px;
 }
 

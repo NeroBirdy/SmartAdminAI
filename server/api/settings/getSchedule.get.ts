@@ -11,7 +11,6 @@ const defaultShedule = daysOfWeek.map((day) => ({
   breaks: [],
 }));
 
-
 export default defineEventHandler(async (event) => {
   const query = getQuery(event);
   const id = Number(query.id);
@@ -20,13 +19,17 @@ export default defineEventHandler(async (event) => {
   return await getSchedule(type, id);
 });
 
-const getWhere = (type: "employee" | "venue" | "organisation", id: number) => ({
-  organisation: { organizationId: id },
-  employee: { employeeId: id },
-  venue: { venueId: id },
-}[type]);
+const getWhere = (type: "employee" | "venue" | "organisation", id: number) =>
+  ({
+    organisation: { organizationId: id },
+    employee: { employeeId: id },
+    venue: { venueId: id },
+  })[type];
 
-const getSchedule = async (type: "employee" | "venue" | "organisation", id: number) => {
+const getSchedule = async (
+  type: "employee" | "venue" | "organisation",
+  id: number,
+) => {
   try {
     const workSchedule = await prisma.workSchedule.findMany({
       where: getWhere(type, id),
@@ -39,8 +42,8 @@ const getSchedule = async (type: "employee" | "venue" | "organisation", id: numb
         workScheduleBreaks: { select: { break: true } },
       },
       orderBy: {
-        dayOfWeek: "asc"
-      }
+        dayOfWeek: "asc",
+      },
     });
 
     if (workSchedule.length === 0) {

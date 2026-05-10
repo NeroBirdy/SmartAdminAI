@@ -132,11 +132,7 @@ function validateSchedule() {
     return false;
   }
   if (!settings.validateData(orgSchedule.value)) {
-    showCustomToast(
-      "warning",
-      "Некорректное заполнение времени",
-      "",
-    );
+    showCustomToast("warning", "Некорректное заполнение времени", "");
     return false;
   }
   return true;

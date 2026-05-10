@@ -2,7 +2,10 @@
   <div class="frame">
     <h1 class="frame-header header-md">Результаты</h1>
     <div class="inside-frame row">
-      <ui-result-card title="Подборов замен" type="SELECTION_INSTRUCTOR_CHANGE" />
+      <ui-result-card
+        title="Подборов замен"
+        type="SELECTION_INSTRUCTOR_CHANGE"
+      />
       <ui-result-card title="Успешных замен" type="INSTRUCTOR_CHANGE" />
     </div>
   </div>

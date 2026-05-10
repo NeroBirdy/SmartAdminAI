@@ -67,7 +67,7 @@ const fetchFilteredLessons = (
       date: { gte: dateFrom, lt: dateTo },
     },
     orderBy: {
-      startTime: 'asc'
+      startTime: "asc",
     },
     include: {
       group: { select: { id: true, name: true } },

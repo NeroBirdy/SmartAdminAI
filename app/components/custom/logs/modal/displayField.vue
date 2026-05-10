@@ -19,8 +19,9 @@ defineProps<{ display: { title: string; text: string } }>();
   padding-bottom: 2.5px;
 }
 
-.header-sm,.main-text-sm {
-    color: #324260;
+.header-sm,
+.main-text-sm {
+  color: #324260;
 }
 
 p {

@@ -108,7 +108,7 @@ onMounted(async () => {
 .sparkle-wrapper {
   display: flex;
   align-self: flex-start;
-  height: 69px
+  height: 69px;
 }
 
 .sparkle {
