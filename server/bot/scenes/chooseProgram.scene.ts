@@ -4,7 +4,7 @@ export const chooseProgramScene = new StepScene("chooseProgram", [
   async (context) => {
     if (context.scene.step.firstTime) {
       const orgId = await getUserOrgId(context.peerId);
-      const programList = await getPrograms(orgId!);
+      const programList = await getPrograms(orgId!, context.peerId);
 
       context.session.lists = {
         ...(context.session.lists || {}),

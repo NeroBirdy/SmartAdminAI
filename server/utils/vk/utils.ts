@@ -256,9 +256,19 @@ async function checkMessagesCount(randomId: number) {
   return count;
 }
 
-async function getPrograms(orgId: number) {
+async function getPrograms(orgId: number, peerId: number) {
+  const userKey = await getUserAccessCode(peerId);
+  const client = await fakeApi.client.findFirst({
+    where: {
+      accessCode: userKey,
+    },
+    include: { group: true },
+  });
+
+  const programId = client!.groupId ? client!.group?.programId : -1;
+
   const programs = await fakeApi.program.findMany({
-    where: { organizationId: orgId },
+    where: { organizationId: orgId, id: { not: programId } },
     select: { name: true },
   });
 
