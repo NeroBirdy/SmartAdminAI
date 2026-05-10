@@ -54,7 +54,7 @@ onMounted(async () => {
 }
 
 .second-frame-results {
-  width: 348px;
+  width: 310px;
   height: 110px;
   margin-right: 15px;
 }

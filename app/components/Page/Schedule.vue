@@ -4,6 +4,8 @@
     <div class="inside-frame row">
       <ui-result-card title="Создано занятий" type="LESSON_CREATE" />
       <ui-result-card title="Перенесено занятий" type="DATE_CHANGE" />
+      <ui-result-card title="Отменено занятий" type="LESSON_CANCELLATION" />
+      <ui-result-card title="Смена помещений" type="VENUE_CHANGE" />
     </div>
   </div>
   <div class="frame">

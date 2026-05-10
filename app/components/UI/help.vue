@@ -53,5 +53,6 @@ const props = defineProps<{
   margin-bottom: 16px;
   margin-left: 20px;
   padding-bottom: 10px;
+  padding-right: 5px;
 }
 </style>

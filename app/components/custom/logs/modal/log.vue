@@ -72,16 +72,11 @@ function getTitle() {
 }
 
 function getDate() {
-  const date = formatInTimeZone(
-    props.log.createdAt,
-    "UTC",
-    "dd MMM yyyy, HH:mm",
-    { locale: ru },
-  );
+  const date = format(props.log.createdAt, "dd MMM yyyy, HH:mm", {
+    locale: ru,
+  });
   return date;
 }
-
-onMounted(async () => {});
 </script>
 
 <style scoped>
@@ -171,6 +166,6 @@ p {
 .slide-down-enter-to,
 .slide-down-leave-from {
   opacity: 1;
-  max-height: 200px;
+  max-height: 500px;
 }
 </style>

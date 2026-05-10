@@ -185,12 +185,16 @@ const saveLessons = async (content: string) => {
       ),
     );
 
+    const lessonFields = await Promise.all(
+      createdLessons.map((lesson) => getLessonFields(lesson.id)),
+    );
+
     //LOG Генерация Урока
     await prisma.log.createMany({
-      data: createdLessons.map((lesson) => ({
+      data: lessonFields.map((fields) => ({
         changeType: ChangeType.LESSON_CREATE,
         oldValue: {},
-        newValue: { lessonId: lesson.id },
+        newValue: { ...fields },
       })),
     });
 

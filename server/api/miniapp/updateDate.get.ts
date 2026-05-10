@@ -45,11 +45,9 @@ export default defineEventHandler(async (event) => {
       random_id: Date.now(),
     });
 
-    const oldLesson = await fakeAPI.lesson.findUnique({
-      where: { id: lessonId },
-    });
+    const oldLessonFields = await getLessonFields(lessonId);
 
-    const newLesson = await fakeAPI.lesson.update({
+    await fakeAPI.lesson.update({
       where: { id: lessonId },
       data: {
         date: utcDateObj,
@@ -58,19 +56,17 @@ export default defineEventHandler(async (event) => {
       },
     });
 
+    const newLessonFields = await getLessonFields(lessonId);
+
     //LOG Перенос занятия на другую дату
     await createLog(
       employee!.id,
       ChangeType.DATE_CHANGE,
       {
-        lessonId: oldLesson!.id,
-        date: oldLesson!.date,
-        startTime: oldLesson!.startTime,
+        ...oldLessonFields,
       },
       {
-        lessonId: newLesson!.id,
-        date: newLesson!.date,
-        startTime: newLesson!.startTime,
+        ...newLessonFields,
       },
     );
 

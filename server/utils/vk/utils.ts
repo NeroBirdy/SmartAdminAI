@@ -206,12 +206,16 @@ async function updateInstructor(lessonId: number, peerId: number) {
 
   const lesson = await fakeApi.lesson.findUnique({ where: { id: lessonId } });
 
+  const lessonFields = await getLessonFields(lessonId);
+  const oldEmployeeFields = await getEmployeeFields(lesson!.instructorId);
+  const newEmployeeFields = await getEmployeeFields(employee!.id);
+
   //LOG Замена инструктора
   await createLog(
     lesson!.instructorId,
     ChangeType.INSTRUCTOR_CHANGE,
-    { lessonId: lesson!.id, instructorId: lesson!.instructorId },
-    { lessonId: lesson!.id, instructorId: employee!.id },
+    { ...lessonFields, ...oldEmployeeFields },
+    { ...lessonFields, ...newEmployeeFields },
   );
 
   return await fakeApi.lesson.update({

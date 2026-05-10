@@ -22,13 +22,17 @@ export default defineEventHandler(async (event) => {
       random_id: Date.now(),
     });
 
+    const lessonFields = await getLessonFields(lessonId);
+
     await fakeAPI.lesson.delete({ where: { id: lessonId } });
 
     //LOG Отмена занятия
     await createLog(
       employee!.id,
       ChangeType.LESSON_CANCELLATION,
-      { lessonId: lessonId },
+      {
+        ...lessonFields,
+      },
       {},
     );
 

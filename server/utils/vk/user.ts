@@ -399,7 +399,7 @@ async function getEmployee(key: string) {
 
 async function setUserGroup(peerId: number, groupId: number) {
   const userKey = await getUserAccessCode(peerId);
-  const oldValue = await fakeApi.client.findFirst({
+  const client = await fakeApi.client.findFirst({
     where: { accessCode: userKey },
   });
 
@@ -410,21 +410,21 @@ async function setUserGroup(peerId: number, groupId: number) {
     },
   });
 
+  const clientFields = await getClientFields(client!.id);
+  const oldGroupFields = await getGroupFields(client!.groupId);
+  const newGroupFields = await getGroupFields(groupId);
+
   //LOG Распределение в группу
   await createLog(
     null,
     ChangeType.ASSIGNED_TO_GROUP,
     {
-      clientId: oldValue?.id,
-      firstName: oldValue?.firstName,
-      lastName: oldValue?.lastName,
-      groupId: oldValue?.groupId,
+      ...clientFields,
+      ...oldGroupFields,
     },
     {
-      clientId: newValue?.id,
-      firstName: newValue?.firstName,
-      lastName: newValue?.lastName,
-      groupId: newValue?.groupId,
+      ...clientFields,
+      ...newGroupFields,
     },
   );
 

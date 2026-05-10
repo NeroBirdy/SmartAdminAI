@@ -156,12 +156,15 @@ export function registerEventHandler() {
       const user = await getUser({ peerId: context.peerId });
       const client = await getClient(user?.key!);
 
+      const lessonFields = await getLessonFields(payload.lessonId);
+      const clientFields = await getClientFields(client!.id);
+
       //LOG Назначение пробного занятия
       await createLog(
         null,
         ChangeType.SCHEDULED_TRIAL_LESSON,
         {},
-        { clientId: client?.id!, lessonId: payload.lessonId },
+        { ...lessonFields, ...clientFields },
       );
 
       const keyboard = await buildConfirmKeyboard(
@@ -325,12 +328,14 @@ export function registerEventHandler() {
       const user = await getUser({ peerId: context.peerId });
       const employee = await getEmployee(user?.key!);
 
+      const lessonFields = await getLessonFields(payload.lessonId);
+
       //LOG Подбор замены инструктора
       await createLog(
         employee!.id,
         ChangeType.SELECTION_INSTRUCTOR_CHANGE,
         {},
-        { lessonId: payload.lessonId },
+        { ...lessonFields },
       );
 
       await sendChangeInstructorRequest(

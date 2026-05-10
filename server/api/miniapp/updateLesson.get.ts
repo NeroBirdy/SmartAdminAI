@@ -28,6 +28,10 @@ export default defineEventHandler(async (event) => {
       where: { id: lessonId },
     });
 
+    const lessonFields = await getLessonFields(lessonId);
+    const oldVenueFields = await getVenueFields(lesson!.venueId);
+    const newVenueFields = await getVenueFields(venueId);
+
     await fakeAPI.lesson.update({
       where: { id: lessonId },
       data: {
@@ -39,8 +43,8 @@ export default defineEventHandler(async (event) => {
     await createLog(
       employee!.id,
       ChangeType.VENUE_CHANGE,
-      { lessonId: lesson!.id, venueId: lesson!.venueId },
-      { lessonId: lesson!.id, venueId: venueId },
+      { ...lessonFields, ...oldVenueFields },
+      { ...lessonFields, ...newVenueFields },
     );
 
     await Promise.all([

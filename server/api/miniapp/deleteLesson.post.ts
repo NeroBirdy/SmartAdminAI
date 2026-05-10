@@ -1,5 +1,5 @@
 export default defineEventHandler(async (event) => {
-  const body = getQuery(event);
+  const body = await readBody(event);
   const lessonId = Number(body.lessonId);
   const userId = Number(body.userId);
 
