@@ -211,8 +211,8 @@ export function registerEventHandler() {
 
     if (payload.cmd == "cancellationLesson") {
       $fetch("/api/miniapp/deleteLesson", {
-        method: "GET",
-        query: {
+        method: "DELETE",
+        body: {
           lessonId: payload.lessonId,
           userId: payload.userId,
         },
@@ -268,8 +268,8 @@ export function registerEventHandler() {
       await sendMessageWithoutKeyboard(payload.userId, "Ваш запрос одобрен");
 
       $fetch("/api/miniapp/deleteLesson", {
-        method: "GET",
-        query: {
+        method: "DELETE",
+        body: {
           lessonId: payload.lessonId,
           userId: payload.userId,
         },

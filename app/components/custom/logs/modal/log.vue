@@ -36,6 +36,8 @@
 <script lang="ts" setup>
 import type { JsonValue } from "@prisma/client/runtime/client";
 import { format } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz";
+import { ru } from "date-fns/locale";
 import arrow from "~/assets/icons/chevron_down.svg";
 import type { ChangeType } from "~~/prisma/generated/prisma/db1/enums";
 type DisplayField = { title: string; text: string };
@@ -70,7 +72,12 @@ function getTitle() {
 }
 
 function getDate() {
-  const date = format(props.log.createdAt, "dd.MM.yyyy, HH:mm");
+  const date = formatInTimeZone(
+    props.log.createdAt,
+    "UTC",
+    "dd MMM yyyy, HH:mm",
+    { locale: ru },
+  );
   return date;
 }
 
@@ -110,8 +117,8 @@ onMounted(async () => {});
 }
 
 .ellips {
-  height: 7px;
-  width: 7px;
+  height: 10px;
+  width: 10px;
   border-radius: 50%;
   background-color: #4983e7;
 }
