@@ -1,6 +1,5 @@
 import { VK } from "vk-io";
 import { session } from "../../bot/middlewares";
-import { ChangeType } from "~~/prisma/generated/prisma/db1/client";
 
 export {
   saveUserState,
@@ -415,18 +414,20 @@ async function setUserGroup(peerId: number, groupId: number) {
   const newGroupFields = await getGroupFields(groupId);
 
   //LOG Распределение в группу
-  await createLog(
-    null,
-    ChangeType.ASSIGNED_TO_GROUP,
-    {
+  await createLog({
+    entityType: "CLIENT",
+    entityId: client!.id,
+    changeType: "ASSIGNED_TO_GROUP",
+    oldValue: {
       ...clientFields,
       ...oldGroupFields,
+      change: { groupId: client!.groupId },
     },
-    {
-      ...clientFields,
+    newValue: {
       ...newGroupFields,
+      change: { groupId: groupId },
     },
-  );
+  });
 
   return newValue;
 }

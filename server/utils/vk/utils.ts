@@ -211,12 +211,22 @@ async function updateInstructor(lessonId: number, peerId: number) {
   const newEmployeeFields = await getEmployeeFields(employee!.id);
 
   //LOG Замена инструктора
-  await createLog(
-    lesson!.instructorId,
-    ChangeType.INSTRUCTOR_CHANGE,
-    { ...lessonFields, ...oldEmployeeFields },
-    { ...lessonFields, ...newEmployeeFields },
-  );
+  await createLog({
+    employeeId: lesson!.instructorId,
+    entityType: "LESSON",
+    entityId: lessonId,
+    changeType: "INSTRUCTOR_CHANGE",
+    oldValue: {
+      ...lessonFields,
+      ...oldEmployeeFields,
+      change: { instructorId: lesson!.instructorId },
+    },
+    newValue: {
+      ...lessonFields,
+      ...newEmployeeFields,
+      change: { instructorId: employee!.id },
+    },
+  });
 
   return await fakeApi.lesson.update({
     where: { id: Number(lessonId) },
@@ -408,6 +418,7 @@ async function getLessonsForClient(key: string) {
         gte: start,
         lte: end,
       },
+      status: "ACTUAL",
     },
   });
 

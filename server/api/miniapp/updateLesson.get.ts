@@ -1,4 +1,3 @@
-import { ChangeType } from "~~/prisma/generated/prisma/db1/client";
 import { VK, Keyboard } from "vk-io";
 const vk = new VK({ token: useRuntimeConfig().vkToken });
 
@@ -40,12 +39,18 @@ export default defineEventHandler(async (event) => {
     });
 
     //LOG Смена помещения
-    await createLog(
-      employee!.id,
-      ChangeType.VENUE_CHANGE,
-      { ...lessonFields, ...oldVenueFields },
-      { ...lessonFields, ...newVenueFields },
-    );
+    await createLog({
+      entityType: "LESSON",
+      entityId: lessonId,
+      employeeId: employee!.id,
+      changeType: "VENUE_CHANGE",
+      oldValue: {
+        ...lessonFields,
+        ...oldVenueFields,
+        change: { venueId: lesson!.venueId },
+      },
+      newValue: { ...newVenueFields, change: { venueId: venueId } },
+    });
 
     await Promise.all([
       new Promise((resolve) => setTimeout(resolve, 2000)),

@@ -106,7 +106,7 @@ export default defineEventHandler(async (event) => {
       });
 
       const lessons = await fakeAPI.lesson.findMany({
-        where: { date, venueId: venue.id },
+        where: { date, venueId: venue.id, status: "ACTUAL" },
         select: { startTime: true, endTime: true },
       });
 

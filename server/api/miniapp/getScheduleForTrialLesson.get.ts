@@ -54,6 +54,7 @@ export default defineEventHandler(async (event) => {
         gte: today,
         lte: twoWeeksLater,
       },
+      status: "ACTUAL"
     },
   });
 

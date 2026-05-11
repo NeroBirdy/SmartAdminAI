@@ -1,6 +1,5 @@
-import { ChangeType } from "~~/prisma/generated/prisma/db1/enums";
-import { startOfMonth, endOfMonth, format } from "date-fns";
-import { ru } from "date-fns/locale";
+import { ChangeType, LogStatus } from "~~/prisma/generated/prisma/db1/enums";
+import { startOfMonth, endOfMonth } from "date-fns";
 import { Log } from "~~/prisma/generated/prisma/db1/client";
 import { formatInTimeZone } from "date-fns-tz";
 
@@ -13,15 +12,118 @@ type ChangeField = {
 
 type LogResult = {
   id: number;
+  originalType?: ChangeType | null;
   changeType: ChangeType;
+  status: LogStatus;
   employee: { firstName: string; lastName: string } | null;
   display: DisplayField[];
   changes: ChangeField[];
   createdAt: Date;
 };
 
+type Builder = (
+  o: any,
+  n: any,
+) => { display: DisplayField[]; changes: ChangeField[] };
+type FieldExtractor = (v: any) => string;
+
 const prisma = usePrisma();
 const fakeAPI = useFakeAPI();
+
+const fieldExtractors: Record<string, FieldExtractor> = {
+  Занятие: (v) => v.lessonName,
+  Группа: (v) => v.groupName,
+  Дата: (v) => formatLessonDate(v.lessonDate, v.lessonStartTime),
+  Клиент: (v) =>
+    formatName({ firstName: v.clientFirstName, lastName: v.clientLastName }),
+  Площадка: (v) => v.venueName,
+  Инструктор: (v) => `${v.employeeFirstName} ${v.empolyeeLastName}`,
+};
+
+function buildDisplay(fields: string[], v: any): DisplayField[] {
+  return fields.map((title) => ({ title, text: fieldExtractors[title]!(v) }));
+}
+
+function buildChanges(fields: string[], o: any, n: any): ChangeField[] {
+  return fields.map((title) => ({
+    title,
+    oldValue: fieldExtractors[title]!(o),
+    newValue: fieldExtractors[title]!(n),
+  }));
+}
+
+function dateChanges(o: any, n: any): ChangeField[] {
+  const changes: ChangeField[] = [];
+  if (o.lessonDate !== n.lessonDate) {
+    changes.push({
+      title: "Дата",
+      oldValue: formatDate(o.lessonDate),
+      newValue: formatDate(n.lessonDate),
+    });
+  }
+  if (o.startTime !== n.startTime) {
+    changes.push({
+      title: "Время",
+      oldValue: formatTime(o.lessonStartTime),
+      newValue: formatTime(n.lessonStartTime),
+    });
+  }
+  return changes;
+}
+
+const builders: Partial<Record<ChangeType, Builder>> = {
+  DATE_CHANGE: (o, n) => ({
+    display: buildDisplay(["Занятие", "Группа"], o),
+    changes: dateChanges(o, n),
+  }),
+  VENUE_CHANGE: (o, n) => ({
+    display: buildDisplay(["Занятие", "Группа", "Дата"], o),
+    changes: buildChanges(["Площадка"], o, n),
+  }),
+  LESSON_CANCELLATION: (o, n) => ({
+    display: buildDisplay(["Занятие", "Группа", "Дата"], o),
+    changes: [
+      {
+        title: "Статус",
+        oldValue: null,
+        newValue: n.lessonStatus == "ACTUAL" ? "Актуален" : "Удалён",
+      },
+    ],
+  }),
+  INSTRUCTOR_CHANGE: (o, n) => ({
+    display: buildDisplay(["Занятие", "Группа", "Дата"], o),
+    changes: buildChanges(["Инструктор"], o, n),
+  }),
+  LESSON_CREATE: (_o, n) => ({
+    display: buildDisplay(["Занятие", "Группа", "Дата"], n),
+    changes: [
+      {
+        title: "Статус",
+        oldValue: null,
+        newValue: n.lessonStatus == "ACTUAL" ? "Создан" : "Удалён",
+      },
+    ],
+  }),
+  QUESTION_ANSWER: (_o, n) => ({
+    display: buildDisplay(["Клиент"], n),
+    changes: [
+      { title: "Вопрос", oldValue: n.question, newValue: null },
+      { title: "Ответ", oldValue: null, newValue: n.answer },
+    ],
+  }),
+  ASSIGNED_TO_GROUP: (o, n) => ({
+    display: buildDisplay(["Клиент"], o),
+    changes: buildChanges(["Группа"], o, n),
+  }),
+  SCHEDULED_TRIAL_LESSON: (_o, n) => ({
+    display: buildDisplay(["Занятие", "Клиент", "Группа", "Дата"], n),
+    changes: [],
+  }),
+  SELECTION_INSTRUCTOR_CHANGE: (_o, n) => ({
+    display: buildDisplay(["Занятие", "Группа", "Дата"], n),
+    changes: [],
+  }),
+};
 
 export default defineEventHandler(async (event) => {
   const query = getQuery(event);
@@ -39,9 +141,7 @@ export default defineEventHandler(async (event) => {
     },
   });
 
-  const logs = Promise.all(logsDB.map(buildLog));
-
-  return logs;
+  return Promise.all(logsDB.map(buildLog));
 });
 
 async function buildLog(log: Log): Promise<LogResult> {
@@ -52,156 +152,26 @@ async function buildLog(log: Log): Promise<LogResult> {
   let display: DisplayField[] = [];
   let changes: ChangeField[] = [];
 
-  switch (log.changeType) {
-    case "DATE_CHANGE": {
-      display = [
-        { title: "Занятие", text: o.lessonName },
-        { title: "Группа", text: o.groupName },
-      ];
+  let originalLog: Log | null = null;
 
-      if (o.date !== n.date) {
-        changes.push({
-          title: "Дата",
-          oldValue: formatDate(o.lessonDate),
-          newValue: formatDate(n.lessonDate),
-        });
-      }
-      if (o.startTime !== n.startTime) {
-        changes.push({
-          title: "Время",
-          oldValue: formatTime(o.lessonStartTime),
-          newValue: formatTime(n.lessonStartTime),
-        });
-      }
+  if (log.revertedLogId) {
+    originalLog = await getOriginalLog(log.revertedLogId);
+  }
 
-      break;
-    }
-    case "VENUE_CHANGE": {
-      display = [
-        { title: "Занятие", text: o.lessonName },
-        { title: "Группа", text: o.groupName },
-        {
-          title: "Дата",
-          text: formatLessonDate(o.lessonDate, o.lessonStartTime),
-        },
-      ];
-      changes = [
-        {
-          title: "Площадка",
-          oldValue: o.venueName,
-          newValue: n.venueName,
-        },
-      ];
+  const resolvedLog =
+    log.changeType === "LOG_ROLLBACK" && originalLog ? originalLog : log;
 
-      break;
-    }
-    case "LESSON_CANCELLATION": {
-      display = [
-        { title: "Занятие", text: o.lessonName },
-        { title: "Группа", text: o.groupName },
-        {
-          title: "Дата",
-          text: formatLessonDate(o.lessonDate, o.lessonStartTime),
-        },
-      ];
-
-      break;
-    }
-    case "INSTRUCTOR_CHANGE": {
-      display = [
-        { title: "Занятие", text: o.lessonName },
-        { title: "Группа", text: o.groupName },
-        {
-          title: "Дата",
-          text: formatLessonDate(o.lessonDate, o.lessonStartTime),
-        },
-      ];
-      changes = [
-        {
-          title: "Инструктор",
-          oldValue: `${o.employeeFirstName} ${o.empolyeeLastName}`,
-          newValue: `${n.employeeFirstName} ${n.empolyeeLastName}`,
-        },
-      ];
-      break;
-    }
-    case "LESSON_CREATE": {
-      display = [
-        { title: "Занятие", text: n.lessonName },
-        { title: "Группа", text: n.groupName },
-        {
-          title: "Дата",
-          text: formatLessonDate(n.lessonDate, n.lessonStartTime),
-        },
-      ];
-
-      break;
-    }
-    case "QUESTION_ANSWER": {
-      changes = [
-        { title: "Вопрос", oldValue: n.question, newValue: null },
-        { title: "Ответ", oldValue: null, newValue: n.answer },
-      ];
-
-      break;
-    }
-    case "ASSIGNED_TO_GROUP": {
-      display = [
-        {
-          title: "Клиент",
-          text: formatName({
-            firstName: o.clientFirstName,
-            lastName: o.clientLastName,
-          }),
-        },
-      ];
-      changes = [
-        {
-          title: "Группа",
-          oldValue: o.groupName,
-          newValue: n.groupName,
-        },
-      ];
-
-      break;
-    }
-    case "SCHEDULED_TRIAL_LESSON": {
-      display = [
-        { title: "Занятие", text: n.lessonName },
-        {
-          title: "Клиент",
-          text: formatName({
-            firstName: n.clientFirstName,
-            lastName: n.clientLastName,
-          }),
-        },
-        { title: "Группа", text: n.groupName },
-        {
-          title: "Дата",
-          text: formatLessonDate(n.lessonDate, n.lessonStartTime),
-        },
-      ];
-
-      break;
-    }
-    case "SELECTION_INSTRUCTOR_CHANGE": {
-      display = [
-        { title: "Занятие", text: n.lessonName },
-        { title: "Группа", text: n.groupName },
-        {
-          title: "Дата",
-          text: formatLessonDate(n.lessonDate, n.lessonStartTime),
-        },
-      ];
-
-      break;
-    }
+  const builder = builders[resolvedLog.changeType];
+  if (builder) {
+    ({ display, changes } = builder(o, n));
   }
 
   return {
     id: log.id,
     changeType: log.changeType,
+    originalType: originalLog?.changeType ?? null,
     createdAt: log.createdAt,
+    status: log.status,
     employee,
     display,
     changes,
@@ -222,12 +192,17 @@ function formatTime(time: Date) {
   return formatInTimeZone(new Date(time), "UTC", "HH:mm");
 }
 
-function formatName(employee: { firstName: string; lastName: string }) {
-  return `${employee.firstName} ${employee.lastName}`;
+function formatName(v: { firstName: string; lastName: string }) {
+  return `${v.firstName} ${v.lastName}`;
 }
 
 async function getEmployee(id: number) {
   const employee = await fakeAPI.employee.findUnique({ where: { id } });
-
   return { firstName: employee!.firstName, lastName: employee!.lastName };
+}
+
+async function getOriginalLog(logId: number): Promise<Log> {
+  const log = await prisma.log.findFirst({ where: { id: logId } });
+  if (log!.changeType !== "LOG_ROLLBACK") return log!;
+  return getOriginalLog(log!.revertedLogId!);
 }

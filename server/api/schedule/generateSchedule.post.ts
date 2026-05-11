@@ -3,8 +3,10 @@ import { join } from "node:path";
 import JSON5 from "json5";
 
 import { collectData } from "~~/server/utils/schedule/getData";
-import { ChangeType } from "~~/prisma/generated/prisma/db1/client";
-import { Lesson as PrismaLesson } from "~~/prisma/generated/prisma/db2/client";
+import {
+  LessonStatus,
+  Lesson as PrismaLesson,
+} from "~~/prisma/generated/prisma/db2/client";
 
 import {
   venueOrInstructorScheduleToMarkdown,
@@ -185,18 +187,20 @@ const saveLessons = async (content: string) => {
       ),
     );
 
-    const lessonFields = await Promise.all(
-      createdLessons.map((lesson) => getLessonFields(lesson.id)),
-    );
+    await Promise.all(
+      createdLessons.map(async (lesson) => {
+        const fields = await getLessonFields(lesson.id);
 
-    //LOG Генерация Урока
-    await prisma.log.createMany({
-      data: lessonFields.map((fields) => ({
-        changeType: ChangeType.LESSON_CREATE,
-        oldValue: {},
-        newValue: { ...fields },
-      })),
-    });
+        //LOG Генерация Урока
+        await createLog({
+          changeType: "LESSON_CREATE",
+          entityType: "LESSON",
+          entityId: lesson.id,
+          oldValue: { change: { status: LessonStatus.DELETED } },
+          newValue: { ...fields, change: { status: LessonStatus.ACTUAL } },
+        });
+      }),
+    );
 
     return { success: true };
   } catch (e) {

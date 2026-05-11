@@ -198,6 +198,7 @@ const deleteSchedule = async () => {
   width: 475px;
   margin: 0 !important;
   z-index: 2;
+  will-change: transform;
 }
 
 .loader-wrapper {

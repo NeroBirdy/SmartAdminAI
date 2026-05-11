@@ -1,6 +1,5 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { ChangeType } from "~~/prisma/generated/prisma/db1/client";
 
 type OllamaResponse = {
   message: {
@@ -28,6 +27,7 @@ export default defineEventHandler(async (event) => {
   const question = body.question;
 
   const user = await getUser({ peerId: userId });
+  const client = await getClient(user?.key!);
 
   let prompt = `Данные клиента:\n`;
   prompt += `${JSON.stringify(await getClientInfo(user?.key!), null, 2)} \n\n`;
@@ -37,8 +37,19 @@ export default defineEventHandler(async (event) => {
 
   prompt += `Вопрос:\n`;
   prompt += `${question}`;
+  const answer = await sendRequest(prompt, question);
 
-  return await sendRequest(prompt, question);
+  const clientFields = await getClientFields(client!.id);
+
+  //LOG Вопрос Ответ
+  await createLog({
+    entityType: "CLIENT",
+    entityId: client!.id,
+    changeType: "QUESTION_ANSWER",
+    newValue: { ...clientFields, question: question, answer: answer },
+  });
+
+  return answer;
 });
 
 const getClientInfo = async (key: string) => {
@@ -151,13 +162,6 @@ const sendRequest = async (message: string, question: string) => {
     },
   );
   const answer = response.message.content;
-  //LOG Вопрос Ответ
-  await createLog(
-    null,
-    ChangeType.QUESTION_ANSWER,
-    {},
-    { question: question, answer: answer },
-  );
 
   return answer;
 };

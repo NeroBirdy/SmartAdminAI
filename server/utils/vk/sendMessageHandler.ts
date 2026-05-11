@@ -259,6 +259,7 @@ async function sendChangeInstructorRequest(
 ) {
   await sendMessageWithoutKeyboard(peerId, "Запрос отправлен");
 
+  console.log(peerIdList)
   for (const id of peerIdList) {
     if (Number(id) !== 0) {
       const keyboard = await buildConfirmKeyboard(

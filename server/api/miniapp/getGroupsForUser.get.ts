@@ -76,6 +76,7 @@ async function getLessons(groupId: number, today: Date, twoWeeksLater: Date) {
   const lessons = await fakeAPI.lesson.findMany({
     where: {
       groupId: groupId,
+      status: "ACTUAL",
       date: {
         gte: today,
         lte: twoWeeksLater,

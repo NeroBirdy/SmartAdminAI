@@ -23,7 +23,7 @@ const emit = defineEmits<{
   display: flex;
   flex-direction: column;
   padding: 24px 28px;
-  padding-bottom: 5px;
+  padding-bottom: 15px;
 }
 
 .title-texts p {

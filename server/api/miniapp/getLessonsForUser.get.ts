@@ -33,6 +33,7 @@ export default defineEventHandler(async (event) => {
       where: {
         instructorId: employee!.id,
         date: date,
+        status: "ACTUAL",
       },
       include: { group: true, venue: true },
     });
@@ -43,6 +44,7 @@ export default defineEventHandler(async (event) => {
         group: {
           organizationId: orgId,
         },
+        status: "ACTUAL",
       },
       include: { group: true, venue: true },
     });

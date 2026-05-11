@@ -1,6 +1,4 @@
 import { VK, Keyboard } from "vk-io";
-import { format } from "date-fns";
-import { ChangeType } from "~~/prisma/generated/prisma/db1/client";
 const vk = new VK({ token: useRuntimeConfig().vkToken });
 
 const fakeAPI = useFakeAPI();
@@ -58,17 +56,20 @@ export default defineEventHandler(async (event) => {
 
     const newLessonFields = await getLessonFields(lessonId);
 
-    //LOG Перенос занятия на другую дату
-    await createLog(
-      employee!.id,
-      ChangeType.DATE_CHANGE,
-      {
-        ...oldLessonFields,
-      },
-      {
-        ...newLessonFields,
-      },
+    const oldDate = new Date(oldLessonFields.lessonDate!);
+    const utcOldDate = new Date(
+      Date.UTC(oldDate.getFullYear(), oldDate.getMonth(), oldDate.getDate()),
     );
+
+    //LOG Перенос занятия на другую дату
+    await createLog({
+      entityType: "LESSON",
+      entityId: lessonId,
+      employeeId: employee!.id,
+      changeType: "DATE_CHANGE",
+      oldValue: { ...oldLessonFields, change: { date: utcOldDate } },
+      newValue: { ...newLessonFields, change: { date: utcDateObj } },
+    });
 
     await Promise.all([
       new Promise((resolve) => setTimeout(resolve, 2000)),

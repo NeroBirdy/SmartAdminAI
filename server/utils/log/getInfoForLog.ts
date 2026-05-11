@@ -6,9 +6,17 @@ export {
   getEmployeeFields,
   getGroupFields,
   getVenueFields,
+  getFieldsForLog,
 };
 
 const fakeAPI = useFakeAPI();
+const prisma = usePrisma();
+
+async function getOriginalLog(logId: number) {
+  const log = await prisma.log.findFirst({ where: { id: logId } });
+  if (log!.changeType !== "LOG_ROLLBACK") return log!;
+  return getOriginalLog(log!.revertedLogId!);
+}
 
 async function getLessonFields(id: number) {
   const lesson = await fakeAPI.lesson.findUnique({
@@ -23,6 +31,7 @@ async function getLessonFields(id: number) {
     lessonStartTime: lesson?.startTime,
     groupId: lesson?.group.id,
     groupName: lesson?.group.name,
+    lessonStatus: lesson?.status,
   };
 }
 
@@ -64,4 +73,54 @@ async function getVenueFields(id: number) {
   const venue = await fakeAPI.venue.findUnique({ where: { id } });
 
   return { venueId: venue?.id, venueName: venue?.name };
+}
+
+async function getFieldsForLog(id: number) {
+  const log = await prisma.log.findUnique({ where: { id } });
+  if (!log) return {};
+
+  const entityId = log.entityId;
+
+  switch (log.changeType) {
+    case "DATE_CHANGE":
+    case "LESSON_CANCELLATION":
+    case "LESSON_CREATE": {
+      return await getLessonFields(entityId);
+    }
+
+    case "VENUE_CHANGE": {
+      const lessonFields = await getLessonFields(entityId);
+      const lesson = await fakeAPI.lesson.findUnique({
+        where: { id: entityId },
+      });
+      const venueFields = await getVenueFields(lesson!.venueId);
+      return { ...lessonFields, ...venueFields };
+    }
+
+    case "INSTRUCTOR_CHANGE": {
+      const lessonFields = await getLessonFields(entityId);
+      const lesson = await fakeAPI.lesson.findUnique({
+        where: { id: entityId },
+      });
+      const employeeFields = await getEmployeeFields(lesson!.instructorId);
+      return { ...lessonFields, ...employeeFields };
+    }
+
+    case "ASSIGNED_TO_GROUP": {
+      const clientFields = await getClientFields(entityId);
+      const client = await fakeAPI.client.findUnique({
+        where: { id: entityId },
+      });
+      const groupFields = await getGroupFields(client!.groupId);
+      return { ...clientFields, ...groupFields };
+    }
+
+    case "LOG_ROLLBACK": {
+      const originalLog = await getOriginalLog(id);
+      return getFieldsForLog(originalLog.id);
+    }
+
+    default:
+      return {};
+  }
 }

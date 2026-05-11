@@ -1,7 +1,7 @@
 const fakeAPI = useFakeAPI();
 
 import { VK, Keyboard } from "vk-io";
-import { ChangeType } from "~~/prisma/generated/prisma/db1/enums";
+import { LessonStatus } from "~~/prisma/generated/prisma/db2/enums";
 const vk = new VK({ token: useRuntimeConfig().vkToken });
 
 export default defineEventHandler(async (event) => {
@@ -22,19 +22,30 @@ export default defineEventHandler(async (event) => {
       random_id: Date.now(),
     });
 
-    const lessonFields = await getLessonFields(lessonId);
+    const oldLessonFields = await getLessonFields(lessonId);
 
-    await fakeAPI.lesson.delete({ where: { id: lessonId } });
+    await fakeAPI.lesson.update({
+      where: { id: lessonId },
+      data: { status: "DELETED" },
+    });
+
+    const newLessonFields = await getLessonFields(lessonId);
 
     //LOG Отмена занятия
-    await createLog(
-      employee!.id,
-      ChangeType.LESSON_CANCELLATION,
-      {
-        ...lessonFields,
+    await createLog({
+      employeeId: employee!.id,
+      entityType: "LESSON",
+      entityId: lessonId,
+      changeType: "LESSON_CANCELLATION",
+      oldValue: {
+        ...oldLessonFields,
+        change: { status: LessonStatus.ACTUAL },
       },
-      {},
-    );
+      newValue: {
+        ...newLessonFields,
+        change: { status: LessonStatus.DELETED },
+      },
+    });
 
     await Promise.all([
       new Promise((resolve) => setTimeout(resolve, 2000)),

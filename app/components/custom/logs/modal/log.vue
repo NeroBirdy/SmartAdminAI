@@ -1,28 +1,19 @@
 <template>
   <div class="frame log">
     <div class="inside-frame">
-      <div class="log-title">
-        <div class="left">
-          <div class="ellips-wrapper">
-            <div class="ellips"></div>
-          </div>
-          <p class="employee header-sm">{{ getTitle() }}</p>
-        </div>
-        <div class="right">
-          <p class="date main-text-sm">{{ getDate() }}</p>
-          <component
-            :is="arrow"
-            class="arrow"
-            :class="arrowStyle"
-            @click.stop="isOpen = !isOpen"
-          />
-        </div>
-      </div>
+      <custom-logs-modal-log-title
+        :log="log"
+        :isOpen="isOpen"
+        @open="isOpen = !isOpen"
+      />
       <Transition name="slide-down"
         ><div class="content" v-if="isOpen">
           <custom-logs-modal-display
             v-if="log.display.length"
             :display="log.display"
+            :log-id="log.id"
+            :type="log.changeType"
+            :status="log.status"
           />
           <custom-logs-modal-changes
             v-if="log.changes.length"
@@ -34,13 +25,10 @@
 </template>
 
 <script lang="ts" setup>
-import { format } from "date-fns";
-import { formatInTimeZone } from "date-fns-tz";
-import { ru } from "date-fns/locale";
-
-import arrow from "~/assets/icons/chevron_down.svg";
-
-import type { ChangeType } from "~~/prisma/generated/prisma/db1/enums";
+import type {
+  ChangeType,
+  LogStatus,
+} from "~~/prisma/generated/prisma/db1/enums";
 
 type DisplayField = { title: string; text: string };
 type ChangeField = {
@@ -51,6 +39,7 @@ type ChangeField = {
 
 type Log = {
   id: number;
+  status: LogStatus;
   changeType: ChangeType;
   employee: { firstName: string; lastName: string } | null;
   display: DisplayField[];
@@ -61,24 +50,6 @@ type Log = {
 const props = defineProps<{ log: Log }>();
 
 const isOpen = ref(false);
-
-const arrowStyle = computed(() => ({
-  open: isOpen.value,
-}));
-
-function getTitle() {
-  if (props.log.employee) {
-    return props.log.employee.firstName + " " + props.log.employee.lastName;
-  }
-  return "ИИ Ассистент";
-}
-
-function getDate() {
-  const date = format(props.log.createdAt, "dd MMM yyyy, HH:mm", {
-    locale: ru,
-  });
-  return date;
-}
 </script>
 
 <style scoped>
@@ -92,47 +63,6 @@ function getDate() {
 
 .inside-frame {
   padding: 5px;
-}
-
-.log-title {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  min-height: 40px;
-}
-
-.right,
-.left {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.ellips-wrapper {
-  padding-left: 10px;
-  padding-right: 15px;
-}
-
-.ellips {
-  height: 10px;
-  width: 10px;
-  border-radius: 50%;
-  background-color: #4983e7;
-}
-
-.arrow {
-  transition: transform 0.3s ease;
-  cursor: pointer;
-  margin-right: 5px;
-  margin-left: 5px;
-}
-
-.arrow.open {
-  transform: rotate(180deg);
-}
-
-.arrow :deep(path) {
-  stroke: #4983e7;
 }
 
 .content {

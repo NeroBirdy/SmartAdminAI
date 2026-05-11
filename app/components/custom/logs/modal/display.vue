@@ -6,12 +6,37 @@
         :key="item.title"
         :display="item"
       />
+      <custom-logs-modal-revert
+        v-if="revertFor.includes(type)"
+        :status="status"
+        :log-id="logId"
+      />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-const props = defineProps<{ display: { title: string; text: string }[] }>();
+import type {
+  ChangeType,
+  LogStatus,
+} from "~~/prisma/generated/prisma/db1/enums";
+
+const props = defineProps<{
+  display: { title: string; text: string }[];
+  logId: number;
+  type: ChangeType;
+  status: LogStatus;
+}>();
+
+const revertFor = [
+  "DATE_CHANGE",
+  "VENUE_CHANGE",
+  "INSTRUCTOR_CHANGE",
+  "LESSON_CREATE",
+  "LESSON_CANCELLATION",
+  "ASSIGNED_TO_GROUP",
+  "LOG_ROLLBACK",
+];
 </script>
 
 <style scoped>

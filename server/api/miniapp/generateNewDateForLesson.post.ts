@@ -74,7 +74,7 @@ export default defineEventHandler(async (event) => {
     where: {
       instructorId: instructor?.id,
       venueId: venue?.id,
-
+      status: "ACTUAL",
       date: {
         gte: tomorrow,
         lt: endDate,
