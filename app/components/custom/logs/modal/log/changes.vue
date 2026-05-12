@@ -1,7 +1,7 @@
 <template>
   <div class="changes">
     <p class="main-text-sm">Изменение</p>
-    <custom-logs-modal-change-field
+    <custom-logs-modal-log-change-field
       v-for="item in changes"
       :key="item.title"
       :change="item"

@@ -13,6 +13,7 @@ type JsonNullable = Prisma.InputJsonValue | Prisma.NullableJsonNullValueInput;
 type CreateLogParams = {
   employeeId?: number | null;
   changeType: ChangeType;
+  originalChangeType?: ChangeType | null;
   entityType: EntityType;
   entityId: number;
   oldValue?: JsonNullable;
@@ -23,6 +24,7 @@ type CreateLogParams = {
 async function createLog({
   employeeId = null,
   changeType,
+  originalChangeType = null,
   entityType,
   entityId,
   oldValue = Prisma.JsonNull,
@@ -34,11 +36,12 @@ async function createLog({
       status: "ACTIVE",
       employeeId,
       changeType,
+      originalChangeType,
       entityType,
       entityId,
       oldValue,
       newValue,
-      revertedLogId
+      revertedLogId,
     },
   });
 }

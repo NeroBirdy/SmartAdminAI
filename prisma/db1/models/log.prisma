@@ -5,6 +5,7 @@ model Log {
   status LogStatus @default(ACTIVE)
   employeeId Int?
   changeType ChangeType
+  originalChangeType ChangeType?
   oldValue   Json? 
   newValue   Json?
   createdAt  DateTime   @default(now())

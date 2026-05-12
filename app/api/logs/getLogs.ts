@@ -1,8 +1,11 @@
 import type { ChangeType } from "~~/prisma/generated/prisma/db1/enums";
 
-export const getLogs = async (type: ChangeType) => {
+export const getLogs = async (
+  type: ChangeType,
+  chosenCategories: ChangeType[],
+) => {
   return await $fetch("/api/logs/getLogsByType", {
     method: "GET",
-    query: { type: type },
+    query: { type, chosenCategories },
   });
 };

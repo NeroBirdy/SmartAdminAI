@@ -12,12 +12,6 @@ export {
 const fakeAPI = useFakeAPI();
 const prisma = usePrisma();
 
-async function getOriginalLog(logId: number) {
-  const log = await prisma.log.findFirst({ where: { id: logId } });
-  if (log!.changeType !== "LOG_ROLLBACK") return log!;
-  return getOriginalLog(log!.revertedLogId!);
-}
-
 async function getLessonFields(id: number) {
   const lesson = await fakeAPI.lesson.findUnique({
     where: { id: id },
@@ -81,7 +75,10 @@ async function getFieldsForLog(id: number) {
 
   const entityId = log.entityId;
 
-  switch (log.changeType) {
+  const type =
+    log.changeType !== "LOG_ROLLBACK" ? log.changeType : log.originalChangeType;
+
+  switch (type) {
     case "DATE_CHANGE":
     case "LESSON_CANCELLATION":
     case "LESSON_CREATE": {
@@ -113,11 +110,6 @@ async function getFieldsForLog(id: number) {
       });
       const groupFields = await getGroupFields(client!.groupId);
       return { ...clientFields, ...groupFields };
-    }
-
-    case "LOG_ROLLBACK": {
-      const originalLog = await getOriginalLog(id);
-      return getFieldsForLog(originalLog.id);
     }
 
     default:

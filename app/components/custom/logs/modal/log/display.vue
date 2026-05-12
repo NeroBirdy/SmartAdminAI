@@ -1,12 +1,12 @@
 <template>
   <div class="display">
     <div class="inside-display">
-      <custom-logs-modal-display-field
+      <custom-logs-modal-log-display-field
         v-for="item in display"
         :key="item.title"
         :display="item"
       />
-      <custom-logs-modal-revert
+      <custom-logs-modal-log-revert
         v-if="revertFor.includes(type)"
         :status="status"
         :log-id="logId"

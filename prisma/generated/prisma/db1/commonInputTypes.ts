@@ -98,6 +98,13 @@ export type EnumChangeTypeFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumChangeTypeFilter<$PrismaModel> | $Enums.ChangeType
 }
 
+export type EnumChangeTypeNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.ChangeType | Prisma.EnumChangeTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.ChangeType[] | null
+  notIn?: $Enums.ChangeType[] | null
+  not?: Prisma.NestedEnumChangeTypeNullableFilter<$PrismaModel> | $Enums.ChangeType | null
+}
+
 export type JsonNullableFilter<$PrismaModel = never> =
 | Prisma.PatchUndefined<
     Prisma.Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
@@ -171,6 +178,16 @@ export type EnumChangeTypeWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumChangeTypeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumChangeTypeFilter<$PrismaModel>
+}
+
+export type EnumChangeTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ChangeType | Prisma.EnumChangeTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.ChangeType[] | null
+  notIn?: $Enums.ChangeType[] | null
+  not?: Prisma.NestedEnumChangeTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.ChangeType | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumChangeTypeNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumChangeTypeNullableFilter<$PrismaModel>
 }
 
 export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
@@ -416,6 +433,13 @@ export type NestedEnumChangeTypeFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumChangeTypeFilter<$PrismaModel> | $Enums.ChangeType
 }
 
+export type NestedEnumChangeTypeNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.ChangeType | Prisma.EnumChangeTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.ChangeType[] | null
+  notIn?: $Enums.ChangeType[] | null
+  not?: Prisma.NestedEnumChangeTypeNullableFilter<$PrismaModel> | $Enums.ChangeType | null
+}
+
 export type NestedEnumEntityTypeWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.EntityType | Prisma.EnumEntityTypeFieldRefInput<$PrismaModel>
   in?: $Enums.EntityType[]
@@ -471,6 +495,16 @@ export type NestedEnumChangeTypeWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumChangeTypeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumChangeTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumChangeTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ChangeType | Prisma.EnumChangeTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.ChangeType[] | null
+  notIn?: $Enums.ChangeType[] | null
+  not?: Prisma.NestedEnumChangeTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.ChangeType | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumChangeTypeNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumChangeTypeNullableFilter<$PrismaModel>
 }
 
 export type NestedJsonNullableFilter<$PrismaModel = never> =

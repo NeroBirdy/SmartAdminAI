@@ -8,14 +8,14 @@
       />
       <Transition name="slide-down"
         ><div class="content" v-if="isOpen">
-          <custom-logs-modal-display
+          <custom-logs-modal-log-display
             v-if="log.display.length"
             :display="log.display"
             :log-id="log.id"
             :type="log.changeType"
             :status="log.status"
           />
-          <custom-logs-modal-changes
+          <custom-logs-modal-log-changes
             v-if="log.changes.length"
             :changes="log.changes"
           /></div

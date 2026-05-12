@@ -73,6 +73,8 @@ const extendedStyle = computed(() => ({
   extended: logs.value.length > 10,
 }));
 
+const { choosenCategories } = useLogsFilters();
+
 const titles: Record<ChangeType, string> = {
   DATE_CHANGE: "Перенос даты",
   VENUE_CHANGE: "Смена площадки",
@@ -109,8 +111,36 @@ async function onRevert() {
   showCustomToast("success", "Действие было успешно отмененно", "");
 }
 
+async function fetchLogs() {
+  isLoading.value = true;
+  const categories: ChangeType[] = !choosenCategories.value.length
+    ? [
+        "ASSIGNED_TO_GROUP",
+        "DATE_CHANGE",
+        "INSTRUCTOR_CHANGE",
+        "LESSON_CANCELLATION",
+        "LESSON_CREATE",
+        "VENUE_CHANGE",
+      ]
+    : choosenCategories.value;
+
+  logs.value = await getLogs(props.type, categories);
+  setTimeout(() => {
+    isLoading.value = false;
+  }, 500);
+}
+
+watch(
+  choosenCategories,
+  async (newVal) => {
+    console.log("choosenCategories changed:", newVal);
+    await fetchLogs();
+  },
+  { deep: true },
+);
+
 onMounted(async () => {
-  logs.value = await getLogs(props.type);
+  await fetchLogs();
   setTimeout(() => {
     isLoading.value = false;
   }, 500);

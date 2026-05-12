@@ -46,8 +46,13 @@ export default defineEventHandler(async (event) => {
 
   const fields = await getFieldsForLog(logId);
 
+  //LOG Откат
   await createLog({
     changeType: "LOG_ROLLBACK",
+    originalChangeType:
+      log.changeType != "LOG_ROLLBACK"
+        ? log.changeType
+        : log.originalChangeType,
     entityType: log.entityType,
     entityId: entityId,
     revertedLogId: logId,

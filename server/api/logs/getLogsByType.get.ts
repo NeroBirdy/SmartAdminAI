@@ -127,19 +127,40 @@ const builders: Partial<Record<ChangeType, Builder>> = {
 
 export default defineEventHandler(async (event) => {
   const query = getQuery(event);
+
   const type = query.type as ChangeType;
+  const chosenCategories = (
+    Array.isArray(query.chosenCategories)
+      ? query.chosenCategories
+      : [query.chosenCategories]
+  ) as ChangeType[];
 
   const now = new Date();
 
-  const logsDB = await prisma.log.findMany({
-    where: {
-      changeType: type,
-      createdAt: {
-        gte: startOfMonth(now),
-        lte: endOfMonth(now),
+  let logsDB = [];
+
+  if (type === "LOG_ROLLBACK") {
+    logsDB = await prisma.log.findMany({
+      where: {
+        changeType: type,
+        originalChangeType: { in: chosenCategories },
+        createdAt: {
+          gte: startOfMonth(now),
+          lte: endOfMonth(now),
+        },
       },
-    },
-  });
+    });
+  } else {
+    logsDB = await prisma.log.findMany({
+      where: {
+        changeType: type,
+        createdAt: {
+          gte: startOfMonth(now),
+          lte: endOfMonth(now),
+        },
+      },
+    });
+  }
 
   return Promise.all(logsDB.map(buildLog));
 });
@@ -152,16 +173,12 @@ async function buildLog(log: Log): Promise<LogResult> {
   let display: DisplayField[] = [];
   let changes: ChangeField[] = [];
 
-  let originalLog: Log | null = null;
+  const originalChangeType = log.originalChangeType;
 
-  if (log.revertedLogId) {
-    originalLog = await getOriginalLog(log.revertedLogId);
-  }
+  let type =
+    log.changeType === "LOG_ROLLBACK" ? originalChangeType! : log.changeType;
 
-  const resolvedLog =
-    log.changeType === "LOG_ROLLBACK" && originalLog ? originalLog : log;
-
-  const builder = builders[resolvedLog.changeType];
+  const builder = builders[type];
   if (builder) {
     ({ display, changes } = builder(o, n));
   }
@@ -169,7 +186,7 @@ async function buildLog(log: Log): Promise<LogResult> {
   return {
     id: log.id,
     changeType: log.changeType,
-    originalType: originalLog?.changeType ?? null,
+    originalType: log.originalChangeType,
     createdAt: log.createdAt,
     status: log.status,
     employee,
@@ -199,10 +216,4 @@ function formatName(v: { firstName: string; lastName: string }) {
 async function getEmployee(id: number) {
   const employee = await fakeAPI.employee.findUnique({ where: { id } });
   return { firstName: employee!.firstName, lastName: employee!.lastName };
-}
-
-async function getOriginalLog(logId: number): Promise<Log> {
-  const log = await prisma.log.findFirst({ where: { id: logId } });
-  if (log!.changeType !== "LOG_ROLLBACK") return log!;
-  return getOriginalLog(log!.revertedLogId!);
 }

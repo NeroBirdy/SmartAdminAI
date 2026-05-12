@@ -4,6 +4,7 @@
       <h1 class="header-md">{{ title }}</h1>
       <component class="icon" :is="closeIcon" @click.stop="emit('close')" />
     </div>
+    <custom-logs-modal-title-filter-categories />
   </div>
 </template>
 

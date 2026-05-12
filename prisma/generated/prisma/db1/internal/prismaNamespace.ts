@@ -1530,6 +1530,7 @@ export const LogScalarFieldEnum = {
   status: 'status',
   employeeId: 'employeeId',
   changeType: 'changeType',
+  originalChangeType: 'originalChangeType',
   oldValue: 'oldValue',
   newValue: 'newValue',
   createdAt: 'createdAt',

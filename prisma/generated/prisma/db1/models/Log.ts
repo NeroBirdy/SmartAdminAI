@@ -47,6 +47,7 @@ export type LogMinAggregateOutputType = {
   status: $Enums.LogStatus | null
   employeeId: number | null
   changeType: $Enums.ChangeType | null
+  originalChangeType: $Enums.ChangeType | null
   createdAt: Date | null
   revertedLogId: number | null
 }
@@ -58,6 +59,7 @@ export type LogMaxAggregateOutputType = {
   status: $Enums.LogStatus | null
   employeeId: number | null
   changeType: $Enums.ChangeType | null
+  originalChangeType: $Enums.ChangeType | null
   createdAt: Date | null
   revertedLogId: number | null
 }
@@ -69,6 +71,7 @@ export type LogCountAggregateOutputType = {
   status: number
   employeeId: number
   changeType: number
+  originalChangeType: number
   oldValue: number
   newValue: number
   createdAt: number
@@ -98,6 +101,7 @@ export type LogMinAggregateInputType = {
   status?: true
   employeeId?: true
   changeType?: true
+  originalChangeType?: true
   createdAt?: true
   revertedLogId?: true
 }
@@ -109,6 +113,7 @@ export type LogMaxAggregateInputType = {
   status?: true
   employeeId?: true
   changeType?: true
+  originalChangeType?: true
   createdAt?: true
   revertedLogId?: true
 }
@@ -120,6 +125,7 @@ export type LogCountAggregateInputType = {
   status?: true
   employeeId?: true
   changeType?: true
+  originalChangeType?: true
   oldValue?: true
   newValue?: true
   createdAt?: true
@@ -220,6 +226,7 @@ export type LogGroupByOutputType = {
   status: $Enums.LogStatus
   employeeId: number | null
   changeType: $Enums.ChangeType
+  originalChangeType: $Enums.ChangeType | null
   oldValue: runtime.JsonValue | null
   newValue: runtime.JsonValue | null
   createdAt: Date
@@ -256,6 +263,7 @@ export type LogWhereInput = {
   status?: Prisma.EnumLogStatusFilter<"Log"> | $Enums.LogStatus
   employeeId?: Prisma.IntNullableFilter<"Log"> | number | null
   changeType?: Prisma.EnumChangeTypeFilter<"Log"> | $Enums.ChangeType
+  originalChangeType?: Prisma.EnumChangeTypeNullableFilter<"Log"> | $Enums.ChangeType | null
   oldValue?: Prisma.JsonNullableFilter<"Log">
   newValue?: Prisma.JsonNullableFilter<"Log">
   createdAt?: Prisma.DateTimeFilter<"Log"> | Date | string
@@ -271,6 +279,7 @@ export type LogOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   employeeId?: Prisma.SortOrderInput | Prisma.SortOrder
   changeType?: Prisma.SortOrder
+  originalChangeType?: Prisma.SortOrderInput | Prisma.SortOrder
   oldValue?: Prisma.SortOrderInput | Prisma.SortOrder
   newValue?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -289,6 +298,7 @@ export type LogWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumLogStatusFilter<"Log"> | $Enums.LogStatus
   employeeId?: Prisma.IntNullableFilter<"Log"> | number | null
   changeType?: Prisma.EnumChangeTypeFilter<"Log"> | $Enums.ChangeType
+  originalChangeType?: Prisma.EnumChangeTypeNullableFilter<"Log"> | $Enums.ChangeType | null
   oldValue?: Prisma.JsonNullableFilter<"Log">
   newValue?: Prisma.JsonNullableFilter<"Log">
   createdAt?: Prisma.DateTimeFilter<"Log"> | Date | string
@@ -304,6 +314,7 @@ export type LogOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   employeeId?: Prisma.SortOrderInput | Prisma.SortOrder
   changeType?: Prisma.SortOrder
+  originalChangeType?: Prisma.SortOrderInput | Prisma.SortOrder
   oldValue?: Prisma.SortOrderInput | Prisma.SortOrder
   newValue?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -325,6 +336,7 @@ export type LogScalarWhereWithAggregatesInput = {
   status?: Prisma.EnumLogStatusWithAggregatesFilter<"Log"> | $Enums.LogStatus
   employeeId?: Prisma.IntNullableWithAggregatesFilter<"Log"> | number | null
   changeType?: Prisma.EnumChangeTypeWithAggregatesFilter<"Log"> | $Enums.ChangeType
+  originalChangeType?: Prisma.EnumChangeTypeNullableWithAggregatesFilter<"Log"> | $Enums.ChangeType | null
   oldValue?: Prisma.JsonNullableWithAggregatesFilter<"Log">
   newValue?: Prisma.JsonNullableWithAggregatesFilter<"Log">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Log"> | Date | string
@@ -337,6 +349,7 @@ export type LogCreateInput = {
   status?: $Enums.LogStatus
   employeeId?: number | null
   changeType: $Enums.ChangeType
+  originalChangeType?: $Enums.ChangeType | null
   oldValue?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   newValue?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -351,6 +364,7 @@ export type LogUncheckedCreateInput = {
   status?: $Enums.LogStatus
   employeeId?: number | null
   changeType: $Enums.ChangeType
+  originalChangeType?: $Enums.ChangeType | null
   oldValue?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   newValue?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -364,6 +378,7 @@ export type LogUpdateInput = {
   status?: Prisma.EnumLogStatusFieldUpdateOperationsInput | $Enums.LogStatus
   employeeId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   changeType?: Prisma.EnumChangeTypeFieldUpdateOperationsInput | $Enums.ChangeType
+  originalChangeType?: Prisma.NullableEnumChangeTypeFieldUpdateOperationsInput | $Enums.ChangeType | null
   oldValue?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   newValue?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -378,6 +393,7 @@ export type LogUncheckedUpdateInput = {
   status?: Prisma.EnumLogStatusFieldUpdateOperationsInput | $Enums.LogStatus
   employeeId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   changeType?: Prisma.EnumChangeTypeFieldUpdateOperationsInput | $Enums.ChangeType
+  originalChangeType?: Prisma.NullableEnumChangeTypeFieldUpdateOperationsInput | $Enums.ChangeType | null
   oldValue?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   newValue?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -392,6 +408,7 @@ export type LogCreateManyInput = {
   status?: $Enums.LogStatus
   employeeId?: number | null
   changeType: $Enums.ChangeType
+  originalChangeType?: $Enums.ChangeType | null
   oldValue?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   newValue?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -404,6 +421,7 @@ export type LogUpdateManyMutationInput = {
   status?: Prisma.EnumLogStatusFieldUpdateOperationsInput | $Enums.LogStatus
   employeeId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   changeType?: Prisma.EnumChangeTypeFieldUpdateOperationsInput | $Enums.ChangeType
+  originalChangeType?: Prisma.NullableEnumChangeTypeFieldUpdateOperationsInput | $Enums.ChangeType | null
   oldValue?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   newValue?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -416,6 +434,7 @@ export type LogUncheckedUpdateManyInput = {
   status?: Prisma.EnumLogStatusFieldUpdateOperationsInput | $Enums.LogStatus
   employeeId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   changeType?: Prisma.EnumChangeTypeFieldUpdateOperationsInput | $Enums.ChangeType
+  originalChangeType?: Prisma.NullableEnumChangeTypeFieldUpdateOperationsInput | $Enums.ChangeType | null
   oldValue?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   newValue?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -444,6 +463,7 @@ export type LogCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   employeeId?: Prisma.SortOrder
   changeType?: Prisma.SortOrder
+  originalChangeType?: Prisma.SortOrder
   oldValue?: Prisma.SortOrder
   newValue?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -464,6 +484,7 @@ export type LogMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   employeeId?: Prisma.SortOrder
   changeType?: Prisma.SortOrder
+  originalChangeType?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   revertedLogId?: Prisma.SortOrder
 }
@@ -475,6 +496,7 @@ export type LogMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   employeeId?: Prisma.SortOrder
   changeType?: Prisma.SortOrder
+  originalChangeType?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   revertedLogId?: Prisma.SortOrder
 }
@@ -526,6 +548,10 @@ export type EnumChangeTypeFieldUpdateOperationsInput = {
   set?: $Enums.ChangeType
 }
 
+export type NullableEnumChangeTypeFieldUpdateOperationsInput = {
+  set?: $Enums.ChangeType | null
+}
+
 export type LogUpdateOneWithoutRevertLogsNestedInput = {
   create?: Prisma.XOR<Prisma.LogCreateWithoutRevertLogsInput, Prisma.LogUncheckedCreateWithoutRevertLogsInput>
   connectOrCreate?: Prisma.LogCreateOrConnectWithoutRevertLogsInput
@@ -570,6 +596,7 @@ export type LogCreateWithoutRevertLogsInput = {
   status?: $Enums.LogStatus
   employeeId?: number | null
   changeType: $Enums.ChangeType
+  originalChangeType?: $Enums.ChangeType | null
   oldValue?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   newValue?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -583,6 +610,7 @@ export type LogUncheckedCreateWithoutRevertLogsInput = {
   status?: $Enums.LogStatus
   employeeId?: number | null
   changeType: $Enums.ChangeType
+  originalChangeType?: $Enums.ChangeType | null
   oldValue?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   newValue?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -600,6 +628,7 @@ export type LogCreateWithoutRevertedLogInput = {
   status?: $Enums.LogStatus
   employeeId?: number | null
   changeType: $Enums.ChangeType
+  originalChangeType?: $Enums.ChangeType | null
   oldValue?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   newValue?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -613,6 +642,7 @@ export type LogUncheckedCreateWithoutRevertedLogInput = {
   status?: $Enums.LogStatus
   employeeId?: number | null
   changeType: $Enums.ChangeType
+  originalChangeType?: $Enums.ChangeType | null
   oldValue?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   newValue?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -646,6 +676,7 @@ export type LogUpdateWithoutRevertLogsInput = {
   status?: Prisma.EnumLogStatusFieldUpdateOperationsInput | $Enums.LogStatus
   employeeId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   changeType?: Prisma.EnumChangeTypeFieldUpdateOperationsInput | $Enums.ChangeType
+  originalChangeType?: Prisma.NullableEnumChangeTypeFieldUpdateOperationsInput | $Enums.ChangeType | null
   oldValue?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   newValue?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -659,6 +690,7 @@ export type LogUncheckedUpdateWithoutRevertLogsInput = {
   status?: Prisma.EnumLogStatusFieldUpdateOperationsInput | $Enums.LogStatus
   employeeId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   changeType?: Prisma.EnumChangeTypeFieldUpdateOperationsInput | $Enums.ChangeType
+  originalChangeType?: Prisma.NullableEnumChangeTypeFieldUpdateOperationsInput | $Enums.ChangeType | null
   oldValue?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   newValue?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -691,6 +723,7 @@ export type LogScalarWhereInput = {
   status?: Prisma.EnumLogStatusFilter<"Log"> | $Enums.LogStatus
   employeeId?: Prisma.IntNullableFilter<"Log"> | number | null
   changeType?: Prisma.EnumChangeTypeFilter<"Log"> | $Enums.ChangeType
+  originalChangeType?: Prisma.EnumChangeTypeNullableFilter<"Log"> | $Enums.ChangeType | null
   oldValue?: Prisma.JsonNullableFilter<"Log">
   newValue?: Prisma.JsonNullableFilter<"Log">
   createdAt?: Prisma.DateTimeFilter<"Log"> | Date | string
@@ -704,6 +737,7 @@ export type LogCreateManyRevertedLogInput = {
   status?: $Enums.LogStatus
   employeeId?: number | null
   changeType: $Enums.ChangeType
+  originalChangeType?: $Enums.ChangeType | null
   oldValue?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   newValue?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -715,6 +749,7 @@ export type LogUpdateWithoutRevertedLogInput = {
   status?: Prisma.EnumLogStatusFieldUpdateOperationsInput | $Enums.LogStatus
   employeeId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   changeType?: Prisma.EnumChangeTypeFieldUpdateOperationsInput | $Enums.ChangeType
+  originalChangeType?: Prisma.NullableEnumChangeTypeFieldUpdateOperationsInput | $Enums.ChangeType | null
   oldValue?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   newValue?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -728,6 +763,7 @@ export type LogUncheckedUpdateWithoutRevertedLogInput = {
   status?: Prisma.EnumLogStatusFieldUpdateOperationsInput | $Enums.LogStatus
   employeeId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   changeType?: Prisma.EnumChangeTypeFieldUpdateOperationsInput | $Enums.ChangeType
+  originalChangeType?: Prisma.NullableEnumChangeTypeFieldUpdateOperationsInput | $Enums.ChangeType | null
   oldValue?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   newValue?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -741,6 +777,7 @@ export type LogUncheckedUpdateManyWithoutRevertedLogInput = {
   status?: Prisma.EnumLogStatusFieldUpdateOperationsInput | $Enums.LogStatus
   employeeId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   changeType?: Prisma.EnumChangeTypeFieldUpdateOperationsInput | $Enums.ChangeType
+  originalChangeType?: Prisma.NullableEnumChangeTypeFieldUpdateOperationsInput | $Enums.ChangeType | null
   oldValue?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   newValue?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -784,6 +821,7 @@ export type LogSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
   status?: boolean
   employeeId?: boolean
   changeType?: boolean
+  originalChangeType?: boolean
   oldValue?: boolean
   newValue?: boolean
   createdAt?: boolean
@@ -802,13 +840,14 @@ export type LogSelectScalar = {
   status?: boolean
   employeeId?: boolean
   changeType?: boolean
+  originalChangeType?: boolean
   oldValue?: boolean
   newValue?: boolean
   createdAt?: boolean
   revertedLogId?: boolean
 }
 
-export type LogOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "entityType" | "entityId" | "status" | "employeeId" | "changeType" | "oldValue" | "newValue" | "createdAt" | "revertedLogId", ExtArgs["result"]["log"]>
+export type LogOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "entityType" | "entityId" | "status" | "employeeId" | "changeType" | "originalChangeType" | "oldValue" | "newValue" | "createdAt" | "revertedLogId", ExtArgs["result"]["log"]>
 export type LogInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   revertedLog?: boolean | Prisma.Log$revertedLogArgs<ExtArgs>
   revertLogs?: boolean | Prisma.Log$revertLogsArgs<ExtArgs>
@@ -828,6 +867,7 @@ export type $LogPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
     status: $Enums.LogStatus
     employeeId: number | null
     changeType: $Enums.ChangeType
+    originalChangeType: $Enums.ChangeType | null
     oldValue: runtime.JsonValue | null
     newValue: runtime.JsonValue | null
     createdAt: Date
@@ -1209,6 +1249,7 @@ export interface LogFieldRefs {
   readonly status: Prisma.FieldRef<"Log", 'LogStatus'>
   readonly employeeId: Prisma.FieldRef<"Log", 'Int'>
   readonly changeType: Prisma.FieldRef<"Log", 'ChangeType'>
+  readonly originalChangeType: Prisma.FieldRef<"Log", 'ChangeType'>
   readonly oldValue: Prisma.FieldRef<"Log", 'Json'>
   readonly newValue: Prisma.FieldRef<"Log", 'Json'>
   readonly createdAt: Prisma.FieldRef<"Log", 'DateTime'>
