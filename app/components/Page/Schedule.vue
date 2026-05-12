@@ -2,10 +2,31 @@
   <div class="frame">
     <h1 class="frame-header header-md">Результаты</h1>
     <div class="inside-frame row">
-      <ui-result-card title="Создано занятий" type="LESSON_CREATE" />
-      <ui-result-card title="Перенесено занятий" type="DATE_CHANGE" />
-      <ui-result-card title="Отменено занятий" type="LESSON_CANCELLATION" />
-      <ui-result-card title="Смена помещений" type="VENUE_CHANGE" />
+      <ui-result-card
+        title="Создано занятий"
+        type="LESSON_CREATE"
+        :width="width"
+      />
+      <ui-result-card
+        title="Перенесено занятий"
+        type="DATE_CHANGE"
+        :width="width"
+      />
+      <ui-result-card
+        title="Отменено занятий"
+        type="LESSON_CANCELLATION"
+        :width="width"
+      />
+      <ui-result-card
+        title="Смена помещений"
+        type="VENUE_CHANGE"
+        :width="width"
+      />
+      <ui-result-card
+        title="Откат логов"
+        type="LOG_ROLLBACK"
+        :width="width"
+      />
     </div>
   </div>
   <div class="frame">
@@ -16,6 +37,9 @@
     </div>
   </div>
 </template>
+<script lang="ts" setup>
+const width = "300px";
+</script>
 <style scoped>
 .frame {
   margin-top: 10px;

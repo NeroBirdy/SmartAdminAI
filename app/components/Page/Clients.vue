@@ -10,7 +10,6 @@
         title="Распределено клиентов в группу"
         type="ASSIGNED_TO_GROUP"
       />
-      <ui-result-card title="Откат логов" type="LOG_ROLLBACK" />
       <ui-result-card title="Консультаций клиентов" type="QUESTION_ANSWER" />
     </div>
   </div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="filter">
+  <div class="filter" ref="filterRef">
     <p class="filter-title header-sm">Фильтр по категориям</p>
     <div class="categories">
       <template v-for="(category, type) in categories" :key="type">
@@ -16,6 +16,7 @@
 </template>
 
 <script lang="ts" setup>
+import { onClickOutside } from "@vueuse/core";
 import { ChangeType } from "~~/prisma/generated/prisma/db1/enums";
 
 type CategoryConfig = {
@@ -32,7 +33,24 @@ const categories: Partial<Record<ChangeType, CategoryConfig>> = {
   VENUE_CHANGE: { color: "#f97316", title: "Смена площадки" },
 };
 
-const { choosenCategories } = useLogsFilters();
+const { choosenCategories, categoryFilterOpen } = useLogsFilters();
+
+const filterRef = useTemplateRef("filterRef");
+
+onClickOutside(
+  filterRef,
+  () => {
+    categoryFilterOpen.value = false;
+  },
+  {
+    ignore: [
+      ".filter-title",
+      ".separator-button",
+      ".categories",
+      ".filter-title-category",
+    ],
+  },
+);
 
 function deleteFilters() {
   choosenCategories.value = [];
@@ -42,7 +60,8 @@ function deleteFilters() {
 <style scoped>
 .filter {
   position: absolute;
-  top: 80px;
+  left: 28px;
+  top: 90px;
   display: flex;
   flex-direction: column;
   z-index: 1;

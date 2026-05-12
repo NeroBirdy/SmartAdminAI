@@ -27,23 +27,22 @@
           />
         </div>
       </Transition>
-
-      <Transition name="fade">
-        <div
-          class="confirm-overlay"
-          v-if="confirmDeleteOpen"
-          @click.stop="toggleConfirmDelete"
-        />
-      </Transition>
-      <Transition name="confirm">
-        <div v-if="confirmDeleteOpen" class="confirm-wrapper">
-          <CustomSettingsModalConfirmDelete
-            @close="toggleConfirmDelete"
-            @delete="deleteSchedule"
-          />
-        </div>
-      </Transition>
     </div>
+    <Transition name="fade">
+      <div
+        class="confirm-overlay"
+        v-if="confirmDeleteOpen"
+        @click.stop="toggleConfirmDelete"
+      />
+    </Transition>
+    <Transition name="confirm">
+      <div v-if="confirmDeleteOpen" class="confirm-wrapper">
+        <CustomSettingsModalConfirmDelete
+          @close="toggleConfirmDelete"
+          @delete="deleteSchedule"
+        />
+      </div>
+    </Transition>
   </div>
 </template>
 <script lang="ts" setup>
@@ -198,7 +197,6 @@ const deleteSchedule = async () => {
   width: 475px;
   margin: 0 !important;
   z-index: 2;
-  will-change: transform;
 }
 
 .loader-wrapper {
@@ -281,6 +279,7 @@ const deleteSchedule = async () => {
   justify-content: center;
   z-index: 3;
   pointer-events: none;
+  transform: translateZ(0);
 }
 
 .confirm-enter-active,

@@ -19,7 +19,6 @@ const emit = defineEmits<{
   (e: "revert"): void;
   (e: "close"): void;
 }>();
-
 </script>
 
 <style scoped>

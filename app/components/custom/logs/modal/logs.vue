@@ -1,5 +1,5 @@
 <template>
-  <div class="frame setting">
+  <div class="frame logs">
     <CustomLogsModalTitle :title="titles[type]" @close="emit('close')" />
     <div class="inside-frame" :class="extendedStyle">
       <Transition name="fade" mode="out-in">
@@ -150,7 +150,7 @@ provide("openConfirm", openConfirm);
 </script>
 
 <style scoped>
-.setting {
+.logs {
   position: fixed;
   top: 40px;
   left: 50%;
@@ -158,7 +158,6 @@ provide("openConfirm", openConfirm);
   width: 600px;
   margin: 0 !important;
   z-index: 2;
-  will-change: transform;
 }
 
 .loader-wrapper {
@@ -175,13 +174,14 @@ provide("openConfirm", openConfirm);
   justify-content: space-between;
   align-items: center;
   min-height: 678px;
-  max-height: 780px;
+  max-height: 760px;
   transition: min-height 0.3s ease;
   overflow-y: auto;
+  padding-top: 10px;
 }
 
 .inside-frame.extended {
-  min-height: 780px;
+  min-height: 760px;
 }
 
 .inside-frame::-webkit-scrollbar {
@@ -225,6 +225,7 @@ provide("openConfirm", openConfirm);
   justify-content: center;
   z-index: 3;
   pointer-events: none;
+  transform: translateZ(0);
 }
 
 .confirm-enter-active,

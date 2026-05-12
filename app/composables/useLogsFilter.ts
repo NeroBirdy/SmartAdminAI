@@ -6,7 +6,19 @@ export const useLogsFilters = () => {
     () => [],
   );
 
+  const categoryFilterOpen = useState(
+    "category-filter-open",
+    () => false,
+  );
+
+  const dateFilterOpen = useState(
+    "date-filter-open",
+    () => false,
+  );
+
   return {
     choosenCategories,
+    categoryFilterOpen,
+    dateFilterOpen,
   };
 };

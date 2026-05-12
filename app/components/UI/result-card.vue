@@ -1,5 +1,10 @@
 <template>
-  <div class="frame second-frame-results">
+  <div
+    class="frame second-frame-results"
+    :class="disabledClass"
+    :style="frameStyle"
+    @click="isModalOpen = true"
+  >
     <div class="inside-frame">
       <Transition name="fade" mode="out-in">
         <div class="loader-wrapper" v-if="isLoading" key="loader">
@@ -8,11 +13,6 @@
         <div v-else key="content">
           <div class="second-frame-up">
             <p class="second-frame-text main-text-sm">{{ title }}</p>
-            <component
-              class="second-frame-img"
-              :is="ellipsisImg"
-              @click="isModalOpen = true"
-            />
           </div>
           <h1 class="second-frame-header-text header-2xl">{{ count }}</h1>
         </div>
@@ -28,17 +28,25 @@
 
 <script lang="ts" setup>
 import { getCount } from "~/api/logs/getCount";
-import ellipsisImg from "~/assets/icons/ellipsis.svg";
 import type { ChangeType } from "~~/prisma/generated/prisma/db1/enums";
 
 const props = defineProps<{
   title: string;
   type: ChangeType;
+  width?: string;
 }>();
 
 const isLoading = ref(true);
 const isModalOpen = ref(false);
 const count = ref(0);
+
+const frameStyle = computed(() => ({
+  width: props.width ?? "300px",
+}));
+
+const disabledClass = computed(() => ({
+  disabled: count.value === 0,
+}));
 
 onMounted(async () => {
   count.value = await getCount(props.type);
@@ -51,10 +59,14 @@ onMounted(async () => {
 <style scoped>
 .frame {
   margin-top: 10px;
+  cursor: pointer;
+}
+
+.frame.disabled {
+  pointer-events: none;
 }
 
 .second-frame-results {
-  width: 310px;
   height: 110px;
   margin-right: 15px;
 }

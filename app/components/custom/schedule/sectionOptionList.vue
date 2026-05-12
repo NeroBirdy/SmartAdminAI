@@ -87,6 +87,7 @@ const deleteHandler = async (id: number) => {
 
 .remove-img {
   overflow: visible;
+  cursor: pointer;
 }
 
 .tag-enter-active,
