@@ -1,24 +1,24 @@
 model Lesson {
-  id           Int      @id @default(autoincrement())
-  date         DateTime @db2.Date
-  startTime    DateTime @db2.Time
-  endTime      DateTime @db2.Time
-  groupId      Int
-  instructorId Int
-  programId    Int
-  venueId      Int
+  id                Int          @id @default(autoincrement())
+  date              DateTime     @db2.Date
+  startTime         DateTime     @db2.Time
+  endTime           DateTime     @db2.Time
+  groupId           Int
+  instructorId      Int
+  programId         Int
+  venueId           Int
   employeeProgramId Int?
-  status LessonStatus @default(ACTUAL)
+  status            LessonStatus @default(ACTUAL)
 
-  group             Group            @relation(fields: [groupId], references: [id])
-  instructor        Employee         @relation(fields: [instructorId], references: [id])
-  program           Program          @relation(fields: [programId], references: [id])
-  venue             Venue            @relation(fields: [venueId], references: [id])
-  schedules         Schedule[]
-  employeeProgram   EmployeeProgram? @relation(fields: [employeeProgramId], references: [id])
+  group           Group            @relation(fields: [groupId], references: [id])
+  instructor      Employee         @relation(fields: [instructorId], references: [id])
+  program         Program          @relation(fields: [programId], references: [id])
+  venue           Venue            @relation(fields: [venueId], references: [id])
+  schedules       Schedule[]
+  employeeProgram EmployeeProgram? @relation(fields: [employeeProgramId], references: [id])
 }
 
-  enum LessonStatus {
-    ACTUAL
-    DELETED
-  }
+enum LessonStatus {
+  ACTUAL
+  DELETED
+}
