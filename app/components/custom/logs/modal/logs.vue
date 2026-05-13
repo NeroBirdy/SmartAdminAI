@@ -73,7 +73,8 @@ const extendedStyle = computed(() => ({
   extended: logs.value.length > 10,
 }));
 
-const { choosenCategories } = useLogsFilters();
+const { choosenCategories, selectedStart, selectedEnd, startDate, endDate } =
+  useLogsFilters();
 
 const titles: Record<ChangeType, string> = {
   DATE_CHANGE: "Перенос даты",
@@ -124,16 +125,34 @@ async function fetchLogs() {
       ]
     : choosenCategories.value;
 
-  logs.value = await getLogs(props.type, categories);
+  logs.value = await getLogs(
+    props.type,
+    categories,
+    startDate.value ? String(startDate.value) : null,
+    endDate.value ? String(endDate.value) : null,
+  );
   setTimeout(() => {
     isLoading.value = false;
   }, 500);
 }
 
+onMounted(() => {
+  startDate.value = null;
+  endDate.value = null;
+  choosenCategories.value = [];
+});
+
 watch(
   choosenCategories,
-  async (newVal) => {
-    console.log("choosenCategories changed:", newVal);
+  async () => {
+    await fetchLogs();
+  },
+  { deep: true },
+);
+
+watch(
+  [startDate, endDate],
+  async () => {
     await fetchLogs();
   },
   { deep: true },
