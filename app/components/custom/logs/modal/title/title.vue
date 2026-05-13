@@ -16,8 +16,11 @@
     </div>
   </div>
   <Transition name="fade">
-    <custom-logs-modal-title-filter-categories v-if="categoryFilterOpen"
-  /></Transition>
+    <custom-logs-modal-title-filter-categories v-if="categoryFilterOpen" />
+  </Transition>
+  <Transition name="fade">
+    <custom-logs-modal-title-filter-date v-if="dateFilterOpen" />
+  </Transition>
 </template>
 
 <script lang="ts" setup>

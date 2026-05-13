@@ -137,6 +137,29 @@ export default defineEventHandler(async (event) => {
 
   const now = new Date();
 
+  let startDate: Date;
+  let endDate: Date;
+
+  if (query.startDate && query.endDate) {
+    startDate = new Date(query.startDate as string);
+    startDate.setHours(0, 0, 0, 0);
+    endDate = new Date(query.endDate as string);
+    endDate.setHours(23, 59, 59, 999);
+  } else if (query.startDate) {
+    startDate = new Date(query.startDate as string);
+    startDate.setHours(0, 0, 0, 0);
+    endDate = new Date(query.startDate as string);
+    endDate.setHours(23, 59, 59, 999);
+  } else {
+    startDate = startOfMonth(now);
+    endDate = endOfMonth(now);
+  }
+
+  const dateFilter = {
+    gte: startDate,
+    lte: endDate,
+  };
+
   let logsDB = [];
 
   if (type === "LOG_ROLLBACK") {
@@ -144,20 +167,14 @@ export default defineEventHandler(async (event) => {
       where: {
         changeType: type,
         originalChangeType: { in: chosenCategories },
-        createdAt: {
-          gte: startOfMonth(now),
-          lte: endOfMonth(now),
-        },
+        createdAt: dateFilter,
       },
     });
   } else {
     logsDB = await prisma.log.findMany({
       where: {
         changeType: type,
-        createdAt: {
-          gte: startOfMonth(now),
-          lte: endOfMonth(now),
-        },
+        createdAt: dateFilter,
       },
     });
   }
