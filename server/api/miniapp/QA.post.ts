@@ -27,6 +27,7 @@ export default defineEventHandler(async (event) => {
   const question = body.question;
 
   const user = await getUser({ peerId: userId });
+  const client = await getClient(user?.key!);
 
   let prompt = `Данные клиента:\n`;
   prompt += `${JSON.stringify(await getClientInfo(user?.key!), null, 2)} \n\n`;
@@ -36,8 +37,19 @@ export default defineEventHandler(async (event) => {
 
   prompt += `Вопрос:\n`;
   prompt += `${question}`;
+  const answer = await sendRequest(prompt, question);
 
-  return await sendRequest(prompt);
+  const clientFields = await getClientFields(client!.id);
+
+  //LOG Вопрос Ответ
+  await createLog({
+    entityType: "CLIENT",
+    entityId: client!.id,
+    changeType: "QUESTION_ANSWER",
+    newValue: { ...clientFields, question: question, answer: answer },
+  });
+
+  return answer;
 });
 
 const getClientInfo = async (key: string) => {
@@ -125,7 +137,7 @@ const getOrganisationInfo = async (key: string) => {
   return organisation;
 };
 
-const sendRequest = async (message: string) => {
+const sendRequest = async (message: string, question: string) => {
   const systemPrompt = await readFile(filePath, "utf-8");
 
   const response = await $fetch<OllamaResponse>(
@@ -149,6 +161,7 @@ const sendRequest = async (message: string) => {
       },
     },
   );
+  const answer = response.message.content;
 
-  return response.message.content;
+  return answer;
 };

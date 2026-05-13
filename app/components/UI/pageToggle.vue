@@ -1,5 +1,6 @@
 <template>
   <svg
+    class="toggle"
     width="42"
     height="24"
     viewBox="0 0 42 24"
@@ -26,3 +27,9 @@
 <script lang="ts" setup>
 defineProps<{ enabled?: boolean }>();
 </script>
+
+<style scoped>
+.toggle {
+  cursor: pointer;
+}
+</style>

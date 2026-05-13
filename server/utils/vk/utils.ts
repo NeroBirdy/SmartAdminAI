@@ -1,6 +1,8 @@
 import { VK, Keyboard } from "vk-io";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
+import { ChangeType } from "~~/prisma/generated/prisma/db1/enums";
+import { getEmployee } from "./user";
 
 export {
   findCities,
@@ -28,7 +30,7 @@ export {
   timeFromIsoToLocalHm,
   getClientGroup,
   getSubscriptionInfo,
-  getLessonsForClient
+  getLessonsForClient,
 };
 
 const fakeApi = useFakeAPI();
@@ -41,9 +43,9 @@ type VenueIds = {
 };
 
 type Instructor = {
-  id: number
-  isAvailable: boolean
-}
+  id: number;
+  isAvailable: boolean;
+};
 
 function findCities(data: Record<string, string[]>, query: string) {
   const q = query.toLowerCase();
@@ -87,16 +89,14 @@ async function getCityOrganizationList() {
 }
 
 type Venue = {
-  lessonId: number,
-  venueId: number,
-  venueName: string,
-  isAvailable: boolean,
-}
+  lessonId: number;
+  venueId: number;
+  venueName: string;
+  isAvailable: boolean;
+};
 
 async function createVenueList(venueList: Venue[]): Promise<string[]> {
-  return venueList
-    .filter(v => v.isAvailable)
-    .map(v => v.venueName);
+  return venueList.filter((v) => v.isAvailable).map((v) => v.venueName);
 }
 
 async function findVenueDataFromName(venueList: Venue[], name: string) {
@@ -135,11 +135,9 @@ async function deleteLastBotMessage(peerId: number, ownerGroupId: number) {
   }
 }
 
-
 function generateRandomId(min: number, max: number): number {
-  return Math.floor(Math.random() * (max - min + 1)) + min
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-
 
 async function getPeerIdList(instructorsList: Instructor[]) {
   const peerIdList = await Promise.all(
@@ -151,25 +149,26 @@ async function getPeerIdList(instructorsList: Instructor[]) {
       const key = await getInstructorKey(instructor.id);
       const peerId = await getInstructorPeerId(key!);
 
-
       return peerId;
-    })
-  )
+    }),
+  );
 
-  return peerIdList
+  return peerIdList;
 }
 
-
-async function saveNewMessage(userId: number, messageId: number, randomId: number) {
+async function saveNewMessage(
+  userId: number,
+  messageId: number,
+  randomId: number,
+) {
   return prisma.messages.create({
     data: {
       userId: userId,
       messageId: messageId,
       randomId: randomId,
-    }
+    },
   });
 }
-
 
 async function deleteMessageFromDb(messageId: number) {
   const message = await prisma.messages.findFirst({
@@ -182,7 +181,6 @@ async function deleteMessageFromDb(messageId: number) {
   });
 }
 
-
 async function deleteChangeInstructorMessage(peerId: number, randomId: number) {
   const ownerId = await getUserIdByPeerId(peerId);
 
@@ -194,8 +192,7 @@ async function deleteChangeInstructorMessage(peerId: number, randomId: number) {
   for (const message of messages) {
     if (message.userId === ownerId) {
       await editMessage(peerId, message.messageId, "Вы согласились");
-    }
-    else {
+    } else {
       await deleteMessage(message.messageId);
     }
 
@@ -203,18 +200,41 @@ async function deleteChangeInstructorMessage(peerId: number, randomId: number) {
   }
 }
 
-
 async function updateInstructor(lessonId: number, peerId: number) {
-  const id = await getUserIdByPeerId(peerId);
+  const user = await getUser({ peerId: peerId });
+  const employee = await getEmployee(user?.key!);
+
+  const lesson = await fakeApi.lesson.findUnique({ where: { id: lessonId } });
+
+  const lessonFields = await getLessonFields(lessonId);
+  const oldEmployeeFields = await getEmployeeFields(lesson!.instructorId);
+  const newEmployeeFields = await getEmployeeFields(employee!.id);
+
+  //LOG Замена инструктора
+  await createLog({
+    employeeId: lesson!.instructorId,
+    entityType: "LESSON",
+    entityId: lessonId,
+    changeType: "INSTRUCTOR_CHANGE",
+    oldValue: {
+      ...lessonFields,
+      ...oldEmployeeFields,
+      change: { instructorId: lesson!.instructorId },
+    },
+    newValue: {
+      ...lessonFields,
+      ...newEmployeeFields,
+      change: { instructorId: employee!.id },
+    },
+  });
 
   return await fakeApi.lesson.update({
     where: { id: Number(lessonId) },
     data: {
-      instructorId: Number(id),
-    }
+      instructorId: Number(employee!.id),
+    },
   });
 }
-
 
 async function getMessageId(userId: number, randomId: number) {
   const data = await prisma.messages.findFirst({
@@ -224,7 +244,6 @@ async function getMessageId(userId: number, randomId: number) {
 
   return data?.messageId || 0;
 }
-
 
 function checkAvailableInstructor(instructorsList: Instructor[]) {
   let isAvailable = false;
@@ -239,7 +258,6 @@ function checkAvailableInstructor(instructorsList: Instructor[]) {
   return isAvailable;
 }
 
-
 async function checkMessagesCount(randomId: number) {
   const count = await prisma.messages.count({
     where: { randomId },
@@ -248,10 +266,19 @@ async function checkMessagesCount(randomId: number) {
   return count;
 }
 
+async function getPrograms(orgId: number, peerId: number) {
+  const userKey = await getUserAccessCode(peerId);
+  const client = await fakeApi.client.findFirst({
+    where: {
+      accessCode: userKey,
+    },
+    include: { group: true },
+  });
 
-async function getPrograms(orgId: number) {
+  const programId = client!.groupId ? client!.group?.programId : -1;
+
   const programs = await fakeApi.program.findMany({
-    where: { organizationId: orgId },
+    where: { organizationId: orgId, id: { not: programId } },
     select: { name: true },
   });
 
@@ -262,17 +289,16 @@ async function getPrograms(orgId: number) {
 
 function getListTitle(listKey: string): string {
   switch (listKey) {
-    case 'city':
-      return '📋 Выберите город:';
-    case 'organization':
-      return '📋 Выберите организацию:';
-    case 'program':
-      return '📋 Выберите программу:';
+    case "city":
+      return "📋 Выберите город:";
+    case "organization":
+      return "📋 Выберите организацию:";
+    case "program":
+      return "📋 Выберите программу:";
     default:
-      return '📋 Выберите вариант:';
+      return "📋 Выберите вариант:";
   }
 }
-
 
 function isValidDate(value: string): boolean {
   const regex = /^(\d{2})\.(\d{2})\.(\d{4})$/;
@@ -293,7 +319,7 @@ function isValidDate(value: string): boolean {
 }
 
 function isValidPhone(value: string): boolean {
-  const cleaned = value.replace(/[\s\-\(\)]/g, '');
+  const cleaned = value.replace(/[\s\-\(\)]/g, "");
   return /^(\+7|8|7)?9\d{9}$/.test(cleaned);
 }
 
@@ -302,8 +328,9 @@ function isValidEmail(value: string): boolean {
 }
 
 function generateCode(length = 20): string {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let result = '';
+  const chars =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "";
 
   for (let i = 0; i < length; i++) {
     const index = Math.floor(Math.random() * chars.length);
@@ -316,12 +343,11 @@ function generateCode(length = 20): string {
 function timeFromIsoToLocalHm(iso: string): string {
   const date = new Date(iso);
 
-  const hours = date.getHours().toString().padStart(2, '0');
-  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const hours = date.getHours().toString().padStart(2, "0");
+  const minutes = date.getMinutes().toString().padStart(2, "0");
 
   return `${hours}:${minutes}`;
 }
-
 
 async function getClientGroup(key: string) {
   const clientData = await fakeApi.client.findFirst({
@@ -353,7 +379,7 @@ async function getClientGroup(key: string) {
     instructor: instructor?.lastName + " " + instructor?.firstName,
     venueName: venue?.name,
     venueAddress: venue?.address,
-  }
+  };
 }
 
 async function getSubscriptionInfo(key: string) {
@@ -362,11 +388,14 @@ async function getSubscriptionInfo(key: string) {
   const clientSubscription = await fakeApi.clientSubscription.findFirst({
     where: {
       clientId: client?.id,
-    }, include: { subscriptionType: true }
+    },
+    include: { subscriptionType: true },
   });
 
   const today = new Date();
-  const date = today.setDate(today.getDate() + clientSubscription?.subscriptionType.expiryDays!);
+  const date = today.setDate(
+    today.getDate() + clientSubscription?.subscriptionType.expiryDays!,
+  );
   const fmtDate = format(date, "dd.MM.yyyy", { locale: ru });
 
   return {
@@ -389,7 +418,8 @@ async function getLessonsForClient(key: string) {
         gte: start,
         lte: end,
       },
-    }
+      status: "ACTUAL",
+    },
   });
 
   return lessons;

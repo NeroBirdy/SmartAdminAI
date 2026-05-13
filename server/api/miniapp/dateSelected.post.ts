@@ -1,5 +1,5 @@
-import { defineEventHandler, readBody } from 'h3';
-import { VK } from 'vk-io';
+import { defineEventHandler, readBody } from "h3";
+import { VK } from "vk-io";
 
 const vk = new VK({ token: useRuntimeConfig().vkToken });
 
@@ -13,14 +13,14 @@ export default defineEventHandler(async (event) => {
 
   if (!body) {
     event.node.res.statusCode = 400;
-    return { ok: false, error: 'Empty body' };
+    return { ok: false, error: "Empty body" };
   }
 
   const { date, userId } = body;
 
   if (!date || !userId) {
     event.node.res.statusCode = 400;
-    return { ok: false, error: 'date or userId missing' };
+    return { ok: false, error: "date or userId missing" };
   }
 
   await vk.api.messages.send({

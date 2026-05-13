@@ -10,7 +10,7 @@
     />
   </Transition>
   <Transition name="fade">
-    <div class="overlay" v-if="isModalOpen" @click.stop="isModalOpen = false" />
+    <div class="overlay" v-if="isModalOpen" @click.stop="emit('instaClose')" />
   </Transition>
 </template>
 
@@ -22,6 +22,7 @@ const emit = defineEmits<{
     type: "save" | "delete" | "null",
     success: boolean,
   ): void;
+  (e: "instaClose"): void;
 }>();
 
 const props = defineProps<{
@@ -31,6 +32,17 @@ const props = defineProps<{
   employee?: { id: number; firstName: string; lastName: string };
   venue?: { id: number; name: string };
 }>();
+
+watch(
+  () => props.isModalOpen,
+  (val) => {
+    document.body.style.overflow = val ? "hidden" : "";
+  },
+);
+
+onUnmounted(() => {
+  document.body.style.overflow = "";
+});
 </script>
 
 <style scoped>

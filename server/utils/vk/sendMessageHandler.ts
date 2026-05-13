@@ -18,7 +18,7 @@ export {
   deleteMessage,
   sendGroupInfo,
   sendSubscriptionInfo,
-  sendScheduleForClient
+  sendScheduleForClient,
 };
 
 const vk = new VK({ token: useRuntimeConfig().vkToken });
@@ -51,11 +51,13 @@ async function sendStartMessage(peerId: number) {
 }
 
 async function sendChooseCityMessage(peerId: number) {
-  const keyboard = Keyboard.builder().textButton({
-    label: "Назад",
-    color: Keyboard.POSITIVE_COLOR,
-    payload: { cmd: "back" },
-  }).oneTime();
+  const keyboard = Keyboard.builder()
+    .textButton({
+      label: "Назад",
+      color: Keyboard.POSITIVE_COLOR,
+      payload: { cmd: "back" },
+    })
+    .oneTime();
 
   await vk.api.messages.send({
     peer_id: peerId,
@@ -82,7 +84,6 @@ async function sendLoginMessage(peerId: number) {
   return "ok";
 }
 
-
 async function sendCompleteLoginMessage(
   peerId: number,
   firstName: string,
@@ -107,11 +108,27 @@ async function sendHelloMessage(peerId: number) {
     case "CLIENT":
       message = `Добро пожаловать в бот нашей детской секции! Мы рады, что вы выбрали нас для развития вашего ребёнка. Здесь вы сможете в пару кликов отслеживать расписание, абонементы, видеть прогресс юного спортсмена и задать вопросы. Так же я уведомлю вас о важных событиях и изменениях. Выберите нужный раздел!`;
 
-      keyboard.textButton({ label: "Задать вопрос", payload: { cmd: "askQuestion" } }).row();
-      keyboard.textButton({ label: "О моей группе", payload: { cmd: "groupInfo" } }).row();
-      keyboard.textButton({ label: "Абонемент", payload: { cmd: "subscriptionInfo" } }).row();
-      keyboard.textButton({ label: "Расписание", payload: { cmd: "checkSchedule" } }).row();
-      keyboard.textButton({ label: "Сменить программу", payload: { cmd: "changeProgram" } }).row();
+      keyboard
+        .textButton({ label: "Задать вопрос", payload: { cmd: "askQuestion" } })
+        .row();
+      keyboard
+        .textButton({ label: "О моей группе", payload: { cmd: "groupInfo" } })
+        .row();
+      keyboard
+        .textButton({
+          label: "Абонемент",
+          payload: { cmd: "subscriptionInfo" },
+        })
+        .row();
+      keyboard
+        .textButton({ label: "Расписание", payload: { cmd: "checkSchedule" } })
+        .row();
+      keyboard
+        .textButton({
+          label: "Сменить программу",
+          payload: { cmd: "changeProgram" },
+        })
+        .row();
       break;
 
     case "INSTRUCTOR":
@@ -125,7 +142,9 @@ async function sendHelloMessage(peerId: number) {
         })
         .row()
         .applicationButton({
-          label: 'Моё расписание', appId: datePickerId, ownerId: ownerGroupId
+          label: "Моё расписание",
+          appId: datePickerId,
+          ownerId: ownerGroupId,
         })
         .row();
       break;
@@ -140,7 +159,9 @@ async function sendHelloMessage(peerId: number) {
         })
         .row()
         .applicationButton({
-          label: 'Расписание', appId: datePickerId, ownerId: ownerGroupId
+          label: "Расписание",
+          appId: datePickerId,
+          ownerId: ownerGroupId,
         })
         .row();
       break;
@@ -173,11 +194,7 @@ async function sendScheduleMenagementMessage(
   });
 }
 
-async function sendMessage(
-  peerId: number,
-  keyboard: Keyboard,
-  text: string
-) {
+async function sendMessage(peerId: number, keyboard: Keyboard, text: string) {
   return vk.api.messages.send({
     peer_id: peerId,
     message: text,
@@ -194,8 +211,12 @@ async function sendMessageWithoutKeyboard(peerId: number, text: string) {
   });
 }
 
-
-async function editMessage(peerId: number, messageId: number, text: string, keyboard?: Keyboard) {
+async function editMessage(
+  peerId: number,
+  messageId: number,
+  text: string,
+  keyboard?: Keyboard,
+) {
   return vk.api.messages.edit({
     peer_id: peerId,
     message_id: Number(messageId),
@@ -204,8 +225,11 @@ async function editMessage(peerId: number, messageId: number, text: string, keyb
   });
 }
 
-
-async function sendConfirmMessage(peerId: number, keyboard: Keyboard, text: string) {
+async function sendConfirmMessage(
+  peerId: number,
+  keyboard: Keyboard,
+  text: string,
+) {
   return vk.api.messages.send({
     peer_id: peerId,
     message: text,
@@ -214,8 +238,11 @@ async function sendConfirmMessage(peerId: number, keyboard: Keyboard, text: stri
   });
 }
 
-
-async function sendRequestForManager(peerId: number, keyboard: Keyboard, text: string) {
+async function sendRequestForManager(
+  peerId: number,
+  keyboard: Keyboard,
+  text: string,
+) {
   return vk.api.messages.send({
     peer_id: peerId,
     message: text,
@@ -224,13 +251,26 @@ async function sendRequestForManager(peerId: number, keyboard: Keyboard, text: s
   });
 }
 
-
-async function sendChangeInstructorRequest(peerId: number, peerIdList: number[], randomId: number, lessonId: number) {
+async function sendChangeInstructorRequest(
+  peerId: number,
+  peerIdList: number[],
+  randomId: number,
+  lessonId: number,
+) {
   await sendMessageWithoutKeyboard(peerId, "Запрос отправлен");
 
+  console.log(peerIdList)
   for (const id of peerIdList) {
     if (Number(id) !== 0) {
-      const keyboard = await buildConfirmKeyboard({ cmd: "confirmChangeInstructor", ownerId: peerId, randomId: randomId, lessonId: lessonId }, { cmd: "deny", randomId: randomId, ownerId: peerId });
+      const keyboard = await buildConfirmKeyboard(
+        {
+          cmd: "confirmChangeInstructor",
+          ownerId: peerId,
+          randomId: randomId,
+          lessonId: lessonId,
+        },
+        { cmd: "deny", randomId: randomId, ownerId: peerId },
+      );
 
       const res = await sendMessage(Number(id), keyboard, "Сможешь подменить?");
       const userId = await getUserIdByPeerId(id);
@@ -240,14 +280,12 @@ async function sendChangeInstructorRequest(peerId: number, peerIdList: number[],
   }
 }
 
-
 async function deleteMessage(messageId: number) {
   await vk.api.messages.delete({
     message_ids: messageId,
     delete_for_all: 1,
   });
 }
-
 
 async function sendGroupInfo(peerId: number) {
   const userKey = await getUserAccessCode(peerId);
@@ -269,9 +307,9 @@ async function sendSubscriptionInfo(peerId: number) {
   let message = `Информация об абонементе \n`;
   message += `Тип: ${subscription.type}\n`;
   if (subscription.date) {
-    message += `Действует до: ${subscription.date}\n`
+    message += `Действует до: ${subscription.date}\n`;
   }
-  message += `Остаток посещений: ${subscription.remainingVisits}`
+  message += `Остаток посещений: ${subscription.remainingVisits}`;
 
   return await vk.api.messages.send({
     peer_id: peerId,
@@ -287,9 +325,10 @@ async function sendScheduleForClient(peerId: number) {
 
   let message = `Расписание \n`;
   message += lessons
-    .map((lesson) =>
-      `${format(lesson.date, "dd.MM")} - ${format(lesson.startTime, "HH.mm")}`
-      ,)
+    .map(
+      (lesson) =>
+        `${format(lesson.date, "dd.MM")} - ${format(lesson.startTime, "HH.mm")}`,
+    )
     .join("\n");
 
   return await vk.api.messages.send({

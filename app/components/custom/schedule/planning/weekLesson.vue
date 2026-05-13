@@ -47,7 +47,7 @@ const lessonTime = () => {
 
 const getVenueName = (name: string) => {
   const words = name.split(" ");
-    const letters = words
+  const letters = words
     .filter((w) => isNaN(Number(w)))
     .map((w) => w.charAt(0).toUpperCase());
   const number = words.find((w) => !isNaN(Number(w)));

@@ -40,14 +40,9 @@ async function buildBackButton() {
   return keyboard;
 }
 
-type ListKey = 'city' | 'organization' | 'program' | "venue" | string;
+type ListKey = "city" | "organization" | "program" | "venue" | string;
 
-async function buildKeyboard(
-  array: string[],
-  page: number,
-  listKey: ListKey,
-) {
-
+async function buildKeyboard(array: string[], page: number, listKey: ListKey) {
   const { slice, currentPage, totalPages } = getPage(array!, page);
   const keyboard = Keyboard.builder().inline();
 
@@ -105,12 +100,11 @@ async function buildInstructorKeyboard(peerId: number) {
       changeVenue: true,
       cancellationLesson: true,
       changeInstructor: true,
-    }
-  }
-  else {
+    };
+  } else {
     permission = await getPermission(peerId);
   }
-  
+
   const keyboard = Keyboard.builder();
 
   if (permission.changeDate)
@@ -203,19 +197,19 @@ async function buildKeyboardForMiniApp(
 }
 
 type Variant = {
-  startTime: String,
-  endTime: String,
-}
+  startTime: String;
+  endTime: String;
+};
 
 type NewOption = {
-  date: String,
-  variants: Variant[],
-}
+  date: String;
+  variants: Variant[];
+};
 
 type NewDateList = {
-  lessonId: number,
-  newOptions: NewOption[],
-}
+  lessonId: number;
+  newOptions: NewOption[];
+};
 
 async function buildKeyboardForDate(page: number, dateList: NewDateList) {
   const lessonId = dateList.lessonId;
@@ -271,7 +265,6 @@ async function buildKeyboardForDate(page: number, dateList: NewDateList) {
   return keyboard;
 }
 
-
 async function buildConfirmKeyboard(confirmPayload: {}, denyPayload: {}) {
   const keyboard = Keyboard.builder().inline();
 
@@ -289,23 +282,26 @@ async function buildConfirmKeyboard(confirmPayload: {}, denyPayload: {}) {
 }
 
 type TrialLesson = {
-  id: number,
-  date: string,
-  startTime: string,
-  endTime: string,
-  groupId: number,
-  instructorId: number,
-  programId: number,
-  venueId: number,
-  employeeProgramId: number,
-}
+  id: number;
+  date: string;
+  startTime: string;
+  endTime: string;
+  groupId: number;
+  instructorId: number;
+  programId: number;
+  venueId: number;
+  employeeProgramId: number;
+};
 
 type TrialDate = {
-  date: string,
-  lessons: TrialLesson[],
-}
+  date: string;
+  lessons: TrialLesson[];
+};
 
-async function buildKeyboardForTrialLesson(trialLessonList: TrialDate[], page: number) {
+async function buildKeyboardForTrialLesson(
+  trialLessonList: TrialDate[],
+  page: number,
+) {
   const maxPage = trialLessonList.length - 1;
   const safePage = Math.max(0, Math.min(page, maxPage));
 
@@ -313,7 +309,6 @@ async function buildKeyboardForTrialLesson(trialLessonList: TrialDate[], page: n
   const date = currentPage?.date.split("T")[0];
 
   const keyboard = Keyboard.builder().inline();
-
 
   for (const lesson of currentPage?.lessons!) {
     keyboard
@@ -365,9 +360,9 @@ async function buildKeyboardForTrialLesson(trialLessonList: TrialDate[], page: n
 }
 
 type Group = {
-  id: number,
-  name: string,
-}
+  id: number;
+  name: string;
+};
 
 async function buildKeyboardForGroup(groupsList: Group[], page: number) {
   const maxPageSize = 3;
@@ -388,7 +383,7 @@ async function buildKeyboardForGroup(groupsList: Group[], page: number) {
       .callbackButton({
         label: group.name,
         payload: {
-          cmd: 'selectGroup',
+          cmd: "selectGroup",
           groupId: group.id,
           groupName: group.name,
         },
@@ -399,9 +394,9 @@ async function buildKeyboardForGroup(groupsList: Group[], page: number) {
   if (totalPages > 1) {
     if (currentPage > 1) {
       keyboard.callbackButton({
-        label: '⬅️',
+        label: "⬅️",
         payload: {
-          cmd: 'pageGroup',
+          cmd: "pageGroup",
           page: currentPage - 1,
         },
       });
@@ -410,15 +405,15 @@ async function buildKeyboardForGroup(groupsList: Group[], page: number) {
     keyboard.callbackButton({
       label: `${currentPage}/${totalPages}`,
       payload: {
-        cmd: 'noop_group',
+        cmd: "noop_group",
       },
     });
 
     if (currentPage < totalPages) {
       keyboard.callbackButton({
-        label: '➡️',
+        label: "➡️",
         payload: {
-          cmd: 'pageGroup',
+          cmd: "pageGroup",
           page: currentPage + 1,
         },
       });

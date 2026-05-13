@@ -168,7 +168,8 @@ export const LessonScalarFieldEnum = {
   instructorId: 'instructorId',
   programId: 'programId',
   venueId: 'venueId',
-  employeeProgramId: 'employeeProgramId'
+  employeeProgramId: 'employeeProgramId',
+  status: 'status'
 } as const
 
 export type LessonScalarFieldEnum = (typeof LessonScalarFieldEnum)[keyof typeof LessonScalarFieldEnum]

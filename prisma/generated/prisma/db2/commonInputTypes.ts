@@ -232,6 +232,23 @@ export type EnumEmployeeRoleWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumEmployeeRoleFilter<$PrismaModel>
 }
 
+export type EnumLessonStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.LessonStatus | Prisma.EnumLessonStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.LessonStatus[]
+  notIn?: $Enums.LessonStatus[]
+  not?: Prisma.NestedEnumLessonStatusFilter<$PrismaModel> | $Enums.LessonStatus
+}
+
+export type EnumLessonStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.LessonStatus | Prisma.EnumLessonStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.LessonStatus[]
+  notIn?: $Enums.LessonStatus[]
+  not?: Prisma.NestedEnumLessonStatusWithAggregatesFilter<$PrismaModel> | $Enums.LessonStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumLessonStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumLessonStatusFilter<$PrismaModel>
+}
+
 export type EnumOrgTypeFilter<$PrismaModel = never> = {
   equals?: $Enums.OrgType | Prisma.EnumOrgTypeFieldRefInput<$PrismaModel>
   in?: $Enums.OrgType[]
@@ -529,6 +546,23 @@ export type NestedEnumEmployeeRoleWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumEmployeeRoleFilter<$PrismaModel>
   _max?: Prisma.NestedEnumEmployeeRoleFilter<$PrismaModel>
+}
+
+export type NestedEnumLessonStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.LessonStatus | Prisma.EnumLessonStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.LessonStatus[]
+  notIn?: $Enums.LessonStatus[]
+  not?: Prisma.NestedEnumLessonStatusFilter<$PrismaModel> | $Enums.LessonStatus
+}
+
+export type NestedEnumLessonStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.LessonStatus | Prisma.EnumLessonStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.LessonStatus[]
+  notIn?: $Enums.LessonStatus[]
+  not?: Prisma.NestedEnumLessonStatusWithAggregatesFilter<$PrismaModel> | $Enums.LessonStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumLessonStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumLessonStatusFilter<$PrismaModel>
 }
 
 export type NestedEnumOrgTypeFilter<$PrismaModel = never> = {

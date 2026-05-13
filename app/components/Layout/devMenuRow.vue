@@ -18,7 +18,7 @@ const emit = defineEmits<{
 const isActive = ref(false);
 
 const activeClass = computed(() => ({
-  active: isActive.value
+  active: isActive.value,
 }));
 
 let timeoutId: ReturnType<typeof setTimeout> | null = null;

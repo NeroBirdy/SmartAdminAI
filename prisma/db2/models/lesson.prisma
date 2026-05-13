@@ -7,6 +7,8 @@ model Lesson {
   instructorId Int
   programId    Int
   venueId      Int
+  employeeProgramId Int?
+  status LessonStatus @default(ACTUAL)
 
   group             Group            @relation(fields: [groupId], references: [id])
   instructor        Employee         @relation(fields: [instructorId], references: [id])
@@ -14,5 +16,9 @@ model Lesson {
   venue             Venue            @relation(fields: [venueId], references: [id])
   schedules         Schedule[]
   employeeProgram   EmployeeProgram? @relation(fields: [employeeProgramId], references: [id])
-  employeeProgramId Int?
 }
+
+  enum LessonStatus {
+    ACTUAL
+    DELETED
+  }

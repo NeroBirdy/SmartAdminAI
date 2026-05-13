@@ -54,6 +54,7 @@ export type LessonMinAggregateOutputType = {
   programId: number | null
   venueId: number | null
   employeeProgramId: number | null
+  status: $Enums.LessonStatus | null
 }
 
 export type LessonMaxAggregateOutputType = {
@@ -66,6 +67,7 @@ export type LessonMaxAggregateOutputType = {
   programId: number | null
   venueId: number | null
   employeeProgramId: number | null
+  status: $Enums.LessonStatus | null
 }
 
 export type LessonCountAggregateOutputType = {
@@ -78,6 +80,7 @@ export type LessonCountAggregateOutputType = {
   programId: number
   venueId: number
   employeeProgramId: number
+  status: number
   _all: number
 }
 
@@ -110,6 +113,7 @@ export type LessonMinAggregateInputType = {
   programId?: true
   venueId?: true
   employeeProgramId?: true
+  status?: true
 }
 
 export type LessonMaxAggregateInputType = {
@@ -122,6 +126,7 @@ export type LessonMaxAggregateInputType = {
   programId?: true
   venueId?: true
   employeeProgramId?: true
+  status?: true
 }
 
 export type LessonCountAggregateInputType = {
@@ -134,6 +139,7 @@ export type LessonCountAggregateInputType = {
   programId?: true
   venueId?: true
   employeeProgramId?: true
+  status?: true
   _all?: true
 }
 
@@ -233,6 +239,7 @@ export type LessonGroupByOutputType = {
   programId: number
   venueId: number
   employeeProgramId: number | null
+  status: $Enums.LessonStatus
   _count: LessonCountAggregateOutputType | null
   _avg: LessonAvgAggregateOutputType | null
   _sum: LessonSumAggregateOutputType | null
@@ -268,6 +275,7 @@ export type LessonWhereInput = {
   programId?: Prisma.IntFilter<"Lesson"> | number
   venueId?: Prisma.IntFilter<"Lesson"> | number
   employeeProgramId?: Prisma.IntNullableFilter<"Lesson"> | number | null
+  status?: Prisma.EnumLessonStatusFilter<"Lesson"> | $Enums.LessonStatus
   group?: Prisma.XOR<Prisma.GroupScalarRelationFilter, Prisma.GroupWhereInput>
   instructor?: Prisma.XOR<Prisma.EmployeeScalarRelationFilter, Prisma.EmployeeWhereInput>
   program?: Prisma.XOR<Prisma.ProgramScalarRelationFilter, Prisma.ProgramWhereInput>
@@ -286,6 +294,7 @@ export type LessonOrderByWithRelationInput = {
   programId?: Prisma.SortOrder
   venueId?: Prisma.SortOrder
   employeeProgramId?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
   group?: Prisma.GroupOrderByWithRelationInput
   instructor?: Prisma.EmployeeOrderByWithRelationInput
   program?: Prisma.ProgramOrderByWithRelationInput
@@ -307,6 +316,7 @@ export type LessonWhereUniqueInput = Prisma.AtLeast<{
   programId?: Prisma.IntFilter<"Lesson"> | number
   venueId?: Prisma.IntFilter<"Lesson"> | number
   employeeProgramId?: Prisma.IntNullableFilter<"Lesson"> | number | null
+  status?: Prisma.EnumLessonStatusFilter<"Lesson"> | $Enums.LessonStatus
   group?: Prisma.XOR<Prisma.GroupScalarRelationFilter, Prisma.GroupWhereInput>
   instructor?: Prisma.XOR<Prisma.EmployeeScalarRelationFilter, Prisma.EmployeeWhereInput>
   program?: Prisma.XOR<Prisma.ProgramScalarRelationFilter, Prisma.ProgramWhereInput>
@@ -325,6 +335,7 @@ export type LessonOrderByWithAggregationInput = {
   programId?: Prisma.SortOrder
   venueId?: Prisma.SortOrder
   employeeProgramId?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
   _count?: Prisma.LessonCountOrderByAggregateInput
   _avg?: Prisma.LessonAvgOrderByAggregateInput
   _max?: Prisma.LessonMaxOrderByAggregateInput
@@ -345,12 +356,14 @@ export type LessonScalarWhereWithAggregatesInput = {
   programId?: Prisma.IntWithAggregatesFilter<"Lesson"> | number
   venueId?: Prisma.IntWithAggregatesFilter<"Lesson"> | number
   employeeProgramId?: Prisma.IntNullableWithAggregatesFilter<"Lesson"> | number | null
+  status?: Prisma.EnumLessonStatusWithAggregatesFilter<"Lesson"> | $Enums.LessonStatus
 }
 
 export type LessonCreateInput = {
   date: Date | string
   startTime: Date | string
   endTime: Date | string
+  status?: $Enums.LessonStatus
   group: Prisma.GroupCreateNestedOneWithoutLessonsInput
   instructor: Prisma.EmployeeCreateNestedOneWithoutLessonsInput
   program: Prisma.ProgramCreateNestedOneWithoutLessonsInput
@@ -369,6 +382,7 @@ export type LessonUncheckedCreateInput = {
   programId: number
   venueId: number
   employeeProgramId?: number | null
+  status?: $Enums.LessonStatus
   schedules?: Prisma.ScheduleUncheckedCreateNestedManyWithoutLessonsInput
 }
 
@@ -376,6 +390,7 @@ export type LessonUpdateInput = {
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
   group?: Prisma.GroupUpdateOneRequiredWithoutLessonsNestedInput
   instructor?: Prisma.EmployeeUpdateOneRequiredWithoutLessonsNestedInput
   program?: Prisma.ProgramUpdateOneRequiredWithoutLessonsNestedInput
@@ -394,6 +409,7 @@ export type LessonUncheckedUpdateInput = {
   programId?: Prisma.IntFieldUpdateOperationsInput | number
   venueId?: Prisma.IntFieldUpdateOperationsInput | number
   employeeProgramId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
   schedules?: Prisma.ScheduleUncheckedUpdateManyWithoutLessonsNestedInput
 }
 
@@ -407,12 +423,14 @@ export type LessonCreateManyInput = {
   programId: number
   venueId: number
   employeeProgramId?: number | null
+  status?: $Enums.LessonStatus
 }
 
 export type LessonUpdateManyMutationInput = {
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
 }
 
 export type LessonUncheckedUpdateManyInput = {
@@ -425,6 +443,7 @@ export type LessonUncheckedUpdateManyInput = {
   programId?: Prisma.IntFieldUpdateOperationsInput | number
   venueId?: Prisma.IntFieldUpdateOperationsInput | number
   employeeProgramId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
 }
 
 export type LessonListRelationFilter = {
@@ -447,6 +466,7 @@ export type LessonCountOrderByAggregateInput = {
   programId?: Prisma.SortOrder
   venueId?: Prisma.SortOrder
   employeeProgramId?: Prisma.SortOrder
+  status?: Prisma.SortOrder
 }
 
 export type LessonAvgOrderByAggregateInput = {
@@ -468,6 +488,7 @@ export type LessonMaxOrderByAggregateInput = {
   programId?: Prisma.SortOrder
   venueId?: Prisma.SortOrder
   employeeProgramId?: Prisma.SortOrder
+  status?: Prisma.SortOrder
 }
 
 export type LessonMinOrderByAggregateInput = {
@@ -480,6 +501,7 @@ export type LessonMinOrderByAggregateInput = {
   programId?: Prisma.SortOrder
   venueId?: Prisma.SortOrder
   employeeProgramId?: Prisma.SortOrder
+  status?: Prisma.SortOrder
 }
 
 export type LessonSumOrderByAggregateInput = {
@@ -617,6 +639,10 @@ export type LessonUncheckedUpdateManyWithoutGroupNestedInput = {
   deleteMany?: Prisma.LessonScalarWhereInput | Prisma.LessonScalarWhereInput[]
 }
 
+export type EnumLessonStatusFieldUpdateOperationsInput = {
+  set?: $Enums.LessonStatus
+}
+
 export type LessonCreateNestedManyWithoutProgramInput = {
   create?: Prisma.XOR<Prisma.LessonCreateWithoutProgramInput, Prisma.LessonUncheckedCreateWithoutProgramInput> | Prisma.LessonCreateWithoutProgramInput[] | Prisma.LessonUncheckedCreateWithoutProgramInput[]
   connectOrCreate?: Prisma.LessonCreateOrConnectWithoutProgramInput | Prisma.LessonCreateOrConnectWithoutProgramInput[]
@@ -743,6 +769,7 @@ export type LessonCreateWithoutInstructorInput = {
   date: Date | string
   startTime: Date | string
   endTime: Date | string
+  status?: $Enums.LessonStatus
   group: Prisma.GroupCreateNestedOneWithoutLessonsInput
   program: Prisma.ProgramCreateNestedOneWithoutLessonsInput
   venue: Prisma.VenueCreateNestedOneWithoutLessonsInput
@@ -759,6 +786,7 @@ export type LessonUncheckedCreateWithoutInstructorInput = {
   programId: number
   venueId: number
   employeeProgramId?: number | null
+  status?: $Enums.LessonStatus
   schedules?: Prisma.ScheduleUncheckedCreateNestedManyWithoutLessonsInput
 }
 
@@ -801,12 +829,14 @@ export type LessonScalarWhereInput = {
   programId?: Prisma.IntFilter<"Lesson"> | number
   venueId?: Prisma.IntFilter<"Lesson"> | number
   employeeProgramId?: Prisma.IntNullableFilter<"Lesson"> | number | null
+  status?: Prisma.EnumLessonStatusFilter<"Lesson"> | $Enums.LessonStatus
 }
 
 export type LessonCreateWithoutEmployeeProgramInput = {
   date: Date | string
   startTime: Date | string
   endTime: Date | string
+  status?: $Enums.LessonStatus
   group: Prisma.GroupCreateNestedOneWithoutLessonsInput
   instructor: Prisma.EmployeeCreateNestedOneWithoutLessonsInput
   program: Prisma.ProgramCreateNestedOneWithoutLessonsInput
@@ -823,6 +853,7 @@ export type LessonUncheckedCreateWithoutEmployeeProgramInput = {
   instructorId: number
   programId: number
   venueId: number
+  status?: $Enums.LessonStatus
   schedules?: Prisma.ScheduleUncheckedCreateNestedManyWithoutLessonsInput
 }
 
@@ -856,6 +887,7 @@ export type LessonCreateWithoutGroupInput = {
   date: Date | string
   startTime: Date | string
   endTime: Date | string
+  status?: $Enums.LessonStatus
   instructor: Prisma.EmployeeCreateNestedOneWithoutLessonsInput
   program: Prisma.ProgramCreateNestedOneWithoutLessonsInput
   venue: Prisma.VenueCreateNestedOneWithoutLessonsInput
@@ -872,6 +904,7 @@ export type LessonUncheckedCreateWithoutGroupInput = {
   programId: number
   venueId: number
   employeeProgramId?: number | null
+  status?: $Enums.LessonStatus
   schedules?: Prisma.ScheduleUncheckedCreateNestedManyWithoutLessonsInput
 }
 
@@ -905,6 +938,7 @@ export type LessonCreateWithoutProgramInput = {
   date: Date | string
   startTime: Date | string
   endTime: Date | string
+  status?: $Enums.LessonStatus
   group: Prisma.GroupCreateNestedOneWithoutLessonsInput
   instructor: Prisma.EmployeeCreateNestedOneWithoutLessonsInput
   venue: Prisma.VenueCreateNestedOneWithoutLessonsInput
@@ -921,6 +955,7 @@ export type LessonUncheckedCreateWithoutProgramInput = {
   instructorId: number
   venueId: number
   employeeProgramId?: number | null
+  status?: $Enums.LessonStatus
   schedules?: Prisma.ScheduleUncheckedCreateNestedManyWithoutLessonsInput
 }
 
@@ -954,6 +989,7 @@ export type LessonCreateWithoutSchedulesInput = {
   date: Date | string
   startTime: Date | string
   endTime: Date | string
+  status?: $Enums.LessonStatus
   group: Prisma.GroupCreateNestedOneWithoutLessonsInput
   instructor: Prisma.EmployeeCreateNestedOneWithoutLessonsInput
   program: Prisma.ProgramCreateNestedOneWithoutLessonsInput
@@ -971,6 +1007,7 @@ export type LessonUncheckedCreateWithoutSchedulesInput = {
   programId: number
   venueId: number
   employeeProgramId?: number | null
+  status?: $Enums.LessonStatus
 }
 
 export type LessonCreateOrConnectWithoutSchedulesInput = {
@@ -998,6 +1035,7 @@ export type LessonCreateWithoutVenueInput = {
   date: Date | string
   startTime: Date | string
   endTime: Date | string
+  status?: $Enums.LessonStatus
   group: Prisma.GroupCreateNestedOneWithoutLessonsInput
   instructor: Prisma.EmployeeCreateNestedOneWithoutLessonsInput
   program: Prisma.ProgramCreateNestedOneWithoutLessonsInput
@@ -1014,6 +1052,7 @@ export type LessonUncheckedCreateWithoutVenueInput = {
   instructorId: number
   programId: number
   employeeProgramId?: number | null
+  status?: $Enums.LessonStatus
   schedules?: Prisma.ScheduleUncheckedCreateNestedManyWithoutLessonsInput
 }
 
@@ -1052,12 +1091,14 @@ export type LessonCreateManyInstructorInput = {
   programId: number
   venueId: number
   employeeProgramId?: number | null
+  status?: $Enums.LessonStatus
 }
 
 export type LessonUpdateWithoutInstructorInput = {
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
   group?: Prisma.GroupUpdateOneRequiredWithoutLessonsNestedInput
   program?: Prisma.ProgramUpdateOneRequiredWithoutLessonsNestedInput
   venue?: Prisma.VenueUpdateOneRequiredWithoutLessonsNestedInput
@@ -1074,6 +1115,7 @@ export type LessonUncheckedUpdateWithoutInstructorInput = {
   programId?: Prisma.IntFieldUpdateOperationsInput | number
   venueId?: Prisma.IntFieldUpdateOperationsInput | number
   employeeProgramId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
   schedules?: Prisma.ScheduleUncheckedUpdateManyWithoutLessonsNestedInput
 }
 
@@ -1086,6 +1128,7 @@ export type LessonUncheckedUpdateManyWithoutInstructorInput = {
   programId?: Prisma.IntFieldUpdateOperationsInput | number
   venueId?: Prisma.IntFieldUpdateOperationsInput | number
   employeeProgramId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
 }
 
 export type LessonCreateManyEmployeeProgramInput = {
@@ -1097,12 +1140,14 @@ export type LessonCreateManyEmployeeProgramInput = {
   instructorId: number
   programId: number
   venueId: number
+  status?: $Enums.LessonStatus
 }
 
 export type LessonUpdateWithoutEmployeeProgramInput = {
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
   group?: Prisma.GroupUpdateOneRequiredWithoutLessonsNestedInput
   instructor?: Prisma.EmployeeUpdateOneRequiredWithoutLessonsNestedInput
   program?: Prisma.ProgramUpdateOneRequiredWithoutLessonsNestedInput
@@ -1119,6 +1164,7 @@ export type LessonUncheckedUpdateWithoutEmployeeProgramInput = {
   instructorId?: Prisma.IntFieldUpdateOperationsInput | number
   programId?: Prisma.IntFieldUpdateOperationsInput | number
   venueId?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
   schedules?: Prisma.ScheduleUncheckedUpdateManyWithoutLessonsNestedInput
 }
 
@@ -1131,6 +1177,7 @@ export type LessonUncheckedUpdateManyWithoutEmployeeProgramInput = {
   instructorId?: Prisma.IntFieldUpdateOperationsInput | number
   programId?: Prisma.IntFieldUpdateOperationsInput | number
   venueId?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
 }
 
 export type LessonCreateManyGroupInput = {
@@ -1142,12 +1189,14 @@ export type LessonCreateManyGroupInput = {
   programId: number
   venueId: number
   employeeProgramId?: number | null
+  status?: $Enums.LessonStatus
 }
 
 export type LessonUpdateWithoutGroupInput = {
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
   instructor?: Prisma.EmployeeUpdateOneRequiredWithoutLessonsNestedInput
   program?: Prisma.ProgramUpdateOneRequiredWithoutLessonsNestedInput
   venue?: Prisma.VenueUpdateOneRequiredWithoutLessonsNestedInput
@@ -1164,6 +1213,7 @@ export type LessonUncheckedUpdateWithoutGroupInput = {
   programId?: Prisma.IntFieldUpdateOperationsInput | number
   venueId?: Prisma.IntFieldUpdateOperationsInput | number
   employeeProgramId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
   schedules?: Prisma.ScheduleUncheckedUpdateManyWithoutLessonsNestedInput
 }
 
@@ -1176,6 +1226,7 @@ export type LessonUncheckedUpdateManyWithoutGroupInput = {
   programId?: Prisma.IntFieldUpdateOperationsInput | number
   venueId?: Prisma.IntFieldUpdateOperationsInput | number
   employeeProgramId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
 }
 
 export type LessonCreateManyProgramInput = {
@@ -1187,12 +1238,14 @@ export type LessonCreateManyProgramInput = {
   instructorId: number
   venueId: number
   employeeProgramId?: number | null
+  status?: $Enums.LessonStatus
 }
 
 export type LessonUpdateWithoutProgramInput = {
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
   group?: Prisma.GroupUpdateOneRequiredWithoutLessonsNestedInput
   instructor?: Prisma.EmployeeUpdateOneRequiredWithoutLessonsNestedInput
   venue?: Prisma.VenueUpdateOneRequiredWithoutLessonsNestedInput
@@ -1209,6 +1262,7 @@ export type LessonUncheckedUpdateWithoutProgramInput = {
   instructorId?: Prisma.IntFieldUpdateOperationsInput | number
   venueId?: Prisma.IntFieldUpdateOperationsInput | number
   employeeProgramId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
   schedules?: Prisma.ScheduleUncheckedUpdateManyWithoutLessonsNestedInput
 }
 
@@ -1221,12 +1275,14 @@ export type LessonUncheckedUpdateManyWithoutProgramInput = {
   instructorId?: Prisma.IntFieldUpdateOperationsInput | number
   venueId?: Prisma.IntFieldUpdateOperationsInput | number
   employeeProgramId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
 }
 
 export type LessonUpdateWithoutSchedulesInput = {
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
   group?: Prisma.GroupUpdateOneRequiredWithoutLessonsNestedInput
   instructor?: Prisma.EmployeeUpdateOneRequiredWithoutLessonsNestedInput
   program?: Prisma.ProgramUpdateOneRequiredWithoutLessonsNestedInput
@@ -1244,6 +1300,7 @@ export type LessonUncheckedUpdateWithoutSchedulesInput = {
   programId?: Prisma.IntFieldUpdateOperationsInput | number
   venueId?: Prisma.IntFieldUpdateOperationsInput | number
   employeeProgramId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
 }
 
 export type LessonUncheckedUpdateManyWithoutSchedulesInput = {
@@ -1256,6 +1313,7 @@ export type LessonUncheckedUpdateManyWithoutSchedulesInput = {
   programId?: Prisma.IntFieldUpdateOperationsInput | number
   venueId?: Prisma.IntFieldUpdateOperationsInput | number
   employeeProgramId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
 }
 
 export type LessonCreateManyVenueInput = {
@@ -1267,12 +1325,14 @@ export type LessonCreateManyVenueInput = {
   instructorId: number
   programId: number
   employeeProgramId?: number | null
+  status?: $Enums.LessonStatus
 }
 
 export type LessonUpdateWithoutVenueInput = {
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
   group?: Prisma.GroupUpdateOneRequiredWithoutLessonsNestedInput
   instructor?: Prisma.EmployeeUpdateOneRequiredWithoutLessonsNestedInput
   program?: Prisma.ProgramUpdateOneRequiredWithoutLessonsNestedInput
@@ -1289,6 +1349,7 @@ export type LessonUncheckedUpdateWithoutVenueInput = {
   instructorId?: Prisma.IntFieldUpdateOperationsInput | number
   programId?: Prisma.IntFieldUpdateOperationsInput | number
   employeeProgramId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
   schedules?: Prisma.ScheduleUncheckedUpdateManyWithoutLessonsNestedInput
 }
 
@@ -1301,6 +1362,7 @@ export type LessonUncheckedUpdateManyWithoutVenueInput = {
   instructorId?: Prisma.IntFieldUpdateOperationsInput | number
   programId?: Prisma.IntFieldUpdateOperationsInput | number
   employeeProgramId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
 }
 
 
@@ -1344,6 +1406,7 @@ export type LessonSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   programId?: boolean
   venueId?: boolean
   employeeProgramId?: boolean
+  status?: boolean
   group?: boolean | Prisma.GroupDefaultArgs<ExtArgs>
   instructor?: boolean | Prisma.EmployeeDefaultArgs<ExtArgs>
   program?: boolean | Prisma.ProgramDefaultArgs<ExtArgs>
@@ -1365,9 +1428,10 @@ export type LessonSelectScalar = {
   programId?: boolean
   venueId?: boolean
   employeeProgramId?: boolean
+  status?: boolean
 }
 
-export type LessonOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "date" | "startTime" | "endTime" | "groupId" | "instructorId" | "programId" | "venueId" | "employeeProgramId", ExtArgs["result"]["lesson"]>
+export type LessonOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "date" | "startTime" | "endTime" | "groupId" | "instructorId" | "programId" | "venueId" | "employeeProgramId" | "status", ExtArgs["result"]["lesson"]>
 export type LessonInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   group?: boolean | Prisma.GroupDefaultArgs<ExtArgs>
   instructor?: boolean | Prisma.EmployeeDefaultArgs<ExtArgs>
@@ -1398,6 +1462,7 @@ export type $LessonPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     programId: number
     venueId: number
     employeeProgramId: number | null
+    status: $Enums.LessonStatus
   }, ExtArgs["result"]["lesson"]>
   composites: {}
 }
@@ -1782,6 +1847,7 @@ export interface LessonFieldRefs {
   readonly programId: Prisma.FieldRef<"Lesson", 'Int'>
   readonly venueId: Prisma.FieldRef<"Lesson", 'Int'>
   readonly employeeProgramId: Prisma.FieldRef<"Lesson", 'Int'>
+  readonly status: Prisma.FieldRef<"Lesson", 'LessonStatus'>
 }
     
 

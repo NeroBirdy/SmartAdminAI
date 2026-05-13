@@ -9,6 +9,38 @@
 * 🟢 You can import this file directly.
 */
 
+export const LogStatus = {
+  ACTIVE: 'ACTIVE',
+  REVERTED: 'REVERTED'
+} as const
+
+export type LogStatus = (typeof LogStatus)[keyof typeof LogStatus]
+
+
+export const EntityType = {
+  CLIENT: 'CLIENT',
+  LESSON: 'LESSON'
+} as const
+
+export type EntityType = (typeof EntityType)[keyof typeof EntityType]
+
+
+export const ChangeType = {
+  DATE_CHANGE: 'DATE_CHANGE',
+  VENUE_CHANGE: 'VENUE_CHANGE',
+  LESSON_CANCELLATION: 'LESSON_CANCELLATION',
+  INSTRUCTOR_CHANGE: 'INSTRUCTOR_CHANGE',
+  LESSON_CREATE: 'LESSON_CREATE',
+  QUESTION_ANSWER: 'QUESTION_ANSWER',
+  ASSIGNED_TO_GROUP: 'ASSIGNED_TO_GROUP',
+  SCHEDULED_TRIAL_LESSON: 'SCHEDULED_TRIAL_LESSON',
+  SELECTION_INSTRUCTOR_CHANGE: 'SELECTION_INSTRUCTOR_CHANGE',
+  LOG_ROLLBACK: 'LOG_ROLLBACK'
+} as const
+
+export type ChangeType = (typeof ChangeType)[keyof typeof ChangeType]
+
+
 export const DayOfWeek = {
   MON: 'MON',
   TUE: 'TUE',

@@ -1,0 +1,38 @@
+model Log {
+  id         Int        @id @default(autoincrement())
+  entityType EntityType
+  entityId   Int
+  status LogStatus @default(ACTIVE)
+  employeeId Int?
+  changeType ChangeType
+  originalChangeType ChangeType?
+  oldValue   Json? 
+  newValue   Json?
+  createdAt  DateTime   @default(now())
+  revertedLogId  Int?
+  revertedLog    Log?       @relation("LogRevert", fields: [revertedLogId], references: [id])
+  revertLogs     Log[]      @relation("LogRevert")
+}
+
+enum LogStatus {
+  ACTIVE
+  REVERTED
+}
+
+enum EntityType {
+  CLIENT
+  LESSON
+}
+
+enum ChangeType {
+  DATE_CHANGE
+  VENUE_CHANGE
+  LESSON_CANCELLATION
+  INSTRUCTOR_CHANGE
+  LESSON_CREATE
+  QUESTION_ANSWER
+  ASSIGNED_TO_GROUP
+  SCHEDULED_TRIAL_LESSON
+  SELECTION_INSTRUCTOR_CHANGE
+  LOG_ROLLBACK
+}

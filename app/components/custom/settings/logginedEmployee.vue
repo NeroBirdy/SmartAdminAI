@@ -185,7 +185,7 @@ onMounted(async () => {
 }
 
 .help {
-  height: 78px;
+  height: 85px;
   margin-top: 0;
   margin-left: 32px;
   margin-right: 24px;

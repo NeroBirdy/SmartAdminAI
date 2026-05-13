@@ -73,7 +73,7 @@ export const useSchedule = () => {
     watch: [dateFrom, dateTo],
   });
 
-const isUpdating = ref(false);
+  const isUpdating = ref(false);
 
   watch(data, (newData) => {
     if (!newData) return;

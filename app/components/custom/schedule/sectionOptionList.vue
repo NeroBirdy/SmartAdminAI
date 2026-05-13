@@ -30,7 +30,7 @@ type Setting = {
 type SectionSetting = { id: number; option_name: string; option_key: string };
 
 const whiteBackClass = computed(() => ({
-  'white-back': availableToAddMore || props.sectionSettings.length > 1
+  "white-back": availableToAddMore || props.sectionSettings.length > 1,
 }));
 
 const props = defineProps<{
@@ -87,6 +87,7 @@ const deleteHandler = async (id: number) => {
 
 .remove-img {
   overflow: visible;
+  cursor: pointer;
 }
 
 .tag-enter-active,

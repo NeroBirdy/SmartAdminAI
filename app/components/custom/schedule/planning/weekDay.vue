@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="calendar-month-day"
-    :class="dayClasses"
-  >
+  <div class="calendar-month-day" :class="dayClasses">
     <div class="inside-calendar-month-day">
       <div class="header">
         <h1 class="main-text-md">
@@ -65,12 +62,11 @@ const dateText = computed(() => {
   const lastDay = lastDayOfMonth(date).getDate();
 
   if (day === 1 || day === lastDay) {
-    return format(date, "d MMM", { locale: ru }).replace(".", "");;
+    return format(date, "d MMM", { locale: ru }).replace(".", "");
   }
 
   return format(date, "d");
 });
-
 </script>
 
 <style scoped>

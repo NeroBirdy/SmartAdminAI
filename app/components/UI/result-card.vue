@@ -1,31 +1,72 @@
 <template>
-  <div class="frame second-frame-results">
+  <div
+    class="frame second-frame-results"
+    :class="disabledClass"
+    :style="frameStyle"
+    @click="isModalOpen = true"
+  >
     <div class="inside-frame">
-      <div class="second-frame-up">
-        <p class="second-frame-text main-text-sm">{{ title }}</p>
-        <component class="second-frame-img" :is="ellipsisImg" />
-      </div>
-      <h1 class="second-frame-header-text header-2xl">{{ text }}</h1>
+      <Transition name="fade" mode="out-in">
+        <div class="loader-wrapper" v-if="isLoading" key="loader">
+          <ui-loader />
+        </div>
+        <div v-else key="content">
+          <div class="second-frame-up">
+            <p class="second-frame-text main-text-sm">{{ title }}</p>
+          </div>
+          <h1 class="second-frame-header-text header-2xl">{{ count }}</h1>
+        </div>
+      </Transition>
     </div>
   </div>
+  <CustomLogsModalWithOverlay
+    :isModalOpen="isModalOpen"
+    :type="type"
+    @close="isModalOpen = false"
+  />
 </template>
 
 <script lang="ts" setup>
-import ellipsisImg from "~/assets/icons/ellipsis.svg";
+import { getCount } from "~/api/logs/getCount";
+import type { ChangeType } from "~~/prisma/generated/prisma/db1/enums";
 
-defineProps<{
+const props = defineProps<{
   title: string;
-  text: string;
+  type: ChangeType;
+  width?: string;
 }>();
+
+const isLoading = ref(true);
+const isModalOpen = ref(false);
+const count = ref(0);
+
+const frameStyle = computed(() => ({
+  width: props.width ?? "300px",
+}));
+
+const disabledClass = computed(() => ({
+  disabled: count.value === 0,
+}));
+
+onMounted(async () => {
+  count.value = await getCount(props.type);
+  setTimeout(() => {
+    isLoading.value = false;
+  }, 500);
+});
 </script>
 
 <style scoped>
 .frame {
   margin-top: 10px;
+  cursor: pointer;
+}
+
+.frame.disabled {
+  pointer-events: none;
 }
 
 .second-frame-results {
-  width: 348px;
   height: 110px;
   margin-right: 15px;
 }
@@ -36,6 +77,13 @@ defineProps<{
   padding-bottom: 24px;
   padding-left: 30px;
   margin-bottom: 10px;
+  height: 100%;
+}
+
+.loader-wrapper {
+  display: flex;
+  margin: auto;
+  padding-right: 30px;
 }
 
 .second-frame-up {
@@ -59,5 +107,13 @@ defineProps<{
 .second-frame-header-text {
   margin: 0;
   color: #2b3850;
+}
+
+.fade-enter-active {
+  transition: opacity 0.4s ease;
+}
+
+.fade-enter-from {
+  opacity: 0;
 }
 </style>

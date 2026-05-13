@@ -184,7 +184,7 @@ async function main() {
             key: "notify_manager",
             name: "Уведомить руководителя",
             sortOrder: 1,
-          }, 
+          },
         ],
       },
     },

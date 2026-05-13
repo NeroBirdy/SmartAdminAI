@@ -7,7 +7,7 @@ export {
   formatBreaks,
   formatWorkHours,
   formatTime,
-  formatDays
+  formatDays,
 };
 
 type group = {
@@ -56,7 +56,9 @@ const formatDays = (schedule: { dayOfWeek: string }[]) => {
   return schedule.map((s) => days[s.dayOfWeek]);
 };
 
-const venueOrInstructorScheduleToMarkdown = (items: VenueOrInstructorResult[]) => {
+const venueOrInstructorScheduleToMarkdown = (
+  items: VenueOrInstructorResult[],
+) => {
   const rows = items.flatMap((item) =>
     item.workHours.map((day: WorkHours) => {
       const breaks = item.breaks

@@ -106,7 +106,7 @@ export default defineEventHandler(async (event) => {
       });
 
       const lessons = await fakeAPI.lesson.findMany({
-        where: { date, venueId: venue.id },
+        where: { date, venueId: venue.id, status: "ACTUAL" },
         select: { startTime: true, endTime: true },
       });
 
@@ -124,10 +124,14 @@ export default defineEventHandler(async (event) => {
   const venueList = await createVenueList(results);
 
   if (results.length === 0 || venueList.length === 0) {
-    const keyboard = await buildKeyboardForMiniApp(userId, 'Календарь', datePickerId, ownerGroupId);
-    await sendMessage(userId, keyboard, 'Нет доступных локаций');
-  }
-  else {
+    const keyboard = await buildKeyboardForMiniApp(
+      userId,
+      "Календарь",
+      datePickerId,
+      ownerGroupId,
+    );
+    await sendMessage(userId, keyboard, "Нет доступных локаций");
+  } else {
     const userSession = await getUserSession(userId);
     userSession.lists = {
       ...(userSession.lists || {}),
@@ -136,11 +140,14 @@ export default defineEventHandler(async (event) => {
 
     const keyboard = await buildKeyboard(venueList, 1, "venue");
 
-    const messageId = await sendMessage(userId, keyboard, "Выберите локацию для замены");
+    const messageId = await sendMessage(
+      userId,
+      keyboard,
+      "Выберите локацию для замены",
+    );
     userSession.messageId = messageId;
 
     await setUserSession(userId, userSession);
-    
   }
 
   return results;

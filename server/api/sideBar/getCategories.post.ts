@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
       data: ids.map((id) => ({
         sectionId,
         settingAIId: id,
-        enable: false
+        enable: false,
       })),
     });
 

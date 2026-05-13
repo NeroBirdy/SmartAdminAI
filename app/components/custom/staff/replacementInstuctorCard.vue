@@ -108,7 +108,7 @@ onMounted(async () => {
 .sparkle-wrapper {
   display: flex;
   align-self: flex-start;
-  height: 69px
+  height: 69px;
 }
 
 .sparkle {
@@ -155,6 +155,7 @@ onMounted(async () => {
   align-self: center;
   padding: 0 24px;
   transition: transform 0.3s ease;
+  cursor: pointer;
 }
 
 .card-arrow.mirrored {

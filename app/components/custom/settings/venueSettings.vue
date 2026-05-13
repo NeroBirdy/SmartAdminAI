@@ -46,6 +46,7 @@
         (id: number, type: 'save' | 'delete' | 'null', success: boolean) =>
           closeHandler(id, type, success)
       "
+      @instaClose="isModalOpen = false"
     />
   </div>
 </template>

@@ -2,7 +2,9 @@
   <div class="help">
     <div class="inside-help">
       <h1 class="help-header main-text-sm">{{ props.title }}</h1>
-      <p class="help-p main-text-sm" >{{ props.text }} <a :href="props.link">Ссылка</a></p>
+      <p class="help-p main-text-sm">
+        {{ props.text }} <a :href="props.link" v-if="props.link">Ссылка</a>
+      </p>
     </div>
   </div>
 </template>
@@ -51,5 +53,6 @@ const props = defineProps<{
   margin-bottom: 16px;
   margin-left: 20px;
   padding-bottom: 10px;
+  padding-right: 5px;
 }
 </style>

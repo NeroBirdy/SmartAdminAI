@@ -1,5 +1,5 @@
 import { VK } from "vk-io";
-import { session } from '../../bot/middlewares';
+import { session } from "../../bot/middlewares";
 
 export {
   saveUserState,
@@ -22,6 +22,8 @@ export {
   createNewUser,
   checkUserRegistration,
   getUser,
+  getClient,
+  getEmployee,
   setUserGroup,
 };
 
@@ -65,15 +67,7 @@ type DateList = {
 };
 
 async function saveUserState(params: SaveUserStateParams) {
-  const {
-    peerId,
-    state,
-    city,
-    program,
-    organization,
-    key,
-    role,
-  } = params;
+  const { peerId, state, city, program, organization, key, role } = params;
 
   const updateData: any = {};
 
@@ -107,10 +101,9 @@ async function saveUserState(params: SaveUserStateParams) {
       organization: organization ?? null,
       key: key ?? null,
       role: role ?? null,
-    }
+    },
   });
 }
-
 
 async function getUserState(peerId: number) {
   const user = await prisma.users.findUnique({
@@ -228,7 +221,6 @@ async function getMenagerId() {
   return userData?.peerId;
 }
 
-
 async function getInstructorKey(userId: number) {
   const user = await fakeApi.employee.findFirst({
     where: { id: userId },
@@ -237,7 +229,6 @@ async function getInstructorKey(userId: number) {
 
   return user?.accessCode;
 }
-
 
 async function getInstructorPeerId(key: string) {
   const user = await prisma.users.findFirst({
@@ -248,7 +239,6 @@ async function getInstructorPeerId(key: string) {
   return user?.peerId || 0;
 }
 
-
 async function getUserIdByPeerId(peerId: number) {
   const user = await prisma.users.findFirst({
     where: { peerId: peerId },
@@ -258,11 +248,10 @@ async function getUserIdByPeerId(peerId: number) {
   return user?.id;
 }
 
-
 async function getUserOrgId(peerId: number) {
   const userData = await prisma.users.findFirst({
     where: { peerId: peerId },
-    select: { organization: true, city: true }
+    select: { organization: true, city: true },
   });
 
   if (!userData?.city || !userData?.organization) {
@@ -282,16 +271,14 @@ async function getUserOrgId(peerId: number) {
   return orgId?.id;
 }
 
-
 async function saveProgram(peerId: number, program: string) {
   return await prisma.users.update({
     where: { peerId: peerId },
     data: {
       program: program,
-    }
+    },
   });
 }
-
 
 async function getUserSession(peerId: number) {
   const storage: any = (session as any).storage;
@@ -318,10 +305,22 @@ async function setUserSession(peerId: number, sessionData: SessionData) {
   storage[peerId] = sessionData;
 }
 
-
-async function createNewUser(isChild: boolean, gender: string, name: string, surname: string, birthdate: string, phone: string, email: string, key: string, parentName?: string, parentSurname?: string) {
-  const [dd, mm, yyyy] = birthdate.split('.');
-  const date = new Date(Date.UTC(Number(yyyy), Number(mm) - 1, Number(dd), 0, 0, 0, 0));
+async function createNewUser(
+  isChild: boolean,
+  gender: string,
+  name: string,
+  surname: string,
+  birthdate: string,
+  phone: string,
+  email: string,
+  key: string,
+  parentName?: string,
+  parentSurname?: string,
+) {
+  const [dd, mm, yyyy] = birthdate.split(".");
+  const date = new Date(
+    Date.UTC(Number(yyyy), Number(mm) - 1, Number(dd), 0, 0, 0, 0),
+  );
 
   if (isChild) {
     await fakeApi.client.create({
@@ -337,10 +336,9 @@ async function createNewUser(isChild: boolean, gender: string, name: string, sur
         accountType: "CHILD",
         status: "WAITING",
         accessCode: key,
-      }
+      },
     });
-  }
-  else {
+  } else {
     await fakeApi.client.create({
       data: {
         firstName: name,
@@ -352,12 +350,11 @@ async function createNewUser(isChild: boolean, gender: string, name: string, sur
         accountType: "ADULT",
         status: "WAITING",
         accessCode: key,
-      }
+      },
     });
   }
   return true;
 }
-
 
 async function checkUserRegistration(peerId: number) {
   const userData = await prisma.users.findFirst({
@@ -371,17 +368,15 @@ async function checkUserRegistration(peerId: number) {
       select: { id: true },
     });
     return !!client;
-  }
-  else {
+  } else {
     return false;
   }
 }
 
 type UserParam = {
-  peerId?: number,
-  key?: string
-}
-
+  peerId?: number;
+  key?: string;
+};
 
 async function getUser(userParam: UserParam) {
   return await prisma.users.findFirst({
@@ -389,13 +384,50 @@ async function getUser(userParam: UserParam) {
   });
 }
 
+async function getClient(key: string) {
+  return await fakeApi.client.findFirst({
+    where: { accessCode: key },
+  });
+}
+
+async function getEmployee(key: string) {
+  return await fakeApi.employee.findFirst({
+    where: { accessCode: key },
+  });
+}
+
 async function setUserGroup(peerId: number, groupId: number) {
   const userKey = await getUserAccessCode(peerId);
+  const client = await fakeApi.client.findFirst({
+    where: { accessCode: userKey },
+  });
 
-  return await fakeApi.client.update({
+  const newValue = await fakeApi.client.update({
     where: { accessCode: userKey },
     data: {
       groupId: groupId,
     },
   });
+
+  const clientFields = await getClientFields(client!.id);
+  const oldGroupFields = await getGroupFields(client!.groupId);
+  const newGroupFields = await getGroupFields(groupId);
+
+  //LOG Распределение в группу
+  await createLog({
+    entityType: "CLIENT",
+    entityId: client!.id,
+    changeType: "ASSIGNED_TO_GROUP",
+    oldValue: {
+      ...clientFields,
+      ...oldGroupFields,
+      change: { groupId: client!.groupId },
+    },
+    newValue: {
+      ...newGroupFields,
+      change: { groupId: groupId },
+    },
+  });
+
+  return newValue;
 }

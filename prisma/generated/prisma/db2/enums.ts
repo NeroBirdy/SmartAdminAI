@@ -42,6 +42,14 @@ export const EmployeeRole = {
 export type EmployeeRole = (typeof EmployeeRole)[keyof typeof EmployeeRole]
 
 
+export const LessonStatus = {
+  ACTUAL: 'ACTUAL',
+  DELETED: 'DELETED'
+} as const
+
+export type LessonStatus = (typeof LessonStatus)[keyof typeof LessonStatus]
+
+
 export const OrgType = {
   EDUCATION_CENTER: 'EDUCATION_CENTER',
   SPORTS_CLUB: 'SPORTS_CLUB',

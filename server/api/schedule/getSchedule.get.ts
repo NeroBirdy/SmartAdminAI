@@ -46,6 +46,7 @@ const fetchAllLessons = (orgId: number, dateFrom: Date, dateTo: Date) =>
     where: {
       group: { organizationId: orgId },
       date: { gte: dateFrom, lt: dateTo },
+      status: "ACTUAL",
     },
     select: {
       group: { select: { id: true, name: true } },
@@ -65,9 +66,10 @@ const fetchFilteredLessons = (
       group: { organizationId: orgId, id: { notIn: groupExceptions } },
       venue: { id: { notIn: venueExceptions } },
       date: { gte: dateFrom, lt: dateTo },
+      status: "ACTUAL",
     },
     orderBy: {
-      startTime: 'asc'
+      startTime: "asc",
     },
     include: {
       group: { select: { id: true, name: true } },

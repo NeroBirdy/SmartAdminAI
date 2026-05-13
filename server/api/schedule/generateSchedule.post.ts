@@ -3,6 +3,10 @@ import { join } from "node:path";
 import JSON5 from "json5";
 
 import { collectData } from "~~/server/utils/schedule/getData";
+import {
+  LessonStatus,
+  Lesson as PrismaLesson,
+} from "~~/prisma/generated/prisma/db2/client";
 
 import {
   venueOrInstructorScheduleToMarkdown,
@@ -12,6 +16,7 @@ import {
 } from "../../utils/schedule/formatData";
 
 const fakeAPI = useFakeAPI();
+const prisma = usePrisma();
 
 const filePath = join(
   process.cwd(),
@@ -176,7 +181,27 @@ const saveLessons = async (content: string) => {
   const formattedLessons = lessons.map(parseLesson);
 
   try {
-    await fakeAPI.lesson.createMany({ data: formattedLessons });
+    const createdLessons = await Promise.all(
+      formattedLessons.map((lesson: PrismaLesson) =>
+        fakeAPI.lesson.create({ data: lesson }),
+      ),
+    );
+
+    await Promise.all(
+      createdLessons.map(async (lesson) => {
+        const fields = await getLessonFields(lesson.id);
+
+        //LOG Генерация Урока
+        await createLog({
+          changeType: "LESSON_CREATE",
+          entityType: "LESSON",
+          entityId: lesson.id,
+          oldValue: { change: { status: LessonStatus.DELETED } },
+          newValue: { ...fields, change: { status: LessonStatus.ACTUAL } },
+        });
+      }),
+    );
+
     return { success: true };
   } catch (e) {
     return lessons;

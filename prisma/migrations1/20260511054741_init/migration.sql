@@ -8,6 +8,33 @@ CREATE TABLE `Breaks` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `Log` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `entityType` ENUM('CLIENT', 'LESSON') NOT NULL,
+    `entityId` INTEGER NOT NULL,
+    `status` ENUM('ACTIVE', 'REVERTED') NOT NULL,
+    `employeeId` INTEGER NULL,
+    `changeType` ENUM('DATE_CHANGE', 'VENUE_CHANGE', 'LESSON_CANCELLATION', 'INSTRUCTOR_CHANGE', 'LESSON_CREATE', 'QUESTION_ANSWER', 'ASSIGNED_TO_GROUP', 'SCHEDULED_TRIAL_LESSON', 'SELECTION_INSTRUCTOR_CHANGE', 'LOG_ROLLBACK') NOT NULL,
+    `oldValue` JSON NOT NULL,
+    `newValue` JSON NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `revertedLogId` INTEGER NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Messages` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `userId` INTEGER NOT NULL,
+    `messageId` INTEGER NOT NULL,
+    `randomId` INTEGER NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `prompts` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `title` VARCHAR(191) NOT NULL,
@@ -126,12 +153,8 @@ CREATE TABLE `users` (
     `peerId` INTEGER NOT NULL,
     `state` VARCHAR(191) NULL,
     `city` VARCHAR(191) NULL,
-    `citiesList` JSON NOT NULL,
     `organization` VARCHAR(191) NULL,
-    `organizationsList` JSON NOT NULL,
-    `venueList` JSON NOT NULL,
-    `dateList` JSON NOT NULL,
-    `page` INTEGER NOT NULL DEFAULT 1,
+    `program` VARCHAR(191) NULL,
     `key` VARCHAR(191) NULL,
     `role` VARCHAR(191) NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -163,6 +186,9 @@ CREATE TABLE `WorkScheduleBreaks` (
     UNIQUE INDEX `WorkScheduleBreaks_workScheduleId_breakId_key`(`workScheduleId`, `breakId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `Log` ADD CONSTRAINT `Log_revertedLogId_fkey` FOREIGN KEY (`revertedLogId`) REFERENCES `Log`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `recommendations` ADD CONSTRAINT `recommendations_sectionId_fkey` FOREIGN KEY (`sectionId`) REFERENCES `sections`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

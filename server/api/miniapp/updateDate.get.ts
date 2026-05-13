@@ -1,15 +1,17 @@
-import { fromZonedTime } from "date-fns-tz";
-
-const fakeAPI = useFakeAPI();
-
 import { VK, Keyboard } from "vk-io";
 const vk = new VK({ token: useRuntimeConfig().vkToken });
+
+const fakeAPI = useFakeAPI();
+const prisma = usePrisma();
 
 export default defineEventHandler(async (event) => {
   const query = getQuery(event);
 
   const lessonId = Number(query.lessonId);
   const userId = Number(query.userId);
+
+  const user = await prisma.users.findFirst({ where: { peerId: userId } });
+  const employee = await getEmployee(user?.key!);
 
   const date = query.date as string;
   const startTime = query.startTime as string;
@@ -31,7 +33,7 @@ export default defineEventHandler(async (event) => {
 
   const startTimeObj = parseTime(startTime);
   const endTimeObj = parseTime(endTime);
-  
+
   let res;
 
   try {
@@ -41,6 +43,8 @@ export default defineEventHandler(async (event) => {
       random_id: Date.now(),
     });
 
+    const oldLessonFields = await getLessonFields(lessonId);
+
     await fakeAPI.lesson.update({
       where: { id: lessonId },
       data: {
@@ -49,7 +53,23 @@ export default defineEventHandler(async (event) => {
         endTime: endTimeObj,
       },
     });
-    // ЛОГ
+
+    const newLessonFields = await getLessonFields(lessonId);
+
+    const oldDate = new Date(oldLessonFields.lessonDate!);
+    const utcOldDate = new Date(
+      Date.UTC(oldDate.getFullYear(), oldDate.getMonth(), oldDate.getDate()),
+    );
+
+    //LOG Перенос занятия на другую дату
+    await createLog({
+      entityType: "LESSON",
+      entityId: lessonId,
+      employeeId: employee!.id,
+      changeType: "DATE_CHANGE",
+      oldValue: { ...oldLessonFields, change: { date: utcOldDate } },
+      newValue: { ...newLessonFields, change: { date: utcDateObj } },
+    });
 
     await Promise.all([
       new Promise((resolve) => setTimeout(resolve, 2000)),

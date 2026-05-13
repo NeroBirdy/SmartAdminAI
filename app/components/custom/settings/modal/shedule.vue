@@ -27,23 +27,22 @@
           />
         </div>
       </Transition>
-
-      <Transition name="fade">
-        <div
-          class="confirm-overlay"
-          v-if="confirmDeleteOpen"
-          @click.stop="toggleConfirmDelete"
-        />
-      </Transition>
-      <Transition name="confirm">
-        <div v-if="confirmDeleteOpen" class="confirm-wrapper">
-          <CustomSettingsModalConfirmDelete
-            @close="toggleConfirmDelete"
-            @delete="deleteSchedule"
-          />
-        </div>
-      </Transition>
     </div>
+    <Transition name="fade">
+      <div
+        class="confirm-overlay"
+        v-if="confirmDeleteOpen"
+        @click.stop="toggleConfirmDelete"
+      />
+    </Transition>
+    <Transition name="confirm">
+      <div v-if="confirmDeleteOpen" class="confirm-wrapper">
+        <CustomSettingsModalConfirmDelete
+          @close="toggleConfirmDelete"
+          @delete="deleteSchedule"
+        />
+      </div>
+    </Transition>
   </div>
 </template>
 <script lang="ts" setup>
@@ -132,11 +131,7 @@ function validateSchedule() {
     return false;
   }
   if (!settings.validateData(orgSchedule.value)) {
-    showCustomToast(
-      "warning",
-      "Некорректное заполнение времени",
-      "",
-    );
+    showCustomToast("warning", "Некорректное заполнение времени", "");
     return false;
   }
   return true;
@@ -195,7 +190,7 @@ const deleteSchedule = async () => {
 
 <style scoped>
 .setting {
-  position: absolute;
+  position: fixed;
   top: 40px;
   left: 50%;
   transform: translateX(-50%);
@@ -284,6 +279,7 @@ const deleteSchedule = async () => {
   justify-content: center;
   z-index: 3;
   pointer-events: none;
+  transform: translateZ(0);
 }
 
 .confirm-enter-active,

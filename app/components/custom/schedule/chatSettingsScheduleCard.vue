@@ -142,6 +142,7 @@ const hiddenClass = computed(() => ({
   align-self: center;
   padding: 0 24px;
   transition: transform 0.3s ease;
+  cursor: pointer;
 }
 
 .card-arrow.mirrored {
