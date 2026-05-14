@@ -4,7 +4,6 @@ import { Keyboard } from "vk-io";
 export const registrationScene = new StepScene("registration", [
   async (context) => {
     context.session.state = "registration";
-    await saveUserState({ peerId: context.peerId, state: "registration" });
 
     const cmd = context.messagePayload?.cmd;
 

@@ -2,13 +2,7 @@ import { StepScene } from "@vk-io/scenes";
 
 export const chooseOrganizationScene = new StepScene("chooseOrganization", [
   async (context) => {
-    const peerId = context.peerId;
-
     if (context.scene.step.firstTime) {
-      await saveUserState({
-        peerId: context.peerId,
-        state: "choose_organization",
-      });
       context.session.state = "choose_organization";
 
       const response = await getCityOrganizationList();

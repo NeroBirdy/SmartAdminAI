@@ -162,8 +162,8 @@ async function login(peerId: number, key: string) {
       role = employee.role;
     }
 
-    setUserAccessCode(peerId, key, role!);
-    sendCompleteLoginMessage(peerId, user!.firstName, user!.lastName);
+    await setUserAccessCode(peerId, key, role!);
+    await sendCompleteLoginMessage(peerId, user!.firstName, user!.lastName);
   } catch (e) {
     console.log(e);
   }
@@ -248,23 +248,14 @@ async function getUserIdByPeerId(peerId: number) {
   return user?.id;
 }
 
-async function getUserOrgId(peerId: number) {
-  const userData = await prisma.users.findFirst({
-    where: { peerId: peerId },
-    select: { organization: true, city: true },
-  });
-
-  if (!userData?.city || !userData?.organization) {
-    return null;
-  }
-
+async function getUserOrgId(peerId: number, chooseCity: string, chooseOrganization: string) {
   const city = await fakeApi.city.findFirst({
-    where: { name: userData?.city },
+    where: { name: chooseCity },
     select: { id: true },
   });
 
   const orgId = await fakeApi.organization.findFirst({
-    where: { name: userData.organization, cityId: city?.id },
+    where: { name: chooseOrganization, cityId: city?.id },
     select: { id: true },
   });
 

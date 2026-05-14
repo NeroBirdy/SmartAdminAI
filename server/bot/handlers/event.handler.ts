@@ -55,11 +55,6 @@ export function registerEventHandler() {
 
       switch (listKey) {
         case "city":
-          await saveUserState({
-            peerId: context.peerId,
-            city: value,
-            state: "choose_organization",
-          });
           await editMessage(
             context.peerId,
             context.session.messageId,
@@ -69,12 +64,6 @@ export function registerEventHandler() {
           return context.scene.enter("chooseOrganization");
 
         case "organization":
-          await saveUserState({
-            peerId: context.peerId,
-            organization: value,
-            state: "choose_program",
-          });
-          context.session.state = "choose_program";
           await editMessage(
             context.peerId,
             context.session.messageId,
@@ -84,7 +73,6 @@ export function registerEventHandler() {
           return context.scene.enter("chooseProgram");
 
         case "program":
-          await saveUserState({ peerId: context.peerId, program: value });
           await editMessage(
             context.peerId,
             context.session.messageId,
@@ -410,7 +398,14 @@ export function registerEventHandler() {
 
         case "program":
           await deleteMessage(context.session.messageId);
+
+          if (context.session.program) {
+            return;
+          }
           return context.scene.enter("chooseOrganization");
+
+        case "trialLesson":
+          await deleteMessage(context.session.messageId);
 
         default:
           return context.scene.enter("start");

@@ -1655,10 +1655,6 @@ export type SettingTypeScalarFieldEnum = (typeof SettingTypeScalarFieldEnum)[key
 export const UsersScalarFieldEnum = {
   id: 'id',
   peerId: 'peerId',
-  state: 'state',
-  city: 'city',
-  organization: 'organization',
-  program: 'program',
   key: 'key',
   role: 'role',
   createdAt: 'createdAt'
@@ -1794,10 +1790,6 @@ export type SettingTypeOrderByRelevanceFieldEnum = (typeof SettingTypeOrderByRel
 
 
 export const UsersOrderByRelevanceFieldEnum = {
-  state: 'state',
-  city: 'city',
-  organization: 'organization',
-  program: 'program',
   key: 'key',
   role: 'role'
 } as const

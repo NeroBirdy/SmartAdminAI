@@ -10,12 +10,11 @@ export const loginScene = new StepScene("login", [
       return context.scene.enter("start");
     }
 
-    if (context.scene.step.firstTime) {
+    if (context.scene.step.firstTime && context.session.state !== 'login') {
       if (accessCode !== null) {
         const isLogined = await login(peerId, accessCode!);
 
         if (isLogined) {
-          await saveUserState({ peerId, state: "isLogined" });
           context.session.state = "isLogined";
           await sendHelloMessage(peerId);
           return context.scene.leave();
@@ -27,7 +26,7 @@ export const loginScene = new StepScene("login", [
         keyboard: await buildBackButton(),
       });
 
-      await saveUserState({ peerId, state: "login" });
+      context.session.state = 'login';
       return;
     }
 
@@ -39,7 +38,6 @@ export const loginScene = new StepScene("login", [
     const isLogined = await login(peerId, key);
 
     if (isLogined) {
-      await saveUserState({ peerId, state: "isLogined" });
       context.session.state = "isLogined";
       await sendHelloMessage(peerId);
       return context.scene.leave();

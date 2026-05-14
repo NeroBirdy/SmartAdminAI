@@ -266,19 +266,12 @@ async function checkMessagesCount(randomId: number) {
   return count;
 }
 
-async function getPrograms(orgId: number, peerId: number) {
-  const userKey = await getUserAccessCode(peerId);
-  const client = await fakeApi.client.findFirst({
-    where: {
-      accessCode: userKey,
-    },
-    include: { group: true },
-  });
-
-  const programId = client!.groupId ? client!.group?.programId : -1;
-
+async function getPrograms(orgId: number, programName?: string) {
   const programs = await fakeApi.program.findMany({
-    where: { organizationId: orgId, id: { not: programId } },
+    where: {
+      organizationId: orgId,
+      name: { not: programName },
+    },
     select: { name: true },
   });
 
@@ -350,77 +343,91 @@ function timeFromIsoToLocalHm(iso: string): string {
 }
 
 async function getClientGroup(key: string) {
-  const clientData = await fakeApi.client.findFirst({
-    where: { accessCode: key },
-    select: { groupId: true },
-  });
+  try {
+    const clientData = await fakeApi.client.findFirst({
+      where: { accessCode: key },
+      select: { groupId: true },
+    });
 
-  const user = await getUser({ key: key });
+    const user = await getUser({ key: key });
 
-  const group = await fakeApi.group.findFirst({
-    where: { id: clientData?.groupId! },
-    select: { name: true, instructorId: true, defaultVenueId: true },
-  });
+    const group = await fakeApi.group.findFirst({
+      where: { id: clientData?.groupId! },
+      select: { name: true, instructorId: true, defaultVenueId: true },
+    });
 
-  const instructor = await fakeApi.employee.findFirst({
-    where: { id: group?.instructorId },
-    select: { firstName: true, lastName: true },
-  });
+    const instructor = await fakeApi.employee.findFirst({
+      where: { id: group?.instructorId },
+      select: { firstName: true, lastName: true },
+    });
 
-  const venue = await fakeApi.venue.findFirst({
-    where: { id: group?.defaultVenueId },
-    select: { name: true, address: true },
-  });
+    const venue = await fakeApi.venue.findFirst({
+      where: { id: group?.defaultVenueId },
+      select: { name: true, address: true },
+    });
 
-  return {
-    organization: user?.organization,
-    program: user?.program,
-    groupName: group?.name,
-    instructor: instructor?.lastName + " " + instructor?.firstName,
-    venueName: venue?.name,
-    venueAddress: venue?.address,
-  };
+    return {
+      groupName: group?.name,
+      instructor: instructor?.lastName + " " + instructor?.firstName,
+      venueName: venue?.name,
+      venueAddress: venue?.address,
+    };
+  }
+  catch (e) {
+    return false;
+  }
+
 }
 
 async function getSubscriptionInfo(key: string) {
-  const client = await fakeApi.client.findFirst({ where: { accessCode: key } });
+  try {
+    const client = await fakeApi.client.findFirst({ where: { accessCode: key } });
 
-  const clientSubscription = await fakeApi.clientSubscription.findFirst({
-    where: {
-      clientId: client?.id,
-    },
-    include: { subscriptionType: true },
-  });
+    const clientSubscription = await fakeApi.clientSubscription.findFirst({
+      where: {
+        clientId: client?.id,
+      },
+      include: { subscriptionType: true },
+    });
 
-  const today = new Date();
-  const date = today.setDate(
-    today.getDate() + clientSubscription?.subscriptionType.expiryDays!,
-  );
-  const fmtDate = format(date, "dd.MM.yyyy", { locale: ru });
+    const today = new Date();
+    const date = today.setDate(
+      today.getDate() + clientSubscription?.subscriptionType.expiryDays!,
+    );
+    const fmtDate = format(date, "dd.MM.yyyy", { locale: ru });
 
-  return {
-    type: clientSubscription?.subscriptionType.typeName,
-    date: clientSubscription?.subscriptionType.hasExpiry ? fmtDate : null,
-    remainingVisits: clientSubscription?.remainingVisits,
-  };
+    return {
+      type: clientSubscription?.subscriptionType.typeName,
+      date: clientSubscription?.subscriptionType.hasExpiry ? fmtDate : null,
+      remainingVisits: clientSubscription?.remainingVisits,
+    };
+  }
+  catch (e) {
+    return false;
+  }
 }
 
 async function getLessonsForClient(key: string) {
-  const client = await fakeApi.client.findFirst({ where: { accessCode: key } });
+  try {
+    const client = await fakeApi.client.findFirst({ where: { accessCode: key } });
 
-  const start = new Date();
-  const end = new Date();
-  end.setDate(start.getDate() + 14);
-  const lessons = await fakeApi.lesson.findMany({
-    where: {
-      groupId: client?.groupId!,
-      date: {
-        gte: start,
-        lte: end,
+    const start = new Date();
+    const end = new Date();
+    end.setDate(start.getDate() + 14);
+    const lessons = await fakeApi.lesson.findMany({
+      where: {
+        groupId: client?.groupId!,
+        date: {
+          gte: start,
+          lte: end,
+        },
+        status: "ACTUAL",
       },
-      status: "ACTUAL",
-    },
-  });
+    });
 
-  return lessons;
+    return lessons;
+  }
+  catch (e) {
+    return false;
+  }
 }

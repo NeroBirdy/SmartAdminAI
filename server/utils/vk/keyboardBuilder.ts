@@ -353,7 +353,7 @@ async function buildKeyboardForTrialLesson(
 
   keyboard.callbackButton({
     label: "Вернуться",
-    payload: { cmd: "back", state: "return" },
+    payload: { cmd: "back", listKey: "trialLesson" },
   });
 
   return keyboard;

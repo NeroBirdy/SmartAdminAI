@@ -292,10 +292,20 @@ async function sendGroupInfo(peerId: number) {
 
   const group = await getClientGroup(userKey!);
 
+  if (!group) {
+    return await vk.api.messages.send({
+      peer_id: peerId,
+      random_id: Date.now(),
+      message: "Вы еще не состоите в группе",
+    });
+  }
+
+  const userSession = await getUserSession(peerId);
+
   return await vk.api.messages.send({
     peer_id: peerId,
     random_id: Date.now(),
-    message: `Информация о вашей группе:\nНазвание организации: ${group.organization}\nПрограмма: ${group.program}\nГруппа: ${group.groupName}\nИнструктор: ${group.instructor}\nЛокация: ${group.venueName}, расположена по адресу ${group.venueAddress}`,
+    message: `Информация о вашей группе:\nНазвание организации: ${userSession.organization}\nПрограмма: ${userSession.program}\nГруппа: ${group.groupName}\nИнструктор: ${group.instructor}\nЛокация: ${group.venueName}, расположена по адресу ${group.venueAddress}`,
   });
 }
 
@@ -303,6 +313,14 @@ async function sendSubscriptionInfo(peerId: number) {
   const userKey = await getUserAccessCode(peerId);
 
   const subscription = await getSubscriptionInfo(userKey!);
+
+  if (!subscription) {
+    return await vk.api.messages.send({
+    peer_id: peerId,
+    random_id: Date.now(),
+    message: "Ваш абонемент не найден",
+  });
+  }
 
   let message = `Информация об абонементе \n`;
   message += `Тип: ${subscription.type}\n`;
@@ -322,6 +340,14 @@ async function sendScheduleForClient(peerId: number) {
   const userKey = await getUserAccessCode(peerId);
 
   const lessons = await getLessonsForClient(userKey!);
+
+  if (!lessons) {
+    return await vk.api.messages.send({
+    peer_id: peerId,
+    random_id: Date.now(),
+    message: "Вы еще не состоите в группе",
+  });
+  }
 
   let message = `Расписание \n`;
   message += lessons
