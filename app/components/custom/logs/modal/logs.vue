@@ -100,8 +100,7 @@ async function onRevert() {
   if (!response.success) {
     confirmLogId.value = null;
 
-    showCustomToast("danger", "Произошла ошибка", "попробуйте позже");
-    //Добавить вторую ошибку
+    showCustomToast("danger", "Произошла ошибка", response.message!);
     return;
   }
 
