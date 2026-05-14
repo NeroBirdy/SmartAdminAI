@@ -18,7 +18,7 @@ model Lesson {
   employeeProgram   EmployeeProgram? @relation(fields: [employeeProgramId], references: [id])
 }
 
-  enum LessonStatus {
-    ACTUAL
-    DELETED
-  }
+enum LessonStatus {
+  ACTUAL
+  DELETED
+}
