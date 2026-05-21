@@ -6,6 +6,7 @@
     </div>
     <div class="btns">
       <custom-logs-modal-title-filter-title
+        v-if="type == 'LOG_ROLLBACK'"
         class="filter-title-category"
         type="category"
       />
@@ -25,8 +26,9 @@
 
 <script lang="ts" setup>
 import closeIcon from "~/assets/icons/x.svg";
+import type { ChangeType } from "~~/prisma/generated/prisma/db1/enums";
 
-const props = defineProps<{ title: string }>();
+const props = defineProps<{ title: string; type: ChangeType }>();
 
 const emit = defineEmits<{
   (e: "close"): void;

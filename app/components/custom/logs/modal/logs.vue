@@ -1,6 +1,6 @@
 <template>
   <div class="frame logs">
-    <CustomLogsModalTitle :title="titles[type]" @close="emit('close')" />
+    <CustomLogsModalTitle :title="titles[type]" :type="type" @close="emit('close')" />
     <div class="inside-frame" :class="extendedStyle">
       <Transition name="fade" mode="out-in">
         <div class="loader-wrapper" v-if="isLoading" key="loader">
