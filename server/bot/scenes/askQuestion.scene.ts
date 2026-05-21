@@ -5,8 +5,7 @@ export const askQuestionScene = new StepScene("askQuestion", [
   async (context) => {
     const cmd = context.messagePayload?.cmd;
 
-    if (context.scene.step.firstTime) {
-      await saveUserState({ peerId: context.peerId, state: "askQuestion" });
+    if (context.scene.step.firstTime && context.session.state !== "askQuestion") {
       context.session.state = "askQuestion";
 
       const keyboard = await buildBackButton();
@@ -19,6 +18,7 @@ export const askQuestionScene = new StepScene("askQuestion", [
 
     if (cmd === "back") {
       await sendHelloMessage(context.peerId);
+      context.session.state = 'isLogined';
       return context.scene.leave();
     }
 

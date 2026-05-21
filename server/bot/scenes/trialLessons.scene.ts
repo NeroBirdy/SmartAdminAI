@@ -3,10 +3,6 @@ import { StepScene } from "@vk-io/scenes";
 export const trialLesonsScene = new StepScene("trialLessons", [
   async (context) => {
     if (context.scene.step.firstTime) {
-      await saveUserState({
-        peerId: context.peerId,
-        state: "chooseTrialLessons",
-      });
       context.session.state = "trialLessons";
 
       const trialLessonsList = await $fetch(

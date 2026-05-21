@@ -39,10 +39,6 @@ export type UsersSumAggregateOutputType = {
 export type UsersMinAggregateOutputType = {
   id: number | null
   peerId: number | null
-  state: string | null
-  city: string | null
-  organization: string | null
-  program: string | null
   key: string | null
   role: string | null
   createdAt: Date | null
@@ -51,10 +47,6 @@ export type UsersMinAggregateOutputType = {
 export type UsersMaxAggregateOutputType = {
   id: number | null
   peerId: number | null
-  state: string | null
-  city: string | null
-  organization: string | null
-  program: string | null
   key: string | null
   role: string | null
   createdAt: Date | null
@@ -63,10 +55,6 @@ export type UsersMaxAggregateOutputType = {
 export type UsersCountAggregateOutputType = {
   id: number
   peerId: number
-  state: number
-  city: number
-  organization: number
-  program: number
   key: number
   role: number
   createdAt: number
@@ -87,10 +75,6 @@ export type UsersSumAggregateInputType = {
 export type UsersMinAggregateInputType = {
   id?: true
   peerId?: true
-  state?: true
-  city?: true
-  organization?: true
-  program?: true
   key?: true
   role?: true
   createdAt?: true
@@ -99,10 +83,6 @@ export type UsersMinAggregateInputType = {
 export type UsersMaxAggregateInputType = {
   id?: true
   peerId?: true
-  state?: true
-  city?: true
-  organization?: true
-  program?: true
   key?: true
   role?: true
   createdAt?: true
@@ -111,10 +91,6 @@ export type UsersMaxAggregateInputType = {
 export type UsersCountAggregateInputType = {
   id?: true
   peerId?: true
-  state?: true
-  city?: true
-  organization?: true
-  program?: true
   key?: true
   role?: true
   createdAt?: true
@@ -210,10 +186,6 @@ export type UsersGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 export type UsersGroupByOutputType = {
   id: number
   peerId: number
-  state: string | null
-  city: string | null
-  organization: string | null
-  program: string | null
   key: string | null
   role: string | null
   createdAt: Date
@@ -245,10 +217,6 @@ export type UsersWhereInput = {
   NOT?: Prisma.UsersWhereInput | Prisma.UsersWhereInput[]
   id?: Prisma.IntFilter<"Users"> | number
   peerId?: Prisma.IntFilter<"Users"> | number
-  state?: Prisma.StringNullableFilter<"Users"> | string | null
-  city?: Prisma.StringNullableFilter<"Users"> | string | null
-  organization?: Prisma.StringNullableFilter<"Users"> | string | null
-  program?: Prisma.StringNullableFilter<"Users"> | string | null
   key?: Prisma.StringNullableFilter<"Users"> | string | null
   role?: Prisma.StringNullableFilter<"Users"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Users"> | Date | string
@@ -257,10 +225,6 @@ export type UsersWhereInput = {
 export type UsersOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   peerId?: Prisma.SortOrder
-  state?: Prisma.SortOrderInput | Prisma.SortOrder
-  city?: Prisma.SortOrderInput | Prisma.SortOrder
-  organization?: Prisma.SortOrderInput | Prisma.SortOrder
-  program?: Prisma.SortOrderInput | Prisma.SortOrder
   key?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -273,10 +237,6 @@ export type UsersWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.UsersWhereInput | Prisma.UsersWhereInput[]
   OR?: Prisma.UsersWhereInput[]
   NOT?: Prisma.UsersWhereInput | Prisma.UsersWhereInput[]
-  state?: Prisma.StringNullableFilter<"Users"> | string | null
-  city?: Prisma.StringNullableFilter<"Users"> | string | null
-  organization?: Prisma.StringNullableFilter<"Users"> | string | null
-  program?: Prisma.StringNullableFilter<"Users"> | string | null
   key?: Prisma.StringNullableFilter<"Users"> | string | null
   role?: Prisma.StringNullableFilter<"Users"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Users"> | Date | string
@@ -285,10 +245,6 @@ export type UsersWhereUniqueInput = Prisma.AtLeast<{
 export type UsersOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   peerId?: Prisma.SortOrder
-  state?: Prisma.SortOrderInput | Prisma.SortOrder
-  city?: Prisma.SortOrderInput | Prisma.SortOrder
-  organization?: Prisma.SortOrderInput | Prisma.SortOrder
-  program?: Prisma.SortOrderInput | Prisma.SortOrder
   key?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -305,10 +261,6 @@ export type UsersScalarWhereWithAggregatesInput = {
   NOT?: Prisma.UsersScalarWhereWithAggregatesInput | Prisma.UsersScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"Users"> | number
   peerId?: Prisma.IntWithAggregatesFilter<"Users"> | number
-  state?: Prisma.StringNullableWithAggregatesFilter<"Users"> | string | null
-  city?: Prisma.StringNullableWithAggregatesFilter<"Users"> | string | null
-  organization?: Prisma.StringNullableWithAggregatesFilter<"Users"> | string | null
-  program?: Prisma.StringNullableWithAggregatesFilter<"Users"> | string | null
   key?: Prisma.StringNullableWithAggregatesFilter<"Users"> | string | null
   role?: Prisma.StringNullableWithAggregatesFilter<"Users"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Users"> | Date | string
@@ -316,10 +268,6 @@ export type UsersScalarWhereWithAggregatesInput = {
 
 export type UsersCreateInput = {
   peerId: number
-  state?: string | null
-  city?: string | null
-  organization?: string | null
-  program?: string | null
   key?: string | null
   role?: string | null
   createdAt?: Date | string
@@ -328,10 +276,6 @@ export type UsersCreateInput = {
 export type UsersUncheckedCreateInput = {
   id?: number
   peerId: number
-  state?: string | null
-  city?: string | null
-  organization?: string | null
-  program?: string | null
   key?: string | null
   role?: string | null
   createdAt?: Date | string
@@ -339,10 +283,6 @@ export type UsersUncheckedCreateInput = {
 
 export type UsersUpdateInput = {
   peerId?: Prisma.IntFieldUpdateOperationsInput | number
-  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  organization?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  program?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -351,10 +291,6 @@ export type UsersUpdateInput = {
 export type UsersUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   peerId?: Prisma.IntFieldUpdateOperationsInput | number
-  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  organization?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  program?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -363,10 +299,6 @@ export type UsersUncheckedUpdateInput = {
 export type UsersCreateManyInput = {
   id?: number
   peerId: number
-  state?: string | null
-  city?: string | null
-  organization?: string | null
-  program?: string | null
   key?: string | null
   role?: string | null
   createdAt?: Date | string
@@ -374,10 +306,6 @@ export type UsersCreateManyInput = {
 
 export type UsersUpdateManyMutationInput = {
   peerId?: Prisma.IntFieldUpdateOperationsInput | number
-  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  organization?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  program?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -386,10 +314,6 @@ export type UsersUpdateManyMutationInput = {
 export type UsersUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   peerId?: Prisma.IntFieldUpdateOperationsInput | number
-  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  organization?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  program?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -404,10 +328,6 @@ export type UsersOrderByRelevanceInput = {
 export type UsersCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   peerId?: Prisma.SortOrder
-  state?: Prisma.SortOrder
-  city?: Prisma.SortOrder
-  organization?: Prisma.SortOrder
-  program?: Prisma.SortOrder
   key?: Prisma.SortOrder
   role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -421,10 +341,6 @@ export type UsersAvgOrderByAggregateInput = {
 export type UsersMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   peerId?: Prisma.SortOrder
-  state?: Prisma.SortOrder
-  city?: Prisma.SortOrder
-  organization?: Prisma.SortOrder
-  program?: Prisma.SortOrder
   key?: Prisma.SortOrder
   role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -433,10 +349,6 @@ export type UsersMaxOrderByAggregateInput = {
 export type UsersMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   peerId?: Prisma.SortOrder
-  state?: Prisma.SortOrder
-  city?: Prisma.SortOrder
-  organization?: Prisma.SortOrder
-  program?: Prisma.SortOrder
   key?: Prisma.SortOrder
   role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -456,10 +368,6 @@ export type NullableStringFieldUpdateOperationsInput = {
 export type UsersSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   peerId?: boolean
-  state?: boolean
-  city?: boolean
-  organization?: boolean
-  program?: boolean
   key?: boolean
   role?: boolean
   createdAt?: boolean
@@ -470,16 +378,12 @@ export type UsersSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 export type UsersSelectScalar = {
   id?: boolean
   peerId?: boolean
-  state?: boolean
-  city?: boolean
-  organization?: boolean
-  program?: boolean
   key?: boolean
   role?: boolean
   createdAt?: boolean
 }
 
-export type UsersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "peerId" | "state" | "city" | "organization" | "program" | "key" | "role" | "createdAt", ExtArgs["result"]["users"]>
+export type UsersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "peerId" | "key" | "role" | "createdAt", ExtArgs["result"]["users"]>
 
 export type $UsersPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Users"
@@ -487,10 +391,6 @@ export type $UsersPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     peerId: number
-    state: string | null
-    city: string | null
-    organization: string | null
-    program: string | null
     key: string | null
     role: string | null
     createdAt: Date
@@ -865,10 +765,6 @@ export interface Prisma__UsersClient<T, Null = never, ExtArgs extends runtime.Ty
 export interface UsersFieldRefs {
   readonly id: Prisma.FieldRef<"Users", 'Int'>
   readonly peerId: Prisma.FieldRef<"Users", 'Int'>
-  readonly state: Prisma.FieldRef<"Users", 'String'>
-  readonly city: Prisma.FieldRef<"Users", 'String'>
-  readonly organization: Prisma.FieldRef<"Users", 'String'>
-  readonly program: Prisma.FieldRef<"Users", 'String'>
   readonly key: Prisma.FieldRef<"Users", 'String'>
   readonly role: Prisma.FieldRef<"Users", 'String'>
   readonly createdAt: Prisma.FieldRef<"Users", 'DateTime'>

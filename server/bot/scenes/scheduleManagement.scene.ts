@@ -8,10 +8,6 @@ export const scheduleManagementScene = new StepScene("scheduleManagement", [
     const cmd = context.messagePayload?.cmd;
 
     if (context.scene.step.firstTime) {
-      await saveUserState({
-        peerId: context.peerId,
-        state: "scheduleManagement",
-      });
       context.session.state = "scheduleManagement";
 
       const keyboard = await buildInstructorKeyboard(context.peerId);
@@ -23,11 +19,9 @@ export const scheduleManagementScene = new StepScene("scheduleManagement", [
 
     if (cmd === "backToInstructorMenu") {
       await sendHelloMessage(context.peerId);
-      await saveUserState({ peerId: context.peerId, state: "isLogined" });
       context.session.state = "isLogined";
       return context.scene.leave();
     } else {
-      await saveUserState({ peerId: context.peerId, state: cmd });
       context.session.state = cmd;
 
       const keyboard = await buildKeyboardForMiniApp(

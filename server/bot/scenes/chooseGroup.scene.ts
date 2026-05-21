@@ -3,7 +3,6 @@ import { StepScene } from "@vk-io/scenes";
 export const chooseGroupScene = new StepScene("chooseGroup", [
   async (context) => {
     if (context.scene.step.firstTime) {
-      await saveUserState({ peerId: context.peerId, state: "chooseGroup" });
       context.session.state = "chooseGroup";
 
       const response = await $fetch("/api/miniapp/getGroupsForUser", {

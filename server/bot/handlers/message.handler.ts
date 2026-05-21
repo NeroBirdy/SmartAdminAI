@@ -6,6 +6,15 @@ export function registerMessageHandler() {
       return next();
     }
 
+    const userState = ctx.session.state;
+
+    switch (userState) {
+      case "askQuestion":
+        return ctx.scene.enter("askQuestion");
+      case 'login':
+        return ctx.scene.enter('login');
+    }
+
     const cmd = ctx.messagePayload?.cmd;
 
     if (ctx.text?.trim().toLocaleLowerCase() === "начать") {

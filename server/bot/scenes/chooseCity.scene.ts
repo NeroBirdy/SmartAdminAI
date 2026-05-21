@@ -9,7 +9,6 @@ export const chooseCityScene = new StepScene("chooseCity", [
     if (context.scene.step.firstTime) {
       const keyboard = await buildBackButton();
 
-      await saveUserState({ peerId, state: "choose_city" });
       context.session.state = "choose_city";
       return context.send({
         message:
@@ -36,11 +35,6 @@ export const chooseCityScene = new StepScene("chooseCity", [
     }
 
     if (cityList.length === 1) {
-      await saveUserState({
-        peerId,
-        state: "choose_organization",
-        city: cityList[0],
-      });
       context.session.state = "choose_organization";
       await context.send(`✅ Ваш город: ${cityList[0]}`);
 
