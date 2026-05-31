@@ -10,12 +10,17 @@ export const registrationScene = new StepScene("registration", [
     if (context.scene.step.firstTime) {
       const keyboard = Keyboard.builder()
         .textButton({ label: "Для взрослого", payload: { cmd: "adult" } })
-        .textButton({ label: "Для ребенка", payload: { cmd: "child" } })
+        .textButton({ label: "Для ребенка", payload: { cmd: "child" } }).row()
+        .textButton({label: "Вернуться к выбору программы"})
         .oneTime();
       return context.send({
         message: "Выберите формат учётной записи",
         keyboard: keyboard,
       });
+    }
+
+    if (cmd === "returnChooseProgram") {
+      return context.scene.enter("chooseProgram");
     }
 
     if (cmd === "adult" || cmd === "child") {
@@ -30,12 +35,17 @@ export const registrationScene = new StepScene("registration", [
     if (context.scene.step.firstTime) {
       const keyboard = Keyboard.builder()
         .textButton({ label: "Мужской", payload: { cmd: "male" } })
-        .textButton({ label: "Женский", payload: { cmd: "female" } })
+        .textButton({ label: "Женский", payload: { cmd: "female" } }).row()
+        .textButton({label: "Вернуться к выбору программы"})
         .oneTime();
       return context.send({
         message: `${context.scene.state.child ? "Укажите пол ребёнка" : "Укажите ваш пол"}`,
         keyboard: keyboard,
       });
+    }
+
+    if (cmd === "returnChooseProgram") {
+      return context.scene.enter("chooseProgram");
     }
 
     if (cmd === "male" || cmd === "female") {
@@ -51,9 +61,16 @@ export const registrationScene = new StepScene("registration", [
 
   async (context) => {
     if (context.scene.step.firstTime) {
+    const keyboard = await buildMainMenuKeyboard();
       return context.send({
         message: `${context.scene.state.child ? "Введите имя ребёнка" : "Введите ваше имя"}`,
+        keyboard: keyboard,
       });
+    }
+
+    const cmd = context.messagePayload?.cmd;
+    if (cmd === "returnChooseProgram") {
+      return context.scene.enter("chooseProgram");
     }
 
     context.scene.state.name = context.text?.trim();
@@ -66,9 +83,16 @@ export const registrationScene = new StepScene("registration", [
 
   async (context) => {
     if (context.scene.step.firstTime) {
+      const keyboard = await buildMainMenuKeyboard();
       return context.send({
         message: `${context.scene.state.child ? "Введите фамилию ребёнка" : "Введите вашу фамилию"}`,
+        keyboard: keyboard,
       });
+    }
+
+    const cmd = context.messagePayload?.cmd;
+    if (cmd === "returnChooseProgram") {
+      return context.scene.enter("chooseProgram");
     }
 
     context.scene.state.surname = context.text?.trim();
@@ -81,17 +105,26 @@ export const registrationScene = new StepScene("registration", [
 
   async (context) => {
     if (context.scene.step.firstTime) {
+      const keyboard = await buildMainMenuKeyboard();
       return context.send({
         message: `${context.scene.state.child ? "Укажите дату рождения ребёнка (в формате ДД.ММ.ГГГГ)" : "Укажите дату вашего рождения (в формате ДД.ММ.ГГГГ)"}`,
+        keyboard: keyboard,
       });
+    }
+
+    const cmd = context.messagePayload?.cmd;
+    if (cmd === "returnChooseProgram") {
+      return context.scene.enter("chooseProgram");
     }
 
     const birthdate = context.text?.trim();
 
     if (!isValidDate(birthdate!)) {
+      const keyboard = await buildMainMenuKeyboard();
       return context.send({
         message:
           "Некорректная дата.\n Введите в формате ДД.ММ.ГГГГ (например: 01.01.2000):",
+          keyboard: keyboard,
       });
     }
 
@@ -107,12 +140,19 @@ export const registrationScene = new StepScene("registration", [
   async (context) => {
     if (context.scene.step.firstTime) {
       if (context.scene.state.child) {
+        const keyboard = await buildMainMenuKeyboard();
         return context.send({
           message: "Введите ваше имя",
+          keyboard: keyboard,
         });
       } else {
         return context.scene.step.next();
       }
+    }
+
+    const cmd = context.messagePayload?.cmd;
+    if (cmd === "returnChooseProgram") {
+      return context.scene.enter("chooseProgram");
     }
 
     context.scene.state.parentName = context.text?.trim();
@@ -127,12 +167,19 @@ export const registrationScene = new StepScene("registration", [
   async (context) => {
     if (context.scene.step.firstTime) {
       if (context.scene.state.child) {
+        const keyboard = await buildMainMenuKeyboard();
         return context.send({
           message: "Введите вашу фамилию",
+          keyboard: keyboard,
         });
       } else {
         return context.scene.step.next();
       }
+    }
+
+    const cmd = context.messagePayload?.cmd;
+    if (cmd === "returnChooseProgram") {
+      return context.scene.enter("chooseProgram");
     }
 
     context.scene.state.parentSurname = context.text?.trim();
@@ -146,17 +193,26 @@ export const registrationScene = new StepScene("registration", [
 
   async (context) => {
     if (context.scene.step.firstTime) {
+      const keyboard = await buildMainMenuKeyboard();
       return context.send({
         message: `${context.scene.state.child ? "Укажите ваш контактный телефон (+71234567890)" : "Укажите контактный телефон (+71234567890)"}`,
+        keyboard: keyboard,
       });
+    }
+
+    const cmd = context.messagePayload?.cmd;
+    if (cmd === "returnChooseProgram") {
+      return context.scene.enter("chooseProgram");
     }
 
     const phone = context.text?.trim();
 
     if (!isValidPhone(phone!)) {
+      const keyboard = await buildMainMenuKeyboard();
       return context.send({
         message:
           "Некорректный номер.\n Введите российский номер телефона (например: +79012345678)",
+          keyboard: keyboard,
       });
     }
 
@@ -171,17 +227,26 @@ export const registrationScene = new StepScene("registration", [
 
   async (context) => {
     if (context.scene.step.firstTime) {
+      const keyboard = await buildMainMenuKeyboard();
       return context.send({
         message: `${context.scene.state.child ? "Укажите вашу электронную почту" : "Укажите электронную почту"}`,
+        keyboard: keyboard,
       });
+    }
+
+    const cmd = context.messagePayload?.cmd;
+    if (cmd === "returnChooseProgram") {
+      return context.scene.enter("chooseProgram");
     }
 
     const email = context.text?.trim();
 
     if (!isValidEmail(email!)) {
+      const keyboard = await buildMainMenuKeyboard();
       return context.send({
         message:
           "Некорректный email.\n Попробуйте ещё раз (например: klient@mail.ru):",
+          keyboard: keyboard,
       });
     }
 

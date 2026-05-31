@@ -10,6 +10,7 @@ export {
   buildConfirmKeyboard,
   buildKeyboardForTrialLesson,
   buildKeyboardForGroup,
+  buildMainMenuKeyboard
 };
 
 async function buildStartKeyboard() {
@@ -28,6 +29,11 @@ async function buildStartKeyboard() {
     .oneTime();
 
   return keyboard;
+}
+
+async function buildMainMenuKeyboard() {
+  const keyboard = Keyboard.builder().textButton({label: "Вернуться к выбору программы", payload: {cmd: "returnChooseProgram"}})
+  return keyboard
 }
 
 async function buildBackButton() {

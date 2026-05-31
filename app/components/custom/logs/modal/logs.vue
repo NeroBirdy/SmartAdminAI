@@ -86,7 +86,7 @@ const titles: Record<ChangeType, string> = {
   ASSIGNED_TO_GROUP: "Распределение в группу",
   SCHEDULED_TRIAL_LESSON: "Пробное занятие",
   SELECTION_INSTRUCTOR_CHANGE: "Подбор инструктора",
-  LOG_ROLLBACK: "Откат логов",
+  LOG_ROLLBACK: "Откат действий",
 };
 
 function openConfirm(logId: number) {

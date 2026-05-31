@@ -5,6 +5,7 @@ export const startScene = new StepScene("start", [
     const keyboard = await buildStartKeyboard();
 
     context.session.state = "start";
+    await saveUserState({peerId: context.peerId})
 
     await context.send({
       message: "Привет! Я умею много крутого и т. д. ... Нажми кнопку ниже 👇",

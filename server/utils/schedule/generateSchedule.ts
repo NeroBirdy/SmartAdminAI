@@ -64,18 +64,12 @@ type Lesson = {
   venueId: string | number;
 };
 
-export default defineEventHandler(async (event) => {
-  const body = await readBody(event);
-  const orgId = body.orgId;
-
+export const generateScheduleForOrg = async (orgId: number) => {
   const data = await collectData(orgId);
-
   const prompt = buildPrompt(data);
-
   const response = await sendMessage(prompt);
-
   return await saveLessons(response);
-});
+};
 
 const sendMessage = async (message: string) => {
   const systemPrompt = await readFile(filePath, "utf-8");
@@ -104,6 +98,17 @@ const sendMessage = async (message: string) => {
   return response.message.content;
 };
 
+function getNextMonday(): Date {
+  const date = new Date();
+  const day = date.getDay();
+
+  if (day === 1) return date;
+
+  const daysUntilMonday = day === 0 ? 1 : 8 - day;
+  date.setDate(date.getDate() + daysUntilMonday);
+  return date;
+}
+
 const buildPrompt = (data: Awaited<ReturnType<typeof collectData>>) => {
   const {
     notWorkingDays,
@@ -118,8 +123,8 @@ const buildPrompt = (data: Awaited<ReturnType<typeof collectData>>) => {
   } = data;
 
   let prompt = `## Входные данные для генерации\n\n`;
-  prompt += `Текущая дата: ${new Date("2026-05-11").toLocaleDateString("ru-RU")}\n`;
-  // prompt += `Текущая дата: ${new Date().toLocaleDateString("ru-RU")}\n`;
+
+  prompt += `Текущая дата: ${getNextMonday().toLocaleDateString("ru-RU")}\n`;
   prompt += `Горизонт планирования: ${horizonPlanning}\n`;
   prompt += `Количество групп: ${groupsCount}\n`;
   prompt += `Количество площадок: ${venuesCount}\n`;

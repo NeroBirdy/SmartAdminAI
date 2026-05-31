@@ -59,7 +59,7 @@ const types: Record<ChangeType, Record<string, string>> = {
   INSTRUCTOR_CHANGE: { color: "#8b5cf6", title: "Замена инструктора" },
   LESSON_CANCELLATION: { color: "#ef4444", title: "Отмена занятия" },
   LESSON_CREATE: { color: "#10b981", title: "Создание занятия" },
-  LOG_ROLLBACK: { color: "#94a3b8", title: "Откат логов" },
+  LOG_ROLLBACK: { color: "#94a3b8", title: "Откат действий" },
   QUESTION_ANSWER: { color: "#0ea5e9", title: "Вопрос / Ответ" },
   SCHEDULED_TRIAL_LESSON: { color: "#3b82f6", title: "Пробное занятие" },
   SELECTION_INSTRUCTOR_CHANGE: {
@@ -87,9 +87,10 @@ function getDate() {
 }
 
 function getTypeColor() {
-  let type = props.log.originalType != null
-    ? props.log.originalType
-    : props.log.changeType;
+  let type =
+    props.log.originalType != null
+      ? props.log.originalType
+      : props.log.changeType;
   return type ? types[type]?.color : "#94a3b8";
 }
 

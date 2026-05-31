@@ -23,7 +23,7 @@
         :width="width"
       />
       <ui-result-card
-        title="Откат логов"
+        title="Откат действий"
         type="LOG_ROLLBACK"
         :width="width"
       />

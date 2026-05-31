@@ -175,6 +175,7 @@ export function registerEventHandler() {
         `Вы записаны в группу: ${payload.groupName}`,
       );
       await setUserGroup(context.peerId, payload.groupId);
+      await sendHelloMessage(context.peerId);
     }
 
     if (payload.cmd === "pageGroup") {
@@ -294,7 +295,7 @@ export function registerEventHandler() {
         },
       );
 
-      console.log(instructors)
+      console.log(instructors);
 
       const id = await getUserIdByPeerId(context.peerId);
       const messageId = await getMessageId(id!, payload.randomId);
