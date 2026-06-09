@@ -25,7 +25,7 @@ export function registerEventHandler() {
       const page = Number(payload.page);
       const list = context.session.lists?.date || [];
 
-      const keyboard = await buildKeyboardForDate(page, list);
+      const keyboard = await buildKeyboardForDate(page, list, payload.dateCmd, payload.oldLessonId);
 
       await editMessage(
         context.peerId,
@@ -118,7 +118,22 @@ export function registerEventHandler() {
       }
     }
 
-    if (payload.cmd === "selectDate") {
+    if (payload.cmd === "changeDate") {
+      const keyboard = await buildConfirmKeyboard({ cmd: "confirmChangeDate", lessonId: payload.lessonId, date: payload.date, startTime: payload.startTime, endTime: payload.endTime }, { cmd: "denyChangeDate" });
+
+      const lessonDateTime = await getLessonDateTime(Number(payload.oldLessonId));
+
+      const message = await context.send({
+        message: `Перенести занятие: ${lessonDateTime}\nНа новую дату: ${payload.date} в ${payload.startTime} - ${payload.endTime}`,
+        keyboard: keyboard,
+      });
+
+      await deleteMessage(context.session.messageId);
+
+      context.session.messageId = message.id;
+    }
+
+    if (payload.cmd === "confirmChangeDate") {
       await deleteMessage(context.session.messageId);
 
       $fetch("/api/miniapp/updateDate", {
@@ -132,6 +147,124 @@ export function registerEventHandler() {
         },
         keepalive: true,
       });
+    }
+
+    if (payload.cmd === "requestChangeDate") {
+      const keyboard = await buildConfirmKeyboard({ cmd: "confirmRequestChangeDate", lessonId: payload.lessonId, date: payload.date, startTime: payload.startTime, endTime: payload.endTime, oldLessonId: payload.oldLessonId }, { cmd: "denyChangeDate" });
+
+      const lessonDateTime = await getLessonDateTime(Number(payload.oldLessonId));
+
+      const message = await context.send({
+        message: `Запросить перенос занятия: ${lessonDateTime}\nНа новую дату: ${payload.date} в ${payload.startTime} - ${payload.endTime}`,
+        keyboard: keyboard,
+      });
+
+      await deleteMessage(context.session.messageId);
+
+      context.session.messageId = message.id;
+    }
+
+    if (payload.cmd === "confirmRequestChangeDate") {
+      await deleteMessage(context.session.messageId);
+
+      const message = await context.send({
+        message: "Запрос отправлен",
+      });
+
+      context.session.state = "isLogined";
+      await sendHelloMessage(context.peerId);
+
+      const managerId = await getMenagerId();
+
+      const id = await getUserIdByPeerId(managerId!);
+      const userId = await getUserIdByPeerId(context.peerId);
+
+      const randomId = generateRandomId(1, 10000000);
+      const userRandomId = generateRandomId(1, 10000000);
+
+      const keyboard = await buildConfirmKeyboard(
+        {
+          cmd: "confirmRequestChangeDateForManager",
+          lessonId: payload.lessonId,
+          userId: context.peerId,
+          date: payload.date,
+          startTime: payload.startTime,
+          endTime: payload.endTime,
+          randomId: randomId,
+          userRandomId: userRandomId,
+        },
+        {
+          cmd: "denyRequestChangeDateForManager",
+          userId: context.peerId,
+          date: payload.date,
+          startTime: payload.startTime,
+          endTime: payload.endTime,
+          randomId: randomId,
+          userRandomId: userRandomId,
+        },
+      );
+
+      const lessonDateTime = await getLessonDateTime(Number(payload.lessonId));
+      const info = await getInfoByLesson(Number(payload.lessonId));
+
+      const messageId = await sendRequestForManager(
+        managerId!,
+        keyboard,
+        `Запрос на перенос занятия:\n    Инструктор: ${info?.instructor.firstName} ${info?.instructor.lastName}\n    Группа: ${info?.group.name}\n    Занятие: ${lessonDateTime}\n    Новая дата: ${payload.date} в ${payload.startTime} - ${payload.endTime}`,
+      );
+
+      await saveNewMessage(id!, Number(messageId)!, randomId);
+      await saveNewMessage(userId!, message.id, userRandomId);
+    }
+
+    if (payload.cmd === "confirmRequestChangeDateForManager") {
+      const managerId = await getUserIdByPeerId(context.peerId)
+      const userId = await getUserIdByPeerId(payload.userId);
+
+      const managerMessage = await getMessageId(managerId!, payload.randomId);
+      const userMessage = await getMessageId(userId!, payload.userRandimId);
+
+      await editMessage(context.peerId, managerMessage, "Запрос одобрен");
+      await deleteMessage(userMessage);
+      await sendMessageWithoutKeyboard(payload.userId, `Ваш запрос на перенос занятия ${payload.date} ${payload.startTime} - ${payload.endTime} одобрен`);
+
+      await deleteMessageFromDb(managerMessage);
+      await deleteMessageFromDb(userMessage);
+
+      $fetch("/api/miniapp/updateDate", {
+        method: "GET",
+        query: {
+          lessonId: payload.lessonId,
+          userId: payload.userId,
+          date: payload.date,
+          startTime: payload.startTime,
+          endTime: payload.endTime,
+        },
+        keepalive: true,
+      });
+    }
+
+    if (payload.cmd === "denyRequestChangeDateForManager") {
+      const managerId = await getUserIdByPeerId(context.peerId)
+      const userId = await getUserIdByPeerId(payload.userId);
+
+      const managerMessage = await getMessageId(managerId!, payload.randomId);
+      const userMessage = await getMessageId(userId!, payload.userRandimId);
+
+      await editMessage(context.peerId, managerMessage, "Запрос отклонен");
+      await deleteMessage(userMessage);
+      await sendMessageWithoutKeyboard(payload.userId, `Ваш запрос на перенос занятия ${payload.date} ${payload.startTime} - ${payload.endTime} отклонен`);
+
+      await deleteMessageFromDb(managerMessage);
+      await deleteMessageFromDb(userMessage);
+    }
+
+    if (payload.cmd == "backToScheduleManagement") {
+      return context.scene.enter("scheduleManagement");
+    }
+
+    if (payload.cmd === "denyChangeDate") {
+      await deleteMessage(context.session.messageId);
     }
 
     if (payload.cmd === "selectTrialLesson") {
@@ -175,6 +308,8 @@ export function registerEventHandler() {
         `Вы записаны в группу: ${payload.groupName}`,
       );
       await setUserGroup(context.peerId, payload.groupId);
+
+      await sendHelloMessage(context.peerId);
     }
 
     if (payload.cmd === "pageGroup") {

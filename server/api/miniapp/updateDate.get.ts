@@ -76,7 +76,7 @@ export default defineEventHandler(async (event) => {
       vk.api.messages.edit({
         peer_id: userId,
         message_id: Number(res),
-        message: "Занятие пройдет в другое время",
+        message: "Занятие успешно перенесено",
       }),
     ]);
   } catch (e) {

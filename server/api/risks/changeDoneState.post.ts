@@ -3,7 +3,6 @@ const prisma = usePrisma();
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
   const { id, done } = body;
-
   if (!id) {
     throw createError({
       statusCode: 400,

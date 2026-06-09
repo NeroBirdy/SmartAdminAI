@@ -10,6 +10,7 @@ export {
   buildConfirmKeyboard,
   buildKeyboardForTrialLesson,
   buildKeyboardForGroup,
+  buildMainMenuKeyboard,
 };
 
 async function buildStartKeyboard() {
@@ -211,7 +212,7 @@ type NewDateList = {
   newOptions: NewOption[];
 };
 
-async function buildKeyboardForDate(page: number, dateList: NewDateList) {
+async function buildKeyboardForDate(page: number, dateList: NewDateList, cmd: string, oldLessonId: number) {
   const lessonId = dateList.lessonId;
   const options = dateList.newOptions;
   const maxPage = options.length - 1;
@@ -226,7 +227,8 @@ async function buildKeyboardForDate(page: number, dateList: NewDateList) {
       .callbackButton({
         label: `${element.startTime} - ${element.endTime}`,
         payload: {
-          cmd: "selectDate",
+          cmd: cmd,
+          oldLessonId: oldLessonId,
           lessonId,
           date: currentPage!.date,
           startTime: element.startTime,
@@ -239,7 +241,7 @@ async function buildKeyboardForDate(page: number, dateList: NewDateList) {
   if (safePage > 0) {
     keyboard.callbackButton({
       label: "⬅️",
-      payload: { cmd: "pageForDate", page: safePage - 1 },
+      payload: { cmd: "pageForDate", page: safePage - 1, dateCmd: cmd, oldLessonId: oldLessonId },
     });
   }
 
@@ -251,7 +253,7 @@ async function buildKeyboardForDate(page: number, dateList: NewDateList) {
   if (safePage < maxPage) {
     keyboard.callbackButton({
       label: "➡️",
-      payload: { cmd: "pageForDate", page: safePage + 1 },
+      payload: { cmd: "pageForDate", page: safePage + 1, dateCmd: cmd, oldLessonId: oldLessonId },
     });
   }
 
@@ -259,7 +261,7 @@ async function buildKeyboardForDate(page: number, dateList: NewDateList) {
 
   keyboard.callbackButton({
     label: "Вернуться",
-    payload: { cmd: "back", state: "selectDate" },
+    payload: { cmd: "backToScheduleManagement", state: "selectDate" },
   });
 
   return keyboard;
@@ -423,4 +425,10 @@ async function buildKeyboardForGroup(groupsList: Group[], page: number) {
   }
 
   return keyboard;
+}
+
+
+async function buildMainMenuKeyboard() {
+  const keyboard = Keyboard.builder().textButton({ label: "Вернуться к выбору программы", payload: { cmd: "returnChooseProgram" } }).oneTime();
+  return keyboard
 }

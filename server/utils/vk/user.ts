@@ -3,7 +3,6 @@ import { session } from "../../bot/middlewares";
 
 export {
   saveUserState,
-  getUserState,
   setUserAccessCode,
   getUserAccessCode,
   login,
@@ -27,17 +26,11 @@ export {
   setUserGroup,
 };
 
-const vk = new VK({ token: useRuntimeConfig().vkToken });
-
 const prisma = usePrisma();
 const fakeApi = useFakeAPI();
 
 type SaveUserStateParams = {
   peerId: number;
-  state?: string | null;
-  city?: string | null;
-  program?: string;
-  organization?: string;
   key?: string;
   role?: string;
 };
@@ -67,22 +60,10 @@ type DateList = {
 };
 
 async function saveUserState(params: SaveUserStateParams) {
-  const { peerId, state, city, program, organization, key, role } = params;
+  const { peerId, key, role } = params;
 
   const updateData: any = {};
 
-  if (state !== undefined) {
-    updateData.state = state;
-  }
-  if (city !== undefined) {
-    updateData.city = city;
-  }
-  if (program !== undefined) {
-    updateData.program = program;
-  }
-  if (organization !== undefined) {
-    updateData.organization = organization;
-  }
   if (key !== undefined) {
     updateData.key = key;
   }
@@ -95,23 +76,10 @@ async function saveUserState(params: SaveUserStateParams) {
     update: updateData,
     create: {
       peerId,
-      state: state ?? null,
-      city: city ?? null,
-      program: program ?? null,
-      organization: organization ?? null,
       key: key ?? null,
       role: role ?? null,
     },
   });
-}
-
-async function getUserState(peerId: number) {
-  const user = await prisma.users.findUnique({
-    where: { peerId },
-    select: { state: true },
-  });
-
-  return user?.state || "";
 }
 
 async function setUserAccessCode(

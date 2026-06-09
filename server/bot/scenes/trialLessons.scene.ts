@@ -1,4 +1,5 @@
 import { StepScene } from "@vk-io/scenes";
+import { Keyboard } from "vk-io";
 
 export const trialLesonsScene = new StepScene("trialLessons", [
   async (context) => {
@@ -17,7 +18,11 @@ export const trialLesonsScene = new StepScene("trialLessons", [
       );
 
       if (!trialLessonsList.success) {
-        context.send(trialLessonsList.message);
+        const keyboard = await Keyboard.builder().textButton({label: "В главное меню", payload: {cmd: "returnMainMenu"}});
+        context.send({
+          message: trialLessonsList.message,
+          keyboard: keyboard,
+        });
         return context.scene.leave();
       }
 

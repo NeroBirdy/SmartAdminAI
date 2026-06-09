@@ -118,7 +118,16 @@ export default defineEventHandler(async (event) => {
     date: newDateList,
   };
 
-  const keyboard = await buildKeyboardForDate(0, newDateList);
+  const permission = await getPermission(userId);
+  let keyboard;
+
+  if (permission.changeDate) {
+    keyboard = await buildKeyboardForDate(0, newDateList, "changeDate", lessonId);
+  }
+  else {
+    keyboard = await buildKeyboardForDate(0, newDateList, "requestChangeDate", lessonId);
+  }
+
   const messageId = await sendMessage(
     userId,
     keyboard,

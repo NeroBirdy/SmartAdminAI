@@ -6,6 +6,7 @@
     </div>
     <div class="btns">
       <custom-logs-modal-title-filter-title
+      v-if="title==='Откат логов'"
         class="filter-title-category"
         type="category"
       />

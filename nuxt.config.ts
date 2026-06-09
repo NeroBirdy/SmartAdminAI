@@ -13,6 +13,7 @@ export default defineNuxtConfig({
         "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
         "Access-Control-Allow-Headers": "*",
       },
+      cors: true,
     },
   },
   vite: {

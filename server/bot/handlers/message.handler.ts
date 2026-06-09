@@ -6,11 +6,26 @@ export function registerMessageHandler() {
       return next();
     }
 
+    console.log(ctx.session.state);
+
     const userState = ctx.session.state;
 
     switch (userState) {
+      case "choose_city":
+        return ctx.scene.enter("chooseCity");
+
+      case "choose_organization":
+        return ctx.scene.enter("chooseOrganization");
+
+      case "choose_program":
+        return ctx.scene.enter("chooseProgram");
+
+      case "registration":
+        return ctx.scene.enter("registration");
+
       case "askQuestion":
         return ctx.scene.enter("askQuestion");
+
       case 'login':
         return ctx.scene.enter('login');
     }
@@ -55,6 +70,10 @@ export function registerMessageHandler() {
 
       case "checkSchedule": {
         return await sendScheduleForClient(ctx.peerId);
+      }
+
+      case "returnMainMenu": {
+        return ctx.scene.enter("start");
       }
     }
 

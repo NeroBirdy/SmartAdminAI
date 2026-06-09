@@ -31,6 +31,8 @@ export {
   getClientGroup,
   getSubscriptionInfo,
   getLessonsForClient,
+  getLessonDateTime,
+  getInfoByLesson,
 };
 
 const fakeApi = useFakeAPI();
@@ -430,4 +432,27 @@ async function getLessonsForClient(key: string) {
   catch (e) {
     return false;
   }
+}
+
+
+async function getLessonDateTime(lessonId: number) {
+  const dateTime = await fakeApi.lesson.findFirst({
+    where: { id: lessonId },
+    select: { date: true, startTime: true, endTime: true },
+  });
+
+  const datePart = format(dateTime?.date!, 'yyyy-MM-dd')
+  const startPart = format(dateTime?.startTime!, 'HH:mm')
+  const endPart = format(dateTime?.endTime!, 'HH:mm')
+  const text = `${datePart} в ${startPart} - ${endPart}`
+
+  return text;
+}
+
+
+async function getInfoByLesson(lessonId: number) {
+  return await fakeApi.lesson.findFirst({
+    where: { id: lessonId },
+    include: { group: true, instructor: true },
+  });
 }

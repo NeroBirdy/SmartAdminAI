@@ -6,7 +6,7 @@ export const chooseCityScene = new StepScene("chooseCity", [
     const payload = context.messagePayload || context.eventPayload;
     const cmd = payload?.cmd;
 
-    if (context.scene.step.firstTime) {
+    if (context.scene.step.firstTime && context.session.state !== "choose_city") {
       const keyboard = await buildBackButton();
 
       context.session.state = "choose_city";
@@ -35,7 +35,6 @@ export const chooseCityScene = new StepScene("chooseCity", [
     }
 
     if (cityList.length === 1) {
-      context.session.state = "choose_organization";
       await context.send(`✅ Ваш город: ${cityList[0]}`);
 
       context.session.city = cityList[0];
