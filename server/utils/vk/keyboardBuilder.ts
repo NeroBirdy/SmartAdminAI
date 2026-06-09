@@ -31,6 +31,11 @@ async function buildStartKeyboard() {
   return keyboard;
 }
 
+async function buildMainMenuKeyboard() {
+  const keyboard = Keyboard.builder().textButton({label: "Вернуться к выбору программы", payload: {cmd: "returnChooseProgram"}})
+  return keyboard
+}
+
 async function buildBackButton() {
   const keyboard = Keyboard.builder().textButton({
     label: "Назад",

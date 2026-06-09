@@ -80,10 +80,10 @@ export default defineEventHandler(async (event) => {
       }
     }
 
-    await fakeAPI.lesson.update({
-      where: { id: entityId },
-      data: change,
-    });
+    // await fakeAPI.lesson.update({
+    //   where: { id: entityId },
+    //   data: change,
+    // });
   } else if (log.entityType === "CLIENT") {
     await fakeAPI.client.update({
       where: { id: entityId },
@@ -96,29 +96,29 @@ export default defineEventHandler(async (event) => {
     };
   }
 
-  await prisma.log.update({
-    where: { id: logId },
-    data: { status: "REVERTED" },
-  });
+  // await prisma.log.update({
+  //   where: { id: logId },
+  //   data: { status: "REVERTED" },
+  // });
 
   const fields = await getFieldsForLog(logId);
 
   //LOG Откат
-  await createLog({
-    changeType: "LOG_ROLLBACK",
-    originalChangeType:
-      log.changeType != "LOG_ROLLBACK"
-        ? log.changeType
-        : log.originalChangeType,
-    entityType: log.entityType,
-    entityId: entityId,
-    revertedLogId: logId,
-    oldValue: log.newValue as Prisma.InputJsonValue,
-    newValue: {
-      ...fields,
-      change,
-    },
-  });
+  // await createLog({
+  //   changeType: "LOG_ROLLBACK",
+  //   originalChangeType:
+  //     log.changeType != "LOG_ROLLBACK"
+  //       ? log.changeType
+  //       : log.originalChangeType,
+  //   entityType: log.entityType,
+  //   entityId: entityId,
+  //   revertedLogId: logId,
+  //   oldValue: log.newValue as Prisma.InputJsonValue,
+  //   newValue: {
+  //     ...fields,
+  //     change,
+  //   },
+  // });
 
   return { success: true };
 });

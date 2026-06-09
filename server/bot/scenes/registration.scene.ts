@@ -29,6 +29,10 @@ export const registrationScene = new StepScene("registration", [
       return context.scene.enter("chooseProgram");
     }
 
+    if (cmd === "returnChooseProgram") {
+      return context.scene.enter("chooseProgram");
+    }
+
     if (cmd === "adult" || cmd === "child") {
       context.scene.state.child = cmd === "adult" ? false : true;
       return context.scene.step.next();
@@ -55,6 +59,10 @@ export const registrationScene = new StepScene("registration", [
       return context.scene.enter("chooseProgram");
     }
 
+    if (cmd === "returnChooseProgram") {
+      return context.scene.enter("chooseProgram");
+    }
+
     if (cmd === "male" || cmd === "female") {
       context.scene.state.gender = cmd;
 
@@ -73,7 +81,13 @@ export const registrationScene = new StepScene("registration", [
       return context.send({
         message: `${context.scene.state.child ? "Введите имя ребёнка" : "Введите ваше имя"}`,
         keyboard: keyboard,
+        keyboard: keyboard,
       });
+    }
+
+    const cmd = context.messagePayload?.cmd;
+    if (cmd === "returnChooseProgram") {
+      return context.scene.enter("chooseProgram");
     }
 
     const cmd = context.messagePayload?.cmd;
@@ -96,7 +110,13 @@ export const registrationScene = new StepScene("registration", [
       return context.send({
         message: `${context.scene.state.child ? "Введите фамилию ребёнка" : "Введите вашу фамилию"}`,
         keyboard: keyboard,
+        keyboard: keyboard,
       });
+    }
+
+    const cmd = context.messagePayload?.cmd;
+    if (cmd === "returnChooseProgram") {
+      return context.scene.enter("chooseProgram");
     }
 
     const cmd = context.messagePayload?.cmd;
@@ -119,7 +139,13 @@ export const registrationScene = new StepScene("registration", [
       return context.send({
         message: `${context.scene.state.child ? "Укажите дату рождения ребёнка (в формате ДД.ММ.ГГГГ)" : "Укажите дату вашего рождения (в формате ДД.ММ.ГГГГ)"}`,
         keyboard: keyboard,
+        keyboard: keyboard,
       });
+    }
+
+    const cmd = context.messagePayload?.cmd;
+    if (cmd === "returnChooseProgram") {
+      return context.scene.enter("chooseProgram");
     }
 
     const cmd = context.messagePayload?.cmd;
@@ -130,6 +156,7 @@ export const registrationScene = new StepScene("registration", [
     const birthdate = context.text?.trim();
 
     if (!isValidDate(birthdate!)) {
+      const keyboard = await buildMainMenuKeyboard();
       const keyboard = await buildMainMenuKeyboard();
       return context.send({
         message:
@@ -152,13 +179,20 @@ export const registrationScene = new StepScene("registration", [
       context.session.registrationStep = 5;
       if (context.scene.state.child) {
         const keyboard = await buildMainMenuKeyboard();
+        const keyboard = await buildMainMenuKeyboard();
         return context.send({
           message: "Введите ваше имя",
+          keyboard: keyboard,
           keyboard: keyboard,
         });
       } else {
         return context.scene.step.next();
       }
+    }
+
+    const cmd = context.messagePayload?.cmd;
+    if (cmd === "returnChooseProgram") {
+      return context.scene.enter("chooseProgram");
     }
 
     const cmd = context.messagePayload?.cmd;
@@ -180,13 +214,20 @@ export const registrationScene = new StepScene("registration", [
       context.session.registrationStep = 6;
       if (context.scene.state.child) {
         const keyboard = await buildMainMenuKeyboard();
+        const keyboard = await buildMainMenuKeyboard();
         return context.send({
           message: "Введите вашу фамилию",
+          keyboard: keyboard,
           keyboard: keyboard,
         });
       } else {
         return context.scene.step.next();
       }
+    }
+
+    const cmd = context.messagePayload?.cmd;
+    if (cmd === "returnChooseProgram") {
+      return context.scene.enter("chooseProgram");
     }
 
     const cmd = context.messagePayload?.cmd;
@@ -210,7 +251,13 @@ export const registrationScene = new StepScene("registration", [
       return context.send({
         message: `${context.scene.state.child ? "Укажите ваш контактный телефон (+71234567890)" : "Укажите контактный телефон (+71234567890)"}`,
         keyboard: keyboard,
+        keyboard: keyboard,
       });
+    }
+
+    const cmd = context.messagePayload?.cmd;
+    if (cmd === "returnChooseProgram") {
+      return context.scene.enter("chooseProgram");
     }
 
     const cmd = context.messagePayload?.cmd;
@@ -221,6 +268,7 @@ export const registrationScene = new StepScene("registration", [
     const phone = context.text?.trim();
 
     if (!isValidPhone(phone!)) {
+      const keyboard = await buildMainMenuKeyboard();
       const keyboard = await buildMainMenuKeyboard();
       return context.send({
         message:
@@ -245,7 +293,13 @@ export const registrationScene = new StepScene("registration", [
       return context.send({
         message: `${context.scene.state.child ? "Укажите вашу электронную почту" : "Укажите электронную почту"}`,
         keyboard: keyboard,
+        keyboard: keyboard,
       });
+    }
+
+    const cmd = context.messagePayload?.cmd;
+    if (cmd === "returnChooseProgram") {
+      return context.scene.enter("chooseProgram");
     }
 
     const cmd = context.messagePayload?.cmd;
@@ -256,6 +310,7 @@ export const registrationScene = new StepScene("registration", [
     const email = context.text?.trim();
 
     if (!isValidEmail(email!)) {
+      const keyboard = await buildMainMenuKeyboard();
       const keyboard = await buildMainMenuKeyboard();
       return context.send({
         message:

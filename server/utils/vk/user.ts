@@ -61,6 +61,7 @@ type DateList = {
 
 async function saveUserState(params: SaveUserStateParams) {
   const { peerId, key, role } = params;
+  const { peerId, key, role } = params;
 
   const updateData: any = {};
 

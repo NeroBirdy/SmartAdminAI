@@ -17,6 +17,7 @@
     "@vk-io/scenes": "^1.2.1",
     "@vk-io/session": "^2.2.1",
     "@vueuse/core": "^14.3.0",
+    "croner": "^10.0.1",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
     "dotenv": "^17.3.1",

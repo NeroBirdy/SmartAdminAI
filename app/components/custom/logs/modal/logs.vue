@@ -1,6 +1,6 @@
 <template>
   <div class="frame logs">
-    <CustomLogsModalTitle :title="titles[type]" @close="emit('close')" />
+    <CustomLogsModalTitle :title="titles[type]" :type="type" @close="emit('close')" />
     <div class="inside-frame" :class="extendedStyle">
       <Transition name="fade" mode="out-in">
         <div class="loader-wrapper" v-if="isLoading" key="loader">
@@ -86,7 +86,7 @@ const titles: Record<ChangeType, string> = {
   ASSIGNED_TO_GROUP: "Распределение в группу",
   SCHEDULED_TRIAL_LESSON: "Пробное занятие",
   SELECTION_INSTRUCTOR_CHANGE: "Подбор инструктора",
-  LOG_ROLLBACK: "Откат логов",
+  LOG_ROLLBACK: "Откат действий",
 };
 
 function openConfirm(logId: number) {
