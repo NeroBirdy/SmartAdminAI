@@ -431,9 +431,3 @@ async function buildKeyboardForGroup(groupsList: Group[], page: number) {
 
   return keyboard;
 }
-
-
-async function buildMainMenuKeyboard() {
-  const keyboard = Keyboard.builder().textButton({ label: "Вернуться к выбору программы", payload: { cmd: "returnChooseProgram" } }).oneTime();
-  return keyboard
-}
