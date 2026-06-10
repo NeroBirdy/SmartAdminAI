@@ -79,6 +79,7 @@ const getRiskOrRec = async (
   prompt += "\n" + dataForPrompt;
 
   const parsedResponse = await gigaChat.sendMessage(prompt);
+
   return await createAndReturn(parsedResponse, type, sectionId);
 };
 

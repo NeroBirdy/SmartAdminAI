@@ -38,76 +38,76 @@ export class GigaChatAnalitics {
     );
     const file = await readFile(filePath, "utf-8");
 
-    // let response = await gigachat.chat({
-    //   messages: [
-    //     { role: "system", content: file },
-    //     { role: "user", content: message },
-    //   ],
-    // });
+    let response = await gigachat.chat({
+      messages: [
+        { role: "system", content: file },
+        { role: "user", content: message },
+      ],
+    });
 
-    type OllamaResponse = {
-      message: {
-        role: string;
-        content: string;
-      };
-      done: boolean;
-      model: string;
-    };
+    // type OllamaResponse = {
+    //   message: {
+    //     role: string;
+    //     content: string;
+    //   };
+    //   done: boolean;
+    //   model: string;
+    // };
 
-    const response = await $fetch<OllamaResponse>(
-      "http://localhost:11434/api/chat",
-      {
-        method: "POST",
-        body: {
-          model: "gpt-oss:120b-cloud",
-          think: "medium",
-          stream: false,
-          messages: [
-            {
-              role: "system",
-              content: file,
-            },
-            {
-              role: "user",
-              content: message,
-            },
-          ],
-        },
-      },
-    );
-
-    // let choice = response.message.content;
-
-    // if (!choice?.message?.content) {
-    //   throw new Error("Пустой ответ от Gigachat");
-    // }
-
-    let textResponse = response.message.content;
-
-    console.log(textResponse)
-
-    // response = await gigachat.chat({
-    //   messages: [
-    //     // {
-    //     //   role: "system",
-    //     //   content: `В ответе не нужно нумеровать и не нужно ставить двоеточие в заголовоках. Формат ответа: Твой формат ответа : "** Заголовок" "- Описание рекомендации".
-    //     //   Не добавляй ничего нового в текст, только исправь, если нужно этот текст.`,
-    //     // },
-    //     {
-    //       role: "user",
-    //       content: `В ответе не нужно нумеровать и не нужно ставить двоеточие в заголовоках. Формат ответа: Твой формат ответа : "** Заголовок" "- Описание рекомендации".
-    //       Не добавляй ничего нового в текст, только исправь, если нужно этот текст. \n ${textResponse}`,
+    // const response = await $fetch<OllamaResponse>(
+    //   "http://localhost:11434/api/chat",
+    //   {
+    //     method: "POST",
+    //     body: {
+    //       model: "gpt-oss:120b-cloud",
+    //       think: "medium",
+    //       stream: false,
+    //       messages: [
+    //         {
+    //           role: "system",
+    //           content: file,
+    //         },
+    //         {
+    //           role: "user",
+    //           content: message,
+    //         },
+    //       ],
     //     },
-    //   ],
-    // });
+    //   },
+    // );
 
-    // choice = response.choices[0];
+    let choice = response.choices[0];
 
-    // if (!choice?.message?.content) {
-    //   throw new Error("Пустой ответ от Gigachat");
-    // }
+    if (!choice?.message?.content) {
+      throw new Error("Пустой ответ от Gigachat");
+    }
 
-    // textResponse = choice.message.content;
+    let textResponse = choice.message.content;
+
+    console.log(textResponse);
+
+    response = await gigachat.chat({
+      messages: [
+        // {
+        //   role: "system",
+        //   content: `В ответе не нужно нумеровать и не нужно ставить двоеточие в заголовоках. Формат ответа: Твой формат ответа : "** Заголовок" "- Описание рекомендации".
+        //   Не добавляй ничего нового в текст, только исправь, если нужно этот текст.`,
+        // },
+        {
+          role: "user",
+          content: `В ответе не нужно нумеровать и не нужно ставить двоеточие в заголовоках. Формат ответа: Твой формат ответа : "** Заголовок" "- Описание рекомендации".
+          Не добавляй ничего нового в текст, только исправь, если нужно этот текст. \n ${textResponse}`,
+        },
+      ],
+    });
+
+    choice = response.choices[0];
+
+    if (!choice?.message?.content) {
+      throw new Error("Пустой ответ от Gigachat");
+    }
+
+    textResponse = choice.message.content;
 
     const parsedResponse = this.parseResponse(textResponse);
 
