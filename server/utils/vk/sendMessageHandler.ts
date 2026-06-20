@@ -312,12 +312,13 @@ async function sendGroupInfo(peerId: number) {
     });
   }
 
-  const userSession = await getUserSession(peerId); // тут нельзя так
+  const orgId = await getOrgByPeerId(peerId);
+  const orgName = await getOrgNameById(orgId!);
 
   return await vk.api.messages.send({
     peer_id: peerId,
     random_id: Date.now(),
-    message: `Информация о вашей группе:\nНазвание организации: ${userSession.organization}\nПрограмма: ${userSession.program}\nГруппа: ${group.groupName}\nИнструктор: ${group.instructor}\nЛокация: ${group.venueName}, расположена по адресу ${group.venueAddress}`,
+    message: `Информация о вашей группе:\nНазвание организации: ${orgName}\nПрограмма: ${group.programName}\nГруппа: ${group.groupName}\nИнструктор: ${group.instructor}\nЛокация: ${group.venueName}, расположена по адресу ${group.venueAddress}`,
   });
 }
 

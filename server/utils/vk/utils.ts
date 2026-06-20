@@ -36,6 +36,7 @@ export {
   getVenueNameById,
   getGroupNameByLessonId,
   getEnabledModules,
+  getOrgNameById,
 };
 
 const fakeApi = useFakeAPI();
@@ -358,7 +359,7 @@ async function getClientGroup(key: string) {
 
     const group = await fakeApi.group.findFirst({
       where: { id: clientData?.groupId! },
-      select: { name: true, instructorId: true, defaultVenueId: true },
+      select: { name: true, instructorId: true, defaultVenueId: true, programId: true },
     });
 
     const instructor = await fakeApi.employee.findFirst({
@@ -371,11 +372,17 @@ async function getClientGroup(key: string) {
       select: { name: true, address: true },
     });
 
+    const program = await fakeApi.program.findFirst({
+      where: { id: group?.programId },
+      select: { name: true },
+    });
+
     return {
       groupName: group?.name,
       instructor: instructor?.lastName + " " + instructor?.firstName,
       venueName: venue?.name,
       venueAddress: venue?.address,
+      programName: program?.name,
     };
   }
   catch (e) {
@@ -463,7 +470,7 @@ async function getInfoByLesson(lessonId: number) {
 
 async function getVenueNameById(venueId: number) {
   const venueData = await fakeApi.venue.findFirst({
-    where: {id: venueId},
+    where: { id: venueId },
     select: {
       name: true,
     }
@@ -475,7 +482,7 @@ async function getVenueNameById(venueId: number) {
 
 async function getGroupNameByLessonId(lessonId: number) {
   const data = await fakeApi.lesson.findFirst({
-    where: {id: lessonId},
+    where: { id: lessonId },
     include: {
       group: true,
     }
@@ -519,4 +526,14 @@ async function getEnabledModules(orgId: number) {
   }
 
   return result;
+}
+
+
+async function getOrgNameById(orgId: number) {
+  const org = await fakeApi.organization.findFirst({
+    where: { id: orgId },
+    select: { name: true },
+  });
+
+  return org?.name;
 }
