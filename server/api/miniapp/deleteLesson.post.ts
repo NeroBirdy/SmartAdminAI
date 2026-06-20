@@ -8,6 +8,9 @@ export default defineEventHandler(async (event) => {
   const id = await getUserIdByPeerId(userId);
   const randomId = generateRandomId(1, 1000000);
 
+  const lessonDateTime = await getLessonDateTime(lessonId);
+  const lessonInfo = await getInfoByLesson(lessonId);
+
   if (permission.cancellationLesson) {
     const keyboard = await buildConfirmKeyboard(
       {
@@ -21,7 +24,7 @@ export default defineEventHandler(async (event) => {
     const messageId = await sendConfirmMessage(
       userId,
       keyboard,
-      "Точно отменить?",
+      `Отменить занятие у группы ${lessonInfo?.group.name} ${lessonDateTime}`,
     );
     await saveNewMessage(id!, Number(messageId), randomId);
   } else {
@@ -37,7 +40,7 @@ export default defineEventHandler(async (event) => {
     const messageId = await sendConfirmMessage(
       userId,
       keyboard,
-      "Точно отменить?",
+      `Отправить запрос на отмену занятия у группы ${lessonInfo?.group.name} ${lessonDateTime}`,
     );
     await saveNewMessage(id!, Number(messageId), randomId);
   }

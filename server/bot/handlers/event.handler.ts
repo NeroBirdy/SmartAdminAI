@@ -181,6 +181,7 @@ export function registerEventHandler() {
 
     if (payload.cmd === "denyChangeVenue") {
       await deleteMessage(context.session.messageId);
+      return context.scene.enter("scheduleManagement");
     }
 
     if (payload.cmd === "confirmRequestChangeVenue") {
@@ -370,11 +371,13 @@ export function registerEventHandler() {
     }
 
     if (payload.cmd == "backToScheduleManagement") {
+      await deleteMessage(context.session.messageId);
       return context.scene.enter("scheduleManagement");
     }
 
     if (payload.cmd === "denyChangeDate") {
       await deleteMessage(context.session.messageId);
+      return context.scene.enter("scheduleManagement");
     }
 
     if (payload.cmd === "selectTrialLesson") {
@@ -443,6 +446,7 @@ export function registerEventHandler() {
 
     if (payload.cmd === "denySelectionGroup") {
       await deleteMessage(context.session.messageId);
+      return sendHelloMessage(context.peerId);
     }
 
     if (payload.cmd == "cancellationLesson") {
@@ -525,6 +529,18 @@ export function registerEventHandler() {
 
       await deleteMessage(messageId);
       await deleteMessageFromDb(messageId);
+
+      return context.scene.enter("scheduleManagement");
+    }
+
+    if (payload.cmd === "denyGetAvailableInstructor") {
+      const id = await getUserIdByPeerId(context.peerId);
+      const messageId = await getMessageId(id!, payload.randomId);
+
+      await deleteMessage(messageId);
+      await deleteMessageFromDb(messageId);
+
+      return context.scene.enter("scheduleManagement");
     }
 
     if (payload.cmd === "getAvailableInstructor") {
@@ -538,8 +554,6 @@ export function registerEventHandler() {
           keepalive: true,
         },
       );
-
-      console.log(instructors);
 
       const id = await getUserIdByPeerId(context.peerId);
       const messageId = await getMessageId(id!, payload.randomId);
@@ -653,7 +667,8 @@ export function registerEventHandler() {
           await deleteMessage(context.session.messageId);
 
         case "venue":
-          return await deleteMessage(context.session.messageId);
+          await deleteMessage(context.session.messageId);
+          return context.scene.enter("scheduleManagement");
 
         default:
           return context.scene.enter("start");

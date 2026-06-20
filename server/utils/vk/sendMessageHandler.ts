@@ -1,5 +1,5 @@
 import { measureMemory } from "node:vm";
-import { format } from "date-fns";
+import { format, subHours } from "date-fns";
 import { VK, Keyboard } from "vk-io";
 
 export {
@@ -366,7 +366,7 @@ async function sendScheduleForClient(peerId: number) {
   message += lessons
     .map(
       (lesson) =>
-        `📅 ${format(lesson.date, "dd.MM")} - 🕓 ${format(lesson.startTime, "HH:mm")}`,
+        `📅 ${format(subHours(lesson.date, 5), "dd.MM")} - 🕓 ${format(subHours(lesson.startTime, 5), "HH:mm")}`,
     )
     .join("\n");
 

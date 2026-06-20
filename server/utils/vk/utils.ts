@@ -1,5 +1,5 @@
 import { VK, Keyboard } from "vk-io";
-import { format } from "date-fns";
+import { format, subHours } from "date-fns";
 import { ru } from "date-fns/locale";
 import { ChangeType } from "~~/prisma/generated/prisma/db1/enums";
 import { getEmployee } from "./user";
@@ -452,8 +452,8 @@ async function getLessonDateTime(lessonId: number) {
   });
 
   const datePart = format(dateTime?.date!, 'yyyy-MM-dd')
-  const startPart = format(dateTime?.startTime!, 'HH:mm')
-  const endPart = format(dateTime?.endTime!, 'HH:mm')
+  const startPart = format(subHours(dateTime!.startTime, 5), "HH:mm")
+  const endPart = format(subHours(dateTime!.endTime, 5), "HH:mm")
   const text = `${datePart} в ${startPart} - ${endPart}`
 
   return text;
