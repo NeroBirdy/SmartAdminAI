@@ -36,6 +36,7 @@ export default defineEventHandler(async (event) => {
         status: "ACTUAL",
       },
       include: { group: true, venue: true },
+      orderBy: [{ date: "asc" }, { startTime: "asc" }],
     });
   } else if (role == "MANAGER") {
     lessons = await fakeAPI.lesson.findMany({
@@ -47,6 +48,7 @@ export default defineEventHandler(async (event) => {
         status: "ACTUAL",
       },
       include: { group: true, venue: true },
+      orderBy: [{ date: "asc" }, { startTime: "asc" }],
     });
   }
 
