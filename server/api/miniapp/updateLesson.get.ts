@@ -52,12 +52,15 @@ export default defineEventHandler(async (event) => {
       newValue: { ...newVenueFields, change: { venueId: venueId } },
     });
 
+    const groupName = await getGroupNameByLessonId(lessonId);
+    const venueName = await getVenueNameById(venueId);
+
     await Promise.all([
       new Promise((resolve) => setTimeout(resolve, 2000)),
       vk.api.messages.edit({
         peer_id: userId,
         message_id: Number(res),
-        message: "Занятие пройдет в другом месте",
+        message: `Занятие у группы ${groupName} пройдет в ${venueName}`,
       }),
     ]);
   } catch (e) {

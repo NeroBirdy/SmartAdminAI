@@ -1,3 +1,4 @@
+import { getAssetKeys } from "node:sea";
 import { Keyboard } from "vk-io";
 
 export {
@@ -13,26 +14,32 @@ export {
   buildMainMenuKeyboard,
 };
 
-async function buildStartKeyboard() {
+async function buildStartKeyboard(peerId: number) {
   const keyboard = Keyboard.builder()
-    .textButton({
+
+  const orgId = await getOrgByPeerId(peerId);
+  const enabledModules = await getEnabledModules(orgId!);
+  console.log(enabledModules);
+
+  if (enabledModules.customerSupport) {
+    keyboard.textButton({
       label: "Хочу записаться",
       color: Keyboard.POSITIVE_COLOR,
       payload: { cmd: "signup" },
-    })
-    .row()
-    .textButton({
-      label: "Войти в систему",
-      color: Keyboard.PRIMARY_COLOR,
-      payload: { cmd: "login" },
-    })
-    .oneTime();
+    }).row()
+  }
+
+  keyboard.textButton({
+    label: "Войти в систему",
+    color: Keyboard.PRIMARY_COLOR,
+    payload: { cmd: "login" },
+  }).oneTime();
 
   return keyboard;
 }
 
 async function buildMainMenuKeyboard() {
-  const keyboard = Keyboard.builder().textButton({label: "Вернуться к выбору программы", payload: {cmd: "returnChooseProgram"}})
+  const keyboard = Keyboard.builder().textButton({ label: "Вернуться к выбору программы", payload: { cmd: "returnChooseProgram" } })
   return keyboard
 }
 
@@ -48,7 +55,7 @@ async function buildBackButton() {
 
 type ListKey = "city" | "organization" | "program" | "venue" | string;
 
-async function buildKeyboard(array: string[], page: number, listKey: ListKey) {
+async function buildKeyboard(array: string[], page: number, listKey: ListKey, venueId?: number, venueCmd?: string) {
   const { slice, currentPage, totalPages } = getPage(array!, page);
   const keyboard = Keyboard.builder().inline();
 
@@ -60,6 +67,8 @@ async function buildKeyboard(array: string[], page: number, listKey: ListKey) {
           cmd: "select",
           listKey,
           select: element,
+          oldVenueId: listKey === "venue" ? venueId : 0,
+          venueCmd: listKey === "venue" ? venueCmd : "",
         },
       })
       .row();
@@ -111,60 +120,66 @@ async function buildInstructorKeyboard(peerId: number) {
     permission = await getPermission(peerId);
   }
 
+  const orgId = await getOrgByPeerId(peerId);
+  const enabledModules = await getEnabledModules(orgId!);
+
   const keyboard = Keyboard.builder();
 
-  if (permission.changeDate)
-    keyboard
-      .textButton({
-        label: "Перенос даты",
-        color: Keyboard.PRIMARY_COLOR,
-        payload: { cmd: "changeDate" },
-      })
-      .row();
-  else {
-    keyboard
-      .textButton({
-        label: "Запросить перенос даты",
-        color: Keyboard.PRIMARY_COLOR,
-        payload: { cmd: "requestChangeDate" },
-      })
-      .row();
+  if (enabledModules.scheduleManagement) {
+    if (permission.changeDate)
+      keyboard
+        .textButton({
+          label: "Перенос даты",
+          color: Keyboard.PRIMARY_COLOR,
+          payload: { cmd: "changeDate" },
+        })
+        .row();
+    else {
+      keyboard
+        .textButton({
+          label: "Запросить перенос даты",
+          color: Keyboard.PRIMARY_COLOR,
+          payload: { cmd: "requestChangeDate" },
+        })
+        .row();
+    }
+    if (permission.changeVenue)
+      keyboard
+        .textButton({
+          label: "Замена локации",
+          color: Keyboard.PRIMARY_COLOR,
+          payload: { cmd: "changeVenue" },
+        })
+        .row();
+    else {
+      keyboard
+        .textButton({
+          label: "Запросить замену локации",
+          color: Keyboard.PRIMARY_COLOR,
+          payload: { cmd: "requestChangeVenue" },
+        })
+        .row();
+    }
+    if (permission.cancellationLesson)
+      keyboard
+        .textButton({
+          label: "Отмена занятия",
+          color: Keyboard.PRIMARY_COLOR,
+          payload: { cmd: "cancellationLesson" },
+        })
+        .row();
+    else {
+      keyboard
+        .textButton({
+          label: "Запросить отмену занятия",
+          color: Keyboard.PRIMARY_COLOR,
+          payload: { cmd: "cancellationLesson" },
+        })
+        .row();
+    }
   }
-  if (permission.changeVenue)
-    keyboard
-      .textButton({
-        label: "Замена локации",
-        color: Keyboard.PRIMARY_COLOR,
-        payload: { cmd: "changeVenue" },
-      })
-      .row();
-  else {
-    keyboard
-      .textButton({
-        label: "Запросить замену локации",
-        color: Keyboard.PRIMARY_COLOR,
-        payload: { cmd: "requestChangeVenue" },
-      })
-      .row();
-  }
-  if (permission.cancellationLesson)
-    keyboard
-      .textButton({
-        label: "Отмена занятия",
-        color: Keyboard.PRIMARY_COLOR,
-        payload: { cmd: "cancellationLesson" },
-      })
-      .row();
-  else {
-    keyboard
-      .textButton({
-        label: "Запросить отмену занятия",
-        color: Keyboard.PRIMARY_COLOR,
-        payload: { cmd: "cancellationLesson" },
-      })
-      .row();
-  }
-  if (permission.changeInstructor)
+
+  if (enabledModules.personnelCoordination)
     keyboard
       .textButton({
         label: "Замена инструктора",

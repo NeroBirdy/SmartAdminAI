@@ -33,6 +33,9 @@ export {
   getLessonsForClient,
   getLessonDateTime,
   getInfoByLesson,
+  getVenueNameById,
+  getGroupNameByLessonId,
+  getEnabledModules,
 };
 
 const fakeApi = useFakeAPI();
@@ -455,4 +458,65 @@ async function getInfoByLesson(lessonId: number) {
     where: { id: lessonId },
     include: { group: true, instructor: true },
   });
+}
+
+
+async function getVenueNameById(venueId: number) {
+  const venueData = await fakeApi.venue.findFirst({
+    where: {id: venueId},
+    select: {
+      name: true,
+    }
+  });
+
+  return venueData?.name;
+}
+
+
+async function getGroupNameByLessonId(lessonId: number) {
+  const data = await fakeApi.lesson.findFirst({
+    where: {id: lessonId},
+    include: {
+      group: true,
+    }
+  });
+
+  return data?.group.name;
+}
+
+
+async function getEnabledModules(orgId: number) {
+  const orgModules = await prisma.sectionAISetting.findMany({
+    where: {
+      sectionId: orgId,
+    },
+    select: {
+      settingAIId: true,
+      enable: true,
+    },
+  });
+
+  const result = {
+    scheduleManagement: false,
+    customerSupport: false,
+    personnelCoordination: false,
+  };
+
+  const mapping: Record<number, keyof typeof result> = {
+    1: "scheduleManagement",
+    2: "customerSupport",
+    3: "personnelCoordination",
+  };
+
+  for (const row of orgModules) {
+    const key = mapping[row.settingAIId];
+    if (!key) continue;
+    if (row.enable) {
+      result[key] = true;
+    } else {
+      result[key] = false;
+    }
+  }
+
+  return result;
 }

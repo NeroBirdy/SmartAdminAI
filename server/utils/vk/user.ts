@@ -10,7 +10,7 @@ export {
   getUserRole,
   getPermission,
   saveDateList,
-  getMenagerId,
+  getManagerId,
   getInstructorKey,
   getInstructorPeerId,
   getUserIdByPeerId,
@@ -24,6 +24,7 @@ export {
   getClient,
   getEmployee,
   setUserGroup,
+  getOrgByPeerId,
 };
 
 const prisma = usePrisma();
@@ -181,7 +182,7 @@ async function saveDateList(peerId: number, dateList: DateList) {
   });
 }
 
-async function getMenagerId() {
+async function getManagerId() {
   const userData = await prisma.users.findFirst({
     where: { role: "MANAGER" },
     select: { peerId: true },
@@ -389,4 +390,16 @@ async function setUserGroup(peerId: number, groupId: number) {
   });
 
   return newValue;
+}
+
+
+async function getOrgByPeerId(peerId: number) {
+  const userKey = await getUserAccessCode(peerId);
+
+  const employee = await fakeApi.employee.findFirst({
+    where: {accessCode: userKey},
+    select: {organizationId: true},
+  });
+
+  return employee?.organizationId;
 }

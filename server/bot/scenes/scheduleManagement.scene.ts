@@ -12,7 +12,7 @@ export const scheduleManagementScene = new StepScene("scheduleManagement", [
 
       const keyboard = await buildInstructorKeyboard(context.peerId);
       return await context.send({
-        message: "Какой-то текст",
+        message: "Выберите действие которое в хотите совершить. Если у вас есть права доступа то изменение примениться автоматически, иначе мы отправим запрос с подтверждением руководителю.",
         keyboard: keyboard,
       });
     }

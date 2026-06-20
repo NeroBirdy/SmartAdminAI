@@ -92,22 +92,33 @@ export function registerEventHandler() {
             value,
           );
           const { venueId, lessonId } = venueData!;
+          const oldVenueId = payload.oldVenueId;
+          const venueCmd = payload.venueCmd;
+          const oldVenueName = await getVenueNameById(oldVenueId);
 
-          await editMessage(
-            context.peerId,
-            context.session.messageId,
-            `Вы выбрали: ${value}`,
-          );
+          const groupName = await getGroupNameByLessonId(lessonId);
 
-          $fetch("/api/miniapp/updateLesson", {
-            method: "GET",
-            query: {
-              venueId: venueId,
-              lessonId: lessonId,
-              userId: context.peerId,
-            },
-            keepalive: true,
+          await deleteMessage(context.session.messageId);
+
+          const keyboard = await buildConfirmKeyboard({ cmd: venueCmd, venueId: venueId, lessonId: lessonId, oldVenueId: oldVenueId, userId: context.peerId }, { cmd: "denyChangeVenue" });
+
+          const lessonDateTime = await getLessonDateTime(lessonId);
+
+          let message;
+          if (venueCmd === "changeVenue") {
+            message = `Замена локации:\n\n    Группа: ${groupName}\n    Дата Занятия: ${lessonDateTime}\n    Предыдущия локация: ${oldVenueName}\n    Новая локация: ${value}`
+          }
+          else {
+            message = `Запрос на замену локации:\n\n    Дата Занятия: ${lessonDateTime}\n    Предыдущия локация: ${oldVenueName}\n    Новая локация: ${value}`
+          }
+
+          const sendMessage = await context.send({
+            message: message,
+            keyboard: keyboard,
           });
+
+          context.session.messageId = sendMessage.id;
+          return;
 
         default:
           await editMessage(
@@ -116,6 +127,105 @@ export function registerEventHandler() {
             `Вы выбрали: ${value}`,
           );
       }
+    }
+
+    if (payload.cmd === "changeVenue") {
+      await deleteMessage(context.session.messageId);
+
+      const venueId = payload.venueId;
+      const lessonId = payload.lessonId;
+
+      $fetch("/api/miniapp/updateLesson", {
+        method: "GET",
+        query: {
+          venueId: venueId,
+          lessonId: lessonId,
+          userId: context.peerId,
+        },
+        keepalive: true,
+      });
+    }
+
+    if (payload.cmd === "requestChangeVenue") {
+      const managerPeerId = await getManagerId();
+      const managerId = await getUserIdByPeerId(managerPeerId!);
+
+      const userPeerId = context.peerId;
+      const userId = await getUserIdByPeerId(userPeerId);
+
+      const managerRandomId = generateRandomId(0, 1000000);
+      const userRandomId = generateRandomId(0, 1000000);
+
+      const newVenueName = await getVenueNameById(payload.venueId);
+      const oldVenueName = await getVenueNameById(payload.oldVenueId);
+
+      const lessonData = await getInfoByLesson(payload.lessonId);
+      const groupName = lessonData?.group.name;
+      const instructor = `${lessonData?.instructor.firstName} ${lessonData?.instructor.lastName}`;
+      const lessonDateTime = await getLessonDateTime(payload.lessonId);
+
+      const keyboard = await buildConfirmKeyboard({ cmd: "confirmRequestChangeVenue", venueId: payload.venueId, lessonId: payload.lessonId, oldVenueId: payload.oldVenueId, userId: context.peerId, userRandomId: userRandomId, managerRandomId: managerRandomId }, { cmd: "denyRequestChangeVenue", venueId: payload.venueId, lessonId: payload.lessonId, oldVenueId: payload.oldVenueId, userId: context.peerId, userRandomId: userRandomId, managerRandomId: managerRandomId });
+
+      const message = `Запрос на изменение локации:\n\n    Инструктор: ${instructor}\n    Группа: ${groupName}\n    Дата: ${lessonDateTime}\n    Предыдущая локация: ${oldVenueName}\n    Новая локация: ${newVenueName}`;
+
+      const messageId = await sendRequestForManager(managerPeerId!, keyboard, message);
+
+      await saveNewMessage(managerId!, Number(messageId)!, managerRandomId);
+
+      await deleteMessage(context.session.messageId);
+
+      const userMessage = await context.send("Запрос отправлен");
+
+      await saveNewMessage(userId!, Number(userMessage.id)!, userRandomId);
+    }
+
+    if (payload.cmd === "denyChangeVenue") {
+      await deleteMessage(context.session.messageId);
+    }
+
+    if (payload.cmd === "confirmRequestChangeVenue") {
+      const managerId = await getUserIdByPeerId(context.peerId);
+      const messageId = await getMessageId(managerId!, payload.managerRandomId);
+
+      await editMessage(context.peerId, messageId, "Запрос одобрен");
+      await deleteMessageFromDb(messageId);
+
+      const userId = await getUserIdByPeerId(payload.userId);
+      const userMessageId = await getMessageId(userId!, payload.userRandomId);
+
+      const lessonDateTime = await getLessonDateTime(payload.lessonId);
+      const groupName = await getGroupNameByLessonId(payload.lessonId);
+      const venueName = await getVenueNameById(payload.venueId);
+
+      await editMessage(Number(payload.userId), userMessageId, `Ваш запрос на замену локации у группы ${groupName} одобрен\nДата: ${lessonDateTime}\nНовая локация: ${venueName}`);
+      await deleteMessageFromDb(userMessageId);
+
+      $fetch("/api/miniapp/updateLesson", {
+        method: "GET",
+        query: {
+          venueId: payload.venueId,
+          lessonId: payload.lessonId,
+          userId: payload.userId,
+        },
+        keepalive: true,
+      });
+    }
+
+    if (payload.cmd === "denyRequestChangeVenue") {
+      const managerId = await getUserIdByPeerId(context.peerId);
+      const messageId = await getMessageId(managerId!, payload.managerRandomId);
+
+      await editMessage(context.peerId, messageId, "Запрос отклонен");
+      await deleteMessageFromDb(messageId);
+
+      const userId = await getUserIdByPeerId(payload.userId);
+      const userMessageId = await getMessageId(userId!, payload.userRandomId);
+
+      const lessonDateTime = await getLessonDateTime(payload.lessonId);
+      const oldVenueName = await getVenueNameById(payload.oldVenueId);
+
+      await editMessage(Number(payload.userId), userMessageId, `Ваш запрос на замену локации ${oldVenueName} занятия ${lessonDateTime} отклонен`);
+      await deleteMessageFromDb(userMessageId);
     }
 
     if (payload.cmd === "changeDate") {
@@ -174,7 +284,7 @@ export function registerEventHandler() {
       context.session.state = "isLogined";
       await sendHelloMessage(context.peerId);
 
-      const managerId = await getMenagerId();
+      const managerId = await getManagerId();
 
       const id = await getUserIdByPeerId(managerId!);
       const userId = await getUserIdByPeerId(context.peerId);
@@ -353,7 +463,7 @@ export function registerEventHandler() {
     }
 
     if (payload.cmd === "requestCancellationLesson") {
-      const managerId = await getMenagerId();
+      const managerId = await getManagerId();
 
       const id = await getUserIdByPeerId(managerId!);
       const randomId = generateRandomId(1, 10000000);
@@ -541,6 +651,9 @@ export function registerEventHandler() {
 
         case "trialLesson":
           await deleteMessage(context.session.messageId);
+
+        case "venue":
+          return await deleteMessage(context.session.messageId);
 
         default:
           return context.scene.enter("start");

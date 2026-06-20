@@ -138,7 +138,14 @@ export default defineEventHandler(async (event) => {
       venue: results,
     };
 
-    const keyboard = await buildKeyboard(venueList, 1, "venue");
+    let keyboard;
+
+    if ((await getPermission(userId)).changeVenue) {
+      keyboard = await buildKeyboard(venueList, 1, "venue", Number(venueId), "changeVenue");
+    }
+    else {
+      keyboard = await buildKeyboard(venueList, 1, "venue", Number(venueId), "requestChangeVenue");
+    }
 
     const messageId = await sendMessage(
       userId,

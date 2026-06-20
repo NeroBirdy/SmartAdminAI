@@ -99,6 +99,8 @@ async function sendCompleteLoginMessage(
 
 async function sendHelloMessage(peerId: number) {
   const role = await getUserRole(peerId);
+  const orgId = await getOrgByPeerId(peerId);
+  const enabledModules = await getEnabledModules(orgId!);
 
   let keyboard = Keyboard.builder();
 
@@ -108,9 +110,12 @@ async function sendHelloMessage(peerId: number) {
     case "CLIENT":
       message = `Добро пожаловать в бот нашей детской секции! Мы рады, что вы выбрали нас для развития вашего ребёнка. Здесь вы сможете в пару кликов отслеживать расписание, абонементы, видеть прогресс юного спортсмена и задать вопросы. Так же я уведомлю вас о важных событиях и изменениях. Выберите нужный раздел!`;
 
-      keyboard
-        .textButton({ label: "Задать вопрос", payload: { cmd: "askQuestion" } })
-        .row();
+      if (enabledModules.customerSupport) {
+        keyboard
+          .textButton({ label: "Задать вопрос", payload: { cmd: "askQuestion" } })
+          .row();
+      }
+
       keyboard
         .textButton({ label: "О моей группе", payload: { cmd: "groupInfo" } })
         .row();
@@ -123,29 +128,36 @@ async function sendHelloMessage(peerId: number) {
       keyboard
         .textButton({ label: "Расписание", payload: { cmd: "checkSchedule" } })
         .row();
-      keyboard
-        .textButton({
-          label: "Сменить программу",
-          payload: { cmd: "changeProgram" },
-        })
-        .row();
+
+      if (enabledModules.customerSupport) {
+        keyboard
+          .textButton({
+            label: "Сменить программу",
+            payload: { cmd: "changeProgram" },
+          })
+          .row();
+      }
+
       break;
 
     case "INSTRUCTOR":
       message = `Здравствуйте, коллега! Добро пожаловать в рабочий кабинет инструктора. Этот бот создан, чтобы упростить вашу рутину! Управляйте и отслеживайте расписание, информируйте владельца и клиентов о важных событиях.`;
 
-      keyboard
-        .textButton({
-          label: "Управление расписание",
-          color: Keyboard.PRIMARY_COLOR,
-          payload: { cmd: "scheduleManagement" },
-        })
-        .row()
-        .applicationButton({
-          label: "Моё расписание",
-          appId: datePickerId,
-          ownerId: ownerGroupId,
-        })
+      if (enabledModules.scheduleManagement || enabledModules.personnelCoordination) {
+        keyboard
+          .textButton({
+            label: "Управление расписанием",
+            color: Keyboard.PRIMARY_COLOR,
+            payload: { cmd: "scheduleManagement" },
+          })
+          .row()
+      }
+
+      keyboard.applicationButton({
+        label: "Моё расписание",
+        appId: datePickerId,
+        ownerId: ownerGroupId,
+      })
         .row();
       break;
 
@@ -300,7 +312,7 @@ async function sendGroupInfo(peerId: number) {
     });
   }
 
-  const userSession = await getUserSession(peerId);
+  const userSession = await getUserSession(peerId); // тут нельзя так
 
   return await vk.api.messages.send({
     peer_id: peerId,
@@ -316,10 +328,10 @@ async function sendSubscriptionInfo(peerId: number) {
 
   if (!subscription) {
     return await vk.api.messages.send({
-    peer_id: peerId,
-    random_id: Date.now(),
-    message: "Ваш абонемент не найден",
-  });
+      peer_id: peerId,
+      random_id: Date.now(),
+      message: "Ваш абонемент не найден",
+    });
   }
 
   let message = `Информация об абонементе \n`;
@@ -343,17 +355,17 @@ async function sendScheduleForClient(peerId: number) {
 
   if (!lessons) {
     return await vk.api.messages.send({
-    peer_id: peerId,
-    random_id: Date.now(),
-    message: "Вы еще не состоите в группе",
-  });
+      peer_id: peerId,
+      random_id: Date.now(),
+      message: "Вы еще не состоите в группе",
+    });
   }
 
-  let message = `Расписание \n`;
+  let message = `Расписание \n\n`;
   message += lessons
     .map(
       (lesson) =>
-        `${format(lesson.date, "dd.MM")} - ${format(lesson.startTime, "HH.mm")}`,
+        `📅 ${format(lesson.date, "dd.MM")} - 🕓 ${format(lesson.startTime, "HH:mm")}`,
     )
     .join("\n");
 
