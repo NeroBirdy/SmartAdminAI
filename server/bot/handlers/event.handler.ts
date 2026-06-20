@@ -555,6 +555,8 @@ export function registerEventHandler() {
         },
       );
 
+      console.log(instructors);
+
       const id = await getUserIdByPeerId(context.peerId);
       const messageId = await getMessageId(id!, payload.randomId);
 
