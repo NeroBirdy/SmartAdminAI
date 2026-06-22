@@ -6,7 +6,7 @@
         <div class="title-texts">
           <h1 class="header-sm">Генерация расписания</h1>
           <p class="description main-text-sm">
-            Отслеживать сообщения требующие внимания
+            Автоматически создавать расписание для организации
           </p>
         </div>
         <component
