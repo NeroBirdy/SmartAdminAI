@@ -599,9 +599,15 @@ export function registerEventHandler() {
     }
 
     if (payload.cmd === "confirmChangeInstructor") {
+      const lessonDateTime = await getLessonDateTime(payload.lessonId);
+      const lessonInfo = await getInfoByLesson(payload.lessonId);
+
+      const key = await getUserAccessCode(payload.newInstructorId);
+      const instructor = await getEmployee(key);
+
       await sendMessageWithoutKeyboard(
         payload.ownerId,
-        "Вас заменит другой инструктор",
+        `На занятии ${lessonDateTime} у группы ${lessonInfo?.group.name}, вас заменит ${instructor?.firstName} ${instructor?.lastName}`,
       );
 
       await deleteChangeInstructorMessage(context.peerId, payload.randomId);
@@ -660,13 +666,19 @@ export function registerEventHandler() {
         case "program":
           await deleteMessage(context.session.messageId);
 
-          if (context.session.program) {
+          const isRegister = await checkUserRegistration(context.peerId);
+
+          if (isRegister) {
+            context.session.state = "isLogined";
+            await sendHelloMessage(context.peerId);
             return;
           }
           return context.scene.enter("chooseOrganization");
 
         case "trialLesson":
           await deleteMessage(context.session.messageId);
+          await sendHelloMessage(context.peerId);
+          return;
 
         case "venue":
           await deleteMessage(context.session.messageId);

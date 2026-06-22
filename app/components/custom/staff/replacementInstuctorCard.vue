@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class="second-frame-content" v-if="isWarning" :class="hiddenClass">
-      <custom-schedule-setting-card queryKey="staff_extra_setting" />
+      <!-- <custom-schedule-setting-card queryKey="staff_extra_setting" /> -->
       <ui-help
         title="Как это работает?"
         text="Инструктор может отправить запрос на его замену другим сотрудником, а ИИ-агент подберет подходящие варианты и отправит все необходимые подтверждения."

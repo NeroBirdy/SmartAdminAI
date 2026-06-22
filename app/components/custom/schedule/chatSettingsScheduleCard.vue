@@ -27,12 +27,12 @@
       <custom-schedule-setting-card
         queryKey="schedule_instructor_lesson_cancellation"
       />
-      <custom-schedule-setting-card queryKey="schedule_extra_setting" />
+      <!-- <custom-schedule-setting-card queryKey="schedule_extra_setting" /> -->
 
       <ui-help
         title="Как это работает?"
         text=" Ваши сотрудники смогут через чат-бот корректировать своё расписание при необходимости.
-         Здесь вы можете настроить их возможности, а так же установить дополнительные настройки."
+         Здесь вы можете настроить их возможности."
       />
     </div>
   </div>

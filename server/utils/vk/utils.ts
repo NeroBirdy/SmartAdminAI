@@ -451,7 +451,7 @@ async function getLessonDateTime(lessonId: number) {
     select: { date: true, startTime: true, endTime: true },
   });
 
-  const datePart = format(dateTime?.date!, 'yyyy-MM-dd')
+  const datePart = format(dateTime?.date!, 'dd-MM-yyyy')
   const startPart = format(subHours(dateTime!.startTime, 5), "HH:mm")
   const endPart = format(subHours(dateTime!.endTime, 5), "HH:mm")
   const text = `${datePart} в ${startPart} - ${endPart}`

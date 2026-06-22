@@ -271,7 +271,6 @@ async function sendChangeInstructorRequest(
 ) {
   await sendMessageWithoutKeyboard(peerId, "Запрос отправлен");
 
-  console.log(peerIdList)
   for (const id of peerIdList) {
     if (Number(id) !== 0) {
       const keyboard = await buildConfirmKeyboard(
@@ -280,11 +279,15 @@ async function sendChangeInstructorRequest(
           ownerId: peerId,
           randomId: randomId,
           lessonId: lessonId,
+          newInstructorId: id,
         },
         { cmd: "deny", randomId: randomId, ownerId: peerId },
       );
 
-      const res = await sendMessage(Number(id), keyboard, "Сможешь подменить?");
+      const lessonDateTime = await getLessonDateTime(lessonId);
+      const lessonInfo = await getInfoByLesson(lessonId);
+
+      const res = await sendMessage(Number(id), keyboard, `Запрос на замену занятия у группы ${lessonInfo?.group.name}:\nДата: ${lessonDateTime}`);
       const userId = await getUserIdByPeerId(id);
 
       await saveNewMessage(userId!, Number(res), randomId);
